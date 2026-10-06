@@ -133,6 +133,7 @@ powershell -ExecutionPolicy Bypass -File tools\day-study.ps1 -Symbol XAUUSD
   SL ตาม ATR / trailing / เลื่อนมากันทุน (`Phase1.exe hasl live-test`, 24 แผน): −0.31 ถึง −0.34 ทุกแผน → **วิธีออกไม่สร้างแรงได้เปรียบ ไม่ต้องทดสอบวิธีออกของการทาย HA ซ้ำอีก**
 - **Momentum burst / velocity scalping (prompt ของผู้ใช้ 06/10/2026):** `Phase1.exe burst live-test` (`Burst.cs`, ~4.5 นาที, tick 33 เดือน) — ความเร็วสูงตามด้วยการ**ย้อนกลับ** ไม่ใช่ไหลต่อ;
   ตาม burst 774 ส่วนผสมไม่มีอันไหนบวกบน dev (−0.27 ถึง −0.44/ไม้); สวน burst ดีกว่าแต่ยังไม่ชนะต้นทุน (ดีสุด −0.12 บน dev, ≈ 0 บน test) → NO REALISTIC EDGE (JOURNAL)
+  ตำแหน่ง + burst พร้อมกัน (`Phase1.exe setup live-test`, `BurstSetup.cs`: sweep, extension, failed breakout, S/R, impulse→pullback, TP 0.5–1): 588 ส่วนผสมไม่มีอันไหนบวกบน dev
 - กฎ R1 = `CH_SESSION_MOM` (โมเมนตัมข้าม session, เข้า 07:00 และ 10:00 UTC, ปิด 20:45 UTC) กำไรครบ 3 ช่วงเดิม (run #49–#51)
   แต่ drawdown สูง (27–64% ของบัญชี 1,000) ใช้กับทุน 100 ไม่ได้ — หน้า `summary.html` แสดงกฎนี้
 
