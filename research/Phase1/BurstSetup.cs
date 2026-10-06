@@ -37,20 +37,23 @@ static partial class Phase1
         if (files.Count == 0) { Console.WriteLine("no tick files in " + dir); return 1; }
 
         const double Commission = 0.08, MaxSpread = 0.35, Alpha = 1.0 / 600;
-        (int win, double th)[] cfg = { (5000, 3), (5000, 5), (10000, 5) };
+        (int win, double th)[] cfg = { (2750, 3), (2750, 5), (2750, 8), (5000, 3), (5000, 5), (10000, 5) }; int[] wins = { 2750, 5000, 10000 };
         string[] setups = { "LS  liquidity sweep + reversal", "SS  session high/low sweep", "EXf extreme extension, fade", "EXr extreme extension, return", "FB  failed breakout", "SR  level rejection", "IP  impulse -> pullback", "base+ any burst, follow", "base- any burst, fade" };
         int[] delays = { 500, 1000 }; int[] limits = { 60000, 300000 }; double[] tps = { 0.5, 1.0 }, sls = { 1, 2, 5 };
-        var exitName = new List<string> { "60s", "300s" };
-        foreach (int lim in limits) foreach (double tp in tps) foreach (double sl in sls) exitName.Add($"TP{tp:0.0}/SL{sl:0}/{lim / 1000}s");
+        // exits: target, stop (0 / 0 = on time only), closed at the quote after `lim`. Index 2 is the rule the user asked for (06/10/2026).
+        var exits = new List<(double tp, double sl, int lim)> { (0, 0, 60000), (0, 0, 300000), (2.0, 1.5, 180000), (0, 0, 180000) };
+        foreach (int lim in limits) foreach (double tp in tps) foreach (double sl in sls) exits.Add((tp, sl, lim));
+        foreach (var (tp, sl) in new[] { (2.0, 1.0), (2.0, 2.0), (1.5, 1.5), (3.0, 1.5) }) exits.Add((tp, sl, 180000));
+        var exitName = exits.Select(x => x.tp > 0 ? $"TP{x.tp:0.0}/SL{x.sl:0.#}/{x.lim / 1000}s" : $"{x.lim / 1000}s").ToList();
         int C = cfg.Length, S = setups.Length, D = delays.Length, E = exitName.Count;
-        var st = new double[S, C, D, E, 2, 4];                                     // [dev/test]: n, net, wins, target reached
+        var st = new double[S, C, D, E, 2, 5];                                     // [dev/test]: n, net, wins, target reached, stopped
         var per = new double[S, C, E, 4, 2];                                       // delay 0.5 s by period: n, net
         long[] perEnd = { Unix(2025, 1), Unix(2026, 1), Unix(2026, 4), long.MaxValue };
 
         // ---- state carried across the files
         const int N = 4500; var rs = new long[N]; var rhi = new double[N]; var rlo = new double[N]; var rmid = new double[N];
         long curTd = -1; double dayH = double.NaN, dayL = double.NaN, prevH = double.NaN, prevL = double.NaN, asiaH = double.NaN, asiaL = double.NaN, lonH = double.NaN, lonL = double.NaN;
-        double vSum = 0, vSum2 = 0; long vCnt = 0; double ema5 = 0, ema10 = 0, emaM5 = 0; long warm = 0, totalTicks = 0;
+        double vSum = 0, vSum2 = 0; long vCnt = 0; var ema = new double[3]; double emaM5 = 0; long warm = 0, totalTicks = 0;
 
         double Range(long now, int fromAgo, int toAgo, bool high, out int valid)
         {
@@ -85,7 +88,7 @@ static partial class Phase1
             int part = string.CompareOrdinal(day, "2026-04-01") >= 0 ? 1 : 0, period = 0; while (dayUnix >= perEnd[period]) period++;
             double Mid(int i) => (bid[i] + ask[i]) / 2;
 
-            int bp5 = -1, bp10 = -1; var prevIn = new bool[C]; var coolUntil = new long[C]; long nextSample = 0;
+            var bp = new[] { -1, -1, -1 }; var prevIn = new bool[C]; var coolUntil = new long[C]; long nextSample = 0;
             for (int i = 0; i < n; i++)
             {
                 long t = tm[i], sec = dayUnix + t / 1000; double mid = Mid(i);
@@ -108,14 +111,15 @@ static partial class Phase1
 
                 if (t < nextSample) continue;
                 nextSample = t - t % 1000 + 1000;
-                while (bp5 + 1 < n && tm[bp5 + 1] <= t - 5000) bp5++;
-                while (bp10 + 1 < n && tm[bp10 + 1] <= t - 10000) bp10++;
-                bool has5 = bp5 >= 0 && t - tm[bp5] <= 8000, has10 = bp10 >= 0 && t - tm[bp10] <= 13000;
-                double mv5 = has5 ? mid - Mid(bp5) : 0, mv10 = has10 ? mid - Mid(bp10) : 0;
-                bool ready = warm > 1800 && ema5 > 0 && ema10 > 0;
-                double r5 = ready && has5 ? Math.Abs(mv5) / ema5 : 0, r10 = ready && has10 ? Math.Abs(mv10) / ema10 : 0;
-                if (has5) ema5 += Alpha * (Math.Abs(mv5) - ema5);
-                if (has10) ema10 += Alpha * (Math.Abs(mv10) - ema10);
+                var mvW = new double[3]; var rW = new double[3];
+                for (int w = 0; w < 3; w++)
+                {
+                    while (bp[w] + 1 < n && tm[bp[w] + 1] <= t - wins[w]) bp[w]++;
+                    if (bp[w] < 0 || t - tm[bp[w]] > wins[w] + 3000) continue;
+                    mvW[w] = mid - Mid(bp[w]);
+                    rW[w] = warm > 1800 && ema[w] > 0 ? Math.Abs(mvW[w]) / ema[w] : 0;
+                    ema[w] += Alpha * (Math.Abs(mvW[w]) - ema[w]);                               // after the ratio: causal
+                }
                 double m300 = MidAt(sec - 300), usual5m = emaM5;
                 if (!double.IsNaN(m300)) emaM5 += (1.0 / 3000) * (Math.Abs(mid - m300) - emaM5);
                 warm++;
@@ -124,7 +128,7 @@ static partial class Phase1
 
                 for (int c = 0; c < C; c++)
                 {
-                    double mv = cfg[c].win == 5000 ? mv5 : mv10, ratio = cfg[c].win == 5000 ? r5 : r10;
+                    int wi = Array.IndexOf(wins, cfg[c].win); double mv = mvW[wi], ratio = rW[wi];
                     bool inCond = mv != 0 && ratio >= cfg[c].th && spread <= MaxSpread;
                     bool onset = inCond && !prevIn[c] && t >= coolUntil[c]; prevIn[c] = inCond;
                     if (!onset) continue;
@@ -173,22 +177,17 @@ static partial class Phase1
                             int e = i; while (e < n && tm[e] < t + delays[di]) e++;
                             if (e >= n) continue;
                             long t0 = tm[e]; double entry = dd > 0 ? ask[e] : bid[e];
-                            var res = new double[E]; var done = new bool[E]; var hit = new bool[E]; int open = E;
+                            var res = new double[E]; var done = new bool[E]; var hit = new bool[E]; var stopped = new bool[E]; int open = E;
                             for (int j = e + 1; j < n && open > 0; j++)
                             {
                                 long dt = tm[j] - t0;
                                 double prev = dd > 0 ? bid[j - 1] - entry : entry - ask[j - 1], now = dd > 0 ? bid[j] - entry : entry - ask[j];
-                                if (dt > 60000)
-                                {
-                                    if (!done[0]) { done[0] = true; res[0] = prev; open--; }
-                                    for (int x = 2; x < 8; x++) if (!done[x]) { done[x] = true; res[x] = prev; open--; }
-                                }
-                                if (dt > 300000) { for (int x = 1; x < E; x++) if (!done[x]) { done[x] = true; res[x] = prev; open--; } break; }
-                                for (int x = 2; x < E; x++)
+                                for (int x = 0; x < E; x++)
                                 {
                                     if (done[x]) continue;
-                                    int q = (x - 2) % 6; double tp = tps[q / 3], sl = sls[q % 3];
-                                    if (now <= -sl) { done[x] = true; res[x] = now; open--; } else if (now >= tp) { done[x] = true; res[x] = tp; hit[x] = true; open--; }
+                                    var ex = exits[x];
+                                    if (dt > ex.lim) { done[x] = true; res[x] = prev; open--; }
+                                    else if (ex.tp > 0) { if (now <= -ex.sl) { done[x] = true; res[x] = now; stopped[x] = true; open--; } else if (now >= ex.tp) { done[x] = true; res[x] = ex.tp; hit[x] = true; open--; } }
                                 }
                             }
                             if (open > 0) continue;
@@ -198,7 +197,7 @@ static partial class Phase1
                                 for (int x = 0; x < E; x++)
                                 {
                                     double net = res[x] - Commission;
-                                    st[s, c, di, x, part, 0]++; st[s, c, di, x, part, 1] += net; if (net > 0) st[s, c, di, x, part, 2]++; if (hit[x]) st[s, c, di, x, part, 3]++;
+                                    st[s, c, di, x, part, 0]++; st[s, c, di, x, part, 1] += net; if (net > 0) st[s, c, di, x, part, 2]++; if (hit[x]) st[s, c, di, x, part, 3]++; if (stopped[x]) st[s, c, di, x, part, 4]++;
                                     if (di == 0) { per[s, c, x, period, 0]++; per[s, c, x, period, 1] += net; }
                                 }
                             }
@@ -208,11 +207,29 @@ static partial class Phase1
         }
 
         string F(double v) => v.ToString("+0.000;-0.000", Inv);
-        string Cfg(int c) => $"{cfg[c].win / 1000,2}s>={cfg[c].th:0}";
+        string Cfg(int c) => $"{cfg[c].win / 1000.0,5:0.##}s>={cfg[c].th:0}";
         double Avg(int s, int c, int di, int x, int part) => st[s, c, di, x, part, 1] / Math.Max(1, st[s, c, di, x, part, 0]);
         Console.WriteLine($"\n==== SETUP + BURST: a location and a burst of speed together ({files[0].day} .. {files[^1].day}, {totalTicks:N0} ticks) ====");
         Console.WriteLine("USD per trade for 0.01 lot, real bid / ask, commission 0.08, entry 0.5 s after the signal. dev = ..2026-03, test = 2026-04..");
-        int[] show = { 0, 1, 2 + 1, 2 + 4, 8 + 1, 8 + 2, 8 + 4, 8 + 5 };
+        // ---- the rule as asked: target 2, stop 1.5, closed after 3 minutes
+        Console.WriteLine($"\n-- {exitName[2]} (the rule as asked), entry 0.5 s after the signal: reached the target / stopped / closed on time, net per trade. dev | test | by period");
+        Console.WriteLine("location                        burst       |   dev n  target  stop   time    win%    avg  |  test n  target  stop    avg  |   2024    2025   26-Q1  26-04..09 | entry 1 s: dev avg");
+        for (int s = 0; s < S; s++)
+            for (int c = 0; c < C; c++)
+            {
+                double dn = st[s, c, 0, 2, 0, 0], tn = st[s, c, 0, 2, 1, 0]; if (dn < 1) continue;
+                double D1(int m) => 100 * st[s, c, 0, 2, 0, m] / dn; double T1(int m) => 100 * st[s, c, 0, 2, 1, m] / Math.Max(1, tn);
+                Console.WriteLine($"{setups[s],-31} {Cfg(c),-11} | {dn,7:N0}  {D1(3),5:N1}% {D1(4),5:N1}% {100 - D1(3) - D1(4),5:N1}%  {D1(2),5:N1}  {F(Avg(s, c, 0, 2, 0))} | {tn,7:N0}  {T1(3),5:N1}% {T1(4),5:N1}%  {F(Avg(s, c, 0, 2, 1))} | " +
+                    string.Join("  ", Enumerable.Range(0, 4).Select(p => F(per[s, c, 2, p, 1] / Math.Max(1, per[s, c, 2, p, 0])))) + $" | {(s < 7 ? F(Avg(s, c, 1, 2, 0)) : "")}");
+            }
+        Console.WriteLine("\n-- neighbours of that rule (closed after 3 minutes), entry 0.5 s: net per trade on dev");
+        int[] near = Enumerable.Range(0, E).Where(x => exits[x].lim == 180000).ToArray();
+        Console.WriteLine("location                        burst       |" + string.Concat(near.Select(x => $" {exitName[x],16}")));
+        for (int s = 0; s < S; s++)
+            for (int c = 0; c < 3; c++)
+                Console.WriteLine($"{setups[s],-31} {Cfg(c),-11} |" + string.Concat(near.Select(x => $" {F(Avg(s, c, 0, x, 0)),16}")));
+
+        int[] show = { 0, 1, 4 + 1, 4 + 4, 10 + 1, 10 + 2, 10 + 4, 10 + 5 };
         Console.WriteLine("\nlocation                        burst    dev n  test n |" + string.Concat(show.Select(x => $" {exitName[x],14}")) + " | test:" + string.Concat(show.Select(x => $" {exitName[x],14}")));
         for (int s = 0; s < S; s++)
             for (int c = 0; c < C; c++)
