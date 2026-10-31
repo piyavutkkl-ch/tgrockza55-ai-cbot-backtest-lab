@@ -17,9 +17,121 @@
       box-shadow: 0 0 25px rgba(16, 185, 129, 0.6);
       border-color: rgba(16, 185, 129, 0.8) !important;
     }
+
+    /* Web Annotation & Comment Mode Styles */
+    .comment-mode-active * {
+      cursor: crosshair !important;
+    }
+    .comment-highlight {
+      outline: 2px dashed #06b6d4 !important;
+      outline-offset: 3px !important;
+      background-color: rgba(6, 182, 212, 0.08) !important;
+    }
+    .comment-selected {
+      outline: 2.5px solid #10b981 !important;
+      outline-offset: 4px !important;
+      background-color: rgba(16, 185, 129, 0.12) !important;
+    }
+    .comment-pin {
+      position: absolute;
+      background: #06b6d4;
+      color: #0f172a;
+      font-weight: 800;
+      font-size: 10px;
+      padding: 1px 5px;
+      border-radius: 9999px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      z-index: 40;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+    }
   </style>
 </head>
-<body class="bg-[#0b0f17] text-[#e2e8f0] antialiased min-h-screen">
+<body class="bg-[#0b0f17] text-[#e2e8f0] antialiased min-h-screen relative">
+
+  <!-- FLOATING TOP COMMENT MODE INDICATOR -->
+  <div id="comment-mode-bar" class="hidden fixed top-14 left-1/2 transform -translate-x-1/2 z-40 bg-cyan-950/95 border border-cyan-400 text-cyan-200 px-4 py-2 rounded-full shadow-2xl flex items-center gap-3 text-xs backdrop-blur">
+    <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+    <span>🎯 <strong>โหมดคอมเมนต์เปิดอยู่:</strong> คลิกเลือกปุ่มหรือองค์ประกอบบนหน้าเว็บเพื่อใส่ข้อคิดเห็น</span>
+    <button onclick="toggleCommentMode()" class="px-2.5 py-0.5 rounded-full bg-cyan-500 text-slate-950 font-bold hover:bg-cyan-400 text-[11px] cursor-pointer">
+      ปิดโหมด (Exit)
+    </button>
+  </div>
+
+  <!-- FLOATING BOTTOM-RIGHT ACTION BUTTON -->
+  <button onclick="toggleCommentMode()" id="floating-comment-btn" class="fixed bottom-6 right-6 z-40 px-4 py-2.5 rounded-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs shadow-2xl flex items-center gap-2 transition-all hover:scale-105 border border-cyan-300/40 cursor-pointer">
+    <span class="text-sm">💬</span>
+    <span>คอมเมนต์หน้าเว็บ</span>
+    <span id="floating-comment-badge" class="px-1.5 py-0.2 rounded-full text-[10px] bg-slate-950 text-cyan-400 font-extrabold hidden">0</span>
+  </button>
+
+  <!-- RIGHT SIDEBAR COMMENT DRAWER -->
+  <aside id="comment-drawer" class="fixed top-0 right-0 h-full w-full sm:w-[380px] bg-slate-900/98 backdrop-blur-xl border-l border-slate-700 shadow-2xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col">
+    <!-- Drawer Header -->
+    <div class="p-4 border-b border-slate-800 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <span class="p-1.5 rounded-lg bg-emerald-500/15 text-emerald-400 text-sm">💬</span>
+        <div>
+          <h3 class="font-bold text-sm text-white">คอมเมนต์ปรับแต่งหน้าเว็บ</h3>
+          <p class="text-[11px] text-slate-400">ชี้/เลือกปุ่มเพื่อแจ้งจุดที่ต้องการแก้ไข</p>
+        </div>
+      </div>
+      <button onclick="closeCommentDrawer()" class="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition cursor-pointer">
+        ✕
+      </button>
+    </div>
+
+    <!-- Active Target Input Section -->
+    <div class="p-4 border-b border-slate-800 bg-slate-950/60 space-y-3">
+      <div>
+        <label class="block text-[11px] font-semibold text-slate-400 mb-1">
+          🎯 องค์ประกอบที่เลือก:
+        </label>
+        <div id="target-element-name" class="p-2 rounded-lg bg-slate-900 border border-slate-700/80 text-xs font-mono text-emerald-400 break-words">
+          ยังไม่ได้เลือกปุ่ม (คลิกบนหน้าเว็บเพื่อเลือก)
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-[11px] font-semibold text-slate-400 mb-1">
+          ✍️ ข้อเสนอแนะ / สิ่งที่ต้องการปรับปรุง:
+        </label>
+        <textarea id="comment-input-text" rows="3" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition resize-none" placeholder="เช่น เปลี่ยนสีปุ่มนี้เป็นสีฟ้า, หรือเพิ่มปุ่มรีเฟรชตรงนี้..."></textarea>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button onclick="saveCurrentComment()" class="flex-1 py-2 px-3 rounded-lg text-xs font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition shadow-sm flex items-center justify-center gap-1.5 cursor-pointer">
+          <span>💾</span> บันทึกคอมเมนต์จุดนี้
+        </button>
+        <button onclick="clearCurrentSelection()" class="py-2 px-3 rounded-lg text-xs text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-700 transition cursor-pointer">
+          ยกเลิก
+        </button>
+      </div>
+    </div>
+
+    <!-- Comment List Section -->
+    <div class="flex-1 overflow-y-auto p-4 space-y-3">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-bold text-slate-300">
+          📋 รายการคอมเมนต์ทั้งหมด (<span id="comment-count">0</span>)
+        </span>
+        <button onclick="copyAllCommentsForAI()" class="text-[11px] font-semibold text-emerald-400 hover:text-emerald-300 flex items-center gap-1 hover:underline cursor-pointer">
+          <span>📋</span> คัดลอกส่งให้ AI
+        </button>
+      </div>
+
+      <div id="comments-list-container" class="space-y-2.5">
+        <!-- Injected by JS -->
+      </div>
+    </div>
+
+    <!-- Drawer Footer -->
+    <div class="p-3 border-t border-slate-800 bg-slate-950 text-center">
+      <p class="text-[11px] text-slate-500">
+        💡 ข้อมูลคอมเมนต์จะถูกเซฟในเครื่อง (Local) อัตโนมัติ สามารถกดคัดลอกส่งให้ AI ในแชทได้ทันที
+      </p>
+    </div>
+  </aside>
 
   <!-- TOP GLOBAL NAVIGATION (Matches Backtest Lab Suite) -->
   <header class="top border-b border-slate-800/80 bg-[#111827]/90 backdrop-blur sticky top-0 z-50 px-4 py-2.5 flex flex-wrap items-center justify-between gap-3">
@@ -94,12 +206,20 @@
         </div>
       </nav>
     </div>
+
+    <!-- Right Controls: Comment Mode Toggle + GitHub link -->
     <div class="flex items-center gap-2 text-xs">
-      <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
+      <button onclick="toggleCommentMode()" id="btn-toggle-comment-nav" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-cyan-500/15 text-cyan-400 border border-cyan-500/30 hover:bg-cyan-500/25 transition shadow-sm cursor-pointer">
+        <span>💬</span>
+        <span>โหมดคอมเมนต์</span>
+        <span id="nav-comment-badge" class="ml-0.5 px-1.5 py-0.2 rounded-full text-[10px] bg-cyan-500 text-slate-950 font-extrabold hidden">0</span>
+      </button>
+
+      <span class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
         <span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
         GitHub Pages
       </span>
-      <a href="https://github.com/tgrockza55-ai/tgrockza55-ai-cbot-backtest-lab" target="_blank" class="text-slate-400 hover:text-white transition font-mono">
+      <a href="https://github.com/tgrockza55-ai/tgrockza55-ai-cbot-backtest-lab" target="_blank" class="text-slate-400 hover:text-white transition font-mono hidden md:inline">
         tgrockza55-ai
       </a>
     </div>
@@ -121,7 +241,7 @@
         <div class="flex items-center gap-2 text-xs text-slate-400">
           <span>🕒 บันทึกสถานะล่าสุด:</span>
           <span class="font-mono font-semibold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-            31 ต.ค. 2026, 16:55 น.
+            31 ต.ค. 2026, 17:15 น.
           </span>
         </div>
       </div>
@@ -214,16 +334,16 @@
 
       <!-- Strategy Switcher Buttons -->
       <div class="flex flex-wrap items-center bg-slate-900 p-1 rounded-xl border border-slate-800 shadow-sm">
-        <button id="tab-runner" onclick="switchStrategy('dom_smart_runner')" class="px-3 py-1.5 text-xs md:text-sm font-bold rounded-lg transition-all bg-emerald-500 text-slate-950 shadow">
+        <button id="tab-runner" onclick="switchStrategy('dom_smart_runner')" class="px-3 py-1.5 text-xs md:text-sm font-bold rounded-lg transition-all bg-emerald-500 text-slate-950 shadow cursor-pointer">
           🚀 DOM_SMART_RUNNER (ปลดล็อค)
         </button>
-        <button id="tab-smc" onclick="switchStrategy('smc_fibo_dom')" class="px-3 py-1.5 text-xs md:text-sm font-medium rounded-lg transition-all text-slate-400 hover:text-white">
+        <button id="tab-smc" onclick="switchStrategy('smc_fibo_dom')" class="px-3 py-1.5 text-xs md:text-sm font-medium rounded-lg transition-all text-slate-400 hover:text-white cursor-pointer">
           ⚡ SMC_FIBO_DOM_5M
         </button>
-        <button id="tab-fade" onclick="switchStrategy('dom_fade')" class="px-3 py-1.5 text-xs md:text-sm font-medium rounded-lg transition-all text-slate-400 hover:text-white">
+        <button id="tab-fade" onclick="switchStrategy('dom_fade')" class="px-3 py-1.5 text-xs md:text-sm font-medium rounded-lg transition-all text-slate-400 hover:text-white cursor-pointer">
           🛡️ DOM_FADE_5M
         </button>
-        <button id="tab-compare" onclick="switchStrategy('compare')" class="px-3 py-1.5 text-xs md:text-sm font-medium rounded-lg transition-all text-slate-400 hover:text-white">
+        <button id="tab-compare" onclick="switchStrategy('compare')" class="px-3 py-1.5 text-xs md:text-sm font-medium rounded-lg transition-all text-slate-400 hover:text-white cursor-pointer">
           ⚖️ เปรียบเทียบ 3 ตัว
         </button>
       </div>
@@ -245,10 +365,10 @@
           <div class="flex flex-wrap items-center gap-2">
             <!-- Active Mode Selector -->
             <div class="flex items-center bg-slate-950 p-1 rounded-xl border border-slate-800">
-              <button id="btn-mode-candle" onclick="setChartMode('candle')" class="flex items-center gap-1.5 px-3 py-1 text-xs font-bold rounded-lg bg-slate-800 shadow-sm text-white border border-slate-700">
+              <button id="btn-mode-candle" onclick="setChartMode('candle')" class="flex items-center gap-1.5 px-3 py-1 text-xs font-bold rounded-lg bg-slate-800 shadow-sm text-white border border-slate-700 cursor-pointer">
                 <span>🕯️</span> กราฟแท่งเทียนจุดเข้า-ออก
               </button>
-              <button id="btn-mode-equity" onclick="setChartMode('equity')" class="flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-lg text-slate-400 hover:text-white">
+              <button id="btn-mode-equity" onclick="setChartMode('equity')" class="flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-lg text-slate-400 hover:text-white cursor-pointer">
                 <span>📈</span> กราฟพอร์ต (Equity Curve)
               </button>
             </div>
@@ -301,11 +421,11 @@
             
             <!-- Filters -->
             <div class="flex flex-wrap items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800">
-              <button onclick="setFilter('ALL')" id="flt-ALL" class="px-2.5 py-1 text-xs rounded-md font-bold bg-slate-800 shadow-sm text-white">ทั้งหมด</button>
-              <button onclick="setFilter('WIN')" id="flt-WIN" class="px-2.5 py-1 text-xs rounded-md font-medium text-slate-400 hover:text-emerald-400">ชนะ</button>
-              <button onclick="setFilter('LOSS')" id="flt-LOSS" class="px-2.5 py-1 text-xs rounded-md font-medium text-slate-400 hover:text-rose-400">แพ้</button>
-              <button onclick="setFilter('BUY')" id="flt-BUY" class="px-2.5 py-1 text-xs rounded-md font-medium text-slate-400 hover:text-blue-400">BUY</button>
-              <button onclick="setFilter('SELL')" id="flt-SELL" class="px-2.5 py-1 text-xs rounded-md font-medium text-slate-400 hover:text-purple-400">SELL</button>
+              <button onclick="setFilter('ALL')" id="flt-ALL" class="px-2.5 py-1 text-xs rounded-md font-bold bg-slate-800 shadow-sm text-white cursor-pointer">ทั้งหมด</button>
+              <button onclick="setFilter('WIN')" id="flt-WIN" class="px-2.5 py-1 text-xs rounded-md font-medium text-slate-400 hover:text-emerald-400 cursor-pointer">ชนะ</button>
+              <button onclick="setFilter('LOSS')" id="flt-LOSS" class="px-2.5 py-1 text-xs rounded-md font-medium text-slate-400 hover:text-rose-400 cursor-pointer">แพ้</button>
+              <button onclick="setFilter('BUY')" id="flt-BUY" class="px-2.5 py-1 text-xs rounded-md font-medium text-slate-400 hover:text-blue-400 cursor-pointer">BUY</button>
+              <button onclick="setFilter('SELL')" id="flt-SELL" class="px-2.5 py-1 text-xs rounded-md font-medium text-slate-400 hover:text-purple-400 cursor-pointer">SELL</button>
             </div>
           </div>
 
@@ -450,9 +570,308 @@
     let currentFilter = 'ALL';
     let selectedTradeId = 1;
 
+    // --- Interactive Visual Feedback & Comment Tool Logic ---
+    let isCommentMode = false;
+    let currentHoveredElem = null;
+    let selectedTargetElem = null;
+    let savedComments = [];
+
+    try {
+      savedComments = JSON.parse(localStorage.getItem('backtestlab_ui_comments') || '[]');
+    } catch(e) { savedComments = []; }
+
+    function toggleCommentMode() {
+      isCommentMode = !isCommentMode;
+      const bar = document.getElementById('comment-mode-bar');
+      const btnNav = document.getElementById('btn-toggle-comment-nav');
+
+      if (isCommentMode) {
+        document.body.classList.add('comment-mode-active');
+        bar.classList.remove('hidden');
+        btnNav.classList.add('bg-cyan-500', 'text-slate-950', 'border-cyan-400');
+        btnNav.classList.remove('bg-cyan-500/15', 'text-cyan-400', 'border-cyan-500/30');
+        openCommentDrawer();
+      } else {
+        document.body.classList.remove('comment-mode-active');
+        bar.classList.add('hidden');
+        btnNav.classList.remove('bg-cyan-500', 'text-slate-950', 'border-cyan-400');
+        btnNav.classList.add('bg-cyan-500/15', 'text-cyan-400', 'border-cyan-500/30');
+        if (currentHoveredElem) currentHoveredElem.classList.remove('comment-highlight');
+      }
+    }
+
+    function openCommentDrawer() {
+      const drawer = document.getElementById('comment-drawer');
+      drawer.classList.remove('translate-x-full');
+      renderCommentsList();
+    }
+
+    function closeCommentDrawer() {
+      const drawer = document.getElementById('comment-drawer');
+      drawer.classList.add('translate-x-full');
+      if (selectedTargetElem) {
+        selectedTargetElem.classList.remove('comment-selected');
+        selectedTargetElem = null;
+      }
+      document.getElementById('target-element-name').textContent = 'ยังไม่ได้เลือกปุ่ม (คลิกบนหน้าเว็บเพื่อเลือก)';
+      document.getElementById('comment-input-text').value = '';
+    }
+
+    function clearCurrentSelection() {
+      if (selectedTargetElem) {
+        selectedTargetElem.classList.remove('comment-selected');
+        selectedTargetElem = null;
+      }
+      document.getElementById('target-element-name').textContent = 'ยังไม่ได้เลือกปุ่ม (คลิกบนหน้าเว็บเพื่อเลือก)';
+      document.getElementById('comment-input-text').value = '';
+    }
+
+    document.addEventListener('mouseover', (e) => {
+      if (!isCommentMode) return;
+      if (e.target.closest('#comment-drawer') || e.target.closest('#comment-mode-bar') || e.target.closest('#floating-comment-btn') || e.target.closest('#btn-toggle-comment-nav') || e.target.closest('#claude-dropdown-wrap')) return;
+
+      if (currentHoveredElem && currentHoveredElem !== e.target) {
+        currentHoveredElem.classList.remove('comment-highlight');
+      }
+      currentHoveredElem = e.target;
+      currentHoveredElem.classList.add('comment-highlight');
+    });
+
+    document.addEventListener('mouseout', (e) => {
+      if (!isCommentMode) return;
+      if (e.target === currentHoveredElem) {
+        e.target.classList.remove('comment-highlight');
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!isCommentMode) return;
+      if (e.target.closest('#comment-drawer') || e.target.closest('#comment-mode-bar') || e.target.closest('#floating-comment-btn') || e.target.closest('#btn-toggle-comment-nav') || e.target.closest('#claude-dropdown-wrap')) return;
+
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (selectedTargetElem) {
+        selectedTargetElem.classList.remove('comment-selected');
+      }
+      selectedTargetElem = e.target;
+      selectedTargetElem.classList.add('comment-selected');
+      if (currentHoveredElem) currentHoveredElem.classList.remove('comment-highlight');
+
+      const tag = selectedTargetElem.tagName.toLowerCase();
+      const idStr = selectedTargetElem.id ? `#${selectedTargetElem.id}` : '';
+      let textPreview = selectedTargetElem.innerText?.trim().slice(0, 35).replace(/\s+/g, ' ') || '';
+      const desc = `${tag}${idStr} ${textPreview ? `("${textPreview}")` : ''}`;
+
+      document.getElementById('target-element-name').textContent = desc;
+      openCommentDrawer();
+      document.getElementById('comment-input-text').focus();
+    }, true);
+
+    function getUniqueSelector(el) {
+      if (!el || !el.tagName) return '';
+      if (el.id) return `#${el.id}`;
+      let path = [];
+      while (el && el.nodeType === Node.ELEMENT_NODE && el.tagName.toLowerCase() !== 'body') {
+        let selector = el.tagName.toLowerCase();
+        if (el.id) {
+          path.unshift(`#${el.id}`);
+          break;
+        } else {
+          let sibling = el;
+          let nth = 1;
+          while (sibling = sibling.previousElementSibling) {
+            if (sibling.tagName && sibling.tagName.toLowerCase() === selector) nth++;
+          }
+          if (nth !== 1) selector += `:nth-of-type(${nth})`;
+        }
+        path.unshift(selector);
+        el = el.parentNode;
+      }
+      return path.join(' > ');
+    }
+
+    function saveCurrentComment() {
+      const text = document.getElementById('comment-input-text').value.trim();
+      const targetDesc = document.getElementById('target-element-name').textContent.trim();
+
+      if (!text) {
+        alert('กรุณาพิมพ์ข้อความคอมเมนต์ก่อนบันทึกครับ');
+        return;
+      }
+      if (!selectedTargetElem || targetDesc.includes('ยังไม่ได้เลือกปุ่ม')) {
+        alert('กรุณาคลิกเลือกปุ่มหรือองค์ประกอบบนหน้าเว็บก่อนครับ');
+        return;
+      }
+
+      const selector = getUniqueSelector(selectedTargetElem);
+
+      const commentItem = {
+        id: Date.now(),
+        targetDesc: targetDesc,
+        selector: selector,
+        text: text,
+        time: new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' })
+      };
+
+      savedComments.unshift(commentItem);
+      try {
+        localStorage.setItem('backtestlab_ui_comments', JSON.stringify(savedComments));
+      } catch(e) {}
+
+      document.getElementById('comment-input-text').value = '';
+      if (selectedTargetElem) {
+        selectedTargetElem.classList.remove('comment-selected');
+        selectedTargetElem = null;
+      }
+      document.getElementById('target-element-name').textContent = 'ยังไม่ได้เลือกปุ่ม (คลิกบนหน้าเว็บเพื่อเลือก)';
+      
+      renderCommentsList();
+      renderPins();
+    }
+
+    function deleteComment(id) {
+      savedComments = savedComments.filter(c => c.id !== id);
+      try {
+        localStorage.setItem('backtestlab_ui_comments', JSON.stringify(savedComments));
+      } catch(e) {}
+      renderCommentsList();
+      renderPins();
+    }
+
+    function jumpToCommentElement(selector) {
+      try {
+        const el = document.querySelector(selector);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          el.classList.add('pulse-glow');
+          setTimeout(() => el.classList.remove('pulse-glow'), 2000);
+        }
+      } catch(e) {}
+    }
+
+    function copyAllCommentsForAI() {
+      if (savedComments.length === 0) {
+        alert('ยังไม่มีคอมเมนต์ให้คัดลอกครับ');
+        return;
+      }
+      let txt = "📋 สรุปรายการข้อเสนอแนะปรับแต่งหน้าเว็บ:\n\n";
+      savedComments.forEach((c, idx) => {
+        txt += `${idx + 1}. [ตำแหน่ง: ${c.targetDesc}]\n   ข้อเสนอแนะ: ${c.text}\n   เวลา: ${c.time}\n\n`;
+      });
+      txt += "ช่วยปรับปรุงหน้าเว็บตามรายการข้อคิดเห็นด้านบนนี้ให้หน่อยครับ";
+
+      navigator.clipboard.writeText(txt).then(() => {
+        alert('คัดลอกรายการคอมเมนต์ทั้งหมดเรียบร้อยแล้ว! สามารถนำไป Paste ในแชท AI ได้ทันทีครับ');
+      });
+    }
+
+    function renderCommentsList() {
+      const container = document.getElementById('comments-list-container');
+      const countEl = document.getElementById('comment-count');
+      const navBadge = document.getElementById('nav-comment-badge');
+      const floatBadge = document.getElementById('floating-comment-badge');
+
+      countEl.textContent = savedComments.length;
+      if (savedComments.length > 0) {
+        navBadge.textContent = savedComments.length;
+        navBadge.classList.remove('hidden');
+        floatBadge.textContent = savedComments.length;
+        floatBadge.classList.remove('hidden');
+      } else {
+        navBadge.classList.add('hidden');
+        floatBadge.classList.add('hidden');
+      }
+
+      if (savedComments.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-8 text-slate-500 text-xs">
+            <span class="text-2xl block mb-2">📌</span>
+            ยังไม่มีคอมเมนต์ที่บันทึกไว้<br>คลิกเลือกปุ่มบนหน้าเว็บเพื่อเริ่มใส่คอมเมนต์ได้เลย
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = '';
+      savedComments.forEach((c, idx) => {
+        const item = document.createElement('div');
+        item.className = "p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-slate-700 transition space-y-1.5";
+        item.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-cyan-500/15 text-cyan-400 border border-cyan-500/20">
+              #${savedComments.length - idx}
+            </span>
+            <div class="flex items-center gap-1.5">
+              <span class="text-[10px] text-slate-500">${c.time}</span>
+              <button onclick="deleteComment(${c.id})" class="text-slate-500 hover:text-rose-400 p-1 text-xs cursor-pointer" title="ลบคอมเมนต์">
+                🗑️
+              </button>
+            </div>
+          </div>
+          <div class="text-[11px] font-mono text-emerald-400 truncate" title="${c.targetDesc}">
+            🎯 ${c.targetDesc}
+          </div>
+          <p class="text-xs text-white leading-relaxed bg-slate-900/60 p-2 rounded-lg border border-slate-800/80">
+            ${c.text}
+          </p>
+          <button onclick="jumpToCommentElement('${c.selector}')" class="w-full text-center text-[10px] font-medium text-slate-400 hover:text-emerald-400 pt-1 flex items-center justify-center gap-1 cursor-pointer">
+            <span>📍</span> เด้งไปไฮไลท์จุดนี้บนหน้าเว็บ
+          </button>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function renderPins() {
+      document.querySelectorAll('.comment-pin').forEach(p => p.remove());
+      savedComments.forEach((c, idx) => {
+        try {
+          const el = document.querySelector(c.selector);
+          if (el) {
+            const rect = el.getBoundingClientRect();
+            const pin = document.createElement('div');
+            pin.className = 'comment-pin';
+            pin.style.top = (window.scrollY + rect.top + 6) + 'px';
+            pin.style.left = (window.scrollX + rect.right - 6) + 'px';
+            pin.textContent = `#${savedComments.length - idx}`;
+            document.body.appendChild(pin);
+          }
+        } catch(e) {}
+      });
+    }
+
+    // --- End of Visual Feedback Logic ---
+
     function init() {
       switchStrategy('dom_smart_runner');
+      renderCommentsList();
+      setTimeout(renderPins, 500);
     }
+
+    function toggleClaudeDropdown(e) {
+      e.stopPropagation();
+      const menu = document.getElementById('claude-dropdown-menu');
+      const arrow = document.getElementById('claude-dropdown-arrow');
+      if (!menu) return;
+      const isHidden = menu.classList.contains('hidden');
+      if (isHidden) {
+        menu.classList.remove('hidden');
+        if (arrow) arrow.classList.add('rotate-180');
+      } else {
+        menu.classList.add('hidden');
+        if (arrow) arrow.classList.remove('rotate-180');
+      }
+    }
+
+    document.addEventListener('click', () => {
+      const menu = document.getElementById('claude-dropdown-menu');
+      const arrow = document.getElementById('claude-dropdown-arrow');
+      if (menu && !menu.classList.contains('hidden')) {
+        menu.classList.add('hidden');
+        if (arrow) arrow.classList.remove('rotate-180');
+      }
+    });
 
     function formatDateThai(isoStr) {
       if (!isoStr) return '';
@@ -477,24 +896,24 @@
       const tabCompare = document.getElementById('tab-compare');
       
       [tabRunner, tabSmc, tabFade, tabCompare].forEach(t => {
-        t.className = "px-3 py-1.5 text-xs md:text-sm font-medium rounded-lg transition-all text-slate-400 hover:text-white";
+        t.className = "px-3 py-1.5 text-xs md:text-sm font-medium rounded-lg transition-all text-slate-400 hover:text-white cursor-pointer";
       });
 
       const singleView = document.getElementById('single-view');
       const compareView = document.getElementById('compare-view');
 
       if (strat === 'compare') {
-        tabCompare.className = "px-3 py-1.5 text-xs md:text-sm font-bold rounded-lg transition-all bg-emerald-500 text-slate-950 shadow";
+        tabCompare.className = "px-3 py-1.5 text-xs md:text-sm font-bold rounded-lg transition-all bg-emerald-500 text-slate-950 shadow cursor-pointer";
         singleView.classList.add('hidden');
         compareView.classList.remove('hidden');
         renderKpis('compare');
       } else {
         if (strat === 'dom_smart_runner') {
-          tabRunner.className = "px-3 py-1.5 text-xs md:text-sm font-bold rounded-lg transition-all bg-emerald-500 text-slate-950 shadow";
+          tabRunner.className = "px-3 py-1.5 text-xs md:text-sm font-bold rounded-lg transition-all bg-emerald-500 text-slate-950 shadow cursor-pointer";
         } else if (strat === 'smc_fibo_dom') {
-          tabSmc.className = "px-3 py-1.5 text-xs md:text-sm font-bold rounded-lg transition-all bg-emerald-500 text-slate-950 shadow";
+          tabSmc.className = "px-3 py-1.5 text-xs md:text-sm font-bold rounded-lg transition-all bg-emerald-500 text-slate-950 shadow cursor-pointer";
         } else {
-          tabFade.className = "px-3 py-1.5 text-xs md:text-sm font-bold rounded-lg transition-all bg-emerald-500 text-slate-950 shadow";
+          tabFade.className = "px-3 py-1.5 text-xs md:text-sm font-bold rounded-lg transition-all bg-emerald-500 text-slate-950 shadow cursor-pointer";
         }
         singleView.classList.remove('hidden');
         compareView.classList.add('hidden');
@@ -517,15 +936,15 @@
       const legend = document.getElementById('candle-legend');
 
       if (mode === 'candle') {
-        btnCandle.className = "flex items-center gap-1.5 px-3 py-1 text-xs font-bold rounded-lg bg-slate-800 shadow-sm text-white border border-slate-700";
-        btnEquity.className = "flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-lg text-slate-400 hover:text-white";
+        btnCandle.className = "flex items-center gap-1.5 px-3 py-1 text-xs font-bold rounded-lg bg-slate-800 shadow-sm text-white border border-slate-700 cursor-pointer";
+        btnEquity.className = "flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-lg text-slate-400 hover:text-white cursor-pointer";
         candleSvg.classList.remove('hidden');
         equitySvg.classList.add('hidden');
         legend.classList.remove('hidden');
         renderCandleChart();
       } else {
-        btnEquity.className = "flex items-center gap-1.5 px-3 py-1 text-xs font-bold rounded-lg bg-slate-800 shadow-sm text-white border border-slate-700";
-        btnCandle.className = "flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-lg text-slate-400 hover:text-white";
+        btnEquity.className = "flex items-center gap-1.5 px-3 py-1 text-xs font-bold rounded-lg bg-slate-800 shadow-sm text-white border border-slate-700 cursor-pointer";
+        btnCandle.className = "flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-lg text-slate-400 hover:text-white cursor-pointer";
         equitySvg.classList.remove('hidden');
         candleSvg.classList.add('hidden');
         legend.classList.add('hidden');
@@ -987,9 +1406,9 @@
       ['ALL', 'WIN', 'LOSS', 'BUY', 'SELL'].forEach(f => {
         const btn = document.getElementById('flt-' + f);
         if (f === flt) {
-          btn.className = "px-2.5 py-1 text-xs rounded-md font-bold bg-slate-800 shadow-sm text-white";
+          btn.className = "px-2.5 py-1 text-xs rounded-md font-bold bg-slate-800 shadow-sm text-white cursor-pointer";
         } else {
-          btn.className = "px-2.5 py-1 text-xs rounded-md font-medium text-slate-400 hover:text-white";
+          btn.className = "px-2.5 py-1 text-xs rounded-md font-medium text-slate-400 hover:text-white cursor-pointer";
         }
       });
       renderTable();
@@ -1167,30 +1586,6 @@
         }
       }
     }
-
-    function toggleClaudeDropdown(e) {
-      e.stopPropagation();
-      const menu = document.getElementById('claude-dropdown-menu');
-      const arrow = document.getElementById('claude-dropdown-arrow');
-      if (!menu) return;
-      const isHidden = menu.classList.contains('hidden');
-      if (isHidden) {
-        menu.classList.remove('hidden');
-        if (arrow) arrow.classList.add('rotate-180');
-      } else {
-        menu.classList.add('hidden');
-        if (arrow) arrow.classList.remove('rotate-180');
-      }
-    }
-
-    document.addEventListener('click', () => {
-      const menu = document.getElementById('claude-dropdown-menu');
-      const arrow = document.getElementById('claude-dropdown-arrow');
-      if (menu && !menu.classList.contains('hidden')) {
-        menu.classList.add('hidden');
-        if (arrow) arrow.classList.remove('rotate-180');
-      }
-    });
 
     window.onload = init;
     window.onresize = () => {
