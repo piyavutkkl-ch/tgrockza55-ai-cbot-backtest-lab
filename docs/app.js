@@ -5,8 +5,9 @@ import { SUPABASE_URL, SUPABASE_ANON_KEY, LAB_API } from "./config.js";
 export const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const PAGES = [
+  ["index.html", "แดชบอร์ด AI (ล่าสุด)"],
+  ["legacy.html", "ผลทดสอบเดิม (Supabase)"],
   ["summary.html", "สรุป"],
-  ["index.html", "ผลทดสอบ"],
   ["strategies.html", "คลังทฤษฎี"],
   ["chart.html", "ทฤษฎีกราฟ"],
   ["daystudy.html", "สถิติรายวัน"],
