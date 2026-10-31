@@ -4,14 +4,13 @@ import { SUPABASE_URL, SUPABASE_ANON_KEY, LAB_API } from "./config.js";
 
 export const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-const PAGES = [
-  ["index.html", "แดชบอร์ด AI (ล่าสุด)"],
-  ["legacy.html", "ผลทดสอบเดิม (Supabase)"],
-  ["summary.html", "สรุป"],
-  ["strategies.html", "คลังทฤษฎี"],
-  ["chart.html", "ทฤษฎีกราฟ"],
-  ["daystudy.html", "สถิติรายวัน"],
-  ["phase1.html", "ทำนายรายนาที"],
+const LEGACY_PAGES = [
+  ["legacy.html", "📋 ผลทดสอบเดิม (Supabase)"],
+  ["summary.html", "📊 สรุปผลการวิจัย"],
+  ["strategies.html", "💡 คลังทฤษฎี"],
+  ["chart.html", "🕯️ ทฤษฎีกราฟ"],
+  ["daystudy.html", "📅 สถิติรายวัน"],
+  ["phase1.html", "🤖 ทำนายรายนาที"],
 ];
 
 export const $ = (sel, root = document) => root.querySelector(sel);
@@ -30,10 +29,33 @@ export function h(tag, attrs = {}, ...children) {
 
 function renderHeader(session) {
   const here = location.pathname.split("/").pop() || "index.html";
+  const isLegacyActive = LEGACY_PAGES.some(([href]) => href === here);
+
+  const dropdownMenu = h("div", { class: "dropdown-menu", id: "app-dropdown-menu" },
+    LEGACY_PAGES.map(([href, label]) =>
+      h("a", { href, class: href === here ? "active" : null }, label)
+    )
+  );
+
+  const dropdownBtn = h("button", {
+    type: "button",
+    class: `dropdown-btn ${isLegacyActive ? "active" : ""}`,
+    onclick: (e) => {
+      e.stopPropagation();
+      dropdownMenu.classList.toggle("show");
+    }
+  }, "📁 ผลทดสอบเก่า CLAUDE ▾");
+
+  document.addEventListener("click", () => {
+    dropdownMenu.classList.remove("show");
+  });
+
   const header = h("header", { class: "top" },
     h("a", { class: "brand", href: "index.html" }, "Backtest Lab"),
-    h("nav", {}, PAGES.map(([href, label]) =>
-      h("a", { href, class: href === here ? "active" : null }, label))),
+    h("nav", {}, [
+      h("a", { href: "index.html", class: here === "index.html" ? "active" : null }, "🚀 แดชบอร์ด AI (ล่าสุด)"),
+      h("div", { class: "dropdown-wrap" }, dropdownBtn, dropdownMenu)
+    ]),
     session && h("div", { class: "who" },
       h("span", { class: "muted" }, session.user.email),
       h("button", { class: "ghost", onclick: async () => { await sb.auth.signOut(); location.reload(); } }, "ออกจากระบบ")),

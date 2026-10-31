@@ -28,14 +28,70 @@
         <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
         Backtest Lab
       </a>
-      <nav class="flex items-center gap-1 flex-wrap text-xs md:text-sm">
-        <a href="index.html" class="px-2.5 py-1 rounded-md font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">🚀 แดชบอร์ด AI (ล่าสุด)</a>
-        <a href="legacy.html" class="px-2.5 py-1 rounded-md text-slate-400 hover:text-white transition">ผลทดสอบเดิม (Supabase)</a>
-        <a href="summary.html" class="px-2.5 py-1 rounded-md text-slate-400 hover:text-white transition">สรุป</a>
-        <a href="strategies.html" class="px-2.5 py-1 rounded-md text-slate-400 hover:text-white transition">คลังทฤษฎี</a>
-        <a href="chart.html" class="px-2.5 py-1 rounded-md text-slate-400 hover:text-white transition">ทฤษฎีกราฟ</a>
-        <a href="daystudy.html" class="px-2.5 py-1 rounded-md text-slate-400 hover:text-white transition">สถิติรายวัน</a>
-        <a href="phase1.html" class="px-2.5 py-1 rounded-md text-slate-400 hover:text-white transition">ทำนายรายนาที</a>
+      <nav class="flex items-center gap-2 flex-wrap text-xs md:text-sm">
+        <a href="index.html" class="px-3 py-1.5 rounded-lg font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 flex items-center gap-1.5 shadow-sm">
+          <span>🚀</span> แดชบอร์ด AI (ล่าสุด)
+        </a>
+        
+        <!-- Dropdown for Legacy Claude Results -->
+        <div class="relative inline-block text-left" id="claude-dropdown-wrap">
+          <button type="button" onclick="toggleClaudeDropdown(event)" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition border border-slate-700/80 bg-slate-900/90 shadow-sm cursor-pointer">
+            <span>📁</span>
+            <span class="font-medium">ผลทดสอบเก่า CLAUDE</span>
+            <svg class="w-3.5 h-3.5 transition-transform duration-200 text-slate-400" id="claude-dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          <div id="claude-dropdown-menu" class="hidden absolute left-0 mt-2 w-64 rounded-xl shadow-2xl bg-slate-900 border border-slate-700 divide-y divide-slate-800 z-50 py-1 ring-1 ring-black ring-opacity-5">
+            <div class="px-3.5 py-2 text-[11px] font-semibold text-slate-400 border-b border-slate-800">
+              คลังผลการวิจัยและทฤษฎีเดิม (CLAUDE)
+            </div>
+            <div class="py-1">
+              <a href="legacy.html" class="flex items-center gap-2.5 px-3.5 py-2 text-xs text-slate-300 hover:bg-slate-800 hover:text-emerald-400 transition">
+                <span class="text-base">📋</span>
+                <div>
+                  <div class="font-medium text-white">ผลทดสอบเดิม (Supabase)</div>
+                  <div class="text-[10px] text-slate-400">ประวัติ Backtest กว่า 2,000 รอบ</div>
+                </div>
+              </a>
+              <a href="summary.html" class="flex items-center gap-2.5 px-3.5 py-2 text-xs text-slate-300 hover:bg-slate-800 hover:text-emerald-400 transition">
+                <span class="text-base">📊</span>
+                <div>
+                  <div class="font-medium text-white">สรุปผลการวิจัย</div>
+                  <div class="text-[10px] text-slate-400">เปรียบเทียบช่วง Explore / Validate</div>
+                </div>
+              </a>
+              <a href="strategies.html" class="flex items-center gap-2.5 px-3.5 py-2 text-xs text-slate-300 hover:bg-slate-800 hover:text-emerald-400 transition">
+                <span class="text-base">💡</span>
+                <div>
+                  <div class="font-medium text-white">คลังทฤษฎี</div>
+                  <div class="text-[10px] text-slate-400">คำอธิบายกลยุทธ์และพารามิเตอร์</div>
+                </div>
+              </a>
+              <a href="chart.html" class="flex items-center gap-2.5 px-3.5 py-2 text-xs text-slate-300 hover:bg-slate-800 hover:text-emerald-400 transition">
+                <span class="text-base">🕯️</span>
+                <div>
+                  <div class="font-medium text-white">ทฤษฎีกราฟ</div>
+                  <div class="text-[10px] text-slate-400">ทฤษฎีที่ใช้ราคาอย่างเดียว (CH_)</div>
+                </div>
+              </a>
+              <a href="daystudy.html" class="flex items-center gap-2.5 px-3.5 py-2 text-xs text-slate-300 hover:bg-slate-800 hover:text-emerald-400 transition">
+                <span class="text-base">📅</span>
+                <div>
+                  <div class="font-medium text-white">สถิติรายวัน (Day Study)</div>
+                  <div class="text-[10px] text-slate-400">พฤติกรรมแยกตามช่วงเวลาตลาด</div>
+                </div>
+              </a>
+              <a href="phase1.html" class="flex items-center gap-2.5 px-3.5 py-2 text-xs text-slate-300 hover:bg-slate-800 hover:text-emerald-400 transition">
+                <span class="text-base">🤖</span>
+                <div>
+                  <div class="font-medium text-white">ทำนายรายนาที (ML Model)</div>
+                  <div class="text-[10px] text-slate-400">การพยากรณ์แท่งเทียนด้วย Machine Learning</div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
       </nav>
     </div>
     <div class="flex items-center gap-2 text-xs">
@@ -1111,6 +1167,30 @@
         }
       }
     }
+
+    function toggleClaudeDropdown(e) {
+      e.stopPropagation();
+      const menu = document.getElementById('claude-dropdown-menu');
+      const arrow = document.getElementById('claude-dropdown-arrow');
+      if (!menu) return;
+      const isHidden = menu.classList.contains('hidden');
+      if (isHidden) {
+        menu.classList.remove('hidden');
+        if (arrow) arrow.classList.add('rotate-180');
+      } else {
+        menu.classList.add('hidden');
+        if (arrow) arrow.classList.remove('rotate-180');
+      }
+    }
+
+    document.addEventListener('click', () => {
+      const menu = document.getElementById('claude-dropdown-menu');
+      const arrow = document.getElementById('claude-dropdown-arrow');
+      if (menu && !menu.classList.contains('hidden')) {
+        menu.classList.add('hidden');
+        if (arrow) arrow.classList.remove('rotate-180');
+      }
+    });
 
     window.onload = init;
     window.onresize = () => {
