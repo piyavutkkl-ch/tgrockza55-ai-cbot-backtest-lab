@@ -3,12 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Backtest Lab · บันทึกบทสนทนาการวิจัยฉบับเต็ม (Full Chat Transcript)</title>
+  <title>Backtest Lab · บทสนทนาการวิจัยฉบับเต็ม (Full Research Chat Transcript)</title>
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
@@ -31,7 +34,7 @@
     ::-webkit-scrollbar-thumb:hover { background: #374151; }
     
     /* Markdown Styles inside assistant bubbles */
-    .prose-content { font-size: 0.9375rem; line-height: 1.7; color: #cbd5e1; }
+    .prose-content { font-size: 0.9375rem; line-height: 1.75; color: #cbd5e1; }
     .prose-content p { margin-bottom: 1rem; }
     .prose-content p:last-child { margin-bottom: 0; }
     .prose-content h1, .prose-content h2, .prose-content h3, .prose-content h4 {
@@ -70,7 +73,7 @@
     }
     .prose-content th, .prose-content td {
       border: 1px solid #1e293b;
-      padding: 0.5rem 0.75rem;
+      padding: 0.55rem 0.8rem;
       text-align: left;
     }
     .prose-content th {
@@ -117,12 +120,7 @@
     .prose-content a:hover {
       color: #7dd3fc;
     }
-    .highlight-search {
-      background-color: rgba(245, 158, 11, 0.35);
-      color: #fef08a;
-      padding: 0.1rem 0.25rem;
-      border-radius: 0.2rem;
-    }
+    .katex { font-size: 1.05em; color: #38bdf8; }
   </style>
 </head>
 <body class="min-h-screen flex flex-col font-sans antialiased">
@@ -168,13 +166,13 @@
       <div class="relative z-10">
         <div class="flex flex-wrap items-center gap-2 mb-3">
           <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-cyan-500/15 text-cyan-400 border border-cyan-500/30 shadow-sm">
-            <span>💬</span> บันทึกบทสนทนาตัวเต็ม (Full Transcript)
+            <span>💬</span> บันทึกบทสนทนาการวิจัยฉบับเต็ม (Full Research Transcript)
           </span>
           <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-800 text-slate-300 border border-slate-700">
             โปรเจกต์: Financial Research Paper Scraping
           </span>
           <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-mono text-cyan-300 bg-cyan-950/60 border border-cyan-800/60">
-            ID: 066c0b89-502c-4b32-b8ff-2f8201902c09
+            Conv ID: 066c0b89-502c-4b32-b8ff-2f8201902c09
           </span>
         </div>
 
@@ -221,7 +219,7 @@
           class="w-full pl-9 pr-8 py-2 bg-slate-950 border border-slate-700/80 rounded-xl text-xs sm:text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition"
           oninput="handleSearch()"
         />
-        <button id="clear-search-btn" onclick="clearSearch()" class="hidden absolute inset-y-0 right-0 pr-3 flex items-center text-slate-500 hover:text-slate-300 text-xs">
+        <button id="clear-search-btn" onclick="clearSearch()" class="hidden absolute inset-y-0 right-0 pr-3 flex items-center text-slate-500 hover:text-slate-300 text-xs cursor-pointer">
           ✕
         </button>
       </div>
@@ -327,7 +325,32 @@
           `;
         } else {
           // Assistant message rendered through marked
-          const renderedMd = marked.parse(msg.text);
+          let renderedMd = marked.parse(msg.text);
+
+          // Add interactive Artifact Card for Message 36 (Step 521)
+          let artifactHtml = '';
+          if (msg.id === 36) {
+            artifactHtml = `
+              <div class="mt-5 p-4 rounded-xl bg-slate-950/90 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-md hover:border-slate-700 transition">
+                <div class="flex items-start gap-3">
+                  <div class="p-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xl">📄</div>
+                  <div>
+                    <div class="font-bold text-white text-sm">All Modules Max Profit Backtest</div>
+                    <p class="text-xs text-slate-400 mt-0.5 leading-relaxed">
+                      Comprehensive Backtest Report of All Discovered Max-Profit Methods across all 14 Quant Modules (56 methods tested), identifying the highest alpha winners and key microstructure mechanics.
+                    </p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2 self-end sm:self-center shrink-0">
+                  <span class="text-[11px] font-mono text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800/40 font-bold">+927 -0</span>
+                  <a href="data/all_modules_max_profit_backtest.md" target="_blank" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow transition flex items-center gap-1">
+                    <span>📖</span> เปิดอ่านรีพอร์ต
+                  </a>
+                </div>
+              </div>
+            `;
+          }
+
           card.innerHTML = `
             <div class="w-full bg-[#111827]/90 border border-slate-800 rounded-2xl rounded-tl-sm p-5 sm:p-7 shadow-xl hover:border-slate-700/80 transition">
               <div class="flex items-center justify-between gap-3 border-b border-slate-800 pb-3 mb-4 flex-wrap">
@@ -344,11 +367,25 @@
               <div class="prose-content">
                 ${renderedMd}
               </div>
+              ${artifactHtml}
             </div>
           `;
         }
 
         stream.appendChild(card);
+
+        // Render KaTeX for mathematical equations
+        try {
+          renderMathInElement(card, {
+            delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false},
+              {left: '\\[', right: '\\]', display: true}
+            ],
+            throwOnError: false
+          });
+        } catch(e) {}
       });
 
       if (visibleCount === 0) {
@@ -383,6 +420,7 @@
       }
 
       renderChat();
+
     }
 
     function handleSearch() {
@@ -395,6 +433,7 @@
         clearBtn.classList.add('hidden');
       }
       renderChat();
+
     }
 
     function clearSearch() {
@@ -404,6 +443,7 @@
       searchQuery = '';
       clearBtn.classList.add('hidden');
       renderChat();
+
     }
 
     function scrollToTop() {
@@ -416,6 +456,11 @@
 
     window.onload = () => {
       renderChat();
+
+      if (window.location.hash) {
+        const target = document.querySelector(window.location.hash);
+        if (target) target.scrollIntoView();
+      }
     };
   </script>
 </body>
