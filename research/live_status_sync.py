@@ -54,10 +54,11 @@ def update_live_status():
     btc_min = get_latest_row(os.path.join(LIVE_BASE, 'BTCUSD', 'min-2026-11.csv'))
     btc_flow = get_latest_row(os.path.join(LIVE_BASE, 'BTCUSD', 'flow-2026-11.csv'))
     
-    # Read latest min and flow for ETHUSD & GOLD-PERP
+    # Read latest min and flow for ETHUSD & GOLD-PERP & XAUUSD
     eth_min = get_latest_row(os.path.join(LIVE_BASE, 'ETHUSD', 'min-2026-11.csv'))
     eth_flow = get_latest_row(os.path.join(LIVE_BASE, 'ETHUSD', 'flow-2026-11.csv'))
     gold_min = get_latest_row(os.path.join(LIVE_BASE, 'GOLD-PERP', 'min-2026-11.csv'))
+    xau_min = get_latest_row(os.path.join(LIVE_BASE, 'XAUUSD', 'min-2026-11.csv'))
 
     btc_trades = get_trades("BTCUSD")
     eth_trades = get_trades("ETHUSD")
@@ -137,6 +138,13 @@ def update_live_status():
                 "current_price": float(gold_min['close']) if gold_min and 'close' in gold_min else 3885.0,
                 "spread": float(gold_min['spreadAvg']) if gold_min and 'spreadAvg' in gold_min else 1.4,
                 "recorded_minutes": count_minutes("GOLD-PERP")
+            },
+            {
+                "symbol": "XAUUSD",
+                "status": "RECORDING_LIVE",
+                "current_price": float(xau_min['close']) if xau_min and 'close' in xau_min else 2740.0,
+                "spread": float(xau_min['spreadAvg']) if xau_min and 'spreadAvg' in xau_min else 0.12,
+                "recorded_minutes": count_minutes("XAUUSD")
             }
         ],
         "recent_trades": all_trades[-10:]
