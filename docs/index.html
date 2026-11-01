@@ -33,10 +33,7 @@
           <span>🚀</span> แดชบอร์ด AI (ล่าสุด)
         </a>
         <a href="research.html" class="px-3 py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition border border-slate-700/80 bg-slate-900/90 shadow-sm flex items-center gap-1.5 cursor-pointer">
-          <span>🔬</span> งานวิจัย (141 Papers)
-        </a>
-        <a href="chat_transcript.html" target="_blank" class="px-3 py-1.5 rounded-lg text-cyan-300 hover:text-white hover:bg-cyan-950/60 transition border border-cyan-800/60 bg-cyan-950/30 flex items-center gap-1.5 shadow-sm">
-          <span>💬</span> บทสนทนาการวิจัย
+          <span>🔬</span> งานวิจัย (141 Papers & สรุปบทสนทนา)
         </a>
         
         <!-- Dropdown for Legacy Claude Results -->
@@ -135,7 +132,7 @@
           
           <!-- Beginner Guide Toggle Button -->
           <button onclick="toggleBeginnerGuide()" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 border border-blue-500/40 text-xs font-bold transition shadow-sm cursor-pointer">
-            <span>📖</span> <span id="guide-btn-text">คลิกเปิด "คู่มือมือใหม่ & พจนานุกรมศัพท์"</span>
+            <span>📖</span> <span id="guide-btn-text">คลิกเปิด "คู่มือมือใหม่ & พจนานุกรมศัพท์" ▼</span>
           </button>
         </div>
 
@@ -165,8 +162,8 @@
               <span>📊</span> 2. ผลลัพธ์จริง (หักค่าสเปรดแล้ว)
             </div>
             <p class="text-[11px] text-slate-400 leading-relaxed">
-              ทดสอบบนข้อมูลจริงข้ามคืน 9.1 ชม. ทำกำไรสุทธิ <strong>+$30.41 USD (+30.4% จากทุน $100)</strong> 
-              Win Rate <strong>68.2%</strong> และ Profit Factor สูงถึง <strong>4.72</strong> โดยความเสี่ยงย่อตัว (Max Drawdown) ต่ำกว่า 3%
+              ทดสอบบนข้อมูลจริงข้ามคืน ทำกำไรสุทธิคู่ขนาน (BTC +$14.16, ETH +$16.16) รวม <strong>+$30.32 USD (+30.3% จากทุน $100)</strong> 
+              Win Rate เฉลี่ย <strong>73.5%</strong> และ Profit Factor สูงถึง <strong>4.24</strong> โดยความเสี่ยงย่อตัว (Max Drawdown) ต่ำเพียง 1.4%
             </p>
           </div>
 
@@ -181,8 +178,8 @@
           </div>
         </div>
 
-        <!-- COLLAPSIBLE BEGINNER GUIDE (Opened or Closed with Smooth Design) -->
-        <div id="beginner-guide-drawer" class="mt-4 pt-4 border-t border-slate-800/80">
+        <!-- COLLAPSIBLE BEGINNER GUIDE (Collapsed by default for clean sleek view) -->
+        <div id="beginner-guide-drawer" class="hidden mt-4 pt-4 border-t border-slate-800/80">
           <div class="bg-slate-950/90 border border-blue-500/30 rounded-xl p-4 sm:p-5">
             <div class="flex items-center justify-between mb-3 border-b border-slate-800 pb-2.5">
               <h3 class="text-xs sm:text-sm font-bold text-blue-400 flex items-center gap-2">
@@ -252,14 +249,14 @@
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-4">
       <div>
         <div class="flex flex-wrap items-center gap-2 mb-1">
-          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-            🚀 ปลดล็อค 5 นาที: กำไรกระโดดแตะ +$14.18 USD
+          <span id="badge-strat-highlight" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            🔥 BTCUSD (M1): วางกรอบดักวอลุ่มสถาบัน กำไร +$14.16 USD
           </span>
-          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">
-            📅 ข้อมูลจริง 4 - 5 ต.ค. 2026
+          <span id="badge-strat-date" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">
+            📅 สมุดคำสั่งสด L2: 31 ต.ค. - 01 พ.ย. 2026
           </span>
-          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-500 border border-amber-500/20">
-            🛡️ เข้าทีละ 1 ไม้ (Single Position)
+          <span id="badge-strat-mode" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-500 border border-amber-500/20">
+            🛡️ เข้าทีละ 1 ไม้ · TP $50 / SL $25
           </span>
         </div>
         <h1 class="text-xl md:text-2xl font-bold tracking-tight text-white flex items-center gap-2">
@@ -286,6 +283,9 @@
         </button>
         <button id="tab-fade" onclick="switchStrategy('dom_fade')" class="px-3 py-1.5 text-xs md:text-sm font-medium rounded-lg transition-all text-slate-400 hover:text-white">
           🛡️ DOM_FADE_5M
+        </button>
+        <button id="tab-compare" onclick="switchStrategy('compare')" class="px-3 py-1.5 text-xs md:text-sm font-medium rounded-lg transition-all text-slate-400 hover:text-white flex items-center gap-1">
+          <span>📊</span> เปรียบเทียบ 3 ยุค
         </button>
       </div>
     </div>
@@ -602,8 +602,18 @@
     function formatDateThai(isoStr) {
       if (!isoStr) return '';
       const d = isoStr.substring(0, 10);
-      if (d === '2026-10-04') return '04 ต.ค. 2026 (อาทิตย์)';
-      if (d === '2026-10-05') return '05 ต.ค. 2026 (จันทร์)';
+      const thaiDays = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'];
+      const thaiMonths = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+      const parts = d.split('-');
+      if (parts.length === 3) {
+        const y = parseInt(parts[0], 10);
+        const m = parseInt(parts[1], 10) - 1;
+        const day = parseInt(parts[2], 10);
+        const dt = new Date(Date.UTC(y, m, day));
+        const dayName = thaiDays[dt.getUTCDay()];
+        const mName = thaiMonths[m] || parts[1];
+        return `${String(day).padStart(2, '0')} ${mName} ${y} (${dayName})`;
+      }
       return d;
     }
 
@@ -645,6 +655,37 @@
 
       const singleView = document.getElementById('single-view');
       const compareView = document.getElementById('compare-view');
+
+      // Dynamic header badges
+      const bHighlight = document.getElementById('badge-strat-highlight');
+      const bDate = document.getElementById('badge-strat-date');
+      const bMode = document.getElementById('badge-strat-mode');
+
+      if (strat === 'dom_absorption_btc') {
+        if (bHighlight) bHighlight.innerHTML = '🔥 BTCUSD (M1): วางกรอบดักวอลุ่มสถาบัน กำไร +$14.16 USD';
+        if (bDate) bDate.innerHTML = '📅 สมุดคำสั่งสด L2: 31 ต.ค. - 01 พ.ย. 2026';
+        if (bMode) bMode.innerHTML = '🛡️ เข้าทีละ 1 ไม้ · TP $50 / SL $25';
+      } else if (strat === 'dom_absorption_eth') {
+        if (bHighlight) bHighlight.innerHTML = '⚡ ETHUSD (M1): ซับแรงขาย Ask/Bid Wall กำไร +$16.16 USD';
+        if (bDate) bDate.innerHTML = '📅 สมุดคำสั่งสด L2: 31 ต.ค. - 01 พ.ย. 2026';
+        if (bMode) bMode.innerHTML = '🛡️ เข้าทีละ 1 ไม้ · TP $3.5 / SL $1.0';
+      } else if (strat === 'dom_smart_runner') {
+        if (bHighlight) bHighlight.innerHTML = '🚀 XAUUSD (M5): ปลดล็อค 5 นาที กำไรกระโดดแตะ +$14.18 USD';
+        if (bDate) bDate.innerHTML = '📅 ข้อมูลจริง 4 - 5 ต.ค. 2026';
+        if (bMode) bMode.innerHTML = '🛡️ เข้าทีละ 1 ไม้ · TP $4.0 / SL $1.5';
+      } else if (strat === 'smc_fibo_dom') {
+        if (bHighlight) bHighlight.innerHTML = '⚡ XAUUSD (M5): ไฮบริด SMC + Fibonacci กำไร +$5.75 USD';
+        if (bDate) bDate.innerHTML = '📅 ข้อมูลจริง 4 - 5 ต.ค. 2026';
+        if (bMode) bMode.innerHTML = '🛡️ เข้าทีละ 1 ไม้ · TP $1.5 / SL $1.5';
+      } else if (strat === 'dom_fade') {
+        if (bHighlight) bHighlight.innerHTML = '🛡️ XAUUSD (M5): กรอบจำกัด 5 นาที กำไร +$5.35 USD';
+        if (bDate) bDate.innerHTML = '📅 ข้อมูลจริง 4 - 5 ต.ค. 2026';
+        if (bMode) bMode.innerHTML = '🛡️ เข้าทีละ 1 ไม้ · TP $1.5 / SL $2.0';
+      } else if (strat === 'compare') {
+        if (bHighlight) bHighlight.innerHTML = '📊 เปรียบเทียบ 3 ยุคของอัลกอริทึมทองคำ';
+        if (bDate) bDate.innerHTML = '📅 ชุดทดสอบเดียวกัน 4 - 5 ต.ค. 2026 (1,027 นาที)';
+        if (bMode) bMode.innerHTML = '🛡️ Benchmark ควบคุมตัวแปร';
+      }
 
       if (strat === 'compare') {
         if (tabCompare) tabCompare.className = "px-3 py-1.5 text-xs md:text-sm font-bold rounded-lg transition-all bg-emerald-500 text-slate-950 shadow flex items-center gap-1.5";
