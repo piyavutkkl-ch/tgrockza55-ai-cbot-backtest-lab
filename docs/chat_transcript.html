@@ -480,8 +480,10 @@
     window.onload = () => {
       renderChat();
       if (window.location.hash) {
-        const target = document.querySelector(window.location.hash);
-        if (target) target.scrollIntoView();
+        setTimeout(() => {
+          const target = document.querySelector(window.location.hash);
+          if (target) target.scrollIntoView({ block: 'start' });
+        }, 300);
       }
     };
   </script>
