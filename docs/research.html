@@ -1004,23 +1004,36 @@
         }
 
         function openDetailModal(s) {
-            document.getElementById('modalId').innerText = s.id;
-            document.getElementById('modalIcon').innerText = s.category_icon || '📊';
-            document.getElementById('modalCategory').innerText = s.category_title;
-            document.getElementById('modalTitle').innerText = s.title;
-            document.getElementById('modalAuthors').innerText = `${s.authors.join(', ')} (${s.published})`;
-            document.getElementById('modalHtmlLink').href = s.html_url;
-            document.getElementById('modalPdfLink').href = s.pdf_url;
-            document.getElementById('modalType').innerText = s.strategy_type;
-            document.getElementById('modalProfit').innerText = s.profit_mechanism;
-            document.getElementById('modalEntry').innerText = s.entry_trigger;
-            document.getElementById('modalExit').innerText = s.exit_trigger;
-            document.getElementById('modalStrengths').innerText = s.strengths;
-            document.getElementById('modalWeaknesses').innerText = s.weaknesses;
-            document.getElementById('modalRisks').innerText = s.risks;
-            document.getElementById('modalAbstract').innerText = s.abstract;
+            const elId = document.getElementById('modalId');
+            const elIcon = document.getElementById('modalIcon');
+            const elCat = document.getElementById('modalCategory');
+            const elTitle = document.getElementById('modalTitle');
+            const elAuthors = document.getElementById('modalAuthors');
+            const elHtml = document.getElementById('modalHtmlLink');
+            const elPdf = document.getElementById('modalPdfLink');
+            const elType = document.getElementById('modalType');
+            const elWhy = document.getElementById('modalWhyProfitable');
+            const elEntry = document.getElementById('modalEntry');
+            const elExit = document.getElementById('modalExit');
+            const elMath = document.getElementById('modalMath');
+            const elRisk = document.getElementById('modalRisk');
 
-            document.getElementById('detailModal').classList.remove('hidden');
+            if (elId) elId.innerText = `${s.id} • arXiv:${s.paper_id}`;
+            if (elIcon) elIcon.innerText = s.category_icon || '📊';
+            if (elCat) elCat.innerText = s.category_title ? s.category_title.replace(/^\d+_/, '').replace(/_/g, ' ') : (s.category_folder || '');
+            if (elTitle) elTitle.innerText = s.title;
+            if (elAuthors) elAuthors.innerText = s.authors ? `ผู้แต่ง: ${Array.isArray(s.authors) ? s.authors.join(', ') : s.authors} (${s.published || ''})` : '';
+            if (elHtml) elHtml.href = s.html_url || `https://arxiv.org/html/${s.base_id || s.paper_id}`;
+            if (elPdf) elPdf.href = s.pdf_url || `https://arxiv.org/pdf/${s.base_id || s.paper_id}.pdf`;
+            if (elType) elType.innerText = s.strategy_type;
+            if (elWhy) elWhy.innerText = s.profit_mechanism || s.why_profitable || '';
+            if (elEntry) elEntry.innerText = s.entry_trigger;
+            if (elExit) elExit.innerText = s.exit_trigger || s.exit_rules || '';
+            if (elMath) elMath.innerText = s.math_formula || s.formula || (s.strengths ? `จุดเด่น: ${s.strengths}` : 'LOB Microstructure Mathematical Model');
+            if (elRisk) elRisk.innerText = s.risks || s.risk_management || '';
+
+            const modal = document.getElementById('detailModal');
+            if (modal) modal.classList.remove('hidden');
         }
 
         function closeDetailModal() {
@@ -1032,152 +1045,18 @@
             m.classList.toggle('hidden');
         }
 
+        // Hash routing for direct tab linking (e.g. #strategies, #benchmark, #optimization)
+        function checkHash() {
+            const h = window.location.hash.replace('#', '');
+            if (['summary', 'benchmark', 'optimization', 'strategies'].includes(h)) {
+                switchTab(h);
+            }
+        }
+        window.addEventListener('hashchange', checkHash);
+        checkHash();
+
         // Initial render
         filterStrategies();
     </script>
-</body>
-</html>
-
-    // Category mapping and colors
-    const categoryMeta = {
-      "01_deep_learning_lob": { label: "Deep Learning & LOB", icon: "🧠", color: "text-purple-400 bg-purple-500/10 border-purple-500/20" },
-      "02_order_flow_imbalance": { label: "Order Flow Imbalance", icon: "📊", color: "text-blue-400 bg-blue-500/10 border-blue-500/20" },
-      "03_high_freq_market_making": { label: "High-Freq Market Making", icon: "⚡", color: "text-yellow-400 bg-yellow-500/10 border-yellow-500/20" },
-      "04_optimal_execution_and_vwap": { label: "Optimal Execution & VWAP", icon: "🎯", color: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20" },
-      "05_point_processes_and_hawkes": { label: "Point Processes & Hawkes", icon: "📈", color: "text-red-400 bg-red-500/10 border-red-500/20" },
-      "06_gold_microstructure_and_intraday": { label: "Gold Microstructure", icon: "🪙", color: "text-amber-400 bg-amber-500/10 border-amber-500/20" },
-      "07_regime_switching_and_hmm": { label: "Regime Switching & HMM", icon: "🔄", color: "text-indigo-400 bg-indigo-500/10 border-indigo-500/20" },
-      "08_lead_lag_and_arbitrage": { label: "Lead-Lag & Arbitrage", icon: "🔗", color: "text-cyan-400 bg-cyan-500/10 border-cyan-500/20" },
-      "09_filtering_and_kalman": { label: "Filtering & Kalman", icon: "📡", color: "text-teal-400 bg-teal-500/10 border-teal-500/20" },
-      "10_synthetic_data_and_simulation": { label: "Synthetic Simulation", icon: "🎲", color: "text-pink-400 bg-pink-500/10 border-pink-500/20" },
-      "11_financial_llm_and_sentiment": { label: "Financial LLM & News", icon: "📰", color: "text-rose-400 bg-rose-500/10 border-rose-500/20" },
-      "12_position_sizing_and_risk": { label: "Position Sizing & Kelly", icon: "⚖️", color: "text-green-400 bg-green-500/10 border-green-500/20" },
-      "13_rough_volatility_and_jumps": { label: "Rough Volatility & Jumps", icon: "📉", color: "text-orange-400 bg-orange-500/10 border-orange-500/20" }
-    };
-
-    let currentCategory = 'ALL';
-    let currentSearch = '';
-
-    // Initialize Category Filters
-    const filterContainer = document.getElementById('categoryFilter');
-    Object.keys(categoryMeta).forEach(key => {
-      const meta = categoryMeta[key];
-      const count = rawStrategies.filter(s => s.category === key).length;
-      const btn = document.createElement('button');
-      btn.onclick = () => setCategory(key);
-      btn.className = `cat-pill px-4 py-2 rounded-xl text-xs font-medium bg-dark-bg text-gray-400 border border-dark-border hover:border-gray-600 transition-all whitespace-nowrap`;
-      btn.id = `cat-${key}`;
-      btn.innerHTML = `${meta.icon} ${meta.label} (${count})`;
-      filterContainer.appendChild(btn);
-    });
-
-    function setCategory(cat) {
-      currentCategory = cat;
-      document.querySelectorAll('.cat-pill').forEach(btn => {
-        btn.classList.remove('bg-emerald-500', 'text-white', 'border-emerald-400');
-        btn.classList.add('bg-dark-bg', 'text-gray-400', 'border-dark-border');
-      });
-      const activeBtn = cat === 'ALL' 
-        ? document.querySelector('.cat-pill') 
-        : document.getElementById(`cat-${cat}`);
-      if (activeBtn) {
-        activeBtn.classList.remove('bg-dark-bg', 'text-gray-400', 'border-dark-border');
-        activeBtn.classList.add('bg-emerald-500', 'text-white', 'border-emerald-400');
-      }
-      filterStrategies();
-    }
-
-    function filterStrategies() {
-      const query = document.getElementById('searchInput').value.toLowerCase().trim();
-      currentSearch = query;
-
-      const filtered = rawStrategies.filter(s => {
-        const matchCat = currentCategory === 'ALL' || s.category === currentCategory;
-        const matchQuery = !query || 
-          s.title.toLowerCase().includes(query) ||
-          s.strategy_type.toLowerCase().includes(query) ||
-          s.why_profitable.toLowerCase().includes(query) ||
-          s.entry_trigger.toLowerCase().includes(query) ||
-          s.id.toLowerCase().includes(query) ||
-          s.paper_id.toLowerCase().includes(query);
-        return matchCat && matchQuery;
-      });
-
-      renderStrategies(filtered);
-      document.getElementById('visibleCount').innerText = filtered.length;
-    }
-
-    function renderStrategies(list) {
-      const grid = document.getElementById('strategyGrid');
-      grid.innerHTML = '';
-
-      if (list.length === 0) {
-        grid.innerHTML = `<div class="col-span-full py-12 text-center text-gray-500 text-sm">ไม่พบกลยุทธ์ที่ตรงกับเงื่อนไขการค้นหา</div>`;
-        return;
-      }
-
-      list.forEach(s => {
-        const meta = categoryMeta[s.category] || { label: s.category, icon: "📄", color: "text-gray-400 bg-gray-500/10 border-gray-500/20" };
-        const card = document.createElement('div');
-        card.className = "bg-dark-card border border-dark-border hover:border-brand-500/50 rounded-2xl p-5 shadow-lg flex flex-col justify-between transition-all hover:-translate-y-1 hover:shadow-brand-500/10 cursor-pointer group";
-        card.onclick = () => openDetailModal(s);
-
-        card.innerHTML = `
-          <div>
-            <div class="flex items-center justify-between gap-2 mb-3">
-              <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full border ${meta.color} flex items-center gap-1">
-                <span>${meta.icon}</span> ${meta.label}
-              </span>
-              <span class="text-[11px] font-mono text-gray-500">${s.id}</span>
-            </div>
-            <h3 class="text-sm font-bold text-white group-hover:text-brand-500 transition-colors line-clamp-2 mb-2">
-              ${s.title}
-            </h3>
-            <p class="text-xs text-gray-400 line-clamp-3 mb-4 leading-relaxed">
-              ${s.why_profitable}
-            </p>
-          </div>
-          <div class="pt-3 border-t border-dark-border/60 flex items-center justify-between text-xs">
-            <span class="text-brand-500 font-medium">${s.strategy_type}</span>
-            <span class="text-gray-400 group-hover:text-white flex items-center gap-1 transition-colors">
-              อ่านรายละเอียด →
-            </span>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
-    }
-
-    function openDetailModal(s) {
-      const meta = categoryMeta[s.category] || { label: s.category, icon: "📄" };
-      document.getElementById('modalIcon').innerText = meta.icon;
-      document.getElementById('modalCategory').innerText = meta.label;
-      document.getElementById('modalId').innerText = `${s.id} • arXiv:${s.paper_id}`;
-      document.getElementById('modalTitle').innerText = s.title;
-      document.getElementById('modalAuthors').innerText = s.authors ? `ผู้แต่ง: ${s.authors}` : '';
-      document.getElementById('modalHtmlLink').href = s.html_url || `https://arxiv.org/html/${s.base_id}`;
-      document.getElementById('modalPdfLink').href = s.pdf_url || `https://arxiv.org/pdf/${s.base_id}`;
-      document.getElementById('modalType').innerText = s.strategy_type;
-      document.getElementById('modalWhyProfitable').innerText = s.why_profitable;
-      document.getElementById('modalEntry').innerText = s.entry_trigger;
-      document.getElementById('modalExit').innerText = s.exit_rules;
-      document.getElementById('modalMath').innerText = s.math_formula;
-      document.getElementById('modalRisk').innerText = s.risk_management;
-
-      document.getElementById('detailModal').classList.remove('hidden');
-    }
-
-    function closeDetailModal() {
-      document.getElementById('detailModal').classList.add('hidden');
-    }
-
-    function toggleEnsembleModal() {
-      const m = document.getElementById('ensembleModal');
-      m.classList.toggle('hidden');
-    }
-
-    // Initial render
-    filterStrategies();
-  </script>
 </body>
 </html>
