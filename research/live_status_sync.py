@@ -14,22 +14,38 @@ LIVE_STATUS_JSON = os.path.join(DOCS_DATA, 'live_status.json')
 def get_latest_row(csv_path):
     if not os.path.exists(csv_path) or os.path.getsize(csv_path) == 0:
         return None
-    with open(csv_path, 'r', encoding='utf-8') as f:
-        reader = list(csv.DictReader(f))
-        if reader:
-            return reader[-1]
+    try:
+        with open(csv_path, 'r', encoding='utf-8') as f:
+            reader = list(csv.DictReader(f))
+            if reader:
+                return reader[-1]
+    except Exception:
+        pass
     return None
 
-def get_recent_trades(symbol):
+def count_minutes(symbol):
+    csv_path = os.path.join(LIVE_BASE, symbol, 'min-2026-11.csv')
+    if not os.path.exists(csv_path):
+        return 0
+    try:
+        with open(csv_path, 'r', encoding='utf-8') as f:
+            return max(0, sum(1 for _ in f) - 1)
+    except Exception:
+        return 0
+
+def get_trades(symbol):
     trades_path = os.path.join(LIVE_BASE, symbol, 'trades.csv')
     if not os.path.exists(trades_path) or os.path.getsize(trades_path) == 0:
         return []
     trades = []
-    with open(trades_path, 'r', encoding='utf-8') as f:
-        reader = csv.DictReader(f)
-        for r in reader:
-            trades.append(r)
-    return trades[-10:]
+    try:
+        with open(trades_path, 'r', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            for r in reader:
+                trades.append(r)
+    except Exception:
+        pass
+    return trades
 
 def update_live_status():
     os.makedirs(DOCS_DATA, exist_ok=True)
@@ -38,10 +54,25 @@ def update_live_status():
     btc_min = get_latest_row(os.path.join(LIVE_BASE, 'BTCUSD', 'min-2026-11.csv'))
     btc_flow = get_latest_row(os.path.join(LIVE_BASE, 'BTCUSD', 'flow-2026-11.csv'))
     
-    # Read latest min for GOLD and ETH
-    gold_min = get_latest_row(os.path.join(LIVE_BASE, 'GOLD-PERP', 'min-2026-11.csv'))
+    # Read latest min and flow for ETHUSD & GOLD-PERP
     eth_min = get_latest_row(os.path.join(LIVE_BASE, 'ETHUSD', 'min-2026-11.csv'))
     eth_flow = get_latest_row(os.path.join(LIVE_BASE, 'ETHUSD', 'flow-2026-11.csv'))
+    gold_min = get_latest_row(os.path.join(LIVE_BASE, 'GOLD-PERP', 'min-2026-11.csv'))
+
+    btc_trades = get_trades("BTCUSD")
+    eth_trades = get_trades("ETHUSD")
+    all_trades = btc_trades + eth_trades
+
+    # Determine balance from latest close trade
+    current_balance = 101.51
+    if btc_trades:
+        for t in reversed(btc_trades):
+            if t.get('balance'):
+                try:
+                    current_balance = float(t['balance'])
+                    break
+                except ValueError:
+                    pass
 
     now_iso = datetime.now(timezone.utc).isoformat()
     now_local = datetime.now().strftime("%d %b %Y, %H:%M:%S น.")
@@ -56,8 +87,9 @@ def update_live_status():
             "period": "M1",
             "mode": "Live Forward Execution (Order Book Wall Absorption)",
             "account": "5258778 (Pepperstone Demo)",
-            "balance": 101.51,
-            "equity": 101.51,
+            "balance": round(current_balance, 2),
+            "equity": round(current_balance, 2),
+            "total_trades": len([t for t in all_trades if t.get('event') == 'CLOSE']),
             "active_bots": [
                 {
                     "symbol": "BTCUSD",
@@ -65,7 +97,7 @@ def update_live_status():
                     "lots": 0.01,
                     "tp_usd": 50.0,
                     "sl_usd": 25.0,
-                    "task_id": "task-2089"
+                    "recorded_minutes": count_minutes("BTCUSD")
                 },
                 {
                     "symbol": "ETHUSD",
@@ -73,7 +105,7 @@ def update_live_status():
                     "lots": 0.01,
                     "tp_usd": 3.5,
                     "sl_usd": 1.0,
-                    "task_id": "task-2092"
+                    "recorded_minutes": count_minutes("ETHUSD")
                 }
             ]
         },
@@ -81,33 +113,33 @@ def update_live_status():
             {
                 "symbol": "BTCUSD",
                 "status": "FORWARD_TRADING_LIVE",
-                "current_price": float(btc_min['close']) if btc_min else 77690.0,
-                "spread": float(btc_min['spreadAvg']) if btc_min else 15.0,
+                "current_price": float(btc_min['close']) if btc_min and 'close' in btc_min else 77950.0,
+                "spread": float(btc_min['spreadAvg']) if btc_min and 'spreadAvg' in btc_min else 15.0,
                 "imbalance": float(btc_min['imbalance']) if btc_min and 'imbalance' in btc_min else 0.0,
-                "delta": float(btc_flow['delta']) if btc_flow else 0.0,
-                "cvd": float(btc_flow['cvd']) if btc_flow else 0.0,
-                "vwap": float(btc_flow['vwapDay']) if btc_flow else 77690.0,
-                "recorded_minutes": 555
+                "delta": float(btc_flow['delta']) if btc_flow and 'delta' in btc_flow else 0.0,
+                "cvd": float(btc_flow['cvd']) if btc_flow and 'cvd' in btc_flow else 0.0,
+                "vwap": float(btc_flow['vwapDay']) if btc_flow and 'vwapDay' in btc_flow else 77950.0,
+                "recorded_minutes": count_minutes("BTCUSD")
             },
             {
                 "symbol": "ETHUSD",
                 "status": "FORWARD_TRADING_LIVE",
-                "current_price": float(eth_min['close']) if eth_min else 2260.0,
-                "spread": float(eth_min['spreadAvg']) if eth_min else 2.0,
+                "current_price": float(eth_min['close']) if eth_min and 'close' in eth_min else 2265.0,
+                "spread": float(eth_min['spreadAvg']) if eth_min and 'spreadAvg' in eth_min else 2.0,
                 "imbalance": float(eth_min['imbalance']) if eth_min and 'imbalance' in eth_min else 0.0,
-                "delta": float(eth_flow['delta']) if eth_flow else 0.0,
-                "cvd": float(eth_flow['cvd']) if eth_flow else 0.0,
-                "recorded_minutes": 555
+                "delta": float(eth_flow['delta']) if eth_flow and 'delta' in eth_flow else 0.0,
+                "cvd": float(eth_flow['cvd']) if eth_flow and 'cvd' in eth_flow else 0.0,
+                "recorded_minutes": count_minutes("ETHUSD")
             },
             {
                 "symbol": "GOLD-PERP",
                 "status": "RECORDING_LIVE",
-                "current_price": float(gold_min['close']) if gold_min else 3885.0,
-                "spread": float(gold_min['spreadAvg']) if gold_min else 1.4,
-                "recorded_minutes": 485
+                "current_price": float(gold_min['close']) if gold_min and 'close' in gold_min else 3885.0,
+                "spread": float(gold_min['spreadAvg']) if gold_min and 'spreadAvg' in gold_min else 1.4,
+                "recorded_minutes": count_minutes("GOLD-PERP")
             }
         ],
-        "recent_trades": get_recent_trades("BTCUSD") + get_recent_trades("ETHUSD")
+        "recent_trades": all_trades[-10:]
     }
 
     # Write atomic JSON
