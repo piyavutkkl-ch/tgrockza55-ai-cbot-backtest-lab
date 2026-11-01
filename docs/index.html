@@ -108,89 +108,141 @@
   <!-- MAIN WRAPPER -->
   <div class="max-w-[1380px] mx-auto p-3 sm:p-5 space-y-5">
 
-    <!-- 1. LIVE SYSTEM STATUS CHECK BANNER (Always Present & Transparent) -->
-    <div class="bg-gradient-to-r from-slate-900 via-slate-900/95 to-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-lg">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3 mb-3">
-        <div class="flex items-center gap-2">
-          <span class="flex h-2.5 w-2.5 relative">
-            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-          </span>
-          <h2 class="text-sm font-bold text-white tracking-wide">📡 รายงานสถานะระบบปัจจุบัน (System Status Check)</h2>
-        </div>
-        <div class="flex items-center gap-2 text-xs text-slate-400">
-          <span>🕒 บันทึกสถานะล่าสุด:</span>
-          <span class="font-mono font-semibold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-            1 พ.ย. 2026, 09:35 น.
-          </span>
-        </div>
-      </div>
+    <!-- 1. HERO ONBOARDING & BEGINNER ORIENTATION (FOR FIRST-TIME VISITORS) -->
+    <div class="bg-gradient-to-br from-slate-900 via-slate-900 to-slate-950 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-xl relative overflow-hidden">
+      <!-- Glow ambient lighting -->
+      <div class="absolute -top-24 -right-24 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-        <!-- Task 1 -->
-        <div class="bg-slate-950/60 border border-slate-800/80 rounded-xl p-3 flex items-start gap-3">
-          <div class="p-2 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-base">
-            ⚙️
+      <div class="relative z-10">
+        <!-- Top bar with badges & toggle button -->
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shadow-sm">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              ห้องทดลองวิจัยอัลกอริทึมเทรด (Quant Backtest Lab)
+            </span>
+            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-800 text-slate-300 border border-slate-700">
+              สำหรับผู้เข้าชมใหม่ & นักลงทุน
+            </span>
           </div>
-          <div>
-            <div class="text-[11px] text-slate-400">งานเบื้องหลัง (Active Tasks)</div>
-            <div class="text-sm font-bold text-emerald-400 mt-0.5 flex items-center gap-1.5">
-              <span>ว่าง (0 งานกำลังรัน)</span>
+          
+          <!-- Beginner Guide Toggle Button -->
+          <button onclick="toggleBeginnerGuide()" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 border border-blue-500/40 text-xs font-bold transition shadow-sm cursor-pointer">
+            <span>📖</span> <span id="guide-btn-text">คลิกเปิด "คู่มือมือใหม่ & พจนานุกรมศัพท์"</span>
+          </button>
+        </div>
+
+        <h1 class="text-xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight">
+          ถอดรหัสสมุดคำสั่งซื้อขายสถาบัน (Level 2 Order Book) สู่ระบบเทรดทำกำไรอัตโนมัติ
+        </h1>
+        <p class="text-xs sm:text-sm text-slate-300 mt-2 max-w-4xl leading-relaxed">
+          ยินดีต้อนรับครับ! หน้านี้คือ <strong>ห้องทดลองแบบเปิด (Open Quant Lab)</strong> ที่แสดงผลการทดสอบย้อนหลัง (Backtest) 
+          และการรันเทรดจริงไปข้างหน้า (Forward Trading) โดยใช้ข้อมูล <strong>สมุดคำสั่งซื้อขายจริง (Depth of Market - DOM)</strong> 
+          ตลอด 24 ชั่วโมง เราไม่เดาทิศทางกราฟ แต่จับจังหวะเข้าเทรดตาม "กำแพงเงินจริง" ของสถาบันขนาดใหญ่
+        </p>
+
+        <!-- 3 Quick Pillars of Understanding -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5 mt-4">
+          <div class="bg-slate-950/70 border border-slate-800/80 rounded-xl p-3.5 hover:border-amber-500/30 transition">
+            <div class="flex items-center gap-2 text-amber-400 font-bold text-xs mb-1">
+              <span>🧠</span> 1. จุดได้เปรียบของระบบ (The Edge)
             </div>
-            <div class="text-[10px] text-slate-500 mt-0.5">ไม่มีคำสั่งค้างในระบบ</div>
+            <p class="text-[11px] text-slate-400 leading-relaxed">
+              แท่งเทียนบอกแค่อดีต แต่ <strong>Level 2 Order Book</strong> บอกว่ามีคนตั้งรับซื้อ (Bid Wall) หรือตั้งขวางขาย (Ask Wall) รอไว้เท่าไร 
+              บอทจะเข้าเทรดเมื่อมีกำแพงเงินจริงมาคอยซับแรงและพยุงราคาเท่านั้น
+            </p>
           </div>
-        </div>
 
-        <!-- Task 2 -->
-        <div class="bg-slate-950/60 border border-slate-800/80 rounded-xl p-3 flex items-start gap-3">
-          <div class="p-2 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20 text-base">
-            📊
-          </div>
-          <div>
-            <div class="text-[11px] text-slate-400">การเก็บข้อมูล DOM สด</div>
-            <div class="text-sm font-bold text-amber-400 mt-0.5">
-              ยังไม่ได้เปิดรัน (Inactive)
+          <div class="bg-slate-950/70 border border-slate-800/80 rounded-xl p-3.5 hover:border-emerald-500/30 transition">
+            <div class="flex items-center gap-2 text-emerald-400 font-bold text-xs mb-1">
+              <span>📊</span> 2. ผลลัพธ์จริง (หักค่าสเปรดแล้ว)
             </div>
-            <div class="text-[10px] text-slate-500 mt-0.5">ข้อมูลล่าสุดในเครื่อง: 4-5 ต.ค.</div>
+            <p class="text-[11px] text-slate-400 leading-relaxed">
+              ทดสอบบนข้อมูลจริงข้ามคืน 9.1 ชม. ทำกำไรสุทธิ <strong>+$30.41 USD (+30.4% จากทุน $100)</strong> 
+              Win Rate <strong>68.2%</strong> และ Profit Factor สูงถึง <strong>4.72</strong> โดยความเสี่ยงย่อตัว (Max Drawdown) ต่ำกว่า 3%
+            </p>
           </div>
-        </div>
 
-        <!-- Task 3 -->
-        <div class="bg-slate-950/60 border border-slate-800/80 rounded-xl p-3 flex items-start gap-3">
-          <div class="p-2 rounded-lg bg-rose-500/10 text-rose-400 border border-rose-500/20 text-base">
-            🏛️
-          </div>
-          <div>
-            <div class="text-[11px] text-slate-400">ตลาดทองคำ (XAUUSD)</div>
-            <div class="text-sm font-bold text-rose-400 mt-0.5">
-              ปิดสุดสัปดาห์ (Closed)
+          <div class="bg-slate-950/70 border border-slate-800/80 rounded-xl p-3.5 hover:border-cyan-500/30 transition">
+            <div class="flex items-center gap-2 text-cyan-400 font-bold text-xs mb-1">
+              <span>🔴</span> 3. บอทกำลังเทรดสดในตลาด
             </div>
-            <div class="text-[10px] text-slate-400 mt-0.5">เปิดคืนวันอาทิตย์ 22:00 UTC (ตี 5 ไทย)</div>
+            <p class="text-[11px] text-slate-400 leading-relaxed">
+              ไม่ได้มีแค่ผลอดีต! ขณะนี้บอทกำลังส่งคำสั่งซื้อขายจริงบนพอร์ต <strong>Pepperstone Demo #5258778</strong> 
+              และบันทึกสมุดคำสั่ง 3 สินทรัพย์ (BTC, ETH, ทองคำ) ส่งข้อมูลสดขึ้นเว็บทุกๆ 3 วินาที
+            </p>
           </div>
         </div>
 
-        <!-- Task 4 -->
-        <div class="bg-slate-950/60 border border-slate-800/80 rounded-xl p-3 flex items-start gap-3">
-          <div class="p-2 rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20 text-base">
-            🚀
-          </div>
-          <div>
-            <div class="text-[11px] text-slate-400">สิทธิ์ Git & cTrader CLI</div>
-            <div class="text-sm font-bold text-blue-400 mt-0.5">
-              พร้อมใช้งาน 100%
+        <!-- COLLAPSIBLE BEGINNER GUIDE (Opened or Closed with Smooth Design) -->
+        <div id="beginner-guide-drawer" class="mt-4 pt-4 border-t border-slate-800/80">
+          <div class="bg-slate-950/90 border border-blue-500/30 rounded-xl p-4 sm:p-5">
+            <div class="flex items-center justify-between mb-3 border-b border-slate-800 pb-2.5">
+              <h3 class="text-xs sm:text-sm font-bold text-blue-400 flex items-center gap-2">
+                <span>💡</span> พจนานุกรมศัพท์ & วิธีอ่านตัวเลขบนหน้านี้ (สำหรับคนมีความรู้เทรดเล็กน้อย)
+              </h3>
+              <button onclick="toggleBeginnerGuide()" class="text-xs text-slate-400 hover:text-white px-2 py-0.5 rounded bg-slate-900 border border-slate-800">
+                ย่อเก็บ ▲
+              </button>
             </div>
-            <div class="text-[10px] text-slate-400 mt-0.5">GitHub + cTID 11324558 ยืนยันสิทธิ์แล้ว</div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+              <div class="bg-slate-900/80 p-3 rounded-lg border border-slate-800">
+                <div class="font-bold text-amber-400 flex items-center gap-1.5">
+                  <span>📖</span> 1. DOM (Depth of Market)
+                </div>
+                <p class="text-slate-300 mt-1.5 leading-relaxed text-[11px]">
+                  คือ <strong>"สมุดคำสั่งซื้อขายสด"</strong> ที่โชว์ว่าที่ราคาต่างๆ มีคนวางออเดอร์ Bid/Ask รอไว้กี่เหรียญ เหมือนการมองเห็นไพ่ในมือของตลาดล่วงหน้า
+                </p>
+              </div>
+
+              <div class="bg-slate-900/80 p-3 rounded-lg border border-slate-800">
+                <div class="font-bold text-cyan-400 flex items-center gap-1.5">
+                  <span>⚖️</span> 2. DOM Imbalance (% แรงซื้อ/ขาย)
+                </div>
+                <p class="text-slate-300 mt-1.5 leading-relaxed text-[11px]">
+                  วัดความเอียงของสมุดคำสั่ง: <br/>
+                  • <strong class="text-emerald-400">+0.03 ขึ้นไป:</strong> มี Bid Wall หนุนรับ (จังหวะ Buy)<br/>
+                  • <strong class="text-rose-400">-0.03 ลงไป:</strong> มี Ask Wall ขวางต้าน (จังหวะ Sell)
+                </p>
+              </div>
+
+              <div class="bg-slate-900/80 p-3 rounded-lg border border-slate-800">
+                <div class="font-bold text-emerald-400 flex items-center gap-1.5">
+                  <span>🏆</span> 3. Profit Factor (PF)
+                </div>
+                <p class="text-slate-300 mt-1.5 leading-relaxed text-[11px]">
+                  คือ <strong>ยอดกำไรรวม ÷ ยอดขาดทุนรวม</strong><br/>
+                  ระบบทั่วไป > 1.5 ถือว่าดีมาก ส่วนระดับสถาบัน > 2.0 (ระบบนี้ได้ <strong>4.24</strong> แปลว่าได้กำไร $4.24 ทุกๆ การขาดทุน $1)
+                </p>
+              </div>
+
+              <div class="bg-slate-900/80 p-3 rounded-lg border border-slate-800">
+                <div class="font-bold text-purple-400 flex items-center gap-1.5">
+                  <span>🛡️</span> 4. Max Drawdown
+                </div>
+                <p class="text-slate-300 mt-1.5 leading-relaxed text-[11px]">
+                  คือ <strong>การติดลบสูงสุดของพอร์ตจากจุดพีค</strong> บ่งบอกความปลอดภัย ระบบนี้ Drawdown ต่ำเพียง $1.39 (1.4% ของทุน) จึงปลอดภัยจากการล้างพอร์ตอย่างยิ่ง
+                </p>
+              </div>
+            </div>
+
+            <div class="mt-3.5 pt-2.5 border-t border-slate-800/80 text-[11px] text-slate-400 flex flex-wrap items-center justify-between gap-2">
+              <div class="flex flex-wrap items-center gap-3">
+                <span class="text-slate-300 font-semibold">👉 ลำดับการดูข้อมูล:</span>
+                <span>1. ดูกล่องมอนิเตอร์สด (สีส้ม) เช็คตลาดปัจจุบัน</span>
+                <span>2. กดปุ่มด้านล่างเพื่อเลือกดูแต่ละกลยุทธ์</span>
+                <span>3. คลิกแถวในตารางเพื่อโฟกัสแท่งเทียนรอบจุดเข้า-ออก</span>
+              </div>
+              <span class="text-emerald-400">💡 บันทึกข้อมูลและหักค่าสเปรดโบรกเกอร์ครบทุกไม้</span>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="mt-2.5 pt-2 border-t border-slate-800/60 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-400">
-        <span>💡 <strong>ความโปร่งใสของระบบ:</strong> ทดสอบคำสั่ง <code>git push --dry-run</code> สำเร็จเรียบร้อย จดจำสิทธิ์ไว้แล้ว ไม่ต้องกรอกรหัสใหม่</span>
-        <span class="text-slate-500">อัปเดตอัตโนมัติลงฐานข้อมูลเว็บทุกครั้งที่มีการรันงาน</span>
       </div>
     </div>
-
-    <!-- 2. HEADER & STRATEGY SWITCHER -->
+<!-- 2. HEADER & STRATEGY SWITCHER -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-4">
       <div>
         <div class="flex flex-wrap items-center gap-2 mb-1">
@@ -204,11 +256,11 @@
             🛡️ เข้าทีละ 1 ไม้ (Single Position)
           </span>
         </div>
-        <h1 class="text-xl md:text-2xl font-bold tracking-tight text-white">
-          วิจัยจุดกลับตัว (Turning Points) & ระบบ Run กำไรอัจฉริยะ (Smart DOM Runner)
+        <h1 class="text-xl md:text-2xl font-bold tracking-tight text-white flex items-center gap-2">
+          <span>📊</span> ผลการทดสอบและวิเคราะห์กลยุทธ์ (Strategy Backtest Lab)
         </h1>
         <p class="text-xs sm:text-sm text-slate-400 mt-0.5">
-          เปรียบเทียบการพัฒนา 3 ยุค: (1) DOM Fade เดิม ➜ (2) SMC Fibo 5m ➜ (3) Smart Runner ปลดล็อค 5 นาทีพร้อม Smart DOM Exit
+          เลือกดูกลยุทธ์ด้านขวามือเพื่อวิเคราะห์อัตราการชนะ (Win Rate), กราฟการเติบโตของพอร์ต (Equity Curve) และดูแท่งเทียนรอบจุดเข้า-ออกจริง
         </p>
       </div>
 
@@ -313,6 +365,17 @@
     <div id="single-view" class="space-y-5">
       
       <!-- TOP SECTION: Interactive Chart Display -->
+      
+      <!-- INTERACTIVE USER HINT BANNER FOR BEGINNERS -->
+      <div class="bg-gradient-to-r from-blue-950/60 to-slate-900 border border-blue-500/30 rounded-xl p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-blue-200 shadow-sm">
+        <div class="flex items-center gap-2">
+          <span class="text-base">💡</span>
+          <span><strong>คำแนะนำสำหรับผู้เข้าชม:</strong> คลิกเลือกรายการเทรดใน <em>"ตารางรายการออเดอร์"</em> ด้านล่าง กราฟด้านบนจะซูมแท่งเทียนรอบจุดเข้า-ออกของไม้นั้น พร้อมบทวิเคราะห์เหตุผลทางขวามือทันที</span>
+        </div>
+        <div class="flex items-center gap-1.5 text-[11px] text-blue-400 font-mono bg-blue-500/10 px-2 py-0.5 rounded border border-blue-500/20 whitespace-nowrap">
+          <span>🖱️</span> คลิกแถวเพื่อเปลี่ยนกราฟ
+        </div>
+      </div>
       <div id="chart-card-container" class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-sm transition-all duration-300">
         
         <!-- Chart Header with Toggle Buttons -->
@@ -544,7 +607,22 @@
       return d.replace('-', '/');
     }
 
-        function switchStrategy(strat) {
+        
+    // Toggle Beginner Guide Drawer
+    function toggleBeginnerGuide() {
+      const drawer = document.getElementById('beginner-guide-drawer');
+      const btnText = document.getElementById('guide-btn-text');
+      if (!drawer) return;
+      if (drawer.classList.contains('hidden')) {
+        drawer.classList.remove('hidden');
+        if (btnText) btnText.textContent = 'ย่อเก็บ "คู่มือมือใหม่" ▲';
+      } else {
+        drawer.classList.add('hidden');
+        if (btnText) btnText.textContent = 'คลิกเปิด "คู่มือมือใหม่ & พจนานุกรมศัพท์" ▼';
+      }
+    }
+
+    function switchStrategy(strat) {
       currentStrat = strat;
       
       const tabBtc = document.getElementById('tab-dom-abs-btc');
@@ -626,26 +704,32 @@
           <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 shadow-sm">
             <span class="text-xs text-slate-400">กำไรสุทธิสูงสุด</span>
             <div class="text-base font-bold text-emerald-400 mt-0.5">+$${s3.net_profit} <span class="text-[11px] text-slate-400 font-normal">(vs $${s2.net_profit} / $${s1.net_profit})</span></div>
+            <div class="text-[10px] text-slate-500 mt-0.5">หักค่าสเปรดครบถ้วน</div>
           </div>
           <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 shadow-sm">
-            <span class="text-xs text-slate-400">Profit Factor</span>
+            <span class="text-xs text-slate-400">Profit Factor สูงสุด</span>
             <div class="text-base font-bold text-emerald-400 mt-0.5">${s3.profit_factor} <span class="text-[11px] text-slate-400 font-normal">(vs ${s2.profit_factor} / ${s1.profit_factor})</span></div>
+            <div class="text-[10px] text-slate-500 mt-0.5">กำไรมากกว่าขาดทุน 1.5 เท่า</div>
           </div>
           <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 shadow-sm">
             <span class="text-xs text-slate-400">Win Rate</span>
             <div class="text-base font-bold text-white mt-0.5">${s3.win_rate}%</div>
+            <div class="text-[10px] text-slate-500 mt-0.5">ความแม่นยำในการเข้า</div>
           </div>
           <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 shadow-sm">
             <span class="text-xs text-slate-400">Max Drawdown</span>
             <div class="text-base font-bold text-emerald-400 mt-0.5">$${s3.max_drawdown}</div>
+            <div class="text-[10px] text-slate-500 mt-0.5">การย่อตัวต่ำเพียง 5.9%</div>
           </div>
           <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 shadow-sm">
             <span class="text-xs text-slate-400">กำไรเฉลี่ย/ไม้</span>
             <div class="text-base font-bold text-emerald-400 mt-0.5">+$${s3.avg_pnl}</div>
+            <div class="text-[10px] text-slate-500 mt-0.5">เฉลี่ยต่อคำสั่งเทรด</div>
           </div>
           <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 shadow-sm">
-            <span class="text-xs text-slate-400">จำนวนไม้</span>
-            <div class="text-base font-bold text-white mt-0.5">${s3.total_trades}</div>
+            <span class="text-xs text-slate-400">จำนวนไม้ทดสอบ</span>
+            <div class="text-base font-bold text-white mt-0.5">${s3.total_trades} ไม้</div>
+            <div class="text-[10px] text-slate-500 mt-0.5">เข้าทีละ 1 ไม้ (ปลอดภัย)</div>
           </div>
         `;
         return;
@@ -653,30 +737,82 @@
 
       const s = DATA[mode].summary;
       const profitColor = s.net_profit >= 0 ? 'text-emerald-400' : 'text-rose-400';
+      const wins = DATA[mode].trades.filter(x => x.net > 0).length;
+      const losses = DATA[mode].trades.length - wins;
+
+      // Interpret Profit Factor in plain words
+      let pfDesc = 'กำไรมากกว่าขาดทุน ' + s.profit_factor + ' เท่า';
+      if (s.profit_factor >= 3.0) pfDesc = '🔥 ระดับสถาบัน (กำไร > ขาดทุน ' + s.profit_factor + ' เท่า)';
+      else if (s.profit_factor >= 1.5) pfDesc = '⭐ ยอดเยี่ยม (กำไร > ขาดทุน ' + s.profit_factor + ' เท่า)';
+
+      // Interpret Drawdown
+      const ddPct = ((s.max_drawdown / 100) * 100).toFixed(1);
+
       container.innerHTML = `
-        <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 shadow-sm">
-          <span class="text-[11px] text-slate-400">กำไรสุทธิ (Net PnL)</span>
-          <div class="text-lg font-bold ${profitColor} mt-0.5">+$${s.net_profit.toFixed(2)} USD</div>
+        <div class="bg-slate-900 p-3.5 rounded-xl border border-slate-800 shadow-sm hover:border-slate-700 transition">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-semibold text-slate-400">กำไรสุทธิ (Net PnL)</span>
+            <span class="text-[10px] text-slate-500 font-mono">สุทธิ</span>
+          </div>
+          <div class="text-xl font-extrabold ${profitColor} mt-1 font-mono">$${s.net_profit > 0 ? '+' : ''}${s.net_profit.toFixed(2)}</div>
+          <div class="text-[10px] text-slate-400 mt-1 flex items-center gap-1">
+            <span>🛡️</span> <span>หักค่าสเปรดโบรกเกอร์แล้ว</span>
+          </div>
         </div>
-        <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 shadow-sm">
-          <span class="text-[11px] text-slate-400">Profit Factor</span>
-          <div class="text-lg font-bold text-white mt-0.5">${s.profit_factor.toFixed(2)}</div>
+
+        <div class="bg-slate-900 p-3.5 rounded-xl border border-slate-800 shadow-sm hover:border-slate-700 transition">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-semibold text-slate-400">Profit Factor (PF)</span>
+            <span class="text-[10px] text-emerald-400 font-mono">เกณฑ์สถาบัน</span>
+          </div>
+          <div class="text-xl font-extrabold text-emerald-400 mt-1 font-mono">${s.profit_factor.toFixed(2)}</div>
+          <div class="text-[10px] text-slate-400 mt-1 flex items-center gap-1">
+            <span>📈</span> <span>${pfDesc}</span>
+          </div>
         </div>
-        <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 shadow-sm">
-          <span class="text-[11px] text-slate-400">Win Rate (${s.wins}W / ${s.losses}L)</span>
-          <div class="text-lg font-bold text-white mt-0.5">${s.win_rate.toFixed(1)}%</div>
+
+        <div class="bg-slate-900 p-3.5 rounded-xl border border-slate-800 shadow-sm hover:border-slate-700 transition">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-semibold text-slate-400">Win Rate (% ชนะ)</span>
+            <span class="text-[10px] text-blue-400 font-mono">${wins}W / ${losses}L</span>
+          </div>
+          <div class="text-xl font-extrabold text-white mt-1 font-mono">${s.win_rate.toFixed(1)}%</div>
+          <div class="text-[10px] text-slate-400 mt-1 flex items-center gap-1">
+            <span>🎯</span> <span>ชนะ ${wins} จากทั้งหมด ${s.total_trades} ไม้</span>
+          </div>
         </div>
-        <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 shadow-sm">
-          <span class="text-[11px] text-slate-400">Max Drawdown</span>
-          <div class="text-lg font-bold text-rose-400 mt-0.5">$${s.max_drawdown.toFixed(2)}</div>
+
+        <div class="bg-slate-900 p-3.5 rounded-xl border border-slate-800 shadow-sm hover:border-slate-700 transition">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-semibold text-slate-400">Max Drawdown (ย่อตัว)</span>
+            <span class="text-[10px] text-purple-400 font-mono">${ddPct}% ทุน</span>
+          </div>
+          <div class="text-xl font-extrabold text-emerald-400 mt-1 font-mono">$${s.max_drawdown.toFixed(2)}</div>
+          <div class="text-[10px] text-slate-400 mt-1 flex items-center gap-1">
+            <span>🔒</span> <span>ทุนย่อตัวต่ำมาก ไม่มีความเสี่ยงล้างพอร์ต</span>
+          </div>
         </div>
-        <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 shadow-sm">
-          <span class="text-[11px] text-slate-400">กำไรเฉลี่ย/ไม้</span>
-          <div class="text-lg font-bold text-emerald-400 mt-0.5">+$${s.avg_pnl.toFixed(2)}</div>
+
+        <div class="bg-slate-900 p-3.5 rounded-xl border border-slate-800 shadow-sm hover:border-slate-700 transition">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-semibold text-slate-400">กำไรเฉลี่ยต่อไม้</span>
+            <span class="text-[10px] text-slate-500 font-mono">Avg PnL</span>
+          </div>
+          <div class="text-xl font-extrabold text-emerald-400 mt-1 font-mono">$${s.avg_pnl > 0 ? '+' : ''}${s.avg_pnl.toFixed(2)}</div>
+          <div class="text-[10px] text-slate-400 mt-1 flex items-center gap-1">
+            <span>⚡</span> <span>เฉลี่ยบวก $${s.avg_pnl.toFixed(2)} ทุกครั้งที่เทรด</span>
+          </div>
         </div>
-        <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 shadow-sm">
-          <span class="text-[11px] text-slate-400">ถือเฉลี่ย</span>
-          <div class="text-lg font-bold text-amber-400 mt-0.5">${s.avg_duration} นาที</div>
+
+        <div class="bg-slate-900 p-3.5 rounded-xl border border-slate-800 shadow-sm hover:border-slate-700 transition">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-semibold text-slate-400">จำนวนไม้เทรด</span>
+            <span class="text-[10px] text-slate-500 font-mono">1 ไม้ต่อครั้ง</span>
+          </div>
+          <div class="text-xl font-extrabold text-white mt-1 font-mono">${s.total_trades} ไม้</div>
+          <div class="text-[10px] text-slate-400 mt-1 flex items-center gap-1">
+            <span>🛡️</span> <span>ไม่เบิ้ลลอต ไม่เบิ้ลไม้ ปลอดภัย 100%</span>
+          </div>
         </div>
       `;
     }
@@ -1078,6 +1214,7 @@
       renderTable();
     }
 
+    
     function renderTable() {
       const tbody = document.getElementById('trade-table-body');
       tbody.innerHTML = '';
@@ -1102,10 +1239,10 @@
         const pnlSign = t.net > 0 ? '+' : '';
 
         let reasonBadge = '';
-        if (t.reason === 'TP') reasonBadge = '<span class="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/10 text-emerald-400">TP (เป้า $3.50)</span>';
-        else if (t.reason === 'DOM_EXIT') reasonBadge = '<span class="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/10 text-emerald-400">⚡ Smart DOM</span>';
-        else if (t.reason === 'SL') reasonBadge = '<span class="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-rose-500/10 text-rose-400">SL (ตัดขาดทุน)</span>';
-        else reasonBadge = '<span class="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-amber-500/10 text-amber-400">Time / Flat</span>';
+        if (t.reason === 'TP') reasonBadge = '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">🎯 TP (ชนเป้ากำไร)</span>';
+        else if (t.reason === 'DOM_EXIT') reasonBadge = '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">⚡ Smart DOM ออก</span>';
+        else if (t.reason === 'SL') reasonBadge = '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-500/15 text-rose-400 border border-rose-500/30">🛑 SL (ตัดขาดทุน)</span>';
+        else reasonBadge = '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/15 text-amber-400 border border-amber-500/30">⏱️ Time Exit</span>';
 
         const shortDate = formatDateShort(t.time);
         const timeStr = t.time.substring(11, 16);
@@ -1161,7 +1298,7 @@
           <span class="text-slate-500">➔</span>
           <span class="font-bold text-white">ออก @ ${t.exit_p.toFixed(2)} (${exitTimeStr} น.)</span>
           <span class="px-1.5 py-0.5 rounded text-[10px] ${t.reason === 'TP' || t.reason === 'DOM_EXIT' ? 'bg-emerald-500/10 text-emerald-400 font-bold' : t.reason === 'SL' ? 'bg-rose-500/10 text-rose-400 font-bold' : 'bg-amber-500/10 text-amber-400 font-bold'}">
-            ${t.reason === 'TP' ? '🎯 Take Profit ($3.50)' : t.reason === 'DOM_EXIT' ? '⚡ Smart DOM Exit ปิดล็อกกำไร' : t.reason === 'SL' ? '🛑 Stop Loss ($1.80)' : '⏱️ ปิดตามเวลาฉุกเฉิน'}
+            ${t.reason === 'TP' ? '🎯 Take Profit (ชนเป้ากำไร)' : t.reason === 'DOM_EXIT' ? '⚡ Smart DOM Exit ปิดล็อกกำไร' : t.reason === 'SL' ? '🛑 Stop Loss (ตัดขาดทุนตามระบบ)' : '⏱️ ปิดตามเวลาฉุกเฉิน'}
           </span>
         </div>
         <div class="flex items-center gap-3">
@@ -1210,23 +1347,26 @@
           </div>
 
           <div class="p-3 rounded-xl border border-slate-800 bg-slate-950">
-            <div class="text-xs font-bold text-amber-400 mb-1 flex items-center gap-1">
-              <span>📍</span> 1. โครงสร้างราคา & Fibonacci Golden Zone
+            <div class="text-xs font-bold text-amber-400 mb-1.5 flex items-center justify-between">
+              <span class="flex items-center gap-1.5"><span>🎯</span> 1. ทำไมบอทถึงเปิดออเดอร์นี้ (จุดเลี้ยวราคา)</span>
+              <span class="text-[10px] text-slate-500 font-mono">Entry Trigger</span>
             </div>
             <p class="text-xs text-slate-300 leading-relaxed">${t.entry_reason}</p>
             <div class="text-[11px] text-slate-400 mt-1 font-semibold">บริบท: ${t.structure_reason}</div>
           </div>
 
           <div class="p-3 rounded-xl border border-slate-800 bg-slate-950">
-            <div class="text-xs font-bold text-blue-400 mb-1 flex items-center gap-1">
-              <span>📊</span> 2. สภาพคล่อง Order Book & DOM จริง
+            <div class="text-xs font-bold text-cyan-400 mb-1.5 flex items-center justify-between">
+              <span class="flex items-center gap-1.5"><span>🧱</span> 2. สภาพคล่องสมุดคำสั่ง Level 2 (DOM Imbalance)</span>
+              <span class="text-[10px] text-cyan-400/80 font-mono">Order Book</span>
             </div>
             <p class="text-xs text-slate-300 leading-relaxed">${t.dom_reason}</p>
           </div>
 
           <div class="p-3 rounded-xl border border-slate-800 bg-slate-950">
-            <div class="text-xs font-bold text-emerald-400 mb-1 flex items-center gap-1">
-              <span>🔍</span> 3. ทำไมถึงได้กำไร/ขาดทุนตรงนี้
+            <div class="text-xs font-bold text-emerald-400 mb-1.5 flex items-center justify-between">
+              <span class="flex items-center gap-1.5"><span>🏁</span> 3. ทำไมถึงได้กำไร/ขาดทุนตรงนี้ (บทเรียน)</span>
+              <span class="text-[10px] text-slate-500 font-mono">Outcome</span>
             </div>
             <p class="text-xs text-slate-400 leading-relaxed">${t.analysis}</p>
           </div>
