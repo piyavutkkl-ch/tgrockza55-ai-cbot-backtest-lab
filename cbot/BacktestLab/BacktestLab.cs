@@ -169,17 +169,36 @@ namespace cAlgo.Robots
             {
                 using (var doc = System.Text.Json.JsonDocument.Parse(System.IO.File.ReadAllText(file)))
                 {
-                    var root = doc.RootElement; System.Text.Json.JsonElement v;
+                    var root = doc.RootElement;
+                    System.Text.Json.JsonElement v;
                     if (root.TryGetProperty("strategy", out v)) StrategyCode = v.GetString();
+                    if (root.TryGetProperty("lots", out v)) Lots = v.GetDouble();
+                    if (root.TryGetProperty("placeOrders", out v)) PlaceOrders = v.GetBoolean();
+                    if (root.TryGetProperty("flatTime", out v)) FlatTime = v.GetInt32();
                     if (root.TryGetProperty("p1", out v)) P1 = v.GetDouble();
                     if (root.TryGetProperty("p2", out v)) P2 = v.GetDouble();
                     if (root.TryGetProperty("p3", out v)) P3 = v.GetDouble();
                     if (root.TryGetProperty("p4", out v)) P4 = v.GetDouble();
-                    if (root.TryGetProperty("lots", out v)) Lots = v.GetDouble();
-                    if (root.TryGetProperty("placeOrders", out v)) PlaceOrders = v.GetBoolean();
-                    if (root.TryGetProperty("flatTime", out v)) FlatTime = v.GetInt32();
+
+                    // Symbol-specific override (e.g. symbols["BTCUSD"] or symbols["ETHUSD"])
+                    System.Text.Json.JsonElement symObj;
+                    bool hasSym = root.TryGetProperty(SymbolName, out symObj);
+                    if (!hasSym && root.TryGetProperty("symbols", out var syms))
+                        hasSym = syms.TryGetProperty(SymbolName, out symObj);
+
+                    if (hasSym && symObj.ValueKind == System.Text.Json.JsonValueKind.Object)
+                    {
+                        if (symObj.TryGetProperty("strategy", out v)) StrategyCode = v.GetString();
+                        if (symObj.TryGetProperty("lots", out v)) Lots = v.GetDouble();
+                        if (symObj.TryGetProperty("placeOrders", out v)) PlaceOrders = v.GetBoolean();
+                        if (symObj.TryGetProperty("p1", out v)) P1 = v.GetDouble();
+                        if (symObj.TryGetProperty("p2", out v)) P2 = v.GetDouble();
+                        if (symObj.TryGetProperty("p3", out v)) P3 = v.GetDouble();
+                        if (symObj.TryGetProperty("p4", out v)) P4 = v.GetDouble();
+                    }
                 }
-                Print("Live settings from live.json: {0}  P1 {1}  P2 {2}  P3 {3}  P4 {4}  lots {5}  place orders {6}", StrategyCode, P1, P2, P3, P4, Lots, PlaceOrders);
+                Print("Live settings ({0}) from live.json: {1}  P1 {2}  P2 {3}  P3 {4}  P4 {5}  lots {6}  place orders {7}",
+                    SymbolName, StrategyCode, P1, P2, P3, P4, Lots, PlaceOrders);
             }
             catch (Exception e)
             {
