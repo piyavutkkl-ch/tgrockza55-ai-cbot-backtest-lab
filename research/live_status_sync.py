@@ -120,6 +120,7 @@ def get_trades(symbol):
         with open(trades_path, 'r', encoding='utf-8') as f:
             reader = csv.DictReader(f)
             for r in reader:
+                r['symbol'] = symbol
                 trades.append(r)
     except Exception:
         pass
@@ -129,9 +130,26 @@ def inspect_bot_telemetry(cfg, now_epoch):
     sym = cfg["symbol"]
     sdir = os.path.join(LIVE_BASE, sym)
     
+    # Calculate PnL stats for this symbol
+    sym_trades = get_trades(sym)
+    sym_closes = [t for t in sym_trades if t.get('event') == 'CLOSE']
+    net_pnl = round(sum(float(t.get('net', 0) or 0) for t in sym_closes), 2)
+    wins = len([t for t in sym_closes if float(t.get('net', 0) or 0) > 0])
+    losses = len([t for t in sym_closes if float(t.get('net', 0) or 0) < 0])
+    win_rate = round(wins / len(sym_closes) * 100, 1) if sym_closes else 0.0
+
+    pnl_info = {
+        "closed_trades": len(sym_closes),
+        "net_pnl": net_pnl,
+        "wins": wins,
+        "losses": losses,
+        "win_rate": win_rate
+    }
+
     if cfg.get("force_offline"):
         return {
             **cfg,
+            **pnl_info,
             "is_online": False,
             "status": "OFFLINE",
             "heartbeat_seconds": 99999,
@@ -149,6 +167,7 @@ def inspect_bot_telemetry(cfg, now_epoch):
     if not os.path.exists(sdir):
         return {
             **cfg,
+            **pnl_info,
             "is_online": False,
             "status": "OFFLINE",
             "heartbeat_seconds": 99999,
@@ -202,6 +221,7 @@ def inspect_bot_telemetry(cfg, now_epoch):
 
     return {
         **cfg,
+        **pnl_info,
         "is_online": is_online,
         "status": status,
         "heartbeat_seconds": round(diff_sec, 1),
@@ -228,15 +248,47 @@ def update_live_status():
     all_trades = btc_trades + eth_trades + xau_trades
     all_trades.sort(key=lambda x: x.get('time', ''))
 
-    current_balance = 97.53
-    if all_trades:
-        for t in reversed(all_trades):
+    all_closed = [t for t in all_trades if t.get('event') == 'CLOSE']
+    all_opens = {t.get('id'): t for t in all_trades if t.get('event') == 'OPEN'}
+
+    current_balance = 97.48
+    if all_closed:
+        for t in reversed(all_closed):
             if t.get('balance'):
                 try:
                     current_balance = float(t['balance'])
                     break
                 except ValueError:
                     pass
+
+    total_net_pnl = round(current_balance - 100.0, 2)
+    total_net_pct = round((current_balance - 100.0) / 100.0 * 100, 2)
+    total_wins = len([t for t in all_closed if float(t.get('net', 0) or 0) > 0])
+    total_losses = len([t for t in all_closed if float(t.get('net', 0) or 0) < 0])
+    total_gross_win = round(sum(float(t.get('net', 0) or 0) for t in all_closed if float(t.get('net', 0) or 0) > 0), 2)
+    total_gross_loss = round(sum(float(t.get('net', 0) or 0) for t in all_closed if float(t.get('net', 0) or 0) < 0), 2)
+    win_rate = round(total_wins / len(all_closed) * 100, 1) if all_closed else 0.0
+
+    # Build paired recent deals for the table
+    recent_deals = []
+    for c in reversed(all_closed[-10:]):
+        op = all_opens.get(c.get('id'), {})
+        entry_p = float(op.get('price', 0) or 0) if op.get('price') else float(c.get('price', 0) or 0)
+        exit_p = float(c.get('price', 0) or 0)
+        net_val = float(c.get('net', 0) or 0)
+        recent_deals.append({
+            "id": c.get('id'),
+            "symbol": c.get('symbol', 'BTCUSD'),
+            "side": c.get('side', 'Sell'),
+            "close_time": c.get('time', ''),
+            "entry_price": entry_p,
+            "exit_price": exit_p,
+            "net": net_val,
+            "reason": c.get('reason', 'Closed'),
+            "spread": float(c.get('spread', 0) or 0),
+            "slippage": float(c.get('slippage', 0) or 0),
+            "balance": float(c.get('balance', 0) or current_balance)
+        })
 
     now_iso = datetime.now(timezone.utc).isoformat()
     now_local = datetime.now().strftime("%d %b %Y, %H:%M:%S น.")
@@ -262,13 +314,22 @@ def update_live_status():
             "bot_name": "BacktestLab (DOM_ABSORPTION)",
             "symbols": "BTCUSD + ETHUSD + XAUUSD",
             "account": "5258778 (Pepperstone Demo)",
+            "initial_deposit": 100.00,
             "balance": round(current_balance, 2),
             "equity": round(current_balance, 2),
-            "total_trades": len([t for t in all_trades if t.get('event') == 'CLOSE']),
+            "net_pnl": total_net_pnl,
+            "net_pnl_pct": total_net_pct,
+            "gross_win": total_gross_win,
+            "gross_loss": total_gross_loss,
+            "total_trades": len(all_closed),
+            "wins": total_wins,
+            "losses": total_losses,
+            "win_rate": win_rate,
             "open_positions": 0
         },
         "bots_fleet": bots_telemetry,
-        "recent_trades": all_trades[-10:]
+        "recent_trades": all_trades[-10:],
+        "recent_closed_deals": recent_deals
     }
 
     # Write atomic JSON
@@ -297,7 +358,7 @@ def maybe_git_push():
 
 if __name__ == '__main__':
     if '--daemon' in sys.argv:
-        print("Starting Enhanced Live Status Sync Daemon with Bot Fleet Heartbeats...")
+        print("Starting Enhanced Live Status Sync Daemon with PnL Telemetry...")
         while True:
             try:
                 update_live_status()

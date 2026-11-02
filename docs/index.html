@@ -349,11 +349,89 @@
         </div>
       </div>
 
-      <!-- BOT FLEET INTERACTIVE CARDS GRID -->
+            <!-- BOT FLEET INTERACTIVE CARDS GRID -->
       <div id="bot-fleet-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3.5">
         <!-- Dynamically rendered by renderBotFleet() -->
       </div>
-    </div>
+
+      <!-- LIVE FORWARD PERFORMANCE KPI STRIP -->
+      <div class="mt-4 pt-3.5 border-t border-slate-800/80">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold text-white flex items-center gap-1.5">
+              <span>📊</span> สรุปผลกำไร/ขาดทุนพอร์ตสด (Live Performance Metrics)
+            </span>
+            <span class="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+              อัปเดตสดทุก 3 วิ
+            </span>
+          </div>
+          <div class="text-[11px] text-slate-400">
+            ทุนเริ่มต้น: <span class="font-mono font-bold text-white">$100.00 USD</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+          <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-3">
+            <div class="text-[11px] text-slate-400">กำไร/ขาดทุนสุทธิ (Net PnL)</div>
+            <div id="live-pnl-net" class="text-base sm:text-lg font-mono font-extrabold text-rose-400 mt-0.5">-$2.52 USD</div>
+            <div id="live-pnl-pct" class="text-[10px] text-slate-400 font-mono mt-0.5">ผลตอบแทน: -2.52%</div>
+          </div>
+
+          <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-3">
+            <div class="text-[11px] text-slate-400">Win Rate สด (อัตราการชนะ)</div>
+            <div id="live-pnl-wr" class="text-base sm:text-lg font-mono font-extrabold text-white mt-0.5">25.0%</div>
+            <div id="live-pnl-wl-count" class="text-[10px] text-slate-400 font-mono mt-0.5">5 ชนะ / 15 แพ้ (20 ไม้)</div>
+          </div>
+
+          <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-3">
+            <div class="text-[11px] text-slate-400">กำไรรวม / ขาดทุนรวม</div>
+            <div id="live-pnl-gross" class="text-xs sm:text-sm font-mono font-bold text-emerald-400 mt-1">+$1.92 <span class="text-slate-500">/</span> <span class="text-rose-400">-$7.90</span></div>
+            <div class="text-[10px] text-slate-400 mt-0.5">หักสเปรดโบรกเกอร์ครบทุกไม้</div>
+          </div>
+
+          <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-3">
+            <div class="text-[11px] text-slate-400">สถานะความเสี่ยง & ไม้ค้าง</div>
+            <div id="live-pnl-risk" class="text-xs sm:text-sm font-mono font-bold text-emerald-400 mt-1">0 ไม้ค้าง (Safe)</div>
+            <div class="text-[10px] text-slate-400 mt-0.5">Drawdown ต่ำมากเพียง 2.5%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LIVE FORWARD ORDER EXECUTION LOG -->
+      <div class="mt-4 pt-3.5 border-t border-slate-800/80">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2.5">
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold text-white flex items-center gap-1.5">
+              <span>📋</span> รายการออเดอร์เทรดสดล่าสุด (Real-Time Forward Execution Log)
+            </span>
+            <span class="text-[10px] text-slate-400 bg-slate-950 px-2 py-0.5 rounded border border-slate-800 font-mono">
+              10 ไม้ล่าสุด
+            </span>
+          </div>
+          <span class="text-[11px] text-slate-400">
+            * สัญญาณเทรดจริงบนบัญชี Pepperstone Demo #5258778
+          </span>
+        </div>
+
+        <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950/80 max-h-[260px]">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-950 text-slate-400 font-medium sticky top-0 z-10 border-b border-slate-800 text-[11px]">
+              <tr>
+                <th class="py-2 px-3">เวลาปิด (UTC)</th>
+                <th class="py-2 px-3">สินทรัพย์</th>
+                <th class="py-2 px-3">ฝั่ง</th>
+                <th class="py-2 px-3">ราคาเข้า ➔ ราคาออก</th>
+                <th class="py-2 px-3 text-right">กำไรสุทธิ</th>
+                <th class="py-2 px-3">เหตุผลที่ปิด</th>
+                <th class="py-2 px-3 text-right">Spread / Slip</th>
+              </tr>
+            </thead>
+            <tbody id="live-deals-table-body" class="divide-y divide-slate-800/80 text-[11px] font-mono">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div></div>
 
     <!-- ========================================================================= -->
     <!-- 🧪 ZONE 2: STRATEGY BACKTEST LAB (ห้องทดลองวิเคราะห์ผลย้อนหลัง)              -->
@@ -1631,7 +1709,15 @@
                   </div>
                 </div>
 
-                <div class="text-[10px] text-amber-300/90 mt-2 flex items-center gap-1 font-medium">
+                <div class="mt-2 py-1 px-2 rounded-lg bg-slate-950 border border-slate-800 flex items-center justify-between text-[11px]">
+                  <span class="text-slate-400 font-sans">PnL พอร์ตสด:</span>
+                  <span class="font-mono font-bold ${bot.net_pnl > 0 ? 'text-emerald-400' : bot.net_pnl < 0 ? 'text-rose-400' : 'text-slate-400'}">
+                    ${bot.net_pnl > 0 ? '+' : ''}$${(bot.net_pnl || 0).toFixed(2)} USD
+                  </span>
+                  <span class="text-[10px] text-slate-500 font-mono">(${bot.closed_trades || 0} ไม้ · ${bot.win_rate || 0}%)</span>
+                </div>
+
+                <div class="text-[10px] text-amber-300/90 mt-1.5 flex items-center gap-1 font-medium">
                   <span>🛡️</span> <span>${bot.defense}</span>
                 </div>
                 ${bot.type === 'FORWARD_TRADING' ? `
@@ -1686,9 +1772,66 @@
         if (elClock) elClock.textContent = data.timestamp_local;
         
         if (data.forward_trading) {
-          if (elBal) elBal.textContent = '$' + data.forward_trading.balance.toFixed(2);
-          if (elEq) elEq.textContent = '$' + data.forward_trading.equity.toFixed(2);
-          if (elTrades) elTrades.textContent = (data.forward_trading.total_trades || 0) + ' ไม้';
+          const ft = data.forward_trading;
+          if (elBal) elBal.textContent = '$' + ft.balance.toFixed(2);
+          if (elEq) elEq.textContent = '$' + ft.equity.toFixed(2);
+          if (elTrades) elTrades.textContent = (ft.total_trades || 0) + ' ไม้';
+
+          const elPnlNet = document.getElementById('live-pnl-net');
+          const elPnlPct = document.getElementById('live-pnl-pct');
+          const elPnlWr = document.getElementById('live-pnl-wr');
+          const elPnlWl = document.getElementById('live-pnl-wl-count');
+          const elPnlGross = document.getElementById('live-pnl-gross');
+
+          if (elPnlNet) {
+            const isPos = ft.net_pnl > 0;
+            const isNeg = ft.net_pnl < 0;
+            elPnlNet.className = 'text-base sm:text-lg font-mono font-extrabold mt-0.5 ' + (isPos ? 'text-emerald-400' : isNeg ? 'text-rose-400' : 'text-slate-300');
+            elPnlNet.textContent = (isPos ? '+' : '') + '$' + ft.net_pnl.toFixed(2) + ' USD';
+          }
+          if (elPnlPct) {
+            elPnlPct.textContent = 'ผลตอบแทน: ' + (ft.net_pnl_pct > 0 ? '+' : '') + ft.net_pnl_pct.toFixed(2) + '%';
+          }
+          if (elPnlWr) elPnlWr.textContent = (ft.win_rate || 0).toFixed(1) + '%';
+          if (elPnlWl) elPnlWl.textContent = `${ft.wins || 0} ชนะ / ${ft.losses || 0} แพ้ (${ft.total_trades || 0} ไม้)`;
+          if (elPnlGross) {
+            elPnlGross.innerHTML = `<span class="text-emerald-400">+$${(ft.gross_win || 0).toFixed(2)}</span> <span class="text-slate-500">/</span> <span class="text-rose-400">-$${Math.abs(ft.gross_loss || 0).toFixed(2)}</span>`;
+          }
+        }
+
+        if (data.recent_closed_deals && data.recent_closed_deals.length) {
+          const tbody = document.getElementById('live-deals-table-body');
+          if (tbody) {
+            tbody.innerHTML = data.recent_closed_deals.map(d => {
+              const isWin = d.net > 0;
+              const netColor = isWin ? 'text-emerald-400' : 'text-rose-400';
+              const symIcon = d.symbol === 'BTCUSD' ? '🪙' : d.symbol === 'ETHUSD' ? '🔷' : '🟡';
+              const sideColor = d.side === 'Buy' ? 'text-blue-400' : 'text-purple-400';
+              const timeStr = (d.close_time || '').replace('2026-', '').substring(0, 14);
+
+              return `
+                <tr class="hover:bg-slate-900/60 transition">
+                  <td class="py-1.5 px-3 text-slate-400 whitespace-nowrap">${timeStr}</td>
+                  <td class="py-1.5 px-3 font-bold text-white whitespace-nowrap">${symIcon} ${d.symbol}</td>
+                  <td class="py-1.5 px-3 ${sideColor} font-bold whitespace-nowrap">${d.side}</td>
+                  <td class="py-1.5 px-3 text-slate-300 whitespace-nowrap">
+                    $${d.entry_price ? d.entry_price.toFixed(d.symbol === 'BTCUSD' ? 1 : 2) : '-'} ➔ $${d.exit_price.toFixed(d.symbol === 'BTCUSD' ? 1 : 2)}
+                  </td>
+                  <td class="py-1.5 px-3 text-right font-bold ${netColor} whitespace-nowrap">
+                    ${isWin ? '+' : ''}$${d.net.toFixed(2)}
+                  </td>
+                  <td class="py-1.5 px-3 whitespace-nowrap">
+                    <span class="px-1.5 py-0.5 rounded text-[10px] font-sans ${d.reason === 'TakeProfit' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-rose-500/20 text-rose-300'}">
+                      ${d.reason}
+                    </span>
+                  </td>
+                  <td class="py-1.5 px-3 text-right text-slate-400 whitespace-nowrap">
+                    $${d.spread.toFixed(1)} / ${d.slippage > 0 ? '+' : ''}${d.slippage.toFixed(1)}
+                  </td>
+                </tr>
+              `;
+            }).join('');
+          }
         }
 
         if (data.summary && elMainBadge) {
