@@ -62,12 +62,13 @@ def update_live_status():
 
     btc_trades = get_trades("BTCUSD")
     eth_trades = get_trades("ETHUSD")
-    all_trades = btc_trades + eth_trades
+    xau_trades = get_trades("XAUUSD")
+    all_trades = btc_trades + eth_trades + xau_trades
 
     # Determine balance from latest close trade
-    current_balance = 101.51
-    if btc_trades:
-        for t in reversed(btc_trades):
+    current_balance = 100.05
+    if all_trades:
+        for t in reversed(all_trades):
             if t.get('balance'):
                 try:
                     current_balance = float(t['balance'])
@@ -84,7 +85,7 @@ def update_live_status():
         "forward_trading": {
             "status": "RUNNING",
             "bot_name": "BacktestLab (DOM_ABSORPTION)",
-            "symbols": "BTCUSD + ETHUSD (2 บอทขนานกัน)",
+            "symbols": "BTCUSD + ETHUSD + XAUUSD (3 บอทขนานกัน)",
             "period": "M1",
             "mode": "Live Forward Execution (Order Book Wall Absorption)",
             "account": "5258778 (Pepperstone Demo)",
@@ -96,17 +97,25 @@ def update_live_status():
                     "symbol": "BTCUSD",
                     "status": "RUNNING",
                     "lots": 0.01,
-                    "tp_usd": 50.0,
-                    "sl_usd": 25.0,
+                    "tp_usd": 91.0,
+                    "sl_usd": 35.0,
                     "recorded_minutes": count_minutes("BTCUSD")
                 },
                 {
                     "symbol": "ETHUSD",
                     "status": "RUNNING",
                     "lots": 0.01,
-                    "tp_usd": 3.5,
-                    "sl_usd": 1.0,
+                    "tp_usd": 11.7,
+                    "sl_usd": 4.5,
                     "recorded_minutes": count_minutes("ETHUSD")
+                },
+                {
+                    "symbol": "XAUUSD",
+                    "status": "RUNNING",
+                    "lots": 0.01,
+                    "tp_usd": 6.0,
+                    "sl_usd": 2.5,
+                    "recorded_minutes": count_minutes("XAUUSD")
                 }
             ]
         },
@@ -141,7 +150,7 @@ def update_live_status():
             },
             {
                 "symbol": "XAUUSD",
-                "status": "RECORDING_LIVE",
+                "status": "FORWARD_TRADING_LIVE",
                 "current_price": float(xau_min['close']) if xau_min and 'close' in xau_min else 2740.0,
                 "spread": float(xau_min['spreadAvg']) if xau_min and 'spreadAvg' in xau_min else 0.12,
                 "recorded_minutes": count_minutes("XAUUSD")
