@@ -73,6 +73,16 @@ namespace cAlgo.Robots
         [Parameter("Book snapshot every (s)", DefaultValue = 2, MinValue = 1, Group = "Live")]
         public int BookSeconds { get; set; }
 
+        // --- QUANTUM STEALTH & ANTI-STOP-HUNT DEFENSE ---
+        [Parameter("Stealth stops (SL/TP in RAM)", DefaultValue = true, Group = "Risk")]
+        public bool StealthStops { get; set; } = true;
+
+        [Parameter("Jitter noise (+/- % on SL)", DefaultValue = 5.0, MinValue = 0.0, MaxValue = 20.0, Group = "Risk")]
+        public double JitterNoisePct { get; set; } = 5.0;
+
+        [Parameter("Emergency disaster SL (x SL)", DefaultValue = 3.5, MinValue = 0.0, Group = "Risk")]
+        public double EmergencySlMult { get; set; } = 3.5;
+
         public const string Label = "BacktestLab";
         // กราฟสดโหลดประวัติมาแค่ราวพันแท่ง — ทฤษฎีที่มีสถานะต่อเนื่อง (EMA, กรอบของวันก่อน, โมเดล) ต้องการมากกว่านั้น
         private const int LiveHistoryBars = 6000;
@@ -84,6 +94,21 @@ namespace cAlgo.Robots
         private double _startBalance;
         private bool _structureStops;
         private bool _canTrade = true;
+        // ราคาที่เห็นตอนสั่งปิด ของแต่ละ position — ไว้เทียบกับราคาที่ได้จริง (ใช้เฉพาะตอนบันทึกตลาดสด)
+        // Stealth Position Tracking (ซ่อน SL/TP จากโบรกเกอร์และเจ้าตลาด)
+        private class StealthPosition
+        {
+            public int Id;
+            public TradeType Side;
+            public double EntryPrice;
+            public double VirtualSl;
+            public double VirtualTp;
+            public double JitterFactor;
+            public DateTime OpenTime;
+        }
+        private readonly Dictionary<int, StealthPosition> _stealthPositions = new Dictionary<int, StealthPosition>();
+        private readonly Random _rng = new Random();
+
         // ราคาที่เห็นตอนสั่งปิด ของแต่ละ position — ไว้เทียบกับราคาที่ได้จริง (ใช้เฉพาะตอนบันทึกตลาดสด)
         private readonly Dictionary<int, double> _expectedClose = new Dictionary<int, double>();
         // ราคา SL / TP ตอนเปิดของแต่ละ position (History ไม่เก็บไว้ให้)
@@ -179,6 +204,9 @@ namespace cAlgo.Robots
                     if (root.TryGetProperty("p2", out v)) P2 = v.GetDouble();
                     if (root.TryGetProperty("p3", out v)) P3 = v.GetDouble();
                     if (root.TryGetProperty("p4", out v)) P4 = v.GetDouble();
+                    if (root.TryGetProperty("stealthStops", out v)) StealthStops = v.GetBoolean();
+                    if (root.TryGetProperty("jitterNoisePct", out v)) JitterNoisePct = v.GetDouble();
+                    if (root.TryGetProperty("emergencySlMult", out v)) EmergencySlMult = v.GetDouble();
 
                     // Symbol-specific override (e.g. symbols["BTCUSD"] or symbols["ETHUSD"])
                     System.Text.Json.JsonElement symObj;
@@ -195,6 +223,9 @@ namespace cAlgo.Robots
                         if (symObj.TryGetProperty("p2", out v)) P2 = v.GetDouble();
                         if (symObj.TryGetProperty("p3", out v)) P3 = v.GetDouble();
                         if (symObj.TryGetProperty("p4", out v)) P4 = v.GetDouble();
+                        if (symObj.TryGetProperty("stealthStops", out v)) StealthStops = v.GetBoolean();
+                        if (symObj.TryGetProperty("jitterNoisePct", out v)) JitterNoisePct = v.GetDouble();
+                        if (symObj.TryGetProperty("emergencySlMult", out v)) EmergencySlMult = v.GetDouble();
                     }
                 }
                 Print("Live settings ({0}) from live.json: {1}  P1 {2}  P2 {3}  P3 {4}  P4 {5}  lots {6}  place orders {7}",
@@ -211,6 +242,32 @@ namespace cAlgo.Robots
         {
             _strategy.OnTick();
             if (_recorder != null) _recorder.OnTick();
+
+            if (StealthStops && _stealthPositions.Count > 0)
+                CheckStealthStops();
+        }
+
+        private void CheckStealthStops()
+        {
+            foreach (var pos in Positions.FindAll(Label, SymbolName))
+            {
+                StealthPosition sp;
+                if (!_stealthPositions.TryGetValue(pos.Id, out sp)) continue;
+
+                double currentPrice = pos.TradeType == TradeType.Buy ? Symbol.Bid : Symbol.Ask;
+                bool isSl = pos.TradeType == TradeType.Buy ? (currentPrice <= sp.VirtualSl) : (currentPrice >= sp.VirtualSl);
+                bool isTp = pos.TradeType == TradeType.Buy ? (currentPrice >= sp.VirtualTp) : (currentPrice <= sp.VirtualTp);
+                bool isCustomExit = _strategy.ShouldExit(pos);
+
+                if (isSl || isTp || isCustomExit)
+                {
+                    string reason = isSl ? "STEALTH_SL" : (isTp ? "STEALTH_TP" : "SMART_DOM_EXIT");
+                    Print("🛡️ STEALTH TRIGGERED: {0} for {1} #{2} at Price {3:F2} (VirtualSL={4:F2}, VirtualTP={5:F2})",
+                        reason, SymbolName, pos.Id, currentPrice, sp.VirtualSl, sp.VirtualTp);
+                    Close(pos);
+                    _stealthPositions.Remove(pos.Id);
+                }
+            }
         }
 
         protected override void OnTimer()
@@ -247,18 +304,47 @@ namespace cAlgo.Robots
             double? tp = TakeProfitPips > 0 ? TakeProfitPips : (double?)null;
 
             var distance = _strategy.StopDistance(signal.Value);
+            double baseDistance = 0;
             if (distance.HasValue)
             {
                 var price = Symbol.Bid;
                 var d = Math.Max(distance.Value, price * MinStopPct / 100);
                 if (MaxStopPct > 0) d = Math.Min(d, price * MaxStopPct / 100);
+                baseDistance = d;
                 sl = Math.Round(d / Symbol.PipSize, 1);
                 tp = _strategy.RewardRisk > 0 ? Math.Round(sl.Value * _strategy.RewardRisk, 1) : (double?)null;   // RewardRisk <= 0 = ไม่มี TP
                 _structureStops = true;
             }
             var expected = signal.Value == TradeType.Buy ? Symbol.Ask : Symbol.Bid;
+
+            // --- QUANTUM STEALTH & STOCHASTIC JITTER DEFENSE ---
+            double? brokerSl = sl;
+            double? brokerTp = tp;
+            double virtualSlPrice = 0;
+            double virtualTpPrice = 0;
+            double jitter = 1.0;
+
+            if (StealthStops && baseDistance > 0)
+            {
+                // Jitter +/- JitterNoisePct %
+                if (JitterNoisePct > 0)
+                {
+                    double noise = (_rng.NextDouble() * 2.0 - 1.0) * (JitterNoisePct / 100.0);
+                    jitter = 1.0 + noise;
+                }
+                double actualSlDist = baseDistance * jitter;
+                double actualTpDist = actualSlDist * (_strategy.RewardRisk > 0 ? _strategy.RewardRisk : 2.0);
+
+                virtualSlPrice = signal.Value == TradeType.Buy ? (expected - actualSlDist) : (expected + actualSlDist);
+                virtualTpPrice = signal.Value == TradeType.Buy ? (expected + actualTpDist) : (expected - actualTpDist);
+
+                // Send emergency catastrophic stop to broker if configured, hide TP completely
+                brokerSl = EmergencySlMult > 0 ? Math.Round((baseDistance * EmergencySlMult) / Symbol.PipSize, 1) : (double?)null;
+                brokerTp = null;
+            }
+
             var clock = System.Diagnostics.Stopwatch.StartNew();
-            var result = ExecuteMarketOrder(signal.Value, SymbolName, volume, Label, sl, tp, _strategy.SignalTag);
+            var result = ExecuteMarketOrder(signal.Value, SymbolName, volume, Label, brokerSl, brokerTp, _strategy.SignalTag);
             clock.Stop();
             if (_recorder != null)
             {
@@ -271,6 +357,23 @@ namespace cAlgo.Robots
             {
                 var p = result.Position;
                 _stops[p.Id] = new[] { p.StopLoss, p.TakeProfit };
+
+                if (StealthStops && baseDistance > 0)
+                {
+                    _stealthPositions[p.Id] = new StealthPosition
+                    {
+                        Id = p.Id,
+                        Side = signal.Value,
+                        EntryPrice = p.EntryPrice,
+                        VirtualSl = virtualSlPrice,
+                        VirtualTp = virtualTpPrice,
+                        JitterFactor = jitter,
+                        OpenTime = Server.Time
+                    };
+                    Print("🛡️ STEALTH ARMED for #{0} {1}: Entry={2:F2} | VirtualSL={3:F2} | VirtualTP={4:F2} | Jitter={5:+0.00%} | BrokerEmergencySL={6}",
+                        p.Id, signal.Value, p.EntryPrice, virtualSlPrice, virtualTpPrice, (jitter - 1.0) * 100.0, brokerSl.HasValue ? brokerSl.Value.ToString() : "NONE");
+                }
+
                 if (p.StopLoss.HasValue && (_strategy.BreakevenAtR > 0 || _strategy.CutAfterMinutes > 0))
                     _plans[p.Id] = new TradePlan
                     {
@@ -292,6 +395,7 @@ namespace cAlgo.Robots
         private void OnPositionClosed(PositionClosedEventArgs args)
         {
             var p = args.Position;
+            _stealthPositions.Remove(p.Id);
             if (_recorder == null || p.Label != Label || p.SymbolName != SymbolName) return;
 
             double? expected = null; double seen;

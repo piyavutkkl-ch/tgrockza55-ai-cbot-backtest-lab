@@ -54,7 +54,7 @@ namespace cAlgo.Robots
 
         protected override void OnInit()
         {
-            _flow = Bot.GetFlowTracker();
+            _flow = null;
             _intensity = 0.1;
             _lastTickTime = Bot.Time;
             _eventTimes.Clear();
@@ -79,8 +79,8 @@ namespace cAlgo.Robots
         {
             double thresh = P.Length > 2 && P[2] > 0 ? P[2] : 2.5;
 
-            double delta = _flow != null ? _flow.Delta : 0;
-            double cvd = _flow != null ? _flow.Cvd : 0;
+            double delta = 0;
+            double cvd = 0;
 
             // Hawkes Burst entry
             if (_intensity >= thresh)

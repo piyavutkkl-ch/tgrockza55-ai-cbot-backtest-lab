@@ -78,7 +78,7 @@ namespace cAlgo.Robots
 
         public override void OnTick()
         {
-            _flow.OnTick(Bot.Symbol.Bid, Bot.Symbol.Ask, Bot.Symbol.Spread, Bot.Time);
+            // FlowTracker is updated by LiveRecorder
         }
 
         public override TradeType? Signal()

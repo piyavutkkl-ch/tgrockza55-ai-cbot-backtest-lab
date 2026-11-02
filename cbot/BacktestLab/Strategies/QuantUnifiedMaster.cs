@@ -69,7 +69,7 @@ namespace cAlgo.Robots
         protected override void OnInit()
         {
             _depth = Bot.MarketData.GetMarketDepth(Bot.SymbolName);
-            _flow = Bot.GetFlowTracker();
+            _flow = null;
 
             _kalmanPos = Bot.Bars.ClosePrices.Last(1);
             _kalmanVel = 0;
