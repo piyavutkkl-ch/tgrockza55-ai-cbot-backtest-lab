@@ -64,9 +64,10 @@ def update_live_status():
     eth_trades = get_trades("ETHUSD")
     xau_trades = get_trades("XAUUSD")
     all_trades = btc_trades + eth_trades + xau_trades
+    all_trades.sort(key=lambda x: x.get('time', ''))
 
     # Determine balance from latest close trade
-    current_balance = 100.05
+    current_balance = 97.53
     if all_trades:
         for t in reversed(all_trades):
             if t.get('balance'):
