@@ -1,0 +1,667 @@
+{
+  "backup_created_at_utc": "2026-11-02T10:31:32.698906+00:00",
+  "primary_database": "SUPABASE_POSTGRESQL (https://wmaoopzqgutzxoxiqqgs.supabase.co)",
+  "backup_mode": "ON_DEMAND_LOCAL_SNAPSHOT",
+  "supabase_recent_runs_count": 25,
+  "supabase_recent_runs": [
+    {
+      "id": 104,
+      "owner": "bcb76dfd-a901-438c-ac76-c6643af0c570",
+      "strategy_id": 104,
+      "symbol": "XAUUSD",
+      "timeframe": "m1",
+      "date_from": "2022-01-03T00:00:00+00:00",
+      "date_to": "2026-09-30T23:59:00+00:00",
+      "params": {
+        "max_hold": 60,
+        "rr_ratio": 2.5,
+        "exit_mode": "VWAP_TOUCH",
+        "sd_thresh": 4.2,
+        "max_atr_bar": 2,
+        "sl_atr_mult": 2,
+        "max_risk_usd": 0.7,
+        "dataset_sha256": "73fc31cbc600e40e",
+        "ny_session_only": true,
+        "checklist_9_of_9": true,
+        "source_code_sha256": "456f59e8b3e1ea5a"
+      },
+      "running_mode": "QuantFundV2_Deterministic_Math",
+      "start_balance": 100,
+      "end_balance": 107.73,
+      "net_profit": 7.73,
+      "total_trades": 109,
+      "win_rate": 34.86,
+      "profit_factor": 1.16,
+      "max_dd_pct": 13.84,
+      "machine": "DESKTOP-V8S08E8",
+      "note": "[QuantFund V2 Supabase Sync] 9/9 Checklist=PASS | OOS PF=1.37 ($+5.11) | 1oz Unscaled=+$61.63 | AI Notes: Quarantined (verified_by_human=False)",
+      "drive_file_id": "1x17k3afrkRWLCSgRpaYcWbRZJZkLpWnZ",
+      "drive_error": null,
+      "created_at": "2026-11-02T10:31:30.354803+00:00",
+      "strategy": {
+        "id": 104,
+        "code": "QF_V2_VWAP_EQUILIBRIUM",
+        "name": "Antigravity V2 Institutional Equilibrium (QF_V2_VWAP_EQUILIBRIUM)",
+        "notes": null,
+        "theory": "[V2 Build->Prove->Protect] Dataset SHA256=73fc31cbc600e40e | Code SHA256=456f59e8b3e1ea5a | OOS PF=1.37 | 9/9 Boolean Checklist=PASS",
+        "version": 2,
+        "exit_rules": [
+          "Equilibrium Target: Session VWAP Touch",
+          "Hard Structural Stop Loss: 2.0x ATR clamped to <= 0.70% risk/trade",
+          "Time Stop: 60 minutes"
+        ],
+        "entry_rules": [
+          "13:00-17:00 UTC New York Session",
+          "Anchored VWAP Stretch >= 4.2 SD + 15-bar extreme",
+          "News Void Gate: Bar range <= 2.0x ATR"
+        ],
+        "param_names": [
+          "sd_thresh",
+          "exit_mode",
+          "sl_atr_mult",
+          "rr_ratio",
+          "max_hold",
+          "max_atr_bar",
+          "ny_session_only",
+          "max_risk_usd"
+        ]
+      }
+    },
+    {
+      "id": 103,
+      "owner": "bcb76dfd-a901-438c-ac76-c6643af0c570",
+      "strategy_id": 95,
+      "symbol": "XAUUSD",
+      "timeframe": "HeikinMinute",
+      "date_from": "2026-07-01T00:00:00+00:00",
+      "date_to": "2026-09-30T23:59:59+00:00",
+      "params": {
+        "Lots": 0.01,
+        "StopLossPips": 20,
+        "TakeProfitPips": 40
+      },
+      "running_mode": "SilentBacktesting",
+      "start_balance": 100000,
+      "end_balance": 100000,
+      "net_profit": 0,
+      "total_trades": 0,
+      "win_rate": null,
+      "profit_factor": null,
+      "max_dd_pct": 0,
+      "machine": "DESKTOP-V8S08E8",
+      "note": "ทายทิศแท่ง HA ถัดไปถูก 82.12% จาก 90,182 แท่ง · เฉพาะตอนราคาห่างชัดเจน: 92.20% (63.41% ของแท่ง) · การทายชุดเดียวกันเทียบกับราคาจริงของนาทีนั้น: ถูก 48.40% — Heikin-Ashi Hm1, tick data 2026-07..09 (no orders: counts right and wrong calls)",
+      "drive_file_id": "1ChjNu88GVvBYwvyvXCQvveNpKIDNojjr",
+      "drive_error": null,
+      "created_at": "2026-10-06T02:54:28.215171+00:00",
+      "strategy": {
+        "id": 95,
+        "code": "HA_PREDICT",
+        "name": "ทายทิศแท่ง Heikin Ashi ถัดไป",
+        "notes": null,
+        "theory": "แท่ง Heikin Ashi ถูกทำให้เรียบด้วยการเฉลี่ย: ราคาเปิดของแท่งใหม่คือจุดกึ่งกลางของแท่งก่อน และราคาปิดคือค่าเฉลี่ยของนาทีนั้น เมื่อแท่งใหม่เปิด ถ้าราคาจริงอยู่เหนือราคาเปิดของแท่ง HA อยู่แล้ว ค่าเฉลี่ยของนาทีนั้นก็มักจบเหนือระดับนั้นด้วย แท่งจึงจบเป็นแท่งขึ้น",
+        "version": 1,
+        "exit_rules": [
+          "ไม่มีออเดอร์"
+        ],
+        "entry_rules": [
+          "ไม่เปิดออเดอร์: นับอย่างเดียวว่าทายถูกกี่แท่ง",
+          "ตอนแท่ง HA ใหม่เปิด: ราคาจริงสูงกว่าราคาเปิดของแท่ง HA → ทายว่าแท่งนี้จบเป็นแท่งขึ้น, ต่ำกว่า → แท่งลง"
+        ],
+        "param_names": []
+      }
+    },
+    {
+      "id": 102,
+      "owner": "bcb76dfd-a901-438c-ac76-c6643af0c570",
+      "strategy_id": 95,
+      "symbol": "XAUUSD",
+      "timeframe": "HeikinMinute",
+      "date_from": "2026-04-01T00:00:00+00:00",
+      "date_to": "2026-06-30T23:59:59+00:00",
+      "params": {
+        "Lots": 0.01,
+        "StopLossPips": 20,
+        "TakeProfitPips": 40
+      },
+      "running_mode": "SilentBacktesting",
+      "start_balance": 100000,
+      "end_balance": 100000,
+      "net_profit": 0,
+      "total_trades": 0,
+      "win_rate": null,
+      "profit_factor": null,
+      "max_dd_pct": 0,
+      "machine": "DESKTOP-V8S08E8",
+      "note": "ทายทิศแท่ง HA ถัดไปถูก 81.81% จาก 87,475 แท่ง · เฉพาะตอนราคาห่างชัดเจน: 92.08% (63.88% ของแท่ง) · การทายชุดเดียวกันเทียบกับราคาจริงของนาทีนั้น: ถูก 48.00% — Heikin-Ashi Hm1, tick data 2026-04..06 (no orders: counts right and wrong calls)",
+      "drive_file_id": "1vPOVVKBTGFWCpXqVtcTqpGEX7uSIoEvI",
+      "drive_error": null,
+      "created_at": "2026-10-06T02:53:27.622991+00:00",
+      "strategy": {
+        "id": 95,
+        "code": "HA_PREDICT",
+        "name": "ทายทิศแท่ง Heikin Ashi ถัดไป",
+        "notes": null,
+        "theory": "แท่ง Heikin Ashi ถูกทำให้เรียบด้วยการเฉลี่ย: ราคาเปิดของแท่งใหม่คือจุดกึ่งกลางของแท่งก่อน และราคาปิดคือค่าเฉลี่ยของนาทีนั้น เมื่อแท่งใหม่เปิด ถ้าราคาจริงอยู่เหนือราคาเปิดของแท่ง HA อยู่แล้ว ค่าเฉลี่ยของนาทีนั้นก็มักจบเหนือระดับนั้นด้วย แท่งจึงจบเป็นแท่งขึ้น",
+        "version": 1,
+        "exit_rules": [
+          "ไม่มีออเดอร์"
+        ],
+        "entry_rules": [
+          "ไม่เปิดออเดอร์: นับอย่างเดียวว่าทายถูกกี่แท่ง",
+          "ตอนแท่ง HA ใหม่เปิด: ราคาจริงสูงกว่าราคาเปิดของแท่ง HA → ทายว่าแท่งนี้จบเป็นแท่งขึ้น, ต่ำกว่า → แท่งลง"
+        ],
+        "param_names": []
+      }
+    },
+    {
+      "id": 101,
+      "owner": "bcb76dfd-a901-438c-ac76-c6643af0c570",
+      "strategy_id": 95,
+      "symbol": "XAUUSD",
+      "timeframe": "HeikinMinute",
+      "date_from": "2026-01-01T23:01:00+00:00",
+      "date_to": "2026-03-31T23:59:59+00:00",
+      "params": {
+        "Lots": 0.01,
+        "StopLossPips": 20,
+        "TakeProfitPips": 40
+      },
+      "running_mode": "SilentBacktesting",
+      "start_balance": 100000,
+      "end_balance": 100000,
+      "net_profit": 0,
+      "total_trades": 0,
+      "win_rate": null,
+      "profit_factor": null,
+      "max_dd_pct": 0,
+      "machine": "DESKTOP-V8S08E8",
+      "note": "ทายทิศแท่ง HA ถัดไปถูก 82.35% จาก 86,364 แท่ง · เฉพาะตอนราคาห่างชัดเจน: 92.32% (64.54% ของแท่ง) · การทายชุดเดียวกันเทียบกับราคาจริงของนาทีนั้น: ถูก 48.80% — Heikin-Ashi Hm1, tick data 2026-01..03 (no orders: counts right and wrong calls)",
+      "drive_file_id": "1b_R54XBtzhYMXYSmWIowsddZhhzTsw9G",
+      "drive_error": null,
+      "created_at": "2026-10-06T02:52:27.059801+00:00",
+      "strategy": {
+        "id": 95,
+        "code": "HA_PREDICT",
+        "name": "ทายทิศแท่ง Heikin Ashi ถัดไป",
+        "notes": null,
+        "theory": "แท่ง Heikin Ashi ถูกทำให้เรียบด้วยการเฉลี่ย: ราคาเปิดของแท่งใหม่คือจุดกึ่งกลางของแท่งก่อน และราคาปิดคือค่าเฉลี่ยของนาทีนั้น เมื่อแท่งใหม่เปิด ถ้าราคาจริงอยู่เหนือราคาเปิดของแท่ง HA อยู่แล้ว ค่าเฉลี่ยของนาทีนั้นก็มักจบเหนือระดับนั้นด้วย แท่งจึงจบเป็นแท่งขึ้น",
+        "version": 1,
+        "exit_rules": [
+          "ไม่มีออเดอร์"
+        ],
+        "entry_rules": [
+          "ไม่เปิดออเดอร์: นับอย่างเดียวว่าทายถูกกี่แท่ง",
+          "ตอนแท่ง HA ใหม่เปิด: ราคาจริงสูงกว่าราคาเปิดของแท่ง HA → ทายว่าแท่งนี้จบเป็นแท่งขึ้น, ต่ำกว่า → แท่งลง"
+        ],
+        "param_names": []
+      }
+    },
+    {
+      "id": 100,
+      "owner": "bcb76dfd-a901-438c-ac76-c6643af0c570",
+      "strategy_id": 95,
+      "symbol": "XAUUSD",
+      "timeframe": "HeikinMinute",
+      "date_from": "2025-09-01T00:00:00+00:00",
+      "date_to": "2025-12-31T19:54:59+00:00",
+      "params": {
+        "Lots": 0.01,
+        "StopLossPips": 20,
+        "TakeProfitPips": 40
+      },
+      "running_mode": "SilentBacktesting",
+      "start_balance": 100000,
+      "end_balance": 100000,
+      "net_profit": 0,
+      "total_trades": 0,
+      "win_rate": null,
+      "profit_factor": null,
+      "max_dd_pct": 0,
+      "machine": "DESKTOP-V8S08E8",
+      "note": "ทายทิศแท่ง HA ถัดไปถูก 82.53% จาก 118,408 แท่ง · เฉพาะตอนราคาห่างชัดเจน: 92.44% (64.59% ของแท่ง) · การทายชุดเดียวกันเทียบกับราคาจริงของนาทีนั้น: ถูก 48.93% — Heikin-Ashi Hm1, tick data 2025-09..12 (no orders: counts right and wrong calls)",
+      "drive_file_id": "1sbkDgoDMq2KnltW-KLIK_3EvGMY8ws9d",
+      "drive_error": null,
+      "created_at": "2026-10-06T02:51:21.280178+00:00",
+      "strategy": {
+        "id": 95,
+        "code": "HA_PREDICT",
+        "name": "ทายทิศแท่ง Heikin Ashi ถัดไป",
+        "notes": null,
+        "theory": "แท่ง Heikin Ashi ถูกทำให้เรียบด้วยการเฉลี่ย: ราคาเปิดของแท่งใหม่คือจุดกึ่งกลางของแท่งก่อน และราคาปิดคือค่าเฉลี่ยของนาทีนั้น เมื่อแท่งใหม่เปิด ถ้าราคาจริงอยู่เหนือราคาเปิดของแท่ง HA อยู่แล้ว ค่าเฉลี่ยของนาทีนั้นก็มักจบเหนือระดับนั้นด้วย แท่งจึงจบเป็นแท่งขึ้น",
+        "version": 1,
+        "exit_rules": [
+          "ไม่มีออเดอร์"
+        ],
+        "entry_rules": [
+          "ไม่เปิดออเดอร์: นับอย่างเดียวว่าทายถูกกี่แท่ง",
+          "ตอนแท่ง HA ใหม่เปิด: ราคาจริงสูงกว่าราคาเปิดของแท่ง HA → ทายว่าแท่งนี้จบเป็นแท่งขึ้น, ต่ำกว่า → แท่งลง"
+        ],
+        "param_names": []
+      }
+    },
+    {
+      "id": 99,
+      "owner": "bcb76dfd-a901-438c-ac76-c6643af0c570",
+      "strategy_id": 95,
+      "symbol": "XAUUSD",
+      "timeframe": "HeikinMinute",
+      "date_from": "2025-05-01T00:00:00+00:00",
+      "date_to": "2025-08-31T23:59:59+00:00",
+      "params": {
+        "Lots": 0.01,
+        "StopLossPips": 20,
+        "TakeProfitPips": 40
+      },
+      "running_mode": "SilentBacktesting",
+      "start_balance": 100000,
+      "end_balance": 100000,
+      "net_profit": 0,
+      "total_trades": 0,
+      "win_rate": null,
+      "profit_factor": null,
+      "max_dd_pct": 0,
+      "machine": "DESKTOP-V8S08E8",
+      "note": "ทายทิศแท่ง HA ถัดไปถูก 82.58% จาก 118,409 แท่ง · เฉพาะตอนราคาห่างชัดเจน: 92.31% (65.53% ของแท่ง) · การทายชุดเดียวกันเทียบกับราคาจริงของนาทีนั้น: ถูก 49.01% — Heikin-Ashi Hm1, tick data 2025-05..08 (no orders: counts right and wrong calls)",
+      "drive_file_id": "1a-3726OreaJaiKxE-s2dQhUY4Xuo4r5c",
+      "drive_error": null,
+      "created_at": "2026-10-06T02:50:08.680434+00:00",
+      "strategy": {
+        "id": 95,
+        "code": "HA_PREDICT",
+        "name": "ทายทิศแท่ง Heikin Ashi ถัดไป",
+        "notes": null,
+        "theory": "แท่ง Heikin Ashi ถูกทำให้เรียบด้วยการเฉลี่ย: ราคาเปิดของแท่งใหม่คือจุดกึ่งกลางของแท่งก่อน และราคาปิดคือค่าเฉลี่ยของนาทีนั้น เมื่อแท่งใหม่เปิด ถ้าราคาจริงอยู่เหนือราคาเปิดของแท่ง HA อยู่แล้ว ค่าเฉลี่ยของนาทีนั้นก็มักจบเหนือระดับนั้นด้วย แท่งจึงจบเป็นแท่งขึ้น",
+        "version": 1,
+        "exit_rules": [
+          "ไม่มีออเดอร์"
+        ],
+        "entry_rules": [
+          "ไม่เปิดออเดอร์: นับอย่างเดียวว่าทายถูกกี่แท่ง",
+          "ตอนแท่ง HA ใหม่เปิด: ราคาจริงสูงกว่าราคาเปิดของแท่ง HA → ทายว่าแท่งนี้จบเป็นแท่งขึ้น, ต่ำกว่า → แท่งลง"
+        ],
+        "param_names": []
+      }
+    },
+    {
+      "id": 98,
+      "owner": "bcb76dfd-a901-438c-ac76-c6643af0c570",
+      "strategy_id": 95,
+      "symbol": "XAUUSD",
+      "timeframe": "HeikinMinute",
+      "date_from": "2025-01-01T23:01:00+00:00",
+      "date_to": "2025-04-30T23:59:59+00:00",
+      "params": {
+        "Lots": 0.01,
+        "StopLossPips": 20,
+        "TakeProfitPips": 40
+      },
+      "running_mode": "SilentBacktesting",
+      "start_balance": 100000,
+      "end_balance": 100000,
+      "net_profit": 0,
+      "total_trades": 0,
+      "win_rate": null,
+      "profit_factor": null,
+      "max_dd_pct": 0,
+      "machine": "DESKTOP-V8S08E8",
+      "note": "ทายทิศแท่ง HA ถัดไปถูก 82.44% จาก 114,569 แท่ง · เฉพาะตอนราคาห่างชัดเจน: 92.23% (64.91% ของแท่ง) · การทายชุดเดียวกันเทียบกับราคาจริงของนาทีนั้น: ถูก 48.79% — Heikin-Ashi Hm1, tick data 2025-01..04 (no orders: counts right and wrong calls)",
+      "drive_file_id": "1n7H_dBXoa2tbknJOFUwhZzoHRpnZgzd2",
+      "drive_error": null,
+      "created_at": "2026-10-06T02:49:04.638709+00:00",
+      "strategy": {
+        "id": 95,
+        "code": "HA_PREDICT",
+        "name": "ทายทิศแท่ง Heikin Ashi ถัดไป",
+        "notes": null,
+        "theory": "แท่ง Heikin Ashi ถูกทำให้เรียบด้วยการเฉลี่ย: ราคาเปิดของแท่งใหม่คือจุดกึ่งกลางของแท่งก่อน และราคาปิดคือค่าเฉลี่ยของนาทีนั้น เมื่อแท่งใหม่เปิด ถ้าราคาจริงอยู่เหนือราคาเปิดของแท่ง HA อยู่แล้ว ค่าเฉลี่ยของนาทีนั้นก็มักจบเหนือระดับนั้นด้วย แท่งจึงจบเป็นแท่งขึ้น",
+        "version": 1,
+        "exit_rules": [
+          "ไม่มีออเดอร์"
+        ],
+        "entry_rules": [
+          "ไม่เปิดออเดอร์: นับอย่างเดียวว่าทายถูกกี่แท่ง",
+          "ตอนแท่ง HA ใหม่เปิด: ราคาจริงสูงกว่าราคาเปิดของแท่ง HA → ทายว่าแท่งนี้จบเป็นแท่งขึ้น, ต่ำกว่า → แท่งลง"
+        ],
+        "param_names": []
+      }
+    },
+    {
+      "id": 97,
+      "owner": "bcb76dfd-a901-438c-ac76-c6643af0c570",
+      "strategy_id": 95,
+      "symbol": "XAUUSD",
+      "timeframe": "HeikinMinute",
+      "date_from": "2024-09-01T22:01:00+00:00",
+      "date_to": "2024-12-31T19:54:59+00:00",
+      "params": {
+        "Lots": 0.01,
+        "StopLossPips": 20,
+        "TakeProfitPips": 40
+      },
+      "running_mode": "SilentBacktesting",
+      "start_balance": 100000,
+      "end_balance": 100000,
+      "net_profit": 0,
+      "total_trades": 0,
+      "win_rate": null,
+      "profit_factor": null,
+      "max_dd_pct": 0,
+      "machine": "DESKTOP-V8S08E8",
+      "note": "ทายทิศแท่ง HA ถัดไปถูก 82.71% จาก 116,432 แท่ง · เฉพาะตอนราคาห่างชัดเจน: 92.32% (65.55% ของแท่ง) · การทายชุดเดียวกันเทียบกับราคาจริงของนาทีนั้น: ถูก 49.06% — Heikin-Ashi Hm1, tick data 2024-09..12 (no orders: counts right and wrong calls)",
+      "drive_file_id": "1PMbIBqq7UOXPyQP7LSvQiw7Qtju7-cJr",
+      "drive_error": null,
+      "created_at": "2026-10-06T02:48:05.100717+00:00",
+      "strategy": {
+        "id": 95,
+        "code": "HA_PREDICT",
+        "name": "ทายทิศแท่ง Heikin Ashi ถัดไป",
+        "notes": null,
+        "theory": "แท่ง Heikin Ashi ถูกทำให้เรียบด้วยการเฉลี่ย: ราคาเปิดของแท่งใหม่คือจุดกึ่งกลางของแท่งก่อน และราคาปิดคือค่าเฉลี่ยของนาทีนั้น เมื่อแท่งใหม่เปิด ถ้าราคาจริงอยู่เหนือราคาเปิดของแท่ง HA อยู่แล้ว ค่าเฉลี่ยของนาทีนั้นก็มักจบเหนือระดับนั้นด้วย แท่งจึงจบเป็นแท่งขึ้น",
+        "version": 1,
+        "exit_rules": [
+          "ไม่มีออเดอร์"
+        ],
+        "entry_rules": [
+          "ไม่เปิดออเดอร์: นับอย่างเดียวว่าทายถูกกี่แท่ง",
+          "ตอนแท่ง HA ใหม่เปิด: ราคาจริงสูงกว่าราคาเปิดของแท่ง HA → ทายว่าแท่งนี้จบเป็นแท่งขึ้น, ต่ำกว่า → แท่งลง"
+        ],
+        "param_names": []
+      }
+    },
+    {
+      "id": 96,
+      "owner": "bcb76dfd-a901-438c-ac76-c6643af0c570",
+      "strategy_id": 95,
+      "symbol": "XAUUSD",
+      "timeframe": "HeikinMinute",
+      "date_from": "2024-05-01T00:00:00+00:00",
+      "date_to": "2024-08-30T20:54:59+00:00",
+      "params": {
+        "Lots": 0.01,
+        "StopLossPips": 20,
+        "TakeProfitPips": 40
+      },
+      "running_mode": "SilentBacktesting",
+      "start_balance": 100000,
+      "end_balance": 100000,
+      "net_profit": 0,
+      "total_trades": 0,
+      "win_rate": null,
+      "profit_factor": null,
+      "max_dd_pct": 0,
+      "machine": "DESKTOP-V8S08E8",
+      "note": "ทายทิศแท่ง HA ถัดไปถูก 82.66% จาก 119,328 แท่ง · เฉพาะตอนราคาห่างชัดเจน: 92.13% (66.47% ของแท่ง) · การทายชุดเดียวกันเทียบกับราคาจริงของนาทีนั้น: ถูก 48.81% — Heikin-Ashi Hm1, tick data 2024-05..08 (no orders: counts right and wrong calls)",
+      "drive_file_id": "14_c6vL7uQ2X4mCUENUbENm3kNFCC71Du",
+      "drive_error": null,
+      "created_at": "2026-10-06T02:47:02.928295+00:00",
+      "strategy": {
+        "id": 95,
+        "code": "HA_PREDICT",
+        "name": "ทายทิศแท่ง Heikin Ashi ถัดไป",
+        "notes": null,
+        "theory": "แท่ง Heikin Ashi ถูกทำให้เรียบด้วยการเฉลี่ย: ราคาเปิดของแท่งใหม่คือจุดกึ่งกลางของแท่งก่อน และราคาปิดคือค่าเฉลี่ยของนาทีนั้น เมื่อแท่งใหม่เปิด ถ้าราคาจริงอยู่เหนือราคาเปิดของแท่ง HA อยู่แล้ว ค่าเฉลี่ยของนาทีนั้นก็มักจบเหนือระดับนั้นด้วย แท่งจึงจบเป็นแท่งขึ้น",
+        "version": 1,
+        "exit_rules": [
+          "ไม่มีออเดอร์"
+        ],
+        "entry_rules": [
+          "ไม่เปิดออเดอร์: นับอย่างเดียวว่าทายถูกกี่แท่ง",
+          "ตอนแท่ง HA ใหม่เปิด: ราคาจริงสูงกว่าราคาเปิดของแท่ง HA → ทายว่าแท่งนี้จบเป็นแท่งขึ้น, ต่ำกว่า → แท่งลง"
+        ],
+        "param_names": []
+      }
+    },
+    {
+      "id": 95,
+      "owner": "bcb76dfd-a901-438c-ac76-c6643af0c570",
+      "strategy_id": 95,
+      "symbol": "XAUUSD",
+      "timeframe": "HeikinMinute",
+      "date_from": "2024-01-01T23:00:05+00:00",
+      "date_to": "2024-04-30T23:59:57+00:00",
+      "params": {
+        "Lots": 0.01,
+        "StopLossPips": 20,
+        "TakeProfitPips": 40
+      },
+      "running_mode": "SilentBacktesting",
+      "start_balance": 100000,
+      "end_balance": 100000,
+      "net_profit": 0,
+      "total_trades": 0,
+      "win_rate": null,
+      "profit_factor": null,
+      "max_dd_pct": 0,
+      "machine": "DESKTOP-V8S08E8",
+      "note": "ทายทิศแท่ง HA ถัดไปถูก 83.10% จาก 112,413 แท่ง · เฉพาะตอนราคาห่างชัดเจน: 92.55% (67.11% ของแท่ง) · การทายชุดเดียวกันเทียบกับราคาจริงของนาทีนั้น: ถูก 49.32% — Heikin-Ashi Hm1, tick data 2024-01..04 (no orders: counts right and wrong calls)",
+      "drive_file_id": "1t7hUmBg212hUvN9lW94f356SnrBv1SE-",
+      "drive_error": null,
+      "created_at": "2026-10-06T02:45:52.5218+00:00",
+      "strategy": {
+        "id": 95,
+        "code": "HA_PREDICT",
+        "name": "ทายทิศแท่ง Heikin Ashi ถัดไป",
+        "notes": null,
+        "theory": "แท่ง Heikin Ashi ถูกทำให้เรียบด้วยการเฉลี่ย: ราคาเปิดของแท่งใหม่คือจุดกึ่งกลางของแท่งก่อน และราคาปิดคือค่าเฉลี่ยของนาทีนั้น เมื่อแท่งใหม่เปิด ถ้าราคาจริงอยู่เหนือราคาเปิดของแท่ง HA อยู่แล้ว ค่าเฉลี่ยของนาทีนั้นก็มักจบเหนือระดับนั้นด้วย แท่งจึงจบเป็นแท่งขึ้น",
+        "version": 1,
+        "exit_rules": [
+          "ไม่มีออเดอร์"
+        ],
+        "entry_rules": [
+          "ไม่เปิดออเดอร์: นับอย่างเดียวว่าทายถูกกี่แท่ง",
+          "ตอนแท่ง HA ใหม่เปิด: ราคาจริงสูงกว่าราคาเปิดของแท่ง HA → ทายว่าแท่งนี้จบเป็นแท่งขึ้น, ต่ำกว่า → แท่งลง"
+        ],
+        "param_names": []
+      }
+    }
+  ],
+  "v2_tables": {
+    "risk_policies": [
+      {
+        "id": 1,
+        "policy_version": "RISK-POL-V2.0",
+        "hard_max_dd_pct": 18.0,
+        "hard_max_risk_per_trade_pct": 2.0,
+        "hard_min_profit_factor": 1.15,
+        "hard_min_oos_pf": 1.03,
+        "max_worker_iterations": 3,
+        "daily_token_limit": 500000,
+        "daily_cost_limit_usd": 5.0,
+        "created_by": "SYSTEM_ADMIN",
+        "created_at": "2026-11-02T10:31:11.593686+00:00"
+      }
+    ],
+    "strategy_versions": [
+      {
+        "id": "0659e84a-8d0e-4130-887d-34e1e02a265f",
+        "hypothesis_id": "HYP-01-VWAP-EQ",
+        "strategy_code": "QF_V2_VWAP_EQUILIBRIUM",
+        "symbol": "XAUUSD",
+        "iteration_num": 2,
+        "csharp_class_name": "QuantFundV2Equilibrium",
+        "source_code_sha256": "456f59e8b3e1ea5ad608b597db4148bdfa87fca91f6b72756f580f6bcb619f81",
+        "dataset_sha256": "73fc31cbc600e40e3233c57acac7ad878656bcea8691c9024854a7cf94bcb54c",
+        "parameters_json": "{\"sd_thresh\": 4.2, \"exit_mode\": \"VWAP_TOUCH\", \"sl_atr_mult\": 2.0, \"rr_ratio\": 2.5, \"max_hold\": 60, \"max_atr_bar\": 2.0, \"ny_session_only\": true, \"max_risk_usd\": 0.7}",
+        "compile_passed": 1,
+        "created_at": "2026-11-02T10:31:26.621731+00:00"
+      },
+      {
+        "id": "10cb2723-594f-44ef-b072-1d2e02041793",
+        "hypothesis_id": "HYP-01-VWAP-EQ",
+        "strategy_code": "QF_V2_VWAP_EQUILIBRIUM",
+        "symbol": "XAUUSD",
+        "iteration_num": 1,
+        "csharp_class_name": "QuantFundV2Equilibrium",
+        "source_code_sha256": "f8bc1e963db630225349769d96ca7cd6967dfd5a75bf8b36f51439434f7dd871",
+        "dataset_sha256": "73fc31cbc600e40e3233c57acac7ad878656bcea8691c9024854a7cf94bcb54c",
+        "parameters_json": "{\"sd_thresh\": 2.5, \"exit_mode\": \"FIXED_RR\", \"sl_atr_mult\": 2.0, \"rr_ratio\": 2.0, \"max_hold\": 60, \"max_atr_bar\": 99.0, \"ny_session_only\": true, \"max_risk_usd\": 0.0}",
+        "compile_passed": 1,
+        "created_at": "2026-11-02T10:31:18.034273+00:00"
+      }
+    ],
+    "workflow_audit_logs": [
+      {
+        "id": 10,
+        "hypothesis_id": "HYP-01-VWAP-EQ",
+        "strategy_version_id": "0659e84a-8d0e-4130-887d-34e1e02a265f",
+        "node_name": "node_07_ceo_final_review",
+        "agent_model": "gemini-4-argon",
+        "prompt_version": "V2.0.0",
+        "policy_version": "RISK-POL-V2.0",
+        "input_payload": "{\"checklist_passed\": true}",
+        "output_payload": "{\"generated_at_utc\": \"2026-11-02T10:31:28.445823+00:00\", \"strategy_code\": \"QF_V2_VWAP_EQUILIBRIUM\", \"hypothesis_id\": \"HYP-01-VWAP-EQ\", \"symbol\": \"XAUUSD\", \"source_code_sha256\": \"456f59e8b3e1ea5ad608b597db4148bdfa87fca91f6b72756f580f6bcb619f81\", \"dataset_sha256\": \"73fc31cbc600e40e3233c57acac7ad878656bcea8691c9024854a7cf94bcb54c\", \"next_required_action\": \"STAGE_1_HUMAN_APPROVAL_FOR_PAPER_TRADING\", \"headline\": \"QF_V2_VWAP_EQUILIBRIUM Passed All 9 Deterministic Gatekeeper Checks (Full PF 1.16, OOS PF 1.37, Max DD 13.84%, MC 95% DD 20.69%)\", \"supabase_run_id\": 104, \"supabase_strategy_id\": 104, \"drive_file_id\": \"1x17k3afrkRWLCSgRpaYcWbRZJZkLpWnZ\"}",
+        "tokens_used": 2500,
+        "estimated_cost_usd": 0.01,
+        "verdict": "PASS",
+        "verdict_reasons": "[]",
+        "executed_at": "2026-11-02T10:31:32.408788+00:00"
+      },
+      {
+        "id": 9,
+        "hypothesis_id": "HYP-01-VWAP-EQ",
+        "strategy_version_id": "0659e84a-8d0e-4130-887d-34e1e02a265f",
+        "node_name": "node_06_validation_and_gatekeeper",
+        "agent_model": "PYTHON_RULES+gemini-4-argon",
+        "prompt_version": "V2.0.0",
+        "policy_version": "RISK-POL-V2.0",
+        "input_payload": "{\"iteration\": 2, \"strategy_version_id\": \"0659e84a-8d0e-4130-887d-34e1e02a265f\"}",
+        "output_payload": "{\"verdict\": \"PASS\", \"checklist\": {\"has_hard_stop_loss\": true, \"risk_per_trade_within_limit\": true, \"max_dd_within_limit\": true, \"pf_above_minimum\": true, \"oos_profitable\": true, \"walk_forward_passed\": true, \"monte_carlo_passed\": true, \"no_lookahead_bias_verified\": true, \"ai_security_audit_passed\": true, \"overall_passed\": true, \"veto_reasons\": [], \"remediation_directives\": []}}",
+        "tokens_used": 2100,
+        "estimated_cost_usd": 0.008,
+        "verdict": "PASS",
+        "verdict_reasons": "[]",
+        "executed_at": "2026-11-02T10:31:27.686850+00:00"
+      },
+      {
+        "id": 8,
+        "hypothesis_id": "HYP-01-VWAP-EQ",
+        "strategy_version_id": "0659e84a-8d0e-4130-887d-34e1e02a265f",
+        "node_name": "node_05_backtest_math_engine",
+        "agent_model": "PYTHON_DETERMINISTIC",
+        "prompt_version": "V2.0.0",
+        "policy_version": "RISK-POL-V2.0",
+        "input_payload": "{\"params\": {\"sd_thresh\": 4.2, \"exit_mode\": \"VWAP_TOUCH\", \"sl_atr_mult\": 2.0, \"rr_ratio\": 2.5, \"max_hold\": 60, \"max_atr_bar\": 2.0, \"ny_session_only\": true, \"max_risk_usd\": 0.7}}",
+        "output_payload": "{\"full\": {\"trades\": 109, \"net_pnl_usd\": 7.73, \"profit_factor\": 1.16, \"win_rate_pct\": 34.86, \"max_dd_usd\": 13.84, \"max_dd_pct\": 13.84, \"sharpe_ratio\": 0.61, \"max_single_trade_risk_pct\": 0.7, \"unscaled_1oz_net_pnl_usd\": 61.63}, \"in_sample\": {\"trades\": 68, \"net_pnl_usd\": 6.62, \"profit_factor\": 1.22, \"win_rate_pct\": 35.29, \"max_dd_usd\": 13.84, \"max_dd_pct\": 13.84, \"sharpe_ratio\": 0.65, \"max_single_trade_risk_pct\": 0.7}, \"validation\": {\"trades\": 9, \"net_pnl_usd\": -4.0, \"profit_factor\": 0.23, \"win_rate_pct\": 11.11, \"max_dd_usd\": 4.45, \"max_dd_pct\": 4.45, \"sharpe_ratio\": -2.23, \"max_single_trade_risk_pct\": 0.7}, \"out_of_sample\": {\"trades\": 32, \"net_pnl_usd\": 5.11, \"profit_factor\": 1.37, \"win_rate_pct\": 40.62, \"max_dd_usd\": 4.34, \"max_dd_pct\": 4.34, \"sharpe_ratio\": 0.72, \"max_single_trade_risk_pct\": 0.7}}",
+        "tokens_used": 0,
+        "estimated_cost_usd": 0.0,
+        "verdict": "INFO",
+        "verdict_reasons": "[]",
+        "executed_at": "2026-11-02T10:31:27.260013+00:00"
+      },
+      {
+        "id": 7,
+        "hypothesis_id": "HYP-01-VWAP-EQ",
+        "strategy_version_id": "0659e84a-8d0e-4130-887d-34e1e02a265f",
+        "node_name": "node_04_quant_worker",
+        "agent_model": "gemini-3.8-flash",
+        "prompt_version": "V2.0.0",
+        "policy_version": "RISK-POL-V2.0",
+        "input_payload": "{\"iteration\": 2, \"remediation_from_prev\": [\"Implement `public override double? StopDistance(TradeType side)` returning clamped ATR stop.\", \"Enable Volatility-Targeted Risk Capping (`max_risk_usd <= 1.00`).\", \"Reduce position risk scaling and filter low-probability entries to bring Max DD under 18%.\", \"Increase SD stretch threshold to >= 4.2 and exit at Session VWAP touch (`VWAP_TOUCH`).\", \"Enable News & Volatility Void Gate (`max_atr_bar = 2.0`) to protect OOS performance.\", \"Restrict entries to high-liquidity NY session (13:00-17:00 UTC) for multi-year consistency.\"]}",
+        "output_payload": "{\"strategy_version_id\": \"0659e84a-8d0e-4130-887d-34e1e02a265f\", \"iteration\": 2, \"strategy_code\": \"QF_V2_VWAP_EQUILIBRIUM\", \"csharp_class_name\": \"QuantFundV2Equilibrium\", \"csharp_file_path\": \"d:\\\\cbot-atgvt\\\\cbot\\\\BacktestLab\\\\Strategies\\\\QuantFundV2Equilibrium.cs\", \"source_code_sha256\": \"456f59e8b3e1ea5ad608b597db4148bdfa87fca91f6b72756f580f6bcb619f81\", \"compile_success\": true, \"static_code_audit\": {\"has_stop_distance_override\": true, \"uses_closed_bars\": true, \"has_lookahead_leak\": false}, \"parameters\": {\"sd_thresh\": 4.2, \"exit_mode\": \"VWAP_TOUCH\", \"sl_atr_mult\": 2.0, \"rr_ratio\": 2.5, \"max_hold\": 60, \"max_atr_bar\": 2.0, \"ny_session_only\": true, \"max_risk_usd\": 0.7}}",
+        "tokens_used": 3800,
+        "estimated_cost_usd": 0.004,
+        "verdict": "PASS",
+        "verdict_reasons": "[]",
+        "executed_at": "2026-11-02T10:31:26.886820+00:00"
+      },
+      {
+        "id": 6,
+        "hypothesis_id": "HYP-01-VWAP-EQ",
+        "strategy_version_id": "10cb2723-594f-44ef-b072-1d2e02041793",
+        "node_name": "node_06_validation_and_gatekeeper",
+        "agent_model": "PYTHON_RULES+gemini-4-argon",
+        "prompt_version": "V2.0.0",
+        "policy_version": "RISK-POL-V2.0",
+        "input_payload": "{\"iteration\": 1, \"strategy_version_id\": \"10cb2723-594f-44ef-b072-1d2e02041793\"}",
+        "output_payload": "{\"verdict\": \"VETO\", \"checklist\": {\"has_hard_stop_loss\": false, \"risk_per_trade_within_limit\": false, \"max_dd_within_limit\": false, \"pf_above_minimum\": false, \"oos_profitable\": false, \"walk_forward_passed\": false, \"monte_carlo_passed\": false, \"no_lookahead_bias_verified\": true, \"ai_security_audit_passed\": true, \"overall_passed\": false, \"veto_reasons\": [\"CHK-01 FAILED: C# strategy missing `override double? StopDistance` or failed compilation.\", \"CHK-02 FAILED: Max risk per trade is 51.36%, exceeding hard limit 2.00%.\", \"CHK-03 FAILED: Max Drawdown is 642.13%, exceeding Admin hard limit 18.00%.\", \"CHK-04 FAILED: Net Profit Factor is 0.90, below Admin minimum 1.15.\", \"CHK-05 FAILED: Out-of-Sample PF=0.88 (min 1.03), OOS Net PnL=$-279.76.\", \"CHK-06 FAILED: Walk-Forward Efficiency is 0.0% (< 60.0% required).\", \"CHK-07 FAILED: Monte Carlo 95% DD=1018.29% (limit 22.00%), Ruin Prob=98.90%.\"], \"remediation_directives\": [\"Implement `public override double? StopDistance(TradeType side)` returning clamped ATR stop.\", \"Enable Volatility-Targeted Risk Capping (`max_risk_usd <= 1.00`).\", \"Reduce position risk scaling and filter low-probability entries to bring Max DD under 18%.\", \"Increase SD stretch threshold to >= 4.2 and exit at Session VWAP touch (`VWAP_TOUCH`).\", \"Enable News & Volatility Void Gate (`max_atr_bar = 2.0`) to protect OOS performance.\", \"Restrict entries to high-liquidity NY session (13:00-17:00 UTC) for multi-year consistency.\"]}}",
+        "tokens_used": 2100,
+        "estimated_cost_usd": 0.008,
+        "verdict": "VETO",
+        "verdict_reasons": "[\"CHK-01 FAILED: C# strategy missing `override double? StopDistance` or failed compilation.\", \"CHK-02 FAILED: Max risk per trade is 51.36%, exceeding hard limit 2.00%.\", \"CHK-03 FAILED: Max Drawdown is 642.13%, exceeding Admin hard limit 18.00%.\", \"CHK-04 FAILED: Net Profit Factor is 0.90, below Admin minimum 1.15.\", \"CHK-05 FAILED: Out-of-Sample PF=0.88 (min 1.03), OOS Net PnL=$-279.76.\", \"CHK-06 FAILED: Walk-Forward Efficiency is 0.0% (< 60.0% required).\", \"CHK-07 FAILED: Monte Carlo 95% DD=1018.29% (limit 22.00%), Ruin Prob=98.90%.\"]",
+        "executed_at": "2026-11-02T10:31:22.954316+00:00"
+      },
+      {
+        "id": 5,
+        "hypothesis_id": "HYP-01-VWAP-EQ",
+        "strategy_version_id": "10cb2723-594f-44ef-b072-1d2e02041793",
+        "node_name": "node_05_backtest_math_engine",
+        "agent_model": "PYTHON_DETERMINISTIC",
+        "prompt_version": "V2.0.0",
+        "policy_version": "RISK-POL-V2.0",
+        "input_payload": "{\"params\": {\"sd_thresh\": 2.5, \"exit_mode\": \"FIXED_RR\", \"sl_atr_mult\": 2.0, \"rr_ratio\": 2.0, \"max_hold\": 60, \"max_atr_bar\": 99.0, \"ny_session_only\": true, \"max_risk_usd\": 0.0}}",
+        "output_payload": "{\"full\": {\"trades\": 1764, \"net_pnl_usd\": -457.96, \"profit_factor\": 0.9, \"win_rate_pct\": 37.3, \"max_dd_usd\": 642.13, \"max_dd_pct\": 642.13, \"sharpe_ratio\": -0.58, \"max_single_trade_risk_pct\": 51.36, \"unscaled_1oz_net_pnl_usd\": -457.96}, \"in_sample\": {\"trades\": 944, \"net_pnl_usd\": -157.99, \"profit_factor\": 0.9, \"win_rate_pct\": 38.35, \"max_dd_usd\": 289.07, \"max_dd_pct\": 289.07, \"sharpe_ratio\": -0.73, \"max_single_trade_risk_pct\": 6.87}, \"validation\": {\"trades\": 352, \"net_pnl_usd\": -20.21, \"profit_factor\": 0.97, \"win_rate_pct\": 36.65, \"max_dd_usd\": 135.52, \"max_dd_pct\": 135.52, \"sharpe_ratio\": -0.18, \"max_single_trade_risk_pct\": 9.61}, \"out_of_sample\": {\"trades\": 468, \"net_pnl_usd\": -279.76, \"profit_factor\": 0.88, \"win_rate_pct\": 35.68, \"max_dd_usd\": 418.83, \"max_dd_pct\": 418.83, \"sharpe_ratio\": -0.8, \"max_single_trade_risk_pct\": 51.36}}",
+        "tokens_used": 0,
+        "estimated_cost_usd": 0.0,
+        "verdict": "INFO",
+        "verdict_reasons": "[]",
+        "executed_at": "2026-11-02T10:31:22.379700+00:00"
+      },
+      {
+        "id": 4,
+        "hypothesis_id": "HYP-01-VWAP-EQ",
+        "strategy_version_id": "10cb2723-594f-44ef-b072-1d2e02041793",
+        "node_name": "node_04_quant_worker",
+        "agent_model": "gemini-3.8-flash",
+        "prompt_version": "V2.0.0",
+        "policy_version": "RISK-POL-V2.0",
+        "input_payload": "{\"iteration\": 1, \"remediation_from_prev\": []}",
+        "output_payload": "{\"strategy_version_id\": \"10cb2723-594f-44ef-b072-1d2e02041793\", \"iteration\": 1, \"strategy_code\": \"QF_V2_VWAP_EQUILIBRIUM\", \"csharp_class_name\": \"QuantFundV2Equilibrium\", \"csharp_file_path\": \"d:\\\\cbot-atgvt\\\\cbot\\\\BacktestLab\\\\Strategies\\\\QuantFundV2Equilibrium.cs\", \"source_code_sha256\": \"f8bc1e963db630225349769d96ca7cd6967dfd5a75bf8b36f51439434f7dd871\", \"compile_success\": true, \"static_code_audit\": {\"has_stop_distance_override\": false, \"uses_closed_bars\": true, \"has_lookahead_leak\": false}, \"parameters\": {\"sd_thresh\": 2.5, \"exit_mode\": \"FIXED_RR\", \"sl_atr_mult\": 2.0, \"rr_ratio\": 2.0, \"max_hold\": 60, \"max_atr_bar\": 99.0, \"ny_session_only\": true, \"max_risk_usd\": 0.0}}",
+        "tokens_used": 3800,
+        "estimated_cost_usd": 0.004,
+        "verdict": "PASS",
+        "verdict_reasons": "[]",
+        "executed_at": "2026-11-02T10:31:18.305034+00:00"
+      },
+      {
+        "id": 3,
+        "hypothesis_id": "HYP-01-VWAP-EQ",
+        "strategy_version_id": null,
+        "node_name": "node_03_ceo_strategist",
+        "agent_model": "gemini-4-argon",
+        "prompt_version": "V2.0.0",
+        "policy_version": "RISK-POL-V2.0",
+        "input_payload": "{\"available_hypotheses\": [\"HYP-01-VWAP-EQ\", \"HYP-02-OFI-BURST\"]}",
+        "output_payload": "{\"selected_hypothesis_id\": \"HYP-01-VWAP-EQ\", \"strategy_code\": \"QF_V2_VWAP_EQUILIBRIUM\", \"csharp_class_name\": \"QuantFundV2Equilibrium\", \"symbol\": \"XAUUSD\", \"policy_rationale\": \"Selected `Institutional Session VWAP Equilibrium & News Void Gate` (arXiv:1306.2832 + arXiv:2412.19245). Enforcing strict Admin Governance (`RISK-POL-V2.0`): Max Risk/Trade <= 1.5% (Hard Limit 2.0%), Max DD <= 18.0% (Hard Limit 18.0%).\", \"proposed_risk_per_trade_pct\": 1.5, \"proposed_max_dd_pct\": 18.0, \"proposed_min_pf\": 1.15, \"strategy_params\": {\"sd_thresh\": 4.2, \"exit_mode\": \"VWAP_TOUCH\", \"sl_atr_mult\": 2.0, \"max_hold\": 60, \"max_atr_bar\": 2.0, \"max_risk_usd\": 0.7}}",
+        "tokens_used": 4500,
+        "estimated_cost_usd": 0.018,
+        "verdict": "PASS",
+        "verdict_reasons": "[]",
+        "executed_at": "2026-11-02T10:31:15.401596+00:00"
+      },
+      {
+        "id": 2,
+        "hypothesis_id": null,
+        "strategy_version_id": null,
+        "node_name": "node_02_market_research_team",
+        "agent_model": "gemini-3.8-flash",
+        "prompt_version": "V2.0.0",
+        "policy_version": "RISK-POL-V2.0",
+        "input_payload": "{\"market_snapshot\": {\"timestamp_utc\": \"2026-11-02T10:31:15.052659+00:00\", \"symbol\": \"XAUUSD\", \"live_feed_status\": \"ONLINE\", \"heartbeat_age_sec\": 1.21, \"dom_snapshots_collected\": 18256, \"minutes_analyzed\": 120, \"current_price\": 3896.5, \"vwap_day\": 3903.6524, \"prev_day_vah\": 4026.5, \"prev_day_val\": 3911.5, \"spread_avg\": 0.1105, \"dom_imbalance_latest\": 0.012, \"dom_imbalance_mean\": -0.0009, \"anchored_cvd\": -819.0, \"latest_bar_delta\": -8.0, \"detected_market_regime\": \"INSTITUTIONAL_VALUE_BREAKOUT_BEARISH\", \"account_constraints\": {\"base_capital_usd\": 100.0, \"default_lot\": 0.01, \"razor_commission_per_001_lot_usd\": 0.07, \"max_allowed_drawdown_pct\": 25.0}}, \"papers_queried\": 5}",
+        "output_payload": "{\"proposals_count\": 2}",
+        "tokens_used": 3200,
+        "estimated_cost_usd": 0.003,
+        "verdict": "PASS",
+        "verdict_reasons": "[]",
+        "executed_at": "2026-11-02T10:31:15.055672+00:00"
+      },
+      {
+        "id": 1,
+        "hypothesis_id": null,
+        "strategy_version_id": null,
+        "node_name": "node_01_data_quality_gate",
+        "agent_model": "PYTHON_DETERMINISTIC",
+        "prompt_version": "V2.0.0",
+        "policy_version": "RISK-POL-V2.0",
+        "input_payload": "{\"symbol\": \"XAUUSD\"}",
+        "output_payload": "{\"passed\": true, \"checked_at_utc\": \"2026-11-02T10:31:14.112859+00:00\", \"symbol\": \"XAUUSD\", \"dataset_path\": \"d:\\\\cbot-atgvt\\\\data\\\\XAUUSD_2022_2026_Minute.csv\", \"dataset_sha256\": \"73fc31cbc600e40e3233c57acac7ad878656bcea8691c9024854a7cf94bcb54c\", \"total_bars\": 1675835, \"start_date_utc\": \"2022-01-03 01:04:00\", \"end_date_utc\": \"2026-09-30 23:58:00\", \"time_reversals_count\": 0, \"invalid_hl_count\": 0, \"live_dom_status\": \"VERIFIED_HEALTHY\", \"live_spread_avg\": 0.1122, \"live_imbalance_latest\": 0.012, \"errors\": []}",
+        "tokens_used": 0,
+        "estimated_cost_usd": 0.0,
+        "verdict": "PASS",
+        "verdict_reasons": "[]",
+        "executed_at": "2026-11-02T10:31:14.363587+00:00"
+      }
+    ],
+    "deployment_approvals": [],
+    "strategy_memory": []
+  }
+}

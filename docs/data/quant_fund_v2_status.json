@@ -1,0 +1,315 @@
+{
+  "updated_at": "2026-11-02T10:31:32.697526+00:00",
+  "symbol": "XAUUSD",
+  "policy_version": "RISK-POL-V2.0",
+  "models": {
+    "ceo_and_auditor": "gemini-4-argon",
+    "research_and_worker": "gemini-3.8-flash"
+  },
+  "data_quality_report": {
+    "passed": true,
+    "checked_at_utc": "2026-11-02T10:31:14.112859+00:00",
+    "symbol": "XAUUSD",
+    "dataset_path": "d:\\cbot-atgvt\\data\\XAUUSD_2022_2026_Minute.csv",
+    "dataset_sha256": "73fc31cbc600e40e3233c57acac7ad878656bcea8691c9024854a7cf94bcb54c",
+    "total_bars": 1675835,
+    "start_date_utc": "2022-01-03 01:04:00",
+    "end_date_utc": "2026-09-30 23:58:00",
+    "time_reversals_count": 0,
+    "invalid_hl_count": 0,
+    "live_dom_status": "VERIFIED_HEALTHY",
+    "live_spread_avg": 0.1122,
+    "live_imbalance_latest": 0.012,
+    "errors": []
+  },
+  "ceo_policy": {
+    "selected_hypothesis_id": "HYP-01-VWAP-EQ",
+    "strategy_code": "QF_V2_VWAP_EQUILIBRIUM",
+    "csharp_class_name": "QuantFundV2Equilibrium",
+    "symbol": "XAUUSD",
+    "policy_rationale": "Selected `Institutional Session VWAP Equilibrium & News Void Gate` (arXiv:1306.2832 + arXiv:2412.19245). Enforcing strict Admin Governance (`RISK-POL-V2.0`): Max Risk/Trade <= 1.5% (Hard Limit 2.0%), Max DD <= 18.0% (Hard Limit 18.0%).",
+    "proposed_risk_per_trade_pct": 1.5,
+    "proposed_max_dd_pct": 18.0,
+    "proposed_min_pf": 1.15,
+    "strategy_params": {
+      "sd_thresh": 4.2,
+      "exit_mode": "VWAP_TOUCH",
+      "sl_atr_mult": 2.0,
+      "max_hold": 60,
+      "max_atr_bar": 2.0,
+      "max_risk_usd": 0.7
+    }
+  },
+  "iteration": 2,
+  "dropped_hypotheses": [],
+  "worker_build": {
+    "strategy_version_id": "0659e84a-8d0e-4130-887d-34e1e02a265f",
+    "iteration": 2,
+    "strategy_code": "QF_V2_VWAP_EQUILIBRIUM",
+    "csharp_class_name": "QuantFundV2Equilibrium",
+    "csharp_file_path": "d:\\cbot-atgvt\\cbot\\BacktestLab\\Strategies\\QuantFundV2Equilibrium.cs",
+    "source_code_sha256": "456f59e8b3e1ea5ad608b597db4148bdfa87fca91f6b72756f580f6bcb619f81",
+    "compile_success": true,
+    "static_code_audit": {
+      "has_stop_distance_override": true,
+      "uses_closed_bars": true,
+      "has_lookahead_leak": false
+    },
+    "parameters": {
+      "sd_thresh": 4.2,
+      "exit_mode": "VWAP_TOUCH",
+      "sl_atr_mult": 2.0,
+      "rr_ratio": 2.5,
+      "max_hold": 60,
+      "max_atr_bar": 2.0,
+      "ny_session_only": true,
+      "max_risk_usd": 0.7
+    }
+  },
+  "full_period_metrics": {
+    "trades": 109,
+    "net_pnl_usd": 7.73,
+    "profit_factor": 1.16,
+    "win_rate_pct": 34.86,
+    "max_dd_usd": 13.84,
+    "max_dd_pct": 13.84,
+    "sharpe_ratio": 0.61,
+    "max_single_trade_risk_pct": 0.7,
+    "unscaled_1oz_net_pnl_usd": 61.63
+  },
+  "in_sample_metrics": {
+    "trades": 68,
+    "net_pnl_usd": 6.62,
+    "profit_factor": 1.22,
+    "win_rate_pct": 35.29,
+    "max_dd_usd": 13.84,
+    "max_dd_pct": 13.84,
+    "sharpe_ratio": 0.65,
+    "max_single_trade_risk_pct": 0.7
+  },
+  "validation_metrics": {
+    "trades": 9,
+    "net_pnl_usd": -4.0,
+    "profit_factor": 0.23,
+    "win_rate_pct": 11.11,
+    "max_dd_usd": 4.45,
+    "max_dd_pct": 4.45,
+    "sharpe_ratio": -2.23,
+    "max_single_trade_risk_pct": 0.7
+  },
+  "out_of_sample_metrics": {
+    "trades": 32,
+    "net_pnl_usd": 5.11,
+    "profit_factor": 1.37,
+    "win_rate_pct": 40.62,
+    "max_dd_usd": 4.34,
+    "max_dd_pct": 4.34,
+    "sharpe_ratio": 0.72,
+    "max_single_trade_risk_pct": 0.7
+  },
+  "validation_stats_report": {
+    "walk_forward": {
+      "windows": {
+        "2022": {
+          "trades": 32,
+          "net_pnl_usd": 3.94,
+          "profit_factor": 1.27,
+          "win_rate_pct": 37.5,
+          "max_dd_usd": 6.56,
+          "max_dd_pct": 6.56,
+          "sharpe_ratio": 0.53,
+          "max_single_trade_risk_pct": 0.7
+        },
+        "2023": {
+          "trades": 29,
+          "net_pnl_usd": -2.26,
+          "profit_factor": 0.83,
+          "win_rate_pct": 31.03,
+          "max_dd_usd": 9.21,
+          "max_dd_pct": 9.21,
+          "sharpe_ratio": -0.41,
+          "max_single_trade_risk_pct": 0.7
+        },
+        "2024": {
+          "trades": 9,
+          "net_pnl_usd": 3.43,
+          "profit_factor": 1.89,
+          "win_rate_pct": 33.33,
+          "max_dd_usd": 1.59,
+          "max_dd_pct": 1.59,
+          "sharpe_ratio": 0.77,
+          "max_single_trade_risk_pct": 0.7
+        },
+        "2025": {
+          "trades": 23,
+          "net_pnl_usd": 1.96,
+          "profit_factor": 1.18,
+          "win_rate_pct": 30.43,
+          "max_dd_usd": 4.34,
+          "max_dd_pct": 4.34,
+          "sharpe_ratio": 0.3,
+          "max_single_trade_risk_pct": 0.7
+        },
+        "2026": {
+          "trades": 16,
+          "net_pnl_usd": 0.66,
+          "profit_factor": 1.1,
+          "win_rate_pct": 43.75,
+          "max_dd_usd": 2.55,
+          "max_dd_pct": 2.55,
+          "sharpe_ratio": 0.18,
+          "max_single_trade_risk_pct": 0.7
+        }
+      },
+      "profitable_windows": 4,
+      "total_windows": 5,
+      "wf_efficiency_pct": 80.0
+    },
+    "monte_carlo": {
+      "iterations": 1000,
+      "mc_95th_max_dd_pct": 20.69,
+      "mc_5th_percentile_pnl_usd": -12.4,
+      "ruin_probability_pct": 0.0
+    },
+    "parameter_sensitivity": {
+      "sd_minus_5pct_pf": 1.05,
+      "sd_base_pf": 1.16,
+      "sd_plus_5pct_pf": 1.11
+    }
+  },
+  "validation_checklist": {
+    "has_hard_stop_loss": true,
+    "risk_per_trade_within_limit": true,
+    "max_dd_within_limit": true,
+    "pf_above_minimum": true,
+    "oos_profitable": true,
+    "walk_forward_passed": true,
+    "monte_carlo_passed": true,
+    "no_lookahead_bias_verified": true,
+    "ai_security_audit_passed": true,
+    "overall_passed": true,
+    "veto_reasons": [],
+    "remediation_directives": []
+  },
+  "validation_history": [
+    {
+      "hypothesis_id": "HYP-01-VWAP-EQ",
+      "iteration": 1,
+      "verdict": "VETO",
+      "checklist": {
+        "has_hard_stop_loss": false,
+        "risk_per_trade_within_limit": false,
+        "max_dd_within_limit": false,
+        "pf_above_minimum": false,
+        "oos_profitable": false,
+        "walk_forward_passed": false,
+        "monte_carlo_passed": false,
+        "no_lookahead_bias_verified": true,
+        "ai_security_audit_passed": true,
+        "overall_passed": false,
+        "veto_reasons": [
+          "CHK-01 FAILED: C# strategy missing `override double? StopDistance` or failed compilation.",
+          "CHK-02 FAILED: Max risk per trade is 51.36%, exceeding hard limit 2.00%.",
+          "CHK-03 FAILED: Max Drawdown is 642.13%, exceeding Admin hard limit 18.00%.",
+          "CHK-04 FAILED: Net Profit Factor is 0.90, below Admin minimum 1.15.",
+          "CHK-05 FAILED: Out-of-Sample PF=0.88 (min 1.03), OOS Net PnL=$-279.76.",
+          "CHK-06 FAILED: Walk-Forward Efficiency is 0.0% (< 60.0% required).",
+          "CHK-07 FAILED: Monte Carlo 95% DD=1018.29% (limit 22.00%), Ruin Prob=98.90%."
+        ],
+        "remediation_directives": [
+          "Implement `public override double? StopDistance(TradeType side)` returning clamped ATR stop.",
+          "Enable Volatility-Targeted Risk Capping (`max_risk_usd <= 1.00`).",
+          "Reduce position risk scaling and filter low-probability entries to bring Max DD under 18%.",
+          "Increase SD stretch threshold to >= 4.2 and exit at Session VWAP touch (`VWAP_TOUCH`).",
+          "Enable News & Volatility Void Gate (`max_atr_bar = 2.0`) to protect OOS performance.",
+          "Restrict entries to high-liquidity NY session (13:00-17:00 UTC) for multi-year consistency."
+        ]
+      },
+      "full_metrics": {
+        "trades": 1764,
+        "net_pnl_usd": -457.96,
+        "profit_factor": 0.9,
+        "win_rate_pct": 37.3,
+        "max_dd_usd": 642.13,
+        "max_dd_pct": 642.13,
+        "sharpe_ratio": -0.58,
+        "max_single_trade_risk_pct": 51.36,
+        "unscaled_1oz_net_pnl_usd": -457.96
+      },
+      "oos_metrics": {
+        "trades": 468,
+        "net_pnl_usd": -279.76,
+        "profit_factor": 0.88,
+        "win_rate_pct": 35.68,
+        "max_dd_usd": 418.83,
+        "max_dd_pct": 418.83,
+        "sharpe_ratio": -0.8,
+        "max_single_trade_risk_pct": 51.36
+      },
+      "walk_forward_efficiency_pct": 0.0,
+      "mc_95th_dd_pct": 1018.29
+    },
+    {
+      "hypothesis_id": "HYP-01-VWAP-EQ",
+      "iteration": 2,
+      "verdict": "PASS",
+      "checklist": {
+        "has_hard_stop_loss": true,
+        "risk_per_trade_within_limit": true,
+        "max_dd_within_limit": true,
+        "pf_above_minimum": true,
+        "oos_profitable": true,
+        "walk_forward_passed": true,
+        "monte_carlo_passed": true,
+        "no_lookahead_bias_verified": true,
+        "ai_security_audit_passed": true,
+        "overall_passed": true,
+        "veto_reasons": [],
+        "remediation_directives": []
+      },
+      "full_metrics": {
+        "trades": 109,
+        "net_pnl_usd": 7.73,
+        "profit_factor": 1.16,
+        "win_rate_pct": 34.86,
+        "max_dd_usd": 13.84,
+        "max_dd_pct": 13.84,
+        "sharpe_ratio": 0.61,
+        "max_single_trade_risk_pct": 0.7,
+        "unscaled_1oz_net_pnl_usd": 61.63
+      },
+      "oos_metrics": {
+        "trades": 32,
+        "net_pnl_usd": 5.11,
+        "profit_factor": 1.37,
+        "win_rate_pct": 40.62,
+        "max_dd_usd": 4.34,
+        "max_dd_pct": 4.34,
+        "sharpe_ratio": 0.72,
+        "max_single_trade_risk_pct": 0.7
+      },
+      "walk_forward_efficiency_pct": 80.0,
+      "mc_95th_dd_pct": 20.69
+    }
+  ],
+  "executive_briefing": {
+    "generated_at_utc": "2026-11-02T10:31:28.445823+00:00",
+    "strategy_code": "QF_V2_VWAP_EQUILIBRIUM",
+    "hypothesis_id": "HYP-01-VWAP-EQ",
+    "symbol": "XAUUSD",
+    "source_code_sha256": "456f59e8b3e1ea5ad608b597db4148bdfa87fca91f6b72756f580f6bcb619f81",
+    "dataset_sha256": "73fc31cbc600e40e3233c57acac7ad878656bcea8691c9024854a7cf94bcb54c",
+    "next_required_action": "STAGE_1_HUMAN_APPROVAL_FOR_PAPER_TRADING",
+    "headline": "QF_V2_VWAP_EQUILIBRIUM Passed All 9 Deterministic Gatekeeper Checks (Full PF 1.16, OOS PF 1.37, Max DD 13.84%, MC 95% DD 20.69%)",
+    "supabase_run_id": 104,
+    "supabase_strategy_id": 104,
+    "drive_file_id": "1x17k3afrkRWLCSgRpaYcWbRZJZkLpWnZ"
+  },
+  "paper_trading_approved": false,
+  "paper_deployment_report": {},
+  "live_trading_approved": false,
+  "live_deployment_report": {},
+  "strategy_memory_record": {},
+  "tokens_used_today": 17400,
+  "estimated_cost_usd_today": 0.037
+}
