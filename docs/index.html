@@ -245,53 +245,42 @@
 
       </div>
     </div>
-<!-- 2. HEADER & STRATEGY SWITCHER -->
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-4">
-      <div>
-        <div class="flex flex-wrap items-center gap-2 mb-1">
-          <span id="badge-strat-highlight" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-            🔥 BTCUSD (M1): วางกรอบดักวอลุ่มสถาบัน กำไร +$14.16 USD
-          </span>
-          <span id="badge-strat-date" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">
-            📅 สมุดคำสั่งสด L2: 31 ต.ค. - 01 พ.ย. 2026
-          </span>
-          <span id="badge-strat-mode" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-500 border border-amber-500/20">
-            🛡️ เข้าทีละ 1 ไม้ · TP $50 / SL $25
-          </span>
-        </div>
-        <h1 class="text-xl md:text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-          <span>📊</span> ผลการทดสอบและวิเคราะห์กลยุทธ์ (Strategy Backtest Lab)
-        </h1>
-        <p class="text-xs sm:text-sm text-slate-400 mt-0.5">
-          เลือกดูกลยุทธ์ด้านขวามือเพื่อวิเคราะห์อัตราการชนะ (Win Rate), กราฟการเติบโตของพอร์ต (Equity Curve) และดูแท่งเทียนรอบจุดเข้า-ออกจริง
-        </p>
-      </div>
 
-      <!-- Strategy Switcher Buttons -->
-      <div class="flex flex-wrap items-center bg-slate-900 p-1 rounded-xl border border-slate-800 shadow-sm gap-1">
-        <button id="tab-dom-abs-btc" onclick="switchStrategy('dom_absorption_btc')" class="px-3 py-1.5 text-xs md:text-sm font-bold rounded-lg transition-all bg-amber-500 text-slate-950 shadow flex items-center gap-1.5">
-          <span>🔥</span> DOM_ABSORPTION (BTC) <span class="bg-slate-950 text-amber-400 text-[10px] px-1.5 py-0.5 rounded-full font-mono">NEW +$14.16</span>
-        </button>
-        <button id="tab-dom-abs-eth" onclick="switchStrategy('dom_absorption_eth')" class="px-3 py-1.5 text-xs md:text-sm font-medium rounded-lg transition-all text-slate-300 hover:text-white flex items-center gap-1.5">
-          <span>⚡</span> DOM_ABSORPTION (ETH) <span class="bg-blue-500/20 text-blue-400 text-[10px] px-1.5 py-0.5 rounded-full font-mono">+$16.16</span>
-        </button>
-        <button id="tab-runner" onclick="switchStrategy('dom_smart_runner')" class="px-3 py-1.5 text-xs md:text-sm font-medium rounded-lg transition-all text-slate-400 hover:text-white">
-          🚀 SMART_RUNNER (XAU)
-        </button>
-        <button id="tab-smc" onclick="switchStrategy('smc_fibo_dom')" class="px-3 py-1.5 text-xs md:text-sm font-medium rounded-lg transition-all text-slate-400 hover:text-white">
-          ⚡ SMC_FIBO_5M
-        </button>
-        <button id="tab-fade" onclick="switchStrategy('dom_fade')" class="px-3 py-1.5 text-xs md:text-sm font-medium rounded-lg transition-all text-slate-400 hover:text-white">
-          🛡️ DOM_FADE_5M
-        </button>
-        <button id="tab-compare" onclick="switchStrategy('compare')" class="px-3 py-1.5 text-xs md:text-sm font-medium rounded-lg transition-all text-slate-400 hover:text-white flex items-center gap-1">
-          <span>📊</span> เปรียบเทียบ 3 ยุค
-        </button>
-      </div>
-    </div>
 
     <!-- 3. KPI CARDS CONTAINER -->
     
+    <!-- ========================================================================= -->
+    <!-- 🔴 ZONE 1: REAL-TIME FORWARD TRADING (ตลาดสดเทรดจริง ณ ปัจจุบัน)             -->
+    <!-- ========================================================================= -->
+    <div class="mt-4 mb-2">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-gradient-to-r from-emerald-950/90 via-slate-900 to-slate-900 border-2 border-emerald-500/50 rounded-2xl p-4 shadow-xl">
+        <div class="flex items-center gap-3">
+          <span class="flex h-4 w-4 relative">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-4 w-4 bg-emerald-500"></span>
+          </span>
+          <div>
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-black bg-emerald-500 text-slate-950 uppercase tracking-wider">
+                🔴 โซนที่ 1: บอทเทรดสดในตลาดจริง (Forward Trading Live)
+              </span>
+              <span class="text-xs font-mono font-bold text-emerald-400">
+                PEPPERSTONE DEMO #5258778
+              </span>
+            </div>
+            <p class="text-xs text-slate-300 mt-1">
+              บอทที่แสดงในการ์ดด้านล่างนี้กำลัง <strong>ส่งคำสั่งซื้อขายจริงในตลาดสด ณ วินาทีนี้</strong> (ข้อมูล Real-Time ทุก &lt; 2 วิ · มีพอร์ตและคำสั่งเทรดจริง ไม่ใช่การจำลองในอดีต)
+            </p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 text-xs">
+          <span class="px-3 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 font-mono text-[11px] font-bold flex items-center gap-1.5">
+            <span class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>ตลาดสดปัจจุบัน (LIVE)</span>
+          </span>
+        </div>
+      </div>
+    </div>
     <!-- REAL-TIME FORWARD TRADING & BOT FLEET HEALTH MONITOR (LIVE vs OFFLINE) -->
     <div id="live-forward-card" class="bg-gradient-to-r from-emerald-950/30 via-slate-900 to-slate-900 border-2 border-emerald-500/40 rounded-2xl p-4 sm:p-5 shadow-2xl transition-all">
       <!-- Top Bar: Fleet Overview & Global Sync -->
@@ -363,6 +352,79 @@
       <!-- BOT FLEET INTERACTIVE CARDS GRID -->
       <div id="bot-fleet-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3.5">
         <!-- Dynamically rendered by renderBotFleet() -->
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 🧪 ZONE 2: STRATEGY BACKTEST LAB (ห้องทดลองวิเคราะห์ผลย้อนหลัง)              -->
+    <!-- ========================================================================= -->
+    <div class="mt-10 mb-4 pt-6 border-t-2 border-dashed border-slate-800">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-gradient-to-r from-amber-950/90 via-slate-900 to-slate-900 border-2 border-amber-500/50 rounded-2xl p-4 shadow-xl mb-4">
+        <div class="flex items-center gap-3">
+          <span class="text-3xl">🧪</span>
+          <div>
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-black bg-amber-500 text-slate-950 uppercase tracking-wider">
+                🧪 โซนที่ 2: ห้องทดลองวิเคราะห์ผลย้อนหลัง (Strategy Backtest Lab)
+              </span>
+              <span class="text-xs font-mono font-bold text-amber-400">
+                HISTORICAL SIMULATION (ORDER BOOK L2)
+              </span>
+            </div>
+            <p class="text-xs text-slate-300 mt-1">
+              ผลการจำลองย้อนหลังด้วยข้อมูล Order Book วันที่ 31 ต.ค. - 01 พ.ย. 2026 เพื่อพิสูจน์ความได้เปรียบทางสถิติ <strong>ก่อนนำสูตรที่ชนะไปปล่อยรันสดในโซนที่ 1 ด้านบน</strong>
+            </p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 text-xs">
+          <span class="px-3 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 font-mono text-[11px] font-bold">
+            📊 คลิกปุ่มกลยุทธ์เพื่อดูกราฟย้อนหลัง
+          </span>
+        </div>
+      </div>
+    </div>
+    <!-- 2. HEADER & STRATEGY SWITCHER -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+      <div>
+        <div class="flex flex-wrap items-center gap-2 mb-1">
+          <span id="badge-strat-highlight" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            🔥 BTCUSD (M1): วางกรอบดักวอลุ่มสถาบัน กำไร +$14.16 USD
+          </span>
+          <span id="badge-strat-date" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">
+            📅 สมุดคำสั่งสด L2: 31 ต.ค. - 01 พ.ย. 2026
+          </span>
+          <span id="badge-strat-mode" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-500 border border-amber-500/20">
+            🛡️ เข้าทีละ 1 ไม้ · TP $50 / SL $25
+          </span>
+        </div>
+        <h1 class="text-xl md:text-2xl font-bold tracking-tight text-white flex items-center gap-2">
+          <span>📊</span> ผลการทดสอบและวิเคราะห์กลยุทธ์ (Strategy Backtest Lab)
+        </h1>
+        <p class="text-xs sm:text-sm text-slate-400 mt-0.5">
+          เลือกดูกลยุทธ์ด้านขวามือเพื่อวิเคราะห์อัตราการชนะ (Win Rate), กราฟการเติบโตของพอร์ต (Equity Curve) และดูแท่งเทียนรอบจุดเข้า-ออกจริง
+        </p>
+      </div>
+
+      <!-- Strategy Switcher Buttons -->
+      <div class="flex flex-wrap items-center bg-slate-900 p-1 rounded-xl border border-slate-800 shadow-sm gap-1">
+        <button id="tab-dom-abs-btc" onclick="switchStrategy('dom_absorption_btc')" class="px-3 py-1.5 text-xs md:text-sm font-bold rounded-lg transition-all bg-amber-500 text-slate-950 shadow flex items-center gap-1.5">
+          <span>🔥</span> DOM_ABSORPTION (BTC) <span class="bg-slate-950 text-amber-400 text-[10px] px-1.5 py-0.5 rounded-full font-mono">NEW +$14.16</span>
+        </button>
+        <button id="tab-dom-abs-eth" onclick="switchStrategy('dom_absorption_eth')" class="px-3 py-1.5 text-xs md:text-sm font-medium rounded-lg transition-all text-slate-300 hover:text-white flex items-center gap-1.5">
+          <span>⚡</span> DOM_ABSORPTION (ETH) <span class="bg-blue-500/20 text-blue-400 text-[10px] px-1.5 py-0.5 rounded-full font-mono">+$16.16</span>
+        </button>
+        <button id="tab-runner" onclick="switchStrategy('dom_smart_runner')" class="px-3 py-1.5 text-xs md:text-sm font-medium rounded-lg transition-all text-slate-400 hover:text-white">
+          🚀 SMART_RUNNER (XAU)
+        </button>
+        <button id="tab-smc" onclick="switchStrategy('smc_fibo_dom')" class="px-3 py-1.5 text-xs md:text-sm font-medium rounded-lg transition-all text-slate-400 hover:text-white">
+          ⚡ SMC_FIBO_5M
+        </button>
+        <button id="tab-fade" onclick="switchStrategy('dom_fade')" class="px-3 py-1.5 text-xs md:text-sm font-medium rounded-lg transition-all text-slate-400 hover:text-white">
+          🛡️ DOM_FADE_5M
+        </button>
+        <button id="tab-compare" onclick="switchStrategy('compare')" class="px-3 py-1.5 text-xs md:text-sm font-medium rounded-lg transition-all text-slate-400 hover:text-white flex items-center gap-1">
+          <span>📊</span> เปรียบเทียบ 3 ยุค
+        </button>
       </div>
     </div><div id="kpi-section" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
       <!-- Populated by JS -->
@@ -799,7 +861,7 @@
       container.innerHTML = `
         <div class="bg-slate-900 p-3.5 rounded-xl border border-slate-800 shadow-sm hover:border-slate-700 transition">
           <div class="flex items-center justify-between">
-            <span class="text-[11px] font-semibold text-slate-400">กำไรสุทธิ (Net PnL)</span>
+            <span class="text-[11px] font-semibold text-slate-400">กำไรสุทธิ (Net PnL) <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-normal">Backtest ย้อนหลัง</span></span>
             <span class="text-[10px] text-slate-500 font-mono">สุทธิ</span>
           </div>
           <div class="text-xl font-extrabold ${profitColor} mt-1 font-mono">$${s.net_profit > 0 ? '+' : ''}${s.net_profit.toFixed(2)}</div>
@@ -810,7 +872,7 @@
 
         <div class="bg-slate-900 p-3.5 rounded-xl border border-slate-800 shadow-sm hover:border-slate-700 transition">
           <div class="flex items-center justify-between">
-            <span class="text-[11px] font-semibold text-slate-400">Profit Factor (PF)</span>
+            <span class="text-[11px] font-semibold text-slate-400">Profit Factor (PF) <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-normal">Backtest ย้อนหลัง</span></span>
             <span class="text-[10px] text-emerald-400 font-mono">เกณฑ์สถาบัน</span>
           </div>
           <div class="text-xl font-extrabold text-emerald-400 mt-1 font-mono">${s.profit_factor.toFixed(2)}</div>
@@ -821,7 +883,7 @@
 
         <div class="bg-slate-900 p-3.5 rounded-xl border border-slate-800 shadow-sm hover:border-slate-700 transition">
           <div class="flex items-center justify-between">
-            <span class="text-[11px] font-semibold text-slate-400">Win Rate (% ชนะ)</span>
+            <span class="text-[11px] font-semibold text-slate-400">Win Rate (% ชนะ) <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-normal">Backtest ย้อนหลัง</span></span>
             <span class="text-[10px] text-blue-400 font-mono">${wins}W / ${losses}L</span>
           </div>
           <div class="text-xl font-extrabold text-white mt-1 font-mono">${s.win_rate.toFixed(1)}%</div>
@@ -832,7 +894,7 @@
 
         <div class="bg-slate-900 p-3.5 rounded-xl border border-slate-800 shadow-sm hover:border-slate-700 transition">
           <div class="flex items-center justify-between">
-            <span class="text-[11px] font-semibold text-slate-400">Max Drawdown (ย่อตัว)</span>
+            <span class="text-[11px] font-semibold text-slate-400">Max Drawdown (ย่อตัว) <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-normal">Backtest ย้อนหลัง</span></span>
             <span class="text-[10px] text-purple-400 font-mono">${ddPct}% ทุน</span>
           </div>
           <div class="text-xl font-extrabold text-emerald-400 mt-1 font-mono">$${s.max_drawdown.toFixed(2)}</div>
