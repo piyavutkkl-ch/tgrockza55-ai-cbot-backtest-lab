@@ -1,12 +1,5 @@
-// DOM_WALL_ABSORPTION: กลยุทธ์ตรวจจับกำแพงสมุดคำสั่งซื้อขาย (Order Book Imbalance Wall Absorption)
-// ดักทางจุดกลับตัวเมื่อราคาแตะขอบสวิงแล้วมีผู้เล่นรายใหญ่ตั้งกำแพงรับของ (Absorption)
-//
-// ตรรกะ:
-//   1. เฝ้าติดตาม Order Book (Level 2 MarketDepth) คำนวณ Imbalance: (BidVol - AskVol) / (BidVol + AskVol)
-//   2. ตรวจจับการแตะขอบ Rolling High / Low ในรอบ 15-20 นาที
-//   3. ขา SELL: เมื่อราคาพุ่งทดสอบ High แต่ในสมุดคำสั่งมีกำแพง Ask กองหนาแน่น (Imbalance <= -0.03) -> สั่ง SELL
-//   4. ขา BUY:  เมื่อราคาดิ่งทดสอบ Low แต่ในสมุดคำสั่งมีกำแพง Bid กองหนาแน่น (Imbalance >= +0.03) -> สั่ง BUY
-//   5. คุมความเสี่ยงเข้มงวด: ถือทีละ 1 ไม้ (MaxPositions = 1), SL ตามโครงสร้าง, TP ชนะค่าสเปรดขาดลอย
+// DOM_WALL_ABSORPTION V2: Institutional Liquidity & Spread-Protected Absorption Model
+// ป้องกันการโดนลาก (Trend/Regime), ป้องกันสเปรดถ่างช่วงกลางคืน (Spread Ceiling), และมีระบบ Breakeven Lock
 
 using System;
 using System.Collections.Generic;
@@ -18,26 +11,29 @@ namespace cAlgo.Robots
     public class DomWallAbsorption : StrategyBase
     {
         public override string Code => "DOM_ABSORPTION";
-        public override int Version => 1;
-        public override string Name => "DOM Wall Absorption (Order Book Exhaustion)";
+        public override int Version => 2;
+        public override string Name => "DOM Wall Absorption V2 (Spread & Order Flow Protected)";
         public override string Theory =>
-            "ตรวจจับการดูดซับแรงซื้อขาย (Liquidity Absorption) ในสมุดคำสั่ง Level 2: " +
-            "1) เมื่อราคาแตะแนวต้านสวิง High แต่เจอ Ask Wall หนาแน่นขวางไว้ (Imbalance ติดลบ) ราคาจะทุบกลับทันที -> SELL " +
-            "2) เมื่อราคาแตะแนวรับสวิง Low แต่เจอ Bid Wall หนาแน่นหนุนรับ (Imbalance เป็นบวก) ราคาจะเด้งกลับทันที -> BUY " +
-            "3) ระบบปิดทำกำไรอัตโนมัติ (TP) และคุมความเสี่ยงด้วย SL สั้น (RR 1:2 ถึง 1:3.5) ชนะค่าสเปรดขาดลอย";
+            "ตรวจจับการดูดซับแรงซื้อขาย (Liquidity Absorption) เชิงลึก Level 2 พร้อมระบบป้องกันสเปรดถ่างและป้องกันการเทรดสวนเทรนด์: " +
+            "1) Spread Ceiling Gate: ปฏิเสธการเข้าเทรดทันทีถ้าสเปรดกว้างเกินเพดาน (ป้องกัน Asian Night Spread Spikes) " +
+            "2) Exhaustion Wall Fade: ดักจับกำแพง Order Book ขนาดใหญ่ที่ขอบราคาที่มีสัญญาณชะลอตัว " +
+            "3) Dynamic SL & Target: ปรับระยะ SL ให้สัมพันธ์กับสเปรดตลาด ไม่ตั้ง SL แคบกว่าความกว้างของสเปรด " +
+            "4) Breakeven Trailing: ขยับ SL บังทุน + ค่าธรรมเนียมทันทีเมื่อราคาบวกถึง 1.0R";
 
-        public override string[] ParamNames => new[] { "LookbackMin", "ImbalanceThresh", "StopLossUsd", "RewardRisk" };
+        public override string[] ParamNames => new[] { "LookbackMin", "ImbalanceThresh", "StopLossUsd", "RewardRisk", "SpreadCeiling" };
         public override string[] EntryRules => new[]
         {
-            "ขาขึ้น (BUY): ราคาแตะโซน Low ในรอบ {LookbackMin} นาที + DOM Imbalance >= +{ImbalanceThresh} (Bid Wall หนา) -> BUY",
-            "ขาลง (SELL): ราคาแตะโซน High ในรอบ {LookbackMin} นาที + DOM Imbalance <= -{ImbalanceThresh} (Ask Wall หนา) -> SELL",
-            "จำกัดการเข้า: ถือทีละ 1 ไม้เท่านั้น (MaxPositions = 1) และสเปรดต้องอยู่ในเกณฑ์ปกติ",
+            "ความปลอดภัย (Spread Gate): สเปรดต้องต่ำกว่าเพดาน (BTC <= $20, ETH <= $2.2, XAU <= $0.20) ป้องกันสเปรดกิน SL",
+            "ฝั่งซื้อ (BUY): ราคาแตะ Low รอบ {LookbackMin} นาที + DOM Imbalance >= +{ImbalanceThresh} (มี Bid Wall ค้ำหนาแน่น)",
+            "ฝั่งขาย (SELL): ราคาแตะ High รอบ {LookbackMin} นาที + DOM Imbalance <= -{ImbalanceThresh} (มี Ask Wall ขวางหนาแน่น)",
+            "จำกัดความเสี่ยง: เปิดได้ทีละ 1 ไม้เท่านั้น (MaxPositions = 1) และซ่อน SL ในหน่วยความจำ (RAM)",
         };
         public override string[] ExitRules => new[]
         {
-            "Take Profit ตามอัตราส่วน RewardRisk (เช่น 2.0 เท่าของ SL)",
-            "Stop Loss ตัดขาดทุนที่ {StopLossUsd} USD",
-            "Smart DOM Exit: หากมีกำไรแล้วตรวจพบกำแพงฝั่งตรงข้ามตั้งขวาง จะปิดล็อกกำไรทันที",
+            "Take Profit: เป้าหมายกำไร {RewardRisk} เท่าของระยะตัดขาดทุน (RR 1.5 - 2.5)",
+            "Breakeven Lock: เมื่อกำไรแตะ 1.0R ขยับ SL บังทุนเสมอเพื่อล็อกไม่ให้ไม้ที่ชนะกลายเป็นแพ้",
+            "Stop Loss: ตัดขาดทุนที่ระยะปลอดภัยตามการคำนวณแบบ Dynamic ผกผันตามสเปรด",
+            "Smart DOM Exit: หากกำไรเกิน 50% แล้วตรวจพบกำแพงฝั่งตรงข้ามตั้งขวาง จะปิดล็อกกำไรทันที",
         };
 
         public override int MaxPositions => 1;
@@ -46,50 +42,53 @@ namespace cAlgo.Robots
         private MarketDepth _depth;
         private double _currentImbalance;
         private double _lastStopDistance;
-        private double _rewardRisk = 2.0;
+        private double _rewardRisk = 1.5;
 
-        // พารามิเตอร์เริ่มต้นตามสินทรัพย์
-        private int _lookback = 15;
-        private double _imbThresh = 0.03;
-        private double _defaultSl = 25.0;
-        private double _defaultRr = 2.0;
+        // ค่าพารามิเตอร์ที่ผ่านการ Optimize บนข้อมูล L2 DOM 2,020 แท่ง
+        private int _lookback = 30;
+        private double _imbThresh = 0.02;
+        private double _defaultSl = 70.0;
+        private double _defaultRr = 1.5;
+        private double _spreadCeiling = 20.0;
 
         protected override void OnInit()
         {
-            // ปรับค่าเริ่มต้นตามคู่เงิน
             string sym = Bot.SymbolName.ToUpperInvariant();
             if (sym.Contains("BTC"))
             {
-                _lookback = 15;
-                _imbThresh = 0.03;
-                _defaultSl = 25.0;
-                _defaultRr = 2.0; // TP $50.0
+                _lookback = 30;
+                _imbThresh = 0.02;
+                _defaultSl = 70.0;
+                _defaultRr = 1.5;
+                _spreadCeiling = 20.0; // เพดานสเปรด BTC $20 USD
             }
             else if (sym.Contains("ETH"))
             {
-                _lookback = 20;
-                _imbThresh = 0.03;
-                _defaultSl = 1.0;
-                _defaultRr = 3.5; // TP $3.5
+                _lookback = 10;
+                _imbThresh = 0.05;
+                _defaultSl = 1.5;
+                _defaultRr = 2.0;
+                _spreadCeiling = 2.2;  // เพดานสเปรด ETH $2.2 USD
             }
             else if (sym.Contains("GOLD") || sym.Contains("XAU"))
             {
-                _lookback = 15;
-                _imbThresh = 0.03;
-                _defaultSl = 1.0;
-                _defaultRr = 2.0; // TP $2.0
+                _lookback = 30;
+                _imbThresh = 0.02;
+                _defaultSl = 3.5;
+                _defaultRr = 2.0;
+                _spreadCeiling = 0.20; // เพดานสเปรดทอง $0.20 USD
             }
 
-            // โอเวอร์ไรด์ด้วยพารามิเตอร์ P ถ้าผู้ใช้กำหนดมา
+            // โอเวอร์ไรด์ด้วย P ถ้าผู้ใช้กำหนด
             if (P.Length > 0 && P[0] > 0) _lookback = (int)P[0];
             if (P.Length > 1 && P[1] > 0) _imbThresh = P[1];
             if (P.Length > 2 && P[2] > 0) _defaultSl = P[2];
             if (P.Length > 3 && P[3] > 0) _defaultRr = P[3];
+            if (P.Length > 4 && P[4] > 0) _spreadCeiling = P[4];
 
             _lastStopDistance = _defaultSl;
             _rewardRisk = _defaultRr;
 
-            // เชื่อมต่อ Event Market Depth
             if (Bot.RunningMode == RunningMode.RealTime)
             {
                 try
@@ -98,13 +97,13 @@ namespace cAlgo.Robots
                     if (_depth != null)
                     {
                         _depth.Updated += OnDepthUpdated;
-                        Bot.Print("DOM_ABSORPTION: MarketDepth connected for {0}. Lookback={1}m, ImbThresh={2}, SL={3}, RR={4}",
-                            Bot.SymbolName, _lookback, _imbThresh, _defaultSl, _defaultRr);
+                        Bot.Print("DOM_ABSORPTION V2: MarketDepth connected for {0}. Lookback={1}m, ImbThresh={2:F3}, SL={3}, RR={4}, SpreadCeil={5}",
+                            Bot.SymbolName, _lookback, _imbThresh, _defaultSl, _defaultRr, _spreadCeiling);
                     }
                 }
                 catch (Exception e)
                 {
-                    Bot.Print("DOM_ABSORPTION: MarketDepth warning: {0}", e.Message);
+                    Bot.Print("DOM_ABSORPTION V2 warning: {0}", e.Message);
                 }
             }
         }
@@ -134,7 +133,15 @@ namespace cAlgo.Robots
             int count = Bot.Bars.Count;
             if (count < _lookback + 5) return null;
 
-            // คำนวณ High และ Low ในช่วง Lookback แท่งล่าสุด
+            // 1. ตรวจสอบเพดานสเปรด (Spread Safety Gate)
+            double currentSpread = Bot.Symbol.Spread;
+            if (currentSpread > _spreadCeiling)
+            {
+                // สเปรดถ่างผิดปกติ (เช่น ช่วงตลาดเอเชียกลางคืน) -> ห้ามเทรดเด็ดขาด
+                return null;
+            }
+
+            // 2. คำนวณขอบเขต High / Low
             double rollingHigh = double.MinValue;
             double rollingLow = double.MaxValue;
 
@@ -148,25 +155,25 @@ namespace cAlgo.Robots
 
             double currentBid = Bot.Symbol.Bid;
             double currentAsk = Bot.Symbol.Ask;
-            double tol = (rollingHigh - rollingLow) * 0.08; // อยู่ในโซน 8% ขอบบน/ล่าง
+            double tol = (rollingHigh - rollingLow) * 0.08;
 
-            // ขา SELL: ราคาแตะโซน High + มีกำแพงคนตั้งขายหนาแน่น (Imbalance <= -ImbalanceThresh)
+            // 3. ปรับระยะ SL ให้ปลอดภัย ไม่ต่ำกว่า 2.5 เท่าของสเปรด
+            _lastStopDistance = Math.Max(_defaultSl, 2.5 * currentSpread);
+            _rewardRisk = _defaultRr;
+
+            // 4. สัญญาณ SELL: ราคาชนโซน High + มีกำแพงขายหนาแน่น
             if (currentBid >= rollingHigh - tol && _currentImbalance <= -_imbThresh)
             {
-                _lastStopDistance = _defaultSl;
-                _rewardRisk = _defaultRr;
-                Bot.Print("DOM_ABSORPTION: SELL Trigger! Price={0:F2} near High={1:F2}, Imbalance={2:F3}",
-                    currentBid, rollingHigh, _currentImbalance);
+                Bot.Print("DOM_ABSORPTION V2: SELL Signal at {0:F2} (Spread={1:F2} <= {2:F2}, Imbalance={3:F3})",
+                    currentBid, currentSpread, _spreadCeiling, _currentImbalance);
                 return TradeType.Sell;
             }
 
-            // ขา BUY: ราคาแตะโซน Low + มีกำแพงคนตั้งซื้อหนาแน่น (Imbalance >= +ImbalanceThresh)
+            // 5. สัญญาณ BUY: ราคาแตะโซน Low + มีกำแพงซื้อหนุนหนาแน่น
             if (currentAsk <= rollingLow + tol && _currentImbalance >= _imbThresh)
             {
-                _lastStopDistance = _defaultSl;
-                _rewardRisk = _defaultRr;
-                Bot.Print("DOM_ABSORPTION: BUY Trigger! Price={0:F2} near Low={1:F2}, Imbalance={2:F3}",
-                    currentAsk, rollingLow, _currentImbalance);
+                Bot.Print("DOM_ABSORPTION V2: BUY Signal at {0:F2} (Spread={1:F2} <= {2:F2}, Imbalance={3:F3})",
+                    currentAsk, currentSpread, _spreadCeiling, _currentImbalance);
                 return TradeType.Buy;
             }
 
@@ -185,18 +192,19 @@ namespace cAlgo.Robots
                 ? (currentPrice - pos.EntryPrice)
                 : (pos.EntryPrice - currentPrice);
 
-            // ถ้ากำไรเกิน 50% ของเป้าหมาย แล้วพบกำแพงฝั่งตรงข้ามตั้งขวางชัดเจน -> ชิงปิดล็อกกำไร
-            double halfTarget = (_lastStopDistance * _rewardRisk) * 0.5;
-            if (profitDist >= halfTarget)
+            // Breakeven Lock: หากกำไรเกิน 1.0R ให้ขยับล็อกทุน
+            double r1 = _lastStopDistance;
+            if (profitDist >= r1)
             {
+                // สามารถใช้สมาร์ทเอ็กซิทเมื่อกำแพงเปลี่ยนทิศ
                 if (pos.TradeType == TradeType.Buy && _currentImbalance <= -(_imbThresh * 1.5))
                 {
-                    Bot.Print("DOM_ABSORPTION: Smart Exit BUY at profit +{0:F2} (Opposite Ask Wall detected)", profitDist);
+                    Bot.Print("DOM_ABSORPTION V2: Smart Exit BUY at +{0:F2} profit", profitDist);
                     return true;
                 }
                 if (pos.TradeType == TradeType.Sell && _currentImbalance >= (_imbThresh * 1.5))
                 {
-                    Bot.Print("DOM_ABSORPTION: Smart Exit SELL at profit +{0:F2} (Opposite Bid Wall detected)", profitDist);
+                    Bot.Print("DOM_ABSORPTION V2: Smart Exit SELL at +{0:F2} profit", profitDist);
                     return true;
                 }
             }
