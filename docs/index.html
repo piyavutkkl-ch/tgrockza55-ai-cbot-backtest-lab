@@ -292,78 +292,79 @@
 
     <!-- 3. KPI CARDS CONTAINER -->
     
-    <!-- REAL-TIME FORWARD TRADING & DOM LIVE FEED (AUTO-REFRESHING) -->
-    <div id="live-forward-card" class="bg-gradient-to-r from-amber-950/40 via-slate-900 to-slate-900 border-2 border-amber-500/40 rounded-2xl p-4 sm:p-5 shadow-xl">
+    <!-- REAL-TIME FORWARD TRADING & BOT FLEET HEALTH MONITOR (LIVE vs OFFLINE) -->
+    <div id="live-forward-card" class="bg-gradient-to-r from-emerald-950/30 via-slate-900 to-slate-900 border-2 border-emerald-500/40 rounded-2xl p-4 sm:p-5 shadow-2xl transition-all">
+      <!-- Top Bar: Fleet Overview & Global Sync -->
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-800 pb-3 mb-4">
         <div class="flex items-center gap-3">
           <span class="flex h-3.5 w-3.5 relative">
-            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-3.5 w-3.5 bg-amber-500"></span>
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-3.5 w-3.5 bg-emerald-500"></span>
           </span>
           <div>
-            <div class="flex items-center gap-2">
-              <h2 class="text-base font-bold text-white tracking-wide">🔴 ระบบเทรดสดในตลาด (Real-Time Forward Execution)</h2>
-              <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                LIVE DEMO ACTIVE
+            <div class="flex flex-wrap items-center gap-2">
+              <h2 class="text-base font-bold text-white tracking-wide">🤖 ระบบมอนิเตอร์บอทสด (Bot Fleet: Live vs Offline Monitor)</h2>
+              <span id="fleet-main-badge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
+                <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>3/3 LIVE TRADING</span>
+              </span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30">
+                1 RECORDING LIVE
+              </span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-800 text-slate-400 border border-slate-700">
+                1 OFFLINE
               </span>
             </div>
-            <p class="text-xs text-slate-400 mt-0.5">
-              บอท <strong>BacktestLab (DOM_ABSORPTION)</strong> กำลังรันส่งคำสั่งเทรดสด <strong>2 คู่ขนานกัน (BTCUSD + ETHUSD)</strong> บนพอร์ต Pepperstone Demo #5258778
+            <p id="fleet-subtitle" class="text-xs text-slate-400 mt-0.5">
+              พอร์ต <strong>Pepperstone Demo #5258778</strong> · ระบบส่งคำสั่งเทรดสดอัตโนมัติ <strong>3 สินทรัพย์ (BTC, ETH, XAU)</strong> พร้อมระบบป้องกัน <strong>Quantum Stealth Defense (ซ่อน SL ใน RAM)</strong>
             </p>
           </div>
         </div>
-        <div class="flex items-center gap-3 text-xs">
+        
+        <div class="flex flex-wrap items-center gap-3 text-xs">
           <div class="bg-slate-950/80 px-3 py-1.5 rounded-xl border border-slate-800 text-right">
-            <div class="text-[10px] text-slate-400">อัปเดตสดล่าสุด:</div>
-            <div id="live-clock" class="font-mono font-bold text-emerald-400">01 Nov 2026, 09:38:05 น.</div>
+            <div class="text-[10px] text-slate-400 flex items-center justify-end gap-1">
+              <span class="h-2 w-2 rounded-full bg-emerald-400 animate-ping"></span>
+              <span>อัปเดตสดล่าสุด:</span>
+            </div>
+            <div id="live-clock" class="font-mono font-bold text-emerald-400">กำลังเชื่อมต่อ...</div>
           </div>
-          <button onclick="fetchLiveStatus()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-1.5 text-xs">
+          <button onclick="fetchLiveStatus()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-1.5 text-xs shadow-sm hover:border-slate-600">
             <span>🔄</span> รีเฟรช
           </button>
         </div>
       </div>
 
-      <!-- Live Metric Grid -->
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-        <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-3">
-          <div class="text-[11px] text-slate-400">สินทรัพย์ที่เทรดสด (คู่ขนาน)</div>
-          <div id="live-symbol" class="text-base font-extrabold text-white mt-1 font-mono">BTC & ETH (M1)</div>
-          <div class="text-[10px] text-amber-400 mt-0.5">0.01 Lot | BTC (TP $50) & ETH (TP $3.5)</div>
+      <!-- Fleet Controls & Filter Tabs -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3.5">
+        <div class="flex items-center gap-1.5 bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs">
+          <button onclick="setBotFleetFilter('ALL')" id="flt-bot-all" class="px-3 py-1 rounded-lg font-bold bg-slate-800 text-white shadow-sm transition">
+            บอททั้งหมด (<span id="count-bot-all">5</span>)
+          </button>
+          <button onclick="setBotFleetFilter('LIVE')" id="flt-bot-live" class="px-3 py-1 rounded-lg font-medium text-slate-400 hover:text-emerald-400 transition flex items-center gap-1">
+            <span class="h-2 w-2 rounded-full bg-emerald-400"></span> กำลังรัน LIVE (<span id="count-bot-live">4</span>)
+          </button>
+          <button onclick="setBotFleetFilter('OFFLINE')" id="flt-bot-off" class="px-3 py-1 rounded-lg font-medium text-slate-400 hover:text-rose-400 transition flex items-center gap-1">
+            <span class="h-2 w-2 rounded-full bg-rose-500"></span> ออฟไลน์ OFFLINE (<span id="count-bot-off">1</span>)
+          </button>
         </div>
 
-        <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-3">
-          <div class="text-[11px] text-slate-400">ราคากลางสด (Mid Price)</div>
-          <div id="live-price" class="text-base font-extrabold text-emerald-400 mt-1 font-mono">$77545.01</div>
-          <div id="live-spread" class="text-[10px] text-slate-400 mt-0.5">Spread: $15.00</div>
-        </div>
-
-        <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-3">
-          <div class="text-[11px] text-slate-400">DOM Imbalance (แรงซื้อ/ขาย)</div>
-          <div id="live-imbalance" class="text-base font-extrabold mt-1 font-mono text-cyan-400">+0.004</div>
-          <div id="live-imbalance-desc" class="text-[10px] text-slate-400 mt-0.5">สมุดคำสั่งสมดุลปกติ</div>
-        </div>
-
-        <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-3">
-          <div class="text-[11px] text-slate-400">CVD (สะสม Volume Delta)</div>
-          <div id="live-cvd" class="text-base font-extrabold text-blue-400 mt-1 font-mono">+1129</div>
-          <div class="text-[10px] text-slate-400 mt-0.5">Anchored Daily CVD</div>
-        </div>
-
-        <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-3">
-          <div class="text-[11px] text-slate-400">พอร์ตทดลอง (Demo Balance)</div>
-          <div id="live-balance" class="text-base font-extrabold text-white mt-1 font-mono">$101.51</div>
-          <div class="text-[10px] text-emerald-400 mt-0.5">Equity: $101.51 USD</div>
-        </div>
-
-        <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-3">
-          <div class="text-[11px] text-slate-400">บันทึก DOM Level 2 สด</div>
-          <div class="text-base font-extrabold text-emerald-400 mt-1 font-mono">546+ นาที</div>
-          <div class="text-[10px] text-emerald-400/80 mt-0.5">3 ตลาดขนานกัน 24 ชม.</div>
+        <div class="flex flex-wrap items-center gap-3 text-xs">
+          <div class="text-slate-400 bg-slate-950/60 px-3 py-1 rounded-lg border border-slate-800">
+            ยอดเงินพอร์ต: <span id="fleet-balance" class="font-mono font-bold text-white">$97.53</span>
+            <span class="text-slate-500 mx-1">|</span> Equity: <span id="fleet-equity" class="font-mono font-bold text-emerald-400">$97.53</span>
+          </div>
+          <div class="text-slate-400 bg-slate-950/60 px-3 py-1 rounded-lg border border-slate-800">
+            ปิดออเดอร์แล้ว: <span id="fleet-closed-trades" class="font-mono font-bold text-amber-400">16 ไม้</span>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div id="kpi-section" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
+      <!-- BOT FLEET INTERACTIVE CARDS GRID -->
+      <div id="bot-fleet-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3.5">
+        <!-- Dynamically rendered by renderBotFleet() -->
+      </div>
+    </div><div id="kpi-section" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
       <!-- Populated by JS -->
     </div>
 
@@ -1468,6 +1469,145 @@
       else renderEquityChart();
     };
   
+    let currentBotFilter = 'ALL';
+    let cachedBotsFleet = [];
+
+    function setBotFleetFilter(flt) {
+      currentBotFilter = flt;
+      ['ALL', 'LIVE', 'OFFLINE'].forEach(f => {
+        const btn = document.getElementById(`flt-bot-${f.toLowerCase()}`);
+        if (!btn) return;
+        if (f === flt) {
+          btn.className = 'px-3 py-1 rounded-lg font-bold bg-slate-800 text-white shadow-sm transition flex items-center gap-1';
+        } else {
+          btn.className = 'px-3 py-1 rounded-lg font-medium text-slate-400 hover:text-white transition flex items-center gap-1';
+        }
+      });
+      renderBotFleet(cachedBotsFleet);
+    }
+
+    function renderBotFleet(bots) {
+      if (!bots || !bots.length) return;
+      cachedBotsFleet = bots;
+      const grid = document.getElementById('bot-fleet-cards-grid');
+      if (!grid) return;
+
+      const onlineBots = bots.filter(b => b.is_online);
+      const offlineBots = bots.filter(b => !b.is_online);
+
+      const elAll = document.getElementById('count-bot-all');
+      const elLive = document.getElementById('count-bot-live');
+      const elOff = document.getElementById('count-bot-off');
+      if (elAll) elAll.textContent = bots.length;
+      if (elLive) elLive.textContent = onlineBots.length;
+      if (elOff) elOff.textContent = offlineBots.length;
+
+      const filtered = bots.filter(b => {
+        if (currentBotFilter === 'LIVE') return b.is_online;
+        if (currentBotFilter === 'OFFLINE') return !b.is_online;
+        return true;
+      });
+
+      grid.innerHTML = filtered.map(bot => {
+        const isLive = bot.is_online;
+        const borderClass = isLive 
+          ? 'border-emerald-500/40 bg-slate-900/90 hover:border-emerald-400 shadow-emerald-950/20' 
+          : 'border-rose-500/30 bg-slate-950/70 opacity-75 hover:opacity-100 shadow-rose-950/10';
+
+        const statusBadge = isLive
+          ? `<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+               <span class="h-2 w-2 rounded-full bg-emerald-400 animate-ping"></span>
+               🟢 LIVE (รันสด)
+             </span>`
+          : `<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30">
+               <span class="h-2 w-2 rounded-full bg-rose-500"></span>
+               🔴 OFFLINE
+             </span>`;
+
+        const priceDecimals = (bot.symbol.includes('XAU') || bot.symbol.includes('GOLD')) ? 2 : bot.symbol === 'BTCUSD' ? 1 : 2;
+        const spreadDecimals = bot.symbol.includes('XAU') ? 3 : 2;
+
+        return `
+          <div class="rounded-xl border ${borderClass} p-3.5 shadow-lg flex flex-col justify-between transition-all">
+            <div>
+              <div class="flex items-center justify-between gap-2 border-b border-slate-800/80 pb-2">
+                <div class="flex items-center gap-2">
+                  <span class="text-lg">${bot.icon || '🤖'}</span>
+                  <div>
+                    <span class="font-extrabold text-white text-sm tracking-wide font-mono">${bot.symbol}</span>
+                    <span class="text-[10px] text-slate-400 ml-1 font-mono">${bot.type === 'DOM_RECORDER' ? 'RECORDER' : 'M1'}</span>
+                  </div>
+                </div>
+                ${statusBadge}
+              </div>
+
+              <div class="text-[11px] text-slate-300 font-medium mt-2">${bot.name}</div>
+              <p class="text-[10px] text-slate-400 mt-0.5 line-clamp-1">${bot.role_desc}</p>
+
+              ${isLive ? `
+                <div class="flex items-baseline justify-between mt-2.5">
+                  <div class="text-base font-extrabold font-mono text-emerald-400">
+                    $${bot.current_price.toLocaleString(undefined, {minimumFractionDigits: priceDecimals, maximumFractionDigits: priceDecimals})}
+                  </div>
+                  <div class="text-[10px] text-slate-400 font-mono">
+                    Spread: $${bot.spread.toFixed(spreadDecimals)}
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 mt-2 py-1.5 px-2 rounded-lg bg-slate-950/80 border border-slate-800 text-[10px]">
+                  <div>
+                    <span class="text-slate-500">Imbalance:</span>
+                    <span class="font-mono font-bold ${bot.imbalance >= 0.03 ? 'text-emerald-400' : bot.imbalance <= -0.03 ? 'text-rose-400' : 'text-slate-300'}">
+                      ${bot.imbalance >= 0 ? '+' : ''}${bot.imbalance.toFixed(3)}
+                    </span>
+                  </div>
+                  <div>
+                    <span class="text-slate-500">CVD:</span>
+                    <span class="font-mono font-bold ${bot.cvd >= 0 ? 'text-blue-400' : 'text-amber-400'}">
+                      ${bot.cvd >= 0 ? '+' : ''}${Math.round(bot.cvd)}
+                    </span>
+                  </div>
+                </div>
+
+                <div class="text-[10px] text-amber-300/90 mt-2 flex items-center gap-1 font-medium">
+                  <span>🛡️</span> <span>${bot.defense}</span>
+                </div>
+                ${bot.type === 'FORWARD_TRADING' ? `
+                  <div class="text-[10px] text-slate-400 mt-0.5 font-mono">
+                    Lots: ${bot.lots} | SL: $${bot.sl_usd} | TP: $${bot.tp_usd} (RR ${bot.rr_ratio})
+                  </div>
+                ` : `
+                  <div class="text-[10px] text-slate-400 mt-0.5">
+                    บันทึก Order Book Depth ทุก 2 วินาที (24 ชม.)
+                  </div>
+                `}
+              ` : `
+                <div class="mt-3 p-2.5 rounded-lg bg-rose-950/20 border border-rose-500/20 text-xs">
+                  <div class="text-rose-400 font-bold text-[11px] flex items-center gap-1">
+                    <span>⚠️</span> <span>${bot.offline_reason || 'สถานะออฟไลน์'}</span>
+                  </div>
+                  <div class="text-[10px] text-slate-400 mt-1">${bot.role_desc}</div>
+                </div>
+              `}
+            </div>
+
+            <div class="border-t border-slate-800/80 pt-2 mt-3 flex items-center justify-between text-[10px]">
+              <div class="flex items-center gap-1">
+                <span>💓</span>
+                <span class="text-slate-400">ชีพจร:</span>
+                <span class="${isLive ? 'text-emerald-400 font-bold font-mono' : 'text-rose-400 font-mono'}">
+                  ${bot.heartbeat_desc}
+                </span>
+              </div>
+              <div class="text-slate-400 font-mono">
+                ${isLive ? `⏱️ ${bot.recorded_minutes} นาที` : 'OFFLINE'}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
     // Real-Time Polling function to update live forward trading metrics every 3 seconds
     async function fetchLiveStatus() {
       try {
@@ -1476,26 +1616,25 @@
         const data = await res.json();
         
         const elClock = document.getElementById('live-clock');
-        const elPrice = document.getElementById('live-price');
-        const elSpread = document.getElementById('live-spread');
-        const elImb = document.getElementById('live-imbalance');
-        const elCvd = document.getElementById('live-cvd');
-        const elBal = document.getElementById('live-balance');
+        const elBal = document.getElementById('fleet-balance');
+        const elEq = document.getElementById('fleet-equity');
+        const elTrades = document.getElementById('fleet-closed-trades');
+        const elMainBadge = document.getElementById('fleet-main-badge');
         
         if (elClock) elClock.textContent = data.timestamp_local;
-        if (data.dom_recorders && data.dom_recorders.length >= 2) {
-          const btc = data.dom_recorders[0];
-          const eth = data.dom_recorders[1];
-          if (elPrice) elPrice.innerHTML = `<span class="text-amber-400 font-bold">$${btc.current_price.toFixed(0)}</span> <span class="text-slate-500 text-xs">/</span> <span class="text-blue-400 font-bold">$${eth.current_price.toFixed(1)}</span>`;
-          if (elSpread) elSpread.textContent = `Spread: BTC $${btc.spread.toFixed(1)} | ETH $${eth.spread.toFixed(2)}`;
-          if (elImb) {
-            elImb.innerHTML = `<span class="${btc.imbalance >= 0.03 ? 'text-emerald-400' : btc.imbalance <= -0.03 ? 'text-rose-400' : 'text-slate-300'}">${btc.imbalance >= 0 ? '+' : ''}${btc.imbalance.toFixed(2)}</span> <span class="text-slate-600 text-xs">|</span> <span class="${eth.imbalance >= 0.03 ? 'text-emerald-400' : eth.imbalance <= -0.03 ? 'text-rose-400' : 'text-slate-300'}">${eth.imbalance >= 0 ? '+' : ''}${eth.imbalance.toFixed(2)}</span>`;
-            document.getElementById('live-imbalance-desc').textContent = 'BTC (ซ้าย) | ETH (ขวา) Imbalance';
-          }
-          if (elCvd) elCvd.textContent = (btc.cvd >= 0 ? '+' : '') + Math.round(btc.cvd);
+        
+        if (data.forward_trading) {
+          if (elBal) elBal.textContent = '$' + data.forward_trading.balance.toFixed(2);
+          if (elEq) elEq.textContent = '$' + data.forward_trading.equity.toFixed(2);
+          if (elTrades) elTrades.textContent = (data.forward_trading.total_trades || 0) + ' ไม้';
         }
-        if (data.forward_trading && elBal) {
-          elBal.textContent = '$' + data.forward_trading.balance.toFixed(2);
+
+        if (data.summary && elMainBadge) {
+          elMainBadge.innerHTML = `<span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span><span>${data.summary.forward_online}/${data.summary.forward_total} LIVE TRADING</span>`;
+        }
+
+        if (data.bots_fleet) {
+          renderBotFleet(data.bots_fleet);
         }
       } catch (err) {
         // Fallback gracefully

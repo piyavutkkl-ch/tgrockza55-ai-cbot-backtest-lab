@@ -3,13 +3,91 @@ import sys
 import time
 import json
 import csv
+import glob
+import subprocess
 from datetime import datetime, timezone
 
 sys.stdout.reconfigure(encoding='utf-8')
 
 LIVE_BASE = os.path.expandvars(r'%LOCALAPPDATA%\BacktestLab\live')
-DOCS_DATA = r'd:\cbot-atgvt\docs\data'
+REPO_ROOT = r'd:\cbot-atgvt'
+DOCS_DATA = os.path.join(REPO_ROOT, 'docs', 'data')
 LIVE_STATUS_JSON = os.path.join(DOCS_DATA, 'live_status.json')
+
+BOT_CONFIGS = [
+    {
+        "id": "bot_btc_dom",
+        "symbol": "BTCUSD",
+        "name": "BTCUSD · DOM Absorption",
+        "type": "FORWARD_TRADING",
+        "strategy": "DOM_ABSORPTION",
+        "lots": 0.01,
+        "sl_usd": 35.0,
+        "tp_usd": 91.0,
+        "rr_ratio": 2.6,
+        "defense": "Quantum Stealth RAM SL (±5% Jitter)",
+        "role_desc": "เทรดสดดักจังหวะกำแพงสภาพคล่อง (Ask/Bid Wall Absorption)",
+        "icon": "🪙"
+    },
+    {
+        "id": "bot_eth_dom",
+        "symbol": "ETHUSD",
+        "name": "ETHUSD · DOM Absorption",
+        "type": "FORWARD_TRADING",
+        "strategy": "DOM_ABSORPTION",
+        "lots": 0.01,
+        "sl_usd": 4.5,
+        "tp_usd": 11.7,
+        "rr_ratio": 2.6,
+        "defense": "Quantum Stealth RAM SL (±5% Jitter)",
+        "role_desc": "เทรดสดดักจังหวะกำแพงสภาพคล่อง (Ask/Bid Wall Absorption)",
+        "icon": "🔷"
+    },
+    {
+        "id": "bot_xau_dom",
+        "symbol": "XAUUSD",
+        "name": "XAUUSD · DOM Absorption",
+        "type": "FORWARD_TRADING",
+        "strategy": "DOM_ABSORPTION",
+        "lots": 0.01,
+        "sl_usd": 2.5,
+        "tp_usd": 6.0,
+        "rr_ratio": 2.4,
+        "defense": "Quantum Stealth RAM SL (±5% Jitter)",
+        "role_desc": "เทรดสดดักจังหวะทองคำรอบลอนดอน & นิวยอร์ก (รอวอลุ่มช่วงบ่าย)",
+        "icon": "🟡"
+    },
+    {
+        "id": "bot_gold_perp_recorder",
+        "symbol": "GOLD-PERP",
+        "name": "GOLD-PERP · DOM L2 Recorder",
+        "type": "DOM_RECORDER",
+        "strategy": "ORDER_BOOK_RECORDER",
+        "lots": 0.00,
+        "sl_usd": 0.0,
+        "tp_usd": 0.0,
+        "rr_ratio": 0.0,
+        "defense": "Passive 24h Depth Capture",
+        "role_desc": "บันทึกข้อมูลสมุดคำสั่ง Level 2 Depth ทุก 2 วินาที ตลอด 24 ชม.",
+        "icon": "📊"
+    },
+    {
+        "id": "bot_legacy_smc_fibo",
+        "symbol": "XAUUSD",
+        "name": "SMC Fibo 5M (Legacy Model)",
+        "type": "BACKTEST_ONLY",
+        "strategy": "SMC_FIBO_5M",
+        "lots": 0.01,
+        "sl_usd": 2.0,
+        "tp_usd": 6.0,
+        "rr_ratio": 3.0,
+        "defense": "Standard Hard SL",
+        "role_desc": "กลยุทธ์โครงสร้างราคา SMC (หยุดรันชั่วคราว - รอเปรียบเทียบ)",
+        "icon": "⏸️",
+        "force_offline": True,
+        "offline_reason": "สลับให้ DOM Absorption รันหลัก"
+    }
+]
 
 def get_latest_row(csv_path):
     if not os.path.exists(csv_path) or os.path.getsize(csv_path) == 0:
@@ -47,18 +125,102 @@ def get_trades(symbol):
         pass
     return trades
 
+def inspect_bot_telemetry(cfg, now_epoch):
+    sym = cfg["symbol"]
+    sdir = os.path.join(LIVE_BASE, sym)
+    
+    if cfg.get("force_offline"):
+        return {
+            **cfg,
+            "is_online": False,
+            "status": "OFFLINE",
+            "heartbeat_seconds": 99999,
+            "heartbeat_desc": "ออฟไลน์ (หยุดการทำงาน)",
+            "current_price": 0.0,
+            "spread": 0.0,
+            "imbalance": 0.0,
+            "delta": 0.0,
+            "cvd": 0.0,
+            "vwap": 0.0,
+            "recorded_minutes": 0,
+            "open_positions": 0
+        }
+
+    if not os.path.exists(sdir):
+        return {
+            **cfg,
+            "is_online": False,
+            "status": "OFFLINE",
+            "heartbeat_seconds": 99999,
+            "heartbeat_desc": "ไม่มีไดเรกทอรีข้อมูล",
+            "current_price": 0.0,
+            "spread": 0.0,
+            "imbalance": 0.0,
+            "delta": 0.0,
+            "cvd": 0.0,
+            "vwap": 0.0,
+            "recorded_minutes": 0,
+            "open_positions": 0
+        }
+
+    min_file = os.path.join(sdir, 'min-2026-11.csv')
+    flow_file = os.path.join(sdir, 'flow-2026-11.csv')
+    books = glob.glob(os.path.join(sdir, 'book-*.csv'))
+    latest_book = max(books, key=os.path.getmtime) if books else None
+
+    mtimes = []
+    if os.path.exists(min_file): mtimes.append(os.path.getmtime(min_file))
+    if os.path.exists(flow_file): mtimes.append(os.path.getmtime(flow_file))
+    if latest_book and os.path.exists(latest_book): mtimes.append(os.path.getmtime(latest_book))
+
+    if not mtimes:
+        diff_sec = 99999
+    else:
+        diff_sec = max(0.0, now_epoch - max(mtimes))
+
+    is_online = (diff_sec <= 60.0)
+    status = "LIVE" if is_online else "OFFLINE"
+
+    if diff_sec < 2.0:
+        heartbeat_desc = "เมื่อสักครู่ (< 2 วิ)"
+    elif diff_sec < 60.0:
+        heartbeat_desc = f"{int(diff_sec)} วินาทีที่แล้ว"
+    elif diff_sec < 3600.0:
+        heartbeat_desc = f"{int(diff_sec / 60)} นาทีที่แล้ว"
+    else:
+        heartbeat_desc = f"{int(diff_sec / 3600)} ชม. ที่แล้ว"
+
+    min_row = get_latest_row(min_file)
+    flow_row = get_latest_row(flow_file)
+
+    curr_price = float(min_row['close']) if min_row and 'close' in min_row else 0.0
+    spread = float(min_row['spreadAvg']) if min_row and 'spreadAvg' in min_row else 0.0
+    imbalance = float(min_row['imbalance']) if min_row and 'imbalance' in min_row else 0.0
+    delta = float(flow_row['delta']) if flow_row and 'delta' in flow_row else 0.0
+    cvd = float(flow_row['cvd']) if flow_row and 'cvd' in flow_row else 0.0
+    vwap = float(flow_row['vwapDay']) if flow_row and 'vwapDay' in flow_row else curr_price
+
+    return {
+        **cfg,
+        "is_online": is_online,
+        "status": status,
+        "heartbeat_seconds": round(diff_sec, 1),
+        "heartbeat_desc": heartbeat_desc,
+        "current_price": curr_price,
+        "spread": spread,
+        "imbalance": imbalance,
+        "delta": delta,
+        "cvd": cvd,
+        "vwap": vwap,
+        "recorded_minutes": count_minutes(sym),
+        "open_positions": 0
+    }
+
 def update_live_status():
     os.makedirs(DOCS_DATA, exist_ok=True)
-    
-    # Read latest min and flow for BTCUSD
-    btc_min = get_latest_row(os.path.join(LIVE_BASE, 'BTCUSD', 'min-2026-11.csv'))
-    btc_flow = get_latest_row(os.path.join(LIVE_BASE, 'BTCUSD', 'flow-2026-11.csv'))
-    
-    # Read latest min and flow for ETHUSD & GOLD-PERP & XAUUSD
-    eth_min = get_latest_row(os.path.join(LIVE_BASE, 'ETHUSD', 'min-2026-11.csv'))
-    eth_flow = get_latest_row(os.path.join(LIVE_BASE, 'ETHUSD', 'flow-2026-11.csv'))
-    gold_min = get_latest_row(os.path.join(LIVE_BASE, 'GOLD-PERP', 'min-2026-11.csv'))
-    xau_min = get_latest_row(os.path.join(LIVE_BASE, 'XAUUSD', 'min-2026-11.csv'))
+    now_epoch = time.time()
+
+    bots_telemetry = [inspect_bot_telemetry(cfg, now_epoch) for cfg in BOT_CONFIGS]
 
     btc_trades = get_trades("BTCUSD")
     eth_trades = get_trades("ETHUSD")
@@ -66,7 +228,6 @@ def update_live_status():
     all_trades = btc_trades + eth_trades + xau_trades
     all_trades.sort(key=lambda x: x.get('time', ''))
 
-    # Determine balance from latest close trade
     current_balance = 97.53
     if all_trades:
         for t in reversed(all_trades):
@@ -80,83 +241,33 @@ def update_live_status():
     now_iso = datetime.now(timezone.utc).isoformat()
     now_local = datetime.now().strftime("%d %b %Y, %H:%M:%S น.")
 
+    online_bots_count = sum(1 for b in bots_telemetry if b["is_online"])
+    total_forward_bots = sum(1 for b in bots_telemetry if b["type"] == "FORWARD_TRADING")
+    online_forward_bots = sum(1 for b in bots_telemetry if b["type"] == "FORWARD_TRADING" and b["is_online"])
+
     status_obj = {
         "timestamp_utc": now_iso,
         "timestamp_local": now_local,
+        "epoch": now_epoch,
+        "summary": {
+            "total_bots": len(bots_telemetry),
+            "online_bots": online_bots_count,
+            "offline_bots": len(bots_telemetry) - online_bots_count,
+            "forward_online": online_forward_bots,
+            "forward_total": total_forward_bots,
+            "fleet_status": "ALL_ONLINE" if online_forward_bots == total_forward_bots else "PARTIAL_ONLINE"
+        },
         "forward_trading": {
-            "status": "RUNNING",
+            "status": "RUNNING" if online_forward_bots > 0 else "OFFLINE",
             "bot_name": "BacktestLab (DOM_ABSORPTION)",
-            "symbols": "BTCUSD + ETHUSD + XAUUSD (3 บอทขนานกัน)",
-            "period": "M1",
-            "mode": "Live Forward Execution (Order Book Wall Absorption)",
+            "symbols": "BTCUSD + ETHUSD + XAUUSD",
             "account": "5258778 (Pepperstone Demo)",
             "balance": round(current_balance, 2),
             "equity": round(current_balance, 2),
             "total_trades": len([t for t in all_trades if t.get('event') == 'CLOSE']),
-            "active_bots": [
-                {
-                    "symbol": "BTCUSD",
-                    "status": "RUNNING",
-                    "lots": 0.01,
-                    "tp_usd": 91.0,
-                    "sl_usd": 35.0,
-                    "recorded_minutes": count_minutes("BTCUSD")
-                },
-                {
-                    "symbol": "ETHUSD",
-                    "status": "RUNNING",
-                    "lots": 0.01,
-                    "tp_usd": 11.7,
-                    "sl_usd": 4.5,
-                    "recorded_minutes": count_minutes("ETHUSD")
-                },
-                {
-                    "symbol": "XAUUSD",
-                    "status": "RUNNING",
-                    "lots": 0.01,
-                    "tp_usd": 6.0,
-                    "sl_usd": 2.5,
-                    "recorded_minutes": count_minutes("XAUUSD")
-                }
-            ]
+            "open_positions": 0
         },
-        "dom_recorders": [
-            {
-                "symbol": "BTCUSD",
-                "status": "FORWARD_TRADING_LIVE",
-                "current_price": float(btc_min['close']) if btc_min and 'close' in btc_min else 77950.0,
-                "spread": float(btc_min['spreadAvg']) if btc_min and 'spreadAvg' in btc_min else 15.0,
-                "imbalance": float(btc_min['imbalance']) if btc_min and 'imbalance' in btc_min else 0.0,
-                "delta": float(btc_flow['delta']) if btc_flow and 'delta' in btc_flow else 0.0,
-                "cvd": float(btc_flow['cvd']) if btc_flow and 'cvd' in btc_flow else 0.0,
-                "vwap": float(btc_flow['vwapDay']) if btc_flow and 'vwapDay' in btc_flow else 77950.0,
-                "recorded_minutes": count_minutes("BTCUSD")
-            },
-            {
-                "symbol": "ETHUSD",
-                "status": "FORWARD_TRADING_LIVE",
-                "current_price": float(eth_min['close']) if eth_min and 'close' in eth_min else 2265.0,
-                "spread": float(eth_min['spreadAvg']) if eth_min and 'spreadAvg' in eth_min else 2.0,
-                "imbalance": float(eth_min['imbalance']) if eth_min and 'imbalance' in eth_min else 0.0,
-                "delta": float(eth_flow['delta']) if eth_flow and 'delta' in eth_flow else 0.0,
-                "cvd": float(eth_flow['cvd']) if eth_flow and 'cvd' in eth_flow else 0.0,
-                "recorded_minutes": count_minutes("ETHUSD")
-            },
-            {
-                "symbol": "GOLD-PERP",
-                "status": "RECORDING_LIVE",
-                "current_price": float(gold_min['close']) if gold_min and 'close' in gold_min else 3885.0,
-                "spread": float(gold_min['spreadAvg']) if gold_min and 'spreadAvg' in gold_min else 1.4,
-                "recorded_minutes": count_minutes("GOLD-PERP")
-            },
-            {
-                "symbol": "XAUUSD",
-                "status": "FORWARD_TRADING_LIVE",
-                "current_price": float(xau_min['close']) if xau_min and 'close' in xau_min else 2740.0,
-                "spread": float(xau_min['spreadAvg']) if xau_min and 'spreadAvg' in xau_min else 0.12,
-                "recorded_minutes": count_minutes("XAUUSD")
-            }
-        ],
+        "bots_fleet": bots_telemetry,
         "recent_trades": all_trades[-10:]
     }
 
@@ -166,14 +277,33 @@ def update_live_status():
         json.dump(status_obj, f, indent=2, ensure_ascii=False)
     os.replace(tmp_path, LIVE_STATUS_JSON)
 
+last_git_push = 0
+
+def maybe_git_push():
+    global last_git_push
+    now = time.time()
+    if now - last_git_push < 45:
+        return
+    try:
+        res = subprocess.run(['git', 'status', '--porcelain', 'docs/data/live_status.json'], cwd=REPO_ROOT, capture_output=True, text=True)
+        if res.stdout.strip():
+            subprocess.run(['git', 'add', 'docs/data/live_status.json'], cwd=REPO_ROOT, check=True)
+            subprocess.run(['git', 'commit', '-m', f"chore(live): auto-sync bot fleet status ({datetime.now().strftime('%H:%M:%S')})"], cwd=REPO_ROOT, check=True)
+            subprocess.run(['git', 'push', 'origin', 'main'], cwd=REPO_ROOT, check=True)
+            print(f"[{datetime.now().strftime('%H:%M:%S')}] Pushed live fleet status to GitHub Pages successfully!")
+            last_git_push = now
+    except Exception as e:
+        print(f"Git push skipped/error: {e}")
+
 if __name__ == '__main__':
     if '--daemon' in sys.argv:
-        print("Starting Live Status Sync Daemon (updating every 3 seconds)...")
+        print("Starting Enhanced Live Status Sync Daemon with Bot Fleet Heartbeats...")
         while True:
             try:
                 update_live_status()
+                maybe_git_push()
             except Exception as e:
-                print(f"Error in sync: {e}")
+                print(f"Error in sync daemon: {e}")
             time.sleep(3)
     else:
         update_live_status()
