@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="th" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ANTIGRAVITY QUANT · AI Visual Feedback & Crop Studio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '"Noto Sans Thai"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'Consolas', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background-color: #070b12; color: #e2e8f0; font-family: 'Plus Jakarta Sans', 'Noto Sans Thai', sans-serif; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #070b12; }
+    ::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.25); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(148, 163, 184, 0.45); }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+    .crop-crosshair { cursor: crosshair !important; }
+    .glow-cyan { box-shadow: 0 0 24px rgba(6, 182, 212, 0.35); }
+    .glow-rose { box-shadow: 0 0 24px rgba(244, 63, 94, 0.35); }
+    .glow-gold { box-shadow: 0 0 24px rgba(245, 158, 11, 0.35); }
+    .bg-grid { background-image: radial-gradient(rgba(148, 163, 184, 0.08) 1px, transparent 1px); background-size: 20px 20px; }
+    @keyframes pulse-border {
+      0%, 100% { border-color: rgba(6, 182, 212, 0.8); box-shadow: 0 0 15px rgba(6, 182, 212, 0.4); }
+      50% { border-color: rgba(245, 158, 11, 0.8); box-shadow: 0 0 20px rgba(245, 158, 11, 0.4); }
+    }
+    .active-crop-box { animation: pulse-border 2s infinite; }
+  </style>
+</head>
+<body class="bg-[#070b12] text-[#e2e8f0] min-h-screen flex flex-col bg-grid select-none">
+
+  <!-- ========================================================================= -->
+  <!-- 1. TOP STUDIO NAVBAR                                                      -->
+  <!-- ========================================================================= -->
+  <header class="border-b border-slate-800 bg-[#0b111e]/95 backdrop-blur-md sticky top-0 z-40 px-4 py-2.5">
+    <div class="max-w-[1680px] mx-auto flex flex-wrap items-center justify-between gap-3">
+      
+      <!-- Brand & Title -->
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="flex items-center gap-2 group">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-rose-500/20 via-amber-500/20 to-cyan-500/20 border border-rose-500/40 flex items-center justify-center text-lg shadow-inner">
+            ✂️
+          </div>
+          <div>
+            <div class="flex items-center gap-1.5">
+              <span class="font-extrabold text-white text-base tracking-wider">VISUAL CROP</span>
+              <span class="font-extrabold text-rose-400 text-base">FEEDBACK</span>
+              <span class="px-1.5 py-0.5 text-[9px] font-mono font-bold rounded bg-rose-500/20 text-rose-300 border border-rose-500/30">AI STUDIO</span>
+            </div>
+            <div class="text-[10px] text-slate-400">Crop จุดที่ต้องการแก้ไข ➔ ส่งคำสั่งให้ AI นำไปปรับโค้ดทันที</div>
+          </div>
+        </a>
+
+        <div class="h-6 w-px bg-slate-800 hidden sm:block"></div>
+
+        <!-- Target Page Selector Tabs -->
+        <div class="flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs">
+          <span class="text-[10px] text-slate-500 px-2 font-mono hidden md:inline">เลือกหน้า:</span>
+          <button id="btn-page-index" onclick="switchTargetPage('index.html')" class="px-3 py-1 rounded-lg font-bold bg-slate-800 text-white shadow-sm transition">
+            🎨 ธีมภาพ (index.html)
+          </button>
+          <button id="btn-page-pro" onclick="switchTargetPage('pro.html')" class="px-3 py-1 rounded-lg font-medium text-slate-400 hover:text-white transition">
+            📋 ละเอียด (pro.html)
+          </button>
+          <button id="btn-page-research" onclick="switchTargetPage('research.html')" class="px-3 py-1 rounded-lg font-medium text-slate-400 hover:text-white transition hidden lg:inline">
+            🔬 วิจัย 141 (research.html)
+          </button>
+        </div>
+      </div>
+
+      <!-- Center Capture Controls -->
+      <div class="flex items-center gap-2 flex-wrap text-xs">
+        <!-- Crop Tool Button -->
+        <button id="btn-start-crop" onclick="activateCropMode()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-rose-600 via-pink-600 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white font-extrabold shadow-lg glow-rose flex items-center gap-2 transition cursor-pointer">
+          <span class="text-base">✂️</span>
+          <span>เริ่ม CROP บริเวณที่ต้องการแก้</span>
+          <span class="px-1.5 py-0.2 rounded bg-black/30 font-mono text-[10px]">C</span>
+        </button>
+
+        <!-- Screen Capture API Button -->
+        <button onclick="captureLiveScreen()" class="px-3 py-2 rounded-xl bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-300 border border-cyan-500/40 font-bold flex items-center gap-1.5 transition cursor-pointer" title="แชร์หน้าจอหรือแท็บเพื่อแคปภาพสด">
+          <span>📸</span>
+          <span>แคปหน้าจอสด</span>
+        </button>
+
+        <!-- Upload or Paste Image -->
+        <label class="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700 font-bold flex items-center gap-1.5 transition cursor-pointer" title="เลือกรูปภาพ หรือกด Ctrl+V เพื่อวางภาพได้ทันที">
+          <span>🖼️</span>
+          <span>อัปโหลด / วางภาพ</span>
+          <input type="file" id="image-file-input" accept="image/*" class="hidden" onchange="handleImageUpload(event)">
+        </label>
+      </div>
+
+      <!-- Right Export & Counter -->
+      <div class="flex items-center gap-2.5 text-xs">
+        <button onclick="batchExportTasksPrompt()" class="px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold shadow flex items-center gap-1.5 transition cursor-pointer" title="คัดลอกทุกข้อที่รอแก้รวมกันเป็น Prompt ส่งให้ AI ในแชท">
+          <span>🚀</span>
+          <span>คัดลอกส่ง AI ทั้งหมด</span>
+          <span id="pending-badge-count" class="px-1.5 py-0.2 rounded-full bg-slate-950 text-emerald-400 font-mono font-black text-[10px]">0</span>
+        </button>
+
+        <a href="index.html" class="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-800 transition">
+          ✕ ปิดสตูดิโอ
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- 2. MAIN WORKSPACE (SPLIT: 70% CANVAS / PREVIEW | 30% AI TASK QUEUE)        -->
+  <!-- ========================================================================= -->
+  <div class="flex-1 max-w-[1680px] w-full mx-auto p-3 sm:p-4 grid grid-cols-1 lg:grid-cols-12 gap-4">
+
+    <!-- LEFT 8 COLS: INTERACTIVE PREVIEW & CROP CANVAS -->
+    <div class="lg:col-span-8 flex flex-col space-y-3">
+      
+      <!-- Viewport Toolbar -->
+      <div class="flex flex-wrap items-center justify-between gap-2 bg-slate-900/90 border border-slate-800 rounded-xl px-3 py-2 text-xs">
+        <div class="flex items-center gap-2">
+          <span class="text-slate-400">ขนาดหน้าจอ:</span>
+          <button onclick="setViewportSize('100%')" id="vp-full" class="px-2.5 py-1 rounded bg-slate-800 text-white font-bold font-mono">100% Full</button>
+          <button onclick="setViewportSize('1200px')" id="vp-desktop" class="px-2.5 py-1 rounded text-slate-400 hover:text-white font-mono">1200px</button>
+          <button onclick="setViewportSize('768px')" id="vp-tablet" class="px-2.5 py-1 rounded text-slate-400 hover:text-white font-mono">768px (Tablet)</button>
+          <button onclick="setViewportSize('390px')" id="vp-mobile" class="px-2.5 py-1 rounded text-slate-400 hover:text-white font-mono">390px (Mobile)</button>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <div id="crop-status-indicator" class="flex items-center gap-1.5 text-slate-400 font-medium">
+            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+            <span>พร้อมใช้งาน: คลิกปุ่ม <strong class="text-rose-400">✂️ เริ่ม Crop</strong> หรือกด Ctrl+V เพื่อวางภาพ</span>
+          </div>
+          <button onclick="reloadIframe()" class="text-slate-400 hover:text-white transition" title="โหลดหน้าเว็บใหม่">🔄 รีเฟรช</button>
+        </div>
+      </div>
+
+      <!-- Main Stage Container (Holds either iframe OR captured image canvas) -->
+      <div id="stage-wrapper" class="relative flex-1 bg-slate-950 rounded-2xl border-2 border-slate-800 overflow-hidden min-h-[580px] flex items-center justify-center">
+        
+        <!-- Live Page Iframe -->
+        <iframe id="preview-iframe" src="index.html" class="w-full h-full min-h-[640px] border-0 transition-all duration-300"></iframe>
+
+        <!-- Static Image Canvas (Active when screenshot captured or image pasted) -->
+        <canvas id="screenshot-canvas" class="hidden max-w-full max-h-full object-contain"></canvas>
+
+        <!-- Interactive Crop Overlay Layer (Activated when Crop mode is ON) -->
+        <div id="crop-overlay" class="hidden absolute inset-0 z-30 crop-crosshair bg-black/40">
+          
+          <!-- Crop Guide Toast banner -->
+          <div class="absolute top-4 left-1/2 -translate-x-1/2 bg-slate-900/95 border-2 border-rose-500 rounded-full px-5 py-2 text-xs font-bold text-white shadow-2xl flex items-center gap-2 pointer-events-none glow-rose animate-bounce">
+            <span class="text-base">✂️</span>
+            <span>คลิกเมาส์ค้างแล้วลากเพื่อครอบบริเวณที่ต้องการแจ้ง AI (Drag to Crop)</span>
+            <span class="px-2 py-0.5 rounded bg-slate-800 text-[10px] text-slate-300 font-mono">ESC เพื่อยกเลิก</span>
+          </div>
+
+          <!-- Draggable Crop Box -->
+          <div id="crop-box" class="hidden absolute border-2 border-cyan-400 active-crop-box rounded-lg shadow-2xl pointer-events-auto cursor-move">
+            <!-- Dimensions Pill -->
+            <div id="crop-dims" class="absolute -top-7 left-0 bg-cyan-500 text-slate-950 font-mono font-extrabold text-[10px] px-2 py-0.5 rounded shadow">
+              420 × 260 px
+            </div>
+            <!-- Resize Handles -->
+            <div class="absolute -bottom-1.5 -right-1.5 w-3.5 h-3.5 bg-cyan-400 rounded-sm border border-slate-950 cursor-se-resize"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Quick Tips Bar -->
+      <div class="flex flex-wrap items-center justify-between text-[11px] text-slate-400 bg-slate-900/60 p-2.5 rounded-xl border border-slate-800/80">
+        <div class="flex items-center gap-2">
+          <span>💡 <strong>เคล็ดลับ:</strong> คุณสามารถกด <kbd class="px-1.5 py-0.5 rounded bg-slate-800 text-slate-200 border border-slate-700 font-mono">Ctrl+V</kbd> เพื่อวางรูปภาพหน้าจอใดๆ จากคลิปบอร์ดลงในสตูดิโอนี้ได้ทันที!</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-emerald-400 font-mono">Auto-Saved in LocalStorage</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT 4 COLS: AI TASK QUEUE & FEEDBACK CARDS -->
+    <div class="lg:col-span-4 flex flex-col space-y-3">
+      
+      <!-- Queue Header Card -->
+      <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3.5 flex items-center justify-between">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-base">📋</span>
+            <h3 class="font-extrabold text-sm text-white">คิวงานแจ้งแก้ไข AI (AI Tasks)</h3>
+            <span id="badge-total-tasks" class="px-2 py-0.5 rounded-full text-[10px] font-mono font-extrabold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+              0 งาน
+            </span>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-0.5">รวมจุดที่ Crop ไว้ พร้อม Prompt สั่ง AI แก้โค้ด</p>
+        </div>
+
+        <div class="flex items-center gap-1 text-xs">
+          <button onclick="filterTasks('ALL')" id="flt-task-all" class="px-2 py-1 rounded font-bold bg-slate-800 text-white">ทั้งหมด</button>
+          <button onclick="filterTasks('PENDING')" id="flt-task-pending" class="px-2 py-1 rounded text-slate-400 hover:text-white">รอแก้</button>
+          <button onclick="filterTasks('DONE')" id="flt-task-done" class="px-2 py-1 rounded text-slate-400 hover:text-white">เสร็จ</button>
+        </div>
+      </div>
+
+      <!-- Scrollable Task Cards List -->
+      <div id="task-cards-container" class="space-y-2.5 overflow-y-auto max-h-[580px] pr-1 flex-1">
+        <!-- Rendered dynamically by renderTaskCards() -->
+      </div>
+
+      <!-- Queue Bottom Actions -->
+      <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3 space-y-2">
+        <button onclick="batchExportTasksPrompt()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-extrabold text-xs shadow-lg flex items-center justify-center gap-2 cursor-pointer transition">
+          <span>📋</span>
+          <span>คัดลอก Prompt รวมทั้งหมดไปส่งให้ AI</span>
+        </button>
+
+        <div class="grid grid-cols-2 gap-2 text-[11px]">
+          <button onclick="exportTasksJson()" class="py-1.5 px-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-mono flex items-center justify-center gap-1 transition cursor-pointer">
+            <span>📥</span> ดาวน์โหลด JSON
+          </button>
+          <button onclick="clearAllTasks()" class="py-1.5 px-2 rounded-lg bg-rose-950/40 hover:bg-rose-900/60 text-rose-300 border border-rose-500/30 flex items-center justify-center gap-1 transition cursor-pointer">
+            <span>🗑️</span> ล้างรายการทั้งหมด
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- 3. COMMENT & AI DIRECTIVE MODAL (Opens after cropping an area)             -->
+  <!-- ========================================================================= -->
+  <div id="comment-modal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-[#0b111e] border-2 border-rose-500/70 rounded-2xl max-w-xl w-full p-5 sm:p-6 shadow-2xl space-y-4 glow-rose animate-in fade-in zoom-in duration-200">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="flex items-center gap-2.5">
+          <span class="text-2xl">✂️</span>
+          <div>
+            <h3 class="text-base sm:text-lg font-extrabold text-white">ระบุสิ่งที่ต้องการให้ AI แก้ไขตรงนี้</h3>
+            <p class="text-xs text-slate-400 font-mono">Target: <span id="modal-target-page" class="text-cyan-400">index.html</span> · <span id="modal-crop-res" class="text-amber-300">420 × 260 px</span></p>
+          </div>
+        </div>
+        <button onclick="closeCommentModal()" class="text-slate-400 hover:text-white px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 cursor-pointer">✕</button>
+      </div>
+
+      <!-- Cropped Image Preview Thumbnail -->
+      <div class="bg-slate-950 rounded-xl border border-slate-800 p-2.5 flex flex-col items-center justify-center">
+        <img id="modal-crop-img-preview" src="" alt="Cropped preview" class="max-h-48 rounded-lg object-contain shadow-md border border-slate-800">
+        <div class="text-[10px] text-slate-500 font-mono mt-1.5">ภาพตัวอย่างส่วนที่ Crop จะถูกแนบและอธิบายให้ AI เห็นพิกัดชัดเจน</div>
+      </div>
+
+      <!-- Component Name / Target Title -->
+      <div>
+        <label class="block text-xs font-bold text-slate-300 mb-1">1. ชื่อจุด / องค์ประกอบที่ต้องการแก้ (Component / Element):</label>
+        <input type="text" id="modal-component-input" placeholder="เช่น แถบสถิติพอร์ต, ปุ่ม Kill Switch, การ์ดบอท BTC, กราฟแท่งเทียน" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 font-medium">
+      </div>
+
+      <!-- Category & Priority -->
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1">2. หมวดหมู่งาน:</label>
+          <select id="modal-category-select" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:outline-none focus:border-cyan-500 font-medium">
+            <option value="UI_DESIGN">🎨 ปรับแต่ง UI / ดีไซน์ / โทนสี</option>
+            <option value="BUG_FIX">🐛 แก้บั๊ก / ทำงานผิดพลาด</option>
+            <option value="DATA_METRICS">📊 ตัวเลข / สถิติ / กราฟ</option>
+            <option value="NEW_FEATURE">✨ เพิ่มฟังก์ชัน / ปุ่มใหม่</option>
+            <option value="REMOVE_ITEM">🧹 ลบ / ย่อส่วนนี้ออก</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1">3. ความเร่งด่วน:</label>
+          <select id="modal-priority-select" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:outline-none focus:border-cyan-500 font-medium">
+            <option value="HIGH">🔴 ด่วน (High Priority)</option>
+            <option value="NORMAL" selected>🟡 ทั่วไป (Normal)</option>
+            <option value="LOW">🟢 ตกแต่งเพิ่มเติม (Low)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Comment Directive Textarea -->
+      <div>
+        <div class="flex items-center justify-between mb-1">
+          <label class="text-xs font-bold text-slate-300">4. คำสั่งที่ต้องการให้ AI ทำ (Prompt Instruction):</label>
+          <span class="text-[10px] text-cyan-400 font-mono">พิมพ์สิ่งที่ต้องการได้อิสระ</span>
+        </div>
+        <textarea id="modal-instruction-input" rows="3" placeholder="ระบุชัดเจน เช่น อยากให้เปลี่ยนสีพื้นหลังเป็นเข้มขึ้น, ขยายขนาดฟอนต์ให้ใหญ่ขึ้น 2px, ย้ายปุ่มนี้ไปไว้ขวาบน, ตัวเลขกำไรไม่ต้องมีทศนิยม..." class="w-full p-3 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 leading-relaxed"></textarea>
+      </div>
+
+      <!-- Quick Suggestion Pills -->
+      <div class="flex flex-wrap gap-1.5 text-[11px]">
+        <span class="text-slate-400 text-[10px] py-0.5">แท็กช่วยพิมพ์:</span>
+        <button type="button" onclick="appendPromptSnippet('เปลี่ยนโทนสีเป็น ')" class="px-2 py-0.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 cursor-pointer">+ เปลี่ยนโทนสี</button>
+        <button type="button" onclick="appendPromptSnippet('ปรับขนาดให้รองรับจอมือถือ (Responsive) ')" class="px-2 py-0.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 cursor-pointer">+ รองรับมือถือ</button>
+        <button type="button" onclick="appendPromptSnippet('แก้ไขตัวเลขให้ถูกต้องตรงกับ ')" class="px-2 py-0.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 cursor-pointer">+ แก้ตัวเลข</button>
+        <button type="button" onclick="appendPromptSnippet('เพิ่มปุ่มลัดสำหรับ ')" class="px-2 py-0.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 cursor-pointer">+ เพิ่มปุ่ม</button>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-wrap items-center justify-end gap-2.5 pt-3 border-t border-slate-800">
+        <button onclick="closeCommentModal()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold cursor-pointer">
+          ยกเลิก
+        </button>
+        <button onclick="saveTaskAndCopyPrompt(true)" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-cyan-500/40 text-xs font-bold flex items-center gap-1.5 cursor-pointer">
+          <span>📋</span> คัดลอก Prompt ข้อนี้ทันที
+        </button>
+        <button onclick="saveTaskAndCopyPrompt(false)" class="px-5 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-400 hover:to-green-400 text-slate-950 text-xs font-extrabold shadow-lg flex items-center gap-1.5 cursor-pointer">
+          <span>💾</span> บันทึกลงคิวงาน
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- 4. IMAGE ZOOM MODAL                                                       -->
+  <!-- ========================================================================= -->
+  <div id="image-zoom-modal" class="hidden fixed inset-0 z-50 bg-black/90 backdrop-blur flex items-center justify-center p-4 cursor-zoom-out" onclick="closeZoomModal()">
+    <div class="relative max-w-4xl max-h-[85vh] p-2 bg-slate-900 rounded-2xl border border-slate-700">
+      <img id="zoom-modal-img" src="" class="max-w-full max-h-[80vh] rounded-xl object-contain">
+      <div class="text-center text-xs text-slate-400 mt-2 font-mono" id="zoom-modal-caption">คลิกที่ใดก็ได้เพื่อปิด</div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="studio-toast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 bg-slate-900 border-2 border-emerald-500 rounded-2xl px-4 py-3 shadow-2xl flex items-center gap-3 text-xs text-white glow-cyan pointer-events-none">
+    <span class="text-lg" id="toast-icon">✅</span>
+    <span id="toast-msg">คัดลอก Prompt สำเร็จ! นำไปวางในแชทให้ AI แก้ไขได้ทันที</span>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- JAVASCRIPT: CROP LOGIC, TASK QUEUE & AI PROMPT EXPORT                     -->
+  <!-- ========================================================================= -->
+  <script>
+    // State
+    let currentTargetPage = 'index.html';
+    let isCropMode = false;
+    let isDrawing = false;
+    let startX = 0, startY = 0, cropX = 0, cropY = 0, cropW = 0, cropH = 0;
+    let lastCroppedDataUrl = '';
+    let currentFilter = 'ALL';
+    let feedbackTasks = [];
+
+    // Storage Key
+    const STORAGE_KEY = 'agq_feedback_tasks';
+
+    function init() {
+      loadTasks();
+      renderTaskCards();
+
+      // Check URL parameters (e.g. ?page=pro.html)
+      const urlParams = new URLSearchParams(window.location.search);
+      const pageParam = urlParams.get('page');
+      if (pageParam && ['index.html', 'pro.html', 'research.html'].includes(pageParam)) {
+        switchTargetPage(pageParam);
+      }
+
+      setupCropEventListeners();
+      setupPasteEventListener();
+    }
+
+    // -------------------------------------------------------------------------
+    // PAGE & VIEWPORT SWITCHING
+    // -------------------------------------------------------------------------
+    function switchTargetPage(pageName) {
+      currentTargetPage = pageName;
+      ['index.html', 'pro.html', 'research.html'].forEach(p => {
+        const btnId = p === 'index.html' ? 'btn-page-index' : p === 'pro.html' ? 'btn-page-pro' : 'btn-page-research';
+        const btn = document.getElementById(btnId);
+        if (!btn) return;
+        if (p === pageName) {
+          btn.className = "px-3 py-1 rounded-lg font-bold bg-slate-800 text-white shadow-sm transition";
+        } else {
+          btn.className = "px-3 py-1 rounded-lg font-medium text-slate-400 hover:text-white transition";
+        }
+      });
+
+      // Show iframe and hide static canvas
+      const iframe = document.getElementById('preview-iframe');
+      const canvas = document.getElementById('screenshot-canvas');
+      iframe.classList.remove('hidden');
+      canvas.classList.add('hidden');
+      iframe.src = pageName;
+
+      showToast('📄', `สลับไปยังหน้า ${pageName}`);
+    }
+
+    function setViewportSize(size) {
+      const iframe = document.getElementById('preview-iframe');
+      if (!iframe) return;
+      iframe.style.width = size;
+
+      ['full', 'desktop', 'tablet', 'mobile'].forEach(s => {
+        const btn = document.getElementById('vp-' + s);
+        if (!btn) return;
+        btn.className = "px-2.5 py-1 rounded text-slate-400 hover:text-white font-mono";
+      });
+
+      const activeBtnId = size === '100%' ? 'vp-full' : size === '1200px' ? 'vp-desktop' : size === '768px' ? 'vp-tablet' : 'vp-mobile';
+      const activeBtn = document.getElementById(activeBtnId);
+      if (activeBtn) activeBtn.className = "px-2.5 py-1 rounded bg-slate-800 text-white font-bold font-mono";
+    }
+
+    function reloadIframe() {
+      const iframe = document.getElementById('preview-iframe');
+      if (iframe) iframe.src = iframe.src;
+    }
+
+    // -------------------------------------------------------------------------
+    // CROP ENGINE (HTML5 CANVAS & OVERLAY)
+    // -------------------------------------------------------------------------
+    async function activateCropMode() {
+      const overlay = document.getElementById('crop-overlay');
+      const cropBox = document.getElementById('crop-box');
+      const iframe = document.getElementById('preview-iframe');
+      const canvas = document.getElementById('screenshot-canvas');
+
+      // Attempt to take screenshot of iframe content if possible via html2canvas
+      try {
+        if (!canvas.classList.contains('hidden')) {
+          // Canvas already active (e.g. from pasted image or screen capture)
+        } else {
+          // If running locally or same-origin, we can capture the iframe DOM
+          try {
+            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+            if (iframeDoc && iframeDoc.body) {
+              const fullCanvas = await html2canvas(iframeDoc.body, {
+                useCORS: true,
+                logging: false,
+                width: iframe.clientWidth,
+                height: iframe.clientHeight
+              });
+              canvas.width = fullCanvas.width;
+              canvas.height = fullCanvas.height;
+              const ctx = canvas.getContext('2d');
+              ctx.drawImage(fullCanvas, 0, 0);
+              canvas.classList.remove('hidden');
+              iframe.classList.add('hidden');
+            }
+          } catch(err) {
+            // If cross-origin restrictions block iframeDoc, keep iframe visible and crop overlay directly over it!
+          }
+        }
+      } catch(e) {}
+
+      isCropMode = true;
+      overlay.classList.remove('hidden');
+      cropBox.classList.add('hidden');
+      showToast('✂️', 'ลากเมาส์เพื่อ Crop บริเวณที่ต้องการ');
+    }
+
+    function setupCropEventListeners() {
+      const overlay = document.getElementById('crop-overlay');
+      const cropBox = document.getElementById('crop-box');
+      const dims = document.getElementById('crop-dims');
+
+      overlay.addEventListener('mousedown', (e) => {
+        if (!isCropMode) return;
+        // If clicking on crop box handles, don't restart
+        if (e.target.closest('#crop-box') && !cropBox.classList.contains('hidden')) return;
+
+        isDrawing = true;
+        const rect = overlay.getBoundingClientRect();
+        startX = e.clientX - rect.left;
+        startY = e.clientY - rect.top;
+
+        cropBox.style.left = startX + 'px';
+        cropBox.style.top = startY + 'px';
+        cropBox.style.width = '0px';
+        cropBox.style.height = '0px';
+        cropBox.classList.remove('hidden');
+      });
+
+      overlay.addEventListener('mousemove', (e) => {
+        if (!isDrawing) return;
+        const rect = overlay.getBoundingClientRect();
+        const currentX = e.clientX - rect.left;
+        const currentY = e.clientY - rect.top;
+
+        cropX = Math.min(startX, currentX);
+        cropY = Math.min(startY, currentY);
+        cropW = Math.abs(currentX - startX);
+        cropH = Math.abs(currentY - startY);
+
+        cropBox.style.left = cropX + 'px';
+        cropBox.style.top = cropY + 'px';
+        cropBox.style.width = cropW + 'px';
+        cropBox.style.height = cropH + 'px';
+
+        dims.textContent = `${Math.round(cropW)} × ${Math.round(cropH)} px`;
+      });
+
+      overlay.addEventListener('mouseup', () => {
+        if (!isDrawing) return;
+        isDrawing = false;
+
+        // If drawn box is larger than 20x20 px, proceed to crop extract
+        if (cropW > 20 && cropH > 20) {
+          extractCroppedAreaAndOpenModal();
+        }
+      });
+
+      // ESC key cancels crop mode
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && isCropMode) {
+          overlay.classList.add('hidden');
+          cropBox.classList.add('hidden');
+          isCropMode = false;
+        } else if (e.key === 'c' || e.key === 'C') {
+          // Shortcut 'C' to start crop if not typing in input
+          if (!['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+            activateCropMode();
+          }
+        }
+      });
+    }
+
+    function extractCroppedAreaAndOpenModal() {
+      const overlay = document.getElementById('crop-overlay');
+      const canvas = document.getElementById('screenshot-canvas');
+      const iframe = document.getElementById('preview-iframe');
+
+      // Create an offscreen canvas to render cropped area
+      const cropCanvas = document.createElement('canvas');
+      cropCanvas.width = Math.max(10, cropW);
+      cropCanvas.height = Math.max(10, cropH);
+      const cropCtx = cropCanvas.getContext('2d');
+
+      if (!canvas.classList.contains('hidden') && canvas.width > 0) {
+        // Source is the screenshot canvas
+        const scaleX = canvas.width / overlay.clientWidth;
+        const scaleY = canvas.height / overlay.clientHeight;
+        cropCtx.drawImage(canvas, cropX * scaleX, cropY * scaleY, cropW * scaleX, cropH * scaleY, 0, 0, cropW, cropH);
+        lastCroppedDataUrl = cropCanvas.toDataURL('image/png');
+      } else {
+        // Fallback: Generate an informative vector placeholder representation
+        cropCtx.fillStyle = '#0f172a';
+        cropCtx.fillRect(0, 0, cropW, cropH);
+        cropCtx.strokeStyle = '#06b6d4';
+        cropCtx.lineWidth = 4;
+        cropCtx.strokeRect(0, 0, cropW, cropH);
+        cropCtx.fillStyle = '#e2e8f0';
+        cropCtx.font = 'bold 14px "JetBrains Mono", sans-serif';
+        cropCtx.textAlign = 'center';
+        cropCtx.fillText(`${currentTargetPage}`, cropW / 2, cropH / 2 - 10);
+        cropCtx.fillStyle = '#38bdf8';
+        cropCtx.font = '12px "JetBrains Mono", sans-serif';
+        cropCtx.fillText(`Area: (x: ${Math.round(cropX)}, y: ${Math.round(cropY)})`, cropW / 2, cropH / 2 + 15);
+        lastCroppedDataUrl = cropCanvas.toDataURL('image/png');
+      }
+
+      // Exit crop overlay mode
+      overlay.classList.add('hidden');
+      isCropMode = false;
+
+      // Populate & open modal
+      document.getElementById('modal-target-page').textContent = currentTargetPage;
+      document.getElementById('modal-crop-res').textContent = `${Math.round(cropW)} × ${Math.round(cropH)} px (x: ${Math.round(cropX)}, y: ${Math.round(cropY)})`;
+      document.getElementById('modal-crop-img-preview').src = lastCroppedDataUrl;
+      document.getElementById('modal-component-input').value = '';
+      document.getElementById('modal-instruction-input').value = '';
+      document.getElementById('comment-modal').classList.remove('hidden');
+
+      setTimeout(() => {
+        document.getElementById('modal-component-input').focus();
+      }, 100);
+    }
+
+    // -------------------------------------------------------------------------
+    // SCREEN CAPTURE & PASTE/UPLOAD HANDLERS
+    // -------------------------------------------------------------------------
+    async function captureLiveScreen() {
+      try {
+        const stream = await navigator.mediaDevices.getDisplayMedia({ video: { cursor: "always" }, audio: false });
+        const video = document.createElement('video');
+        video.srcObject = stream;
+        video.play();
+
+        video.onloadedmetadata = () => {
+          setTimeout(() => {
+            const canvas = document.getElementById('screenshot-canvas');
+            const iframe = document.getElementById('preview-iframe');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            // Stop streams
+            stream.getTracks().forEach(t => t.stop());
+
+            canvas.classList.remove('hidden');
+            iframe.classList.add('hidden');
+            showToast('📸', 'แคปหน้าจอสดสำเร็จ! คลิกปุ่ม ✂️ เพื่อเริ่ม Crop');
+          }, 300);
+        };
+      } catch (err) {
+        showToast('⚠️', 'การแคปหน้าจอถูกยกเลิกหรือไม่ได้รับการอนุญาต');
+      }
+    }
+
+    function handleImageUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        renderImageToCanvas(evt.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function setupPasteEventListener() {
+      window.addEventListener('paste', (e) => {
+        const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+        for (let item of items) {
+          if (item.type.indexOf('image') !== -1) {
+            const blob = item.getAsFile();
+            const reader = new FileReader();
+            reader.onload = (evt) => {
+              renderImageToCanvas(evt.target.result);
+              showToast('📋', 'วางภาพจากคลิปบอร์ดสำเร็จ! กดปุ่ม ✂️ เพื่อ Crop');
+            };
+            reader.readAsDataURL(blob);
+            break;
+          }
+        }
+      });
+    }
+
+    function renderImageToCanvas(dataUrl) {
+      const canvas = document.getElementById('screenshot-canvas');
+      const iframe = document.getElementById('preview-iframe');
+      const img = new Image();
+      img.onload = () => {
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        canvas.classList.remove('hidden');
+        iframe.classList.add('hidden');
+      };
+      img.src = dataUrl;
+    }
+
+    // -------------------------------------------------------------------------
+    // COMMENT MODAL & TASK STORAGE
+    // -------------------------------------------------------------------------
+    function closeCommentModal() {
+      document.getElementById('comment-modal').classList.add('hidden');
+    }
+
+    function appendPromptSnippet(text) {
+      const textarea = document.getElementById('modal-instruction-input');
+      textarea.value = (textarea.value ? textarea.value + ' ' : '') + text;
+      textarea.focus();
+    }
+
+    function saveTaskAndCopyPrompt(copyImmediately = false) {
+      const compName = document.getElementById('modal-component-input').value.trim() || 'ส่วนประกอบที่เลือก';
+      const category = document.getElementById('modal-category-select').value;
+      const priority = document.getElementById('modal-priority-select').value;
+      const instruction = document.getElementById('modal-instruction-input').value.trim() || 'ช่วยปรับปรุงส่วนนี้ให้สวยงามและถูกต้อง';
+
+      const task = {
+        id: 'TASK-' + String(Date.now()).slice(-4),
+        page: currentTargetPage,
+        component: compName,
+        category: category,
+        priority: priority,
+        instruction: instruction,
+        coords: { x: Math.round(cropX), y: Math.round(cropY), w: Math.round(cropW), h: Math.round(cropH) },
+        imageUrl: lastCroppedDataUrl,
+        status: 'PENDING',
+        created_at: new Date().toISOString()
+      };
+
+      feedbackTasks.unshift(task);
+      saveTasks();
+      renderTaskCards();
+      closeCommentModal();
+
+      if (copyImmediately) {
+        copySingleTaskPrompt(task);
+      } else {
+        showToast('💾', `บันทึกรายการ #${task.id} เข้าคิวงานเรียบร้อย!`);
+      }
+    }
+
+    // -------------------------------------------------------------------------
+    // AI PROMPT FORMATTING & EXPORT
+    // -------------------------------------------------------------------------
+    function generatePromptForTask(task) {
+      return `### 🛠️ [${task.id}] คำสั่งแก้ไขโค้ดจากหน้าเว็บ (Visual Crop Feedback)
+- **หน้าเว็บเป้าหมาย**: \`${task.page}\`
+- **องค์ประกอบ**: **${task.component}** (หมวดหมู่: \`${task.category}\` | ความสำคัญ: \`${task.priority}\`)
+- **พิกัดที่ระบุ (Crop Area)**: X: ${task.coords.x}px, Y: ${task.coords.y}px, กว้าง: ${task.coords.w}px, สูง: ${task.coords.h}px
+- **สิ่งที่ต้องการให้ AI แก้ไข**:
+  > "${task.instruction}"
+- **คำแนะนำสำหรับ AI**: ตรวจสอบไฟล์ \`${task.page}\` และโค้ดส่วนที่เกี่ยวข้อง ปรับแก้ให้ตรงตามความต้องการ แล้วอัปเดตไฟล์ให้เรียบร้อย`;
+    }
+
+    function copySingleTaskPrompt(task) {
+      const prompt = generatePromptForTask(task);
+      navigator.clipboard.writeText(prompt).then(() => {
+        showToast('📋', `คัดลอก Prompt สำหรับ #${task.id} แล้ว! วางในแชทให้ AI ได้เลย`);
+      });
+    }
+
+    function batchExportTasksPrompt() {
+      const pending = feedbackTasks.filter(t => t.status === 'PENDING');
+      if (pending.length === 0) {
+        showToast('ℹ️', 'ไม่มีรายการที่รอแก้ไข (สร้างรายการใหม่ด้วยการ Crop ก่อน)');
+        return;
+      }
+
+      let prompt = `# 🚀 รวมคำสั่งแก้ไขโค้ดจากหน้าเว็บ (${pending.length} รายการ)\n`;
+      prompt += `ช่วยแก้ไขโค้ดในโปรเจกต์ตามรายการที่ฉันได้ Crop และคอมเมนต์ไว้ดังต่อไปนี้:\n\n`;
+
+      pending.forEach((t, i) => {
+        prompt += `#### ${i + 1}. [${t.id}] ${t.component} (หน้า \`${t.page}\`)\n`;
+        prompt += `- **หมวดหมู่ / ความสำคัญ**: \`${t.category}\` (${t.priority})\n`;
+        prompt += `- **พิกัด Crop**: (x: ${t.coords.x}, y: ${t.coords.y}, ขนาด: ${t.coords.w}x${t.coords.h})\n`;
+        prompt += `- **คำสั่งแก้ไข**: "${t.instruction}"\n\n`;
+      });
+
+      prompt += `---\n**เป้าหมาย**: กรุณาตรวจสอบโค้ดในไฟล์ที่ระบุและดำเนินการแก้ไขตามทุกข้อข้างต้น`;
+
+      navigator.clipboard.writeText(prompt).then(() => {
+        showToast('🚀', `คัดลอก Prompt ทั้งหมด (${pending.length} ข้อ) เรียบร้อย! วางในแชทให้ AI ได้ทันที`);
+      });
+    }
+
+    function exportTasksJson() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(feedbackTasks, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `ai_feedback_tasks_${new Date().toISOString().slice(0,10)}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+      showToast('📥', 'ดาวน์โหลดไฟล์ JSON เรียบร้อย');
+    }
+
+    function downloadCropImage(taskId) {
+      const task = feedbackTasks.find(t => t.id === taskId);
+      if (!task || !task.imageUrl) return;
+      const a = document.createElement('a');
+      a.href = task.imageUrl;
+      a.download = `${task.id}_${task.component.replace(/[^a-z0-9]/gi, '_')}.png`;
+      a.click();
+      a.remove();
+    }
+
+    function toggleTaskStatus(taskId) {
+      const task = feedbackTasks.find(t => t.id === taskId);
+      if (!task) return;
+      task.status = (task.status === 'PENDING') ? 'DONE' : 'PENDING';
+      saveTasks();
+      renderTaskCards();
+    }
+
+    function deleteTask(taskId) {
+      feedbackTasks = feedbackTasks.filter(t => t.id !== taskId);
+      saveTasks();
+      renderTaskCards();
+      showToast('🗑️', `ลบรายการ #${taskId} เรียบร้อย`);
+    }
+
+    function clearAllTasks() {
+      if (!confirm('คุณต้องการล้างรายการคอมเมนต์ทั้งหมดใช่หรือไม่?')) return;
+      feedbackTasks = [];
+      saveTasks();
+      renderTaskCards();
+      showToast('🧹', 'ล้างรายการทั้งหมดเรียบร้อย');
+    }
+
+    // -------------------------------------------------------------------------
+    // TASK CARDS RENDERING
+    // -------------------------------------------------------------------------
+    function filterTasks(flt) {
+      currentFilter = flt;
+      ['all', 'pending', 'done'].forEach(f => {
+        const btn = document.getElementById('flt-task-' + f);
+        if (!btn) return;
+        if (f.toUpperCase() === flt) {
+          btn.className = "px-2 py-1 rounded font-bold bg-slate-800 text-white";
+        } else {
+          btn.className = "px-2 py-1 rounded text-slate-400 hover:text-white";
+        }
+      });
+      renderTaskCards();
+    }
+
+    function renderTaskCards() {
+      const container = document.getElementById('task-cards-container');
+      const badgeTotal = document.getElementById('badge-total-tasks');
+      const pendingCount = document.getElementById('pending-badge-count');
+
+      const pendingTasks = feedbackTasks.filter(t => t.status === 'PENDING');
+      if (badgeTotal) badgeTotal.textContent = `${feedbackTasks.length} งาน`;
+      if (pendingCount) pendingCount.textContent = pendingTasks.length;
+
+      let list = feedbackTasks;
+      if (currentFilter === 'PENDING') list = list.filter(t => t.status === 'PENDING');
+      else if (currentFilter === 'DONE') list = list.filter(t => t.status === 'DONE');
+
+      if (!container) return;
+
+      if (list.length === 0) {
+        container.innerHTML = `
+          <div class="p-6 rounded-2xl border border-dashed border-slate-800 text-center space-y-2 bg-slate-950/40">
+            <span class="text-3xl block">✂️</span>
+            <div class="text-xs font-bold text-slate-300">ยังไม่มีรายการคอมเมนต์</div>
+            <p class="text-[11px] text-slate-500">คลิกปุ่ม <strong>"✂️ เริ่ม CROP"</strong> ด้านบน แล้วลากครอบบริเวณที่ต้องการแก้ไขเพื่อส่งคำสั่งให้ AI</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = list.map(t => {
+        const isDone = (t.status === 'DONE');
+        const prioBadge = t.priority === 'HIGH'
+          ? '<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">ด่วน</span>'
+          : t.priority === 'NORMAL'
+          ? '<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">ทั่วไป</span>'
+          : '<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">ตกแต่ง</span>';
+
+        return `
+          <div class="p-3 rounded-xl border ${isDone ? 'border-slate-800/80 bg-slate-950/50 opacity-60' : 'border-slate-800 bg-slate-950 hover:border-cyan-500/50'} transition space-y-2">
+            
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-1.5 min-w-0">
+                <span class="font-mono text-[10px] font-extrabold text-cyan-400">#${t.id}</span>
+                <span class="px-1.5 py-0.2 rounded text-[9px] font-mono text-slate-400 bg-slate-900 border border-slate-800 truncate">${t.page}</span>
+                ${prioBadge}
+              </div>
+              <button onclick="toggleTaskStatus('${t.id}')" class="px-2 py-0.5 rounded text-[10px] font-bold transition ${isDone ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-slate-800 text-slate-400 hover:text-white'}">
+                ${isDone ? '✅ แก้แล้ว' : '⏳ รอแก้'}
+              </button>
+            </div>
+
+            <!-- Thumbnail + Details -->
+            <div class="flex items-start gap-2.5">
+              ${t.imageUrl ? `
+                <img src="${t.imageUrl}" onclick="zoomImage('${t.imageUrl}', '#${t.id} · ${t.component}')" alt="crop thumb" class="w-20 h-14 rounded-lg object-cover border border-slate-800 cursor-zoom-in shrink-0 hover:border-cyan-400 transition">
+              ` : ''}
+              <div class="min-w-0 flex-1">
+                <div class="text-xs font-bold text-white truncate">${t.component}</div>
+                <p class="text-[11px] text-slate-300 line-clamp-2 mt-0.5 leading-relaxed">${t.instruction}</p>
+              </div>
+            </div>
+
+            <!-- Card Actions -->
+            <div class="flex items-center justify-between pt-1.5 border-t border-slate-900 text-[10px]">
+              <div class="font-mono text-slate-500">
+                ${t.coords ? `${t.coords.w}×${t.coords.h}px` : ''}
+              </div>
+              <div class="flex items-center gap-1.5">
+                <button onclick="downloadCropImage('${t.id}')" class="px-2 py-1 rounded bg-slate-900 hover:bg-slate-800 text-slate-300 font-bold cursor-pointer" title="ดาวน์โหลดรูปภาพส่วนนี้">
+                  📥 รูป
+                </button>
+                <button onclick="copySingleTaskPrompt(feedbackTasks.find(x=>x.id==='${t.id}'))" class="px-2.5 py-1 rounded bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 font-bold flex items-center gap-1 cursor-pointer">
+                  <span>📋</span> <span>คัดลอก Prompt</span>
+                </button>
+                <button onclick="deleteTask('${t.id}')" class="text-slate-500 hover:text-rose-400 px-1.5 py-1 cursor-pointer" title="ลบรายการ">
+                  ✕
+                </button>
+              </div>
+            </div>
+
+          </div>
+        `;
+      }).join('');
+    }
+
+    // -------------------------------------------------------------------------
+    // UTILS: ZOOM MODAL, TOAST & LOCALSTORAGE
+    // -------------------------------------------------------------------------
+    function zoomImage(url, caption) {
+      document.getElementById('zoom-modal-img').src = url;
+      document.getElementById('zoom-modal-caption').textContent = caption;
+      document.getElementById('image-zoom-modal').classList.remove('hidden');
+    }
+
+    function closeZoomModal() {
+      document.getElementById('image-zoom-modal').classList.add('hidden');
+    }
+
+    function showToast(icon, msg) {
+      const toast = document.getElementById('studio-toast');
+      document.getElementById('toast-icon').textContent = icon;
+      document.getElementById('toast-msg').textContent = msg;
+      toast.classList.remove('translate-y-24', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-24', 'opacity-0');
+      }, 2500);
+    }
+
+    function loadTasks() {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+          feedbackTasks = JSON.parse(stored);
+        } else {
+          // Preload an example task demonstrating how it works
+          feedbackTasks = [
+            {
+              id: 'TASK-101',
+              page: 'index.html',
+              component: 'แผงวงแหวนสถิติ (Radial Score)',
+              category: 'UI_DESIGN',
+              priority: 'NORMAL',
+              instruction: 'อยากให้เพิ่มไอคอนรูปเหรียญทองข้างๆ วงแหวน Profit Factor และปรับสีให้เรืองแสงมากขึ้น',
+              coords: { x: 380, y: 190, w: 420, h: 180 },
+              imageUrl: '',
+              status: 'PENDING',
+              created_at: new Date().toISOString()
+            }
+          ];
+        }
+      } catch (e) {
+        feedbackTasks = [];
+      }
+    }
+
+    function saveTasks() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(feedbackTasks));
+      } catch (e) {}
+    }
+
+    window.onload = init;
+  </script>
+</body>
+</html>
