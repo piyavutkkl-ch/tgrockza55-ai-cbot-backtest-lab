@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ANTIGRAVITY QUANT · Visual Hub</title>
+<script>
+  // Theme preference: 'visual' (this page) or 'pro' (detailed page)
+  try { if (localStorage.getItem('agq_theme') === 'pro') location.replace('pro.html'); } catch(e) {}
+</script>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Noto+Sans+Thai:wght@400;600;700&family=JetBrains+Mono:wght@600;800&display=swap" rel="stylesheet">
 <style>
@@ -23,6 +27,12 @@
 </style>
 </head>
 <body class="bg-orbs min-h-screen">
+
+<!-- THEME SWITCHER -->
+<div class="fixed bottom-4 right-4 z-50 flex rounded-full overflow-hidden border border-slate-600 shadow-2xl bg-slate-900/95 backdrop-blur text-sm font-extrabold">
+  <button class="px-4 py-2 bg-emerald-500 text-slate-950">🎨 ภาพ</button>
+  <button onclick="try{localStorage.setItem('agq_theme','pro')}catch(e){};location.href='pro.html'" class="px-4 py-2 text-slate-300 hover:bg-slate-800">📋 ละเอียด</button>
+</div>
 
 <div id="killbar" class="bg-rose-600 text-white text-center font-extrabold py-2 text-sm tracking-widest">🚨 KILL SWITCH ON (จำลอง) · หยุดเปิดไม้ใหม่</div>
 
