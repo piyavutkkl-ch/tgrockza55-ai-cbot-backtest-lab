@@ -106,5 +106,26 @@
       }
     ]
   },
-  "evolution_principle": "วิวัฒนาการที่แท้จริงต้องไม่ทำลายรากฐาน: กลยุทธ์ Baseline ที่ผ่านการพิสูจน์แล้วจะถูกเก็บรักษาใน Immutable Vault อย่างปลอดภัย กลยุทธ์รุ่นใหม่ใน Challenger Sandbox ต้องแข่งขันและพิสูจน์ตัวเองภายใต้รหัสภูมิคุ้มกัน (Immune Genes) ที่เรียนรู้จากความพ่ายแพ้ในอดีต จึงทำให้ระบบยิ่งรัน ยิ่งแข็งแกร่ง และไม่มีวันทำผิดพลาดซ้ำเดิม"
+  "evolution_principle": "วิวัฒนาการที่แท้จริงต้องไม่ทำลายรากฐาน: กลยุทธ์ Baseline ที่ผ่านการพิสูจน์แล้วจะถูกเก็บรักษาใน Immutable Vault อย่างปลอดภัย กลยุทธ์รุ่นใหม่ใน Challenger Sandbox ต้องแข่งขันและพิสูจน์ตัวเองภายใต้รหัสภูมิคุ้มกัน (Immune Genes) ที่เรียนรู้จากความพ่ายแพ้ในอดีต จึงทำให้ระบบยิ่งรัน ยิ่งแข็งแกร่ง และไม่มีวันทำผิดพลาดซ้ำเดิม",
+  "adaptive_rule_evolution_policy": {
+    "stages_covered": [
+      3,
+      4
+    ],
+    "policy_name": "DYNAMIC_OPTIMAL_STRATEGY_MUTATION",
+    "status": "ACTIVE_MANDATE",
+    "mandate_summary": "กฎในหมวด 3 (Strategy Development) และหมวด 4 (Backtesting & Optimization) สามารถปรับเปลี่ยนได้ตลอดเวลา หากการทดสอบบนข้อมูลเก็บสดพบกลยุทธ์ที่ให้กำไรสูงสุดหรือกำไรได้จริงทุกวัน",
+    "inviolable_safety_invariants": [
+      "1. Zero Lookahead Bias: ห้ามใช้ข้อมูลแห่งอนาคตโดยเด็ดขาด ต้องใช้เฉพาะ Bars.Last(1) หรือ Live Microstructure Stream ณ เสี้ยววินาทีนั้น",
+      "2. Fail-Closed Stop Loss: ต้องมีจุดตัดขาดทุนในหน่วยความจำ RAM เสมอ (ห้ามปล่อยลอย / No Martingale)",
+      "3. 100% Real Live Microstructure Only: ต้องทดสอบบนข้อมูลสดที่บันทึกเองเท่านั้น"
+    ],
+    "mutable_elements": [
+      "เกณฑ์ L2 DOM Imbalance Thresholds (0.015 - 0.08)",
+      "เงื่อนไขยืนยันสัญญาณเข้า (Displacement CHoCH, CVD Divergence, Hawkes Intensity, SMC Fibo 50-65%)",
+      "ตรรกะการออกออเดอร์ (Smart DOM Exit vs Dynamic ATR Trailing vs Structural Target)",
+      "ขอบเขตการสวีปพารามิเตอร์ (Parameter Grids) และสัดส่วนน้ำหนักพอร์ต (Portfolio Sizing Weights)",
+      "Fitness Function weighting ระหว่าง Profit Factor, Daily Win Rate, และ Max Drawdown"
+    ]
+  }
 }
