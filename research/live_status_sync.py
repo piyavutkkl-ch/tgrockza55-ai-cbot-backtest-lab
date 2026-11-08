@@ -343,18 +343,21 @@ last_git_push = 0
 def maybe_git_push():
     global last_git_push
     now = time.time()
-    if now - last_git_push < 45:
+    if now - last_git_push < 60:
         return
+    last_git_push = now
     try:
         res = subprocess.run(['git', 'status', '--porcelain', 'docs/data/live_status.json'], cwd=REPO_ROOT, capture_output=True, text=True)
         if res.stdout.strip():
-            subprocess.run(['git', 'add', 'docs/data/live_status.json'], cwd=REPO_ROOT, check=True)
-            subprocess.run(['git', 'commit', '-m', f"chore(live): auto-sync bot fleet status ({datetime.now().strftime('%H:%M:%S')})"], cwd=REPO_ROOT, check=True)
-            subprocess.run(['git', 'push', 'origin', 'main'], cwd=REPO_ROOT, check=True)
-            print(f"[{datetime.now().strftime('%H:%M:%S')}] Pushed live fleet status to GitHub Pages successfully!")
-            last_git_push = now
+            push_test = subprocess.run(['git', 'push', '--dry-run', 'origin', 'main'], cwd=REPO_ROOT, capture_output=True, text=True)
+            if push_test.returncode == 0:
+                subprocess.run(['git', 'add', 'docs/data/live_status.json'], cwd=REPO_ROOT, check=True)
+                msg = f"chore(live): auto-sync bot fleet status ({datetime.now().strftime('%H:%M:%S')})"
+                subprocess.run(['git', 'commit', '-m', msg], cwd=REPO_ROOT, check=True)
+                subprocess.run(['git', 'push', 'origin', 'main'], cwd=REPO_ROOT, check=True)
+                print(f"[{datetime.now().strftime('%H:%M:%S')}] Pushed live fleet status to GitHub Pages successfully!")
     except Exception as e:
-        print(f"Git push skipped/error: {e}")
+        pass
 
 if __name__ == '__main__':
     if '--daemon' in sys.argv:

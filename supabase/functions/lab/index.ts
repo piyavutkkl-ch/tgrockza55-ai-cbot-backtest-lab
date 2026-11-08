@@ -314,6 +314,44 @@ Deno.serve(async (req) => {
     if (req.method === "POST" && route[0] === "progress") {
       return await progress(req, await authorize(req, false));
     }
+    if (req.method === "POST" && route[0] === "qf-v2") {
+      const owner = await authorize(req, false);
+      const body = await req.json().catch(() => ({}));
+      const table = String(body.table ?? "");
+      const allowedTables = [
+        "risk_policies",
+        "strategy_hypotheses",
+        "strategy_versions",
+        "backtest_math_reports",
+        "validation_checklists",
+        "workflow_audit_logs",
+        "deployment_approvals",
+        "strategy_memory",
+        "web_alerts",
+      ];
+      if (!allowedTables.includes(table)) throw new HttpError(400, "invalid V2 table");
+      const record = { ...(body.record ?? {}), owner };
+      const { data, error } = await admin.from(table).upsert(record).select().maybeSingle();
+      if (error) throw new Error(`${table}: ${error.message}`);
+      return json({ ok: true, table, data });
+    }
+    if (req.method === "GET" && route[0] === "qf-v2" && route[1] === "backup") {
+      const owner = await authorize(req, true);
+      const tables = [
+        "risk_policies",
+        "strategy_versions",
+        "workflow_audit_logs",
+        "deployment_approvals",
+        "strategy_memory",
+        "web_alerts",
+      ];
+      const dump: Record<string, unknown> = {};
+      for (const t of tables) {
+        const { data } = await admin.from(t).select("*").or(`owner.is.null,owner.eq.${owner}`).limit(500);
+        dump[t] = data ?? [];
+      }
+      return json({ ok: true, exportedAt: new Date().toISOString(), dump });
+    }
     if (req.method === "DELETE" && route[0] === "runs" && route.length === 2) {
       const owner = await authorize(req, true);
       const id = Number(route[1]);
