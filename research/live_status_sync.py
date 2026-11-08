@@ -7,10 +7,16 @@ import glob
 import subprocess
 from datetime import datetime, timezone
 
+REPO_ROOT = r'd:\cbot-atgvt'
+if REPO_ROOT not in sys.path:
+    sys.path.insert(0, REPO_ROOT)
+
+from research.truth_guard import TruthGuard
+from research.strategy_foundry import StrategyFoundry
+
 sys.stdout.reconfigure(encoding='utf-8')
 
 LIVE_BASE = os.path.expandvars(r'%LOCALAPPDATA%\BacktestLab\live')
-REPO_ROOT = r'd:\cbot-atgvt'
 DOCS_DATA = os.path.join(REPO_ROOT, 'docs', 'data')
 LIVE_STATUS_JSON = os.path.join(DOCS_DATA, 'live_status.json')
 
@@ -333,6 +339,19 @@ def update_live_status():
     validation_data = safe_load_json('autonomous_validation.json')
     evolution_data = safe_load_json('strategy_evolution.json')
 
+    # Execute Truth Guard and Strategy Foundry
+    try:
+        tg = TruthGuard()
+        truth_guard_data = tg.save_audit()
+    except Exception as e:
+        truth_guard_data = safe_load_json('truth_guard.json')
+
+    try:
+        sf = StrategyFoundry()
+        foundry_data = sf.generate_foundry_report()
+    except Exception as e:
+        foundry_data = safe_load_json('strategy_foundry.json')
+
     status_obj = {
         "flywheel": flywheel_state,
         "agent_handovers": handovers_data,
@@ -340,6 +359,8 @@ def update_live_status():
         "alpha_discovery": discovery_data,
         "autonomous_validation": validation_data,
         "strategy_evolution": evolution_data,
+        "truth_guard": truth_guard_data,
+        "strategy_foundry": foundry_data,
         "timestamp_utc": now_iso,
         "timestamp_local": now_local,
         "epoch": now_epoch,
@@ -353,20 +374,21 @@ def update_live_status():
         },
         "forward_trading": {
             "status": "RUNNING" if online_forward_bots > 0 else "OFFLINE",
-            "bot_name": "BacktestLab (DOM_ABSORPTION)",
+            "bot_name": "Strategy Foundry (DOM_ABSORPTION)",
             "symbols": "BTCUSD + ETHUSD + XAUUSD",
             "account": "5258778 (Pepperstone Demo)",
             "initial_deposit": 100.00,
-            "balance": round(current_balance, 2),
-            "equity": round(current_balance, 2),
-            "net_pnl": total_net_pnl,
-            "net_pnl_pct": total_net_pct,
-            "gross_win": total_gross_win,
-            "gross_loss": total_gross_loss,
-            "total_trades": len(all_closed),
-            "wins": total_wins,
-            "losses": total_losses,
-            "win_rate": win_rate,
+            "balance": round(truth_guard_data.get('metrics_empirical', {}).get('current_balance', current_balance), 2) if truth_guard_data else round(current_balance, 2),
+            "equity": round(truth_guard_data.get('metrics_empirical', {}).get('current_balance', current_balance), 2) if truth_guard_data else round(current_balance, 2),
+            "net_pnl": truth_guard_data.get('metrics_empirical', {}).get('net_pnl_usd', total_net_pnl) if truth_guard_data else total_net_pnl,
+            "net_pnl_pct": truth_guard_data.get('metrics_empirical', {}).get('net_pnl_pct', total_net_pct) if truth_guard_data else total_net_pct,
+            "gross_win": truth_guard_data.get('metrics_empirical', {}).get('gross_win_usd', total_gross_win) if truth_guard_data else total_gross_win,
+            "gross_loss": truth_guard_data.get('metrics_empirical', {}).get('gross_loss_usd', total_gross_loss) if truth_guard_data else total_gross_loss,
+            "total_trades": truth_guard_data.get('metrics_empirical', {}).get('total_closed_trades_N', len(all_closed)) if truth_guard_data else len(all_closed),
+            "wins": truth_guard_data.get('metrics_empirical', {}).get('wins_count', total_wins) if truth_guard_data else total_wins,
+            "losses": truth_guard_data.get('metrics_empirical', {}).get('losses_count', total_losses) if truth_guard_data else total_losses,
+            "win_rate": truth_guard_data.get('metrics_empirical', {}).get('win_rate_pct', win_rate) if truth_guard_data else win_rate,
+            "statistical_power": truth_guard_data.get('statistical_power') if truth_guard_data else None,
             "open_positions": 0
         },
         "bots_fleet": bots_telemetry,

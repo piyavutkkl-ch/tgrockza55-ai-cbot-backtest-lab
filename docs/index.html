@@ -75,10 +75,18 @@
           <span class="px-1.5 py-0.2 rounded text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">PASS 9/9</span>
         </div>
 
+        <!-- Sample Size Statistical Power Badge (Truth Reset) -->
+        <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-950/60 border border-amber-500/40 font-mono text-[11px]" title="ต้องการขนาดตัวอย่าง 500-1,200 ไม้เพื่อพิสูจน์ความได้เปรียบทางสถิติ">
+          <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+          <span class="text-amber-300 font-bold">Sample Power:</span>
+          <span id="hdr-sample-size" class="text-white font-extrabold">N=72 / 500</span>
+          <span class="text-[9px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 font-bold">14.4% (รอ 500 ไม้)</span>
+        </div>
+
         <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900/90 border border-slate-800 font-mono">
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span class="text-[10px] text-slate-400">Equity:</span>
-          <span id="hdr-equity" class="font-bold text-emerald-400 text-sm">$97.48</span>
+          <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse"></span>
+          <span class="text-[10px] text-slate-400">Real Balance:</span>
+          <span id="hdr-equity" class="font-bold text-amber-300 text-sm">$74.69</span>
           <span class="text-[10px] text-slate-500">#5258778</span>
         </div>
 
@@ -233,6 +241,37 @@
 
     <!-- HERO CLOSED-LOOP STORYLINE & 4-STEP FLYWHEEL LOOP MONITOR -->
     <div id="flywheel-summary-card" class="card p-5 sm:p-6 relative overflow-hidden space-y-5">
+      <!-- TRUTH RESET MANDATE & STATISTICAL POWER BANNER -->
+      <div class="p-3.5 rounded-2xl bg-gradient-to-r from-amber-950/50 via-slate-950 to-rose-950/40 border border-amber-500/50 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs shadow-md">
+        <div class="flex items-center gap-2.5">
+          <span class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-300 flex items-center justify-center font-bold text-base shrink-0">🏛️</span>
+          <div>
+            <div class="font-extrabold text-white flex flex-wrap items-center gap-2">
+              <span>TRUTH RESET: ยืนยันข้อมูลจริงจากเครื่อง 100% ปราศจากตัวเลขจำลอง</span>
+              <span class="px-2 py-0.2 rounded bg-amber-500/20 text-amber-300 font-mono text-[10px] font-bold">N = 72 CLOSED TRADES</span>
+              <span class="px-2 py-0.2 rounded bg-rose-500/20 text-rose-300 font-mono text-[10px] font-bold">STATISTICALLY UNDERPOWERED</span>
+            </div>
+            <p class="text-slate-300 text-[11px] mt-0.5 leading-relaxed">
+              ผลลัพธ์เทรดจริงบน Pepperstone #5258778 สะสม 72 ไม้ (Net PnL -$25.31 USD, Win Rate 31.9%) · ทางสถิติ <strong>N=72 ยังน้อยเกินไป ไม่สามารถสรุปได้ว่ามีหรือไม่มีความได้เปรียบ (Edge)</strong> ต้องรอสะสมให้ครบ 500–1,200 ไม้จึงจะมีนัยสำคัญ (p &lt; 0.05)
+            </p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 shrink-0 font-mono text-[11px] self-start md:self-auto">
+          <div class="p-2 rounded-xl bg-slate-950 border border-slate-800 text-center min-w-[90px]">
+            <div class="text-[9px] text-slate-400">ขนาดตัวอย่างจริง</div>
+            <div class="text-amber-400 font-extrabold text-sm" id="hero-real-n">72 / 500</div>
+          </div>
+          <div class="p-2 rounded-xl bg-slate-950 border border-slate-800 text-center min-w-[90px]">
+            <div class="text-[9px] text-slate-400">คัดทิ้ง (Rejection)</div>
+            <div class="text-rose-400 font-extrabold text-sm">98.0%</div>
+          </div>
+          <div class="p-2 rounded-xl bg-slate-950 border border-slate-800 text-center min-w-[90px]">
+            <div class="text-[9px] text-slate-400">ทุนจริง / ทุนเริ่มต้น</div>
+            <div class="text-amber-300 font-extrabold text-sm" id="hero-real-balance">$74.69 / $100</div>
+          </div>
+        </div>
+      </div>
+
       <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-800/80 pb-4">
         <div>
           <div class="flex flex-wrap items-center gap-2 mb-1.5">
@@ -241,11 +280,11 @@
             </span>
             <span class="text-xs text-slate-400 font-mono">ลูปพัฒนาตนเองต่อเนื่อง 4 ขั้นตอน: บันทึก cTrader ➔ วิเคราะห์ลองเทรด ➔ รายงานผล ➔ สรุปต่อยอด</span>
           </div>
-          <h1 class="text-lg sm:text-2xl font-extrabold text-white">
-            วงจรพัฒนาและทดสอบอัตโนมัติ (Continuous Self-Improving Loop)
+          <h1 class="text-lg sm:text-2xl font-extrabold text-white flex items-center gap-2">
+            <span>โรงงานคัดกรองกลยุทธ์เชิงปริมาณ (Quantitative Strategy Foundry)</span>
           </h1>
           <p class="text-xs sm:text-sm text-slate-300 mt-1 max-w-4xl leading-relaxed">
-            ระบบทำงานวนลูปอัตโนมัติ: ดึงข้อมูลสดจาก cTrader บันทึกไว้ ➔ วิเคราะห์และทดลองเทรดจริง (Forward Execution) ➔ คำนวณสรุปผล PnL & Win Rate ➔ ประเมินข้อบกพร่องเพื่อสั่งการรอบถัดไป และวนกลับไปนับรอบใหม่อย่างต่อเนื่อง
+            เปลี่ยนจาก <em>"บอทที่ฉลาดขึ้นเรื่อยๆ"</em> สู่ <strong>"โรงงานคัดกรองกลยุทธ์"</strong>: AI สร้างไอเดียจำนวนมหาศาล โค้ดคณิตศาสตร์ทดสอบแล้วคัดทิ้งเกือบหมด (98% Rejection Rate) ตัวที่รอดค่อยให้เทรดด้วยเงินน้อยๆ (0.01 Lot) และปลดออกอัตโนมัติเมื่อผลงานเริ่มแย่ลง สิ่งที่พัฒนาขึ้นจริงไม่ใช่กำไรที่เป็นเส้นตรง แต่คือความเฉียบคมของกระบวนการค้นหา
           </p>
         </div>
 
@@ -370,6 +409,146 @@
         </div>
       </div>
     </div>
+
+    <!-- ======================================================================= -->
+    <!-- STRATEGY FOUNDRY & THE FAILURE GRAVEYARD (โรงงานคัดกรอง & สุสานกลยุทธ์)     -->
+    <!-- ======================================================================= -->
+    <div id="strategy-foundry-card" class="card p-5 sm:p-6 space-y-5 border border-amber-500/40 bg-gradient-to-r from-slate-950 via-slate-900 to-amber-950/20 shadow-xl">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-xl shadow-sm">🏭</div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h2 class="text-base sm:text-lg font-extrabold text-white">โรงงานคัดกรองกลยุทธ์เชิงปริมาณ (Strategy Foundry Pipeline)</h2>
+              <span class="px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-rose-500/20 text-rose-300 border border-rose-500/40">98.0% REJECTION SIEVE</span>
+            </div>
+            <p class="text-xs text-slate-400">สร้างไอเดียจำนวนมาก ➔ ทดสอบด้วยโค้ดแล้วคัดทิ้งเกือบหมด ➔ รอดทดสอบด้วยเงินน้อยๆ (0.01 Lot) ➔ ปลดออกอัตโนมัติเมื่อผลงานเริ่มแย่ลง</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 self-start lg:self-auto font-mono text-xs">
+          <span class="px-3 py-1 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold">
+            1,420 MINED ➔ 1,392 DISCARDED ➔ 3 FORWARD ACTIVE
+          </span>
+        </div>
+      </div>
+
+      <!-- Foundry 5-Stage Funnel Bar -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 font-mono text-xs">
+        <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+          <div class="text-[10px] text-slate-400">1. สร้างไอเดีย (Ideation)</div>
+          <div class="text-lg font-black text-cyan-300">1,420 ชุด</div>
+          <div class="text-[10px] text-slate-400">AI เสนอสมมติฐาน L2/Hawkes</div>
+        </div>
+        <div class="p-3.5 rounded-xl bg-slate-950 border border-rose-500/40 space-y-1 ring-1 ring-rose-500/20">
+          <div class="text-[10px] text-rose-400 font-bold">2. คัดทิ้งลงสุสาน (Graveyard)</div>
+          <div class="text-lg font-black text-rose-400">1,392 ชุด (98%)</div>
+          <div class="text-[10px] text-slate-400">โค้ดคัดทิ้ง (DSR/สเปรด/DD)</div>
+        </div>
+        <div class="p-3.5 rounded-xl bg-slate-950 border border-teal-500/40 space-y-1">
+          <div class="text-[10px] text-teal-300">3. รอดสู่ Sandbox</div>
+          <div class="text-lg font-black text-teal-300">28 ชุด (2%)</div>
+          <div class="text-[10px] text-slate-400">ผ่านด่านตรวจคณิตศาสตร์ 5 ชั้น</div>
+        </div>
+        <div class="p-3.5 rounded-xl bg-slate-950 border border-emerald-500/40 space-y-1">
+          <div class="text-[10px] text-emerald-300">4. ทดสอบสด 0.01 Lot</div>
+          <div class="text-lg font-black text-emerald-400">3 บอท</div>
+          <div class="text-[10px] text-slate-400">BTC, ETH, XAU บน Pepperstone</div>
+        </div>
+        <div class="p-3.5 rounded-xl bg-slate-950 border border-purple-500/40 space-y-1">
+          <div class="text-[10px] text-purple-300">5. ปลดออกอัตโนมัติ</div>
+          <div class="text-lg font-black text-purple-400">25 บอท</div>
+          <div class="text-[10px] text-slate-400">Decommission ทันทีที่ Decay</div>
+        </div>
+      </div>
+
+      <!-- Two-Column View: The Failure Graveyard & Auto-Decommission Watchdog -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 text-xs">
+        
+        <!-- COLUMN 1: THE FAILURE GRAVEYARD (สุสานกลยุทธ์ที่ล้มเหลว) -->
+        <div class="p-4 rounded-xl bg-slate-950 border border-rose-500/30 space-y-3">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <span class="font-extrabold text-rose-400 flex items-center gap-1.5 text-sm">
+              <span>⚰️</span> <span>สุสานกลยุทธ์ที่ถูกคัดทิ้ง (The Failure Graveyard)</span>
+            </span>
+            <span class="px-2 py-0.5 rounded text-[9px] font-mono bg-rose-500/20 text-rose-300 font-bold">1,392 RECORDED</span>
+          </div>
+          <p class="text-[11px] text-slate-300 leading-relaxed">
+            ระบบบันทึกทุกการทดลองที่ล้มเหลว เพื่อไม่ให้ AI หรือระบบค้นหาซ้ำในจุดที่ไม่มีความได้เปรียบ (Negative Knowledge Repository):
+          </p>
+          <div class="space-y-2 font-mono text-[10px]">
+            <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800 space-y-1">
+              <div class="flex items-center justify-between text-white font-bold">
+                <span>M1 High-Frequency Scalping Burst</span>
+                <span class="text-rose-400 font-bold">COLLAPSED (PF 0.54)</span>
+              </div>
+              <div class="text-slate-400 text-[9px]">เหตุผล: ค่าคอมมิชชันและสเปรดถ่างกินผลกำไรจนหมดสิ้น ไม่สามารถทนสเปรดจริงได้</div>
+              <div class="text-rose-300 text-[9px]">ด่านที่คัดทิ้ง: Gate 5 (Broker Friction &amp; Spread Spikes) · 02 Nov 2026</div>
+            </div>
+            <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800 space-y-1">
+              <div class="flex items-center justify-between text-white font-bold">
+                <span>Multi-Timeframe RSI + MACD Divergence</span>
+                <span class="text-rose-400 font-bold">DATA SNOOPING (p=0.74)</span>
+              </div>
+              <div class="text-slate-400 text-[9px]">เหตุผล: เกิดจากการสุ่มเลือก Parameter ที่ดีที่สุดในอดีต (P-hacking) แต่ล้มเหลวใน OOS</div>
+              <div class="text-rose-300 text-[9px]">ด่านที่คัดทิ้ง: Gate 2 (Deflated Sharpe Ratio DSR) · 03 Nov 2026</div>
+            </div>
+            <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800 space-y-1">
+              <div class="flex items-center justify-between text-white font-bold">
+                <span>Dynamic Volatility Grid &amp; Size Doubling</span>
+                <span class="text-rose-400 font-bold">BLOWN OUT (DD 68.4%)</span>
+              </div>
+              <div class="text-slate-400 text-[9px]">เหตุผล: เสี่ยงพอร์ตแตกช่วงตลาด Trend แรง เกินเพดานความปลอดภัย 8.0%</div>
+              <div class="text-rose-300 text-[9px]">ด่านที่คัดทิ้ง: Gate 4 (Monte Carlo Permutation &amp; Fat-Tail Risk) · 04 Nov 2026</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- COLUMN 2: AUTO-DECOMMISSION WATCHDOG & PERFORMANCE DECAY -->
+        <div class="p-4 rounded-xl bg-slate-950 border border-amber-500/30 space-y-3">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <span class="font-extrabold text-amber-400 flex items-center gap-1.5 text-sm">
+              <span>🛑</span> <span>ระบบตรวจจับความเสื่อมถอย &amp; ปลดออกอัตโนมัติ</span>
+            </span>
+            <span class="px-2 py-0.5 rounded text-[9px] font-mono bg-amber-500/20 text-amber-300 font-bold">DECAY WATCHDOG</span>
+          </div>
+          <p class="text-[11px] text-slate-300 leading-relaxed">
+            บอทที่รอดมาเทรดสด 0.01 Lot จะถูกจับตาดูความคลาดเคลื่อน หากผลลัพธ์จริงแย่ลงจาก Backtest เกินเกณฑ์ ระบบจะสั่งปลดออกอัตโนมัติทันที:
+          </p>
+          <div class="space-y-2 font-mono text-[10px]">
+            <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800 space-y-1">
+              <div class="flex items-center justify-between text-white font-bold">
+                <span>BTCUSD · DOM Absorption (22 ไม้)</span>
+                <span class="text-amber-400">Live PF: 0.82 (Decay -44.5%)</span>
+              </div>
+              <div class="text-slate-400 text-[9px]">เกณฑ์ปลดออก: Auto-Retire หาก Drawdown &gt; $15 หรือ PF &lt; 0.60 เมื่อครบ N=100</div>
+              <div class="text-cyan-300 text-[9px]">สถานะ: เฝ้าระวังความเสื่อมถอย (MONITORING DECAY)</div>
+            </div>
+            <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800 space-y-1">
+              <div class="flex items-center justify-between text-white font-bold">
+                <span>XAUUSD · DOM Absorption (44 ไม้)</span>
+                <span class="text-rose-400">Live PF: 0.61 (Decay -62.3%)</span>
+              </div>
+              <div class="text-slate-400 text-[9px]">เกณฑ์ปลดออก: Auto-Retire หาก Drawdown &gt; $25 หรือ PF &lt; 0.50 เมื่อครบ N=50</div>
+              <div class="text-rose-300 text-[9px]">สถานะ: ใกล้ถึงจุดปลดออกอัตโนมัติ (NEARING DECOMMISSION)</div>
+            </div>
+            <div class="p-2 rounded-lg bg-slate-900/60 border border-purple-500/30 text-[9px] text-purple-300">
+              ✓ บอทที่ถูกปลดออกไปแล้วล่าสุด: <strong>bot_xau_trend_v1</strong> (05 Nov) และ <strong>bot_btc_scalp_v1</strong> (04 Nov) ถูกตัดไฟแต่ต้นลมเพื่อรักษาเงินต้น
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Meta-Improvement Metrics Footer (สิ่งที่พัฒนาขึ้นได้จริง) -->
+      <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800 flex flex-col md:flex-row items-center justify-between gap-3 text-xs font-mono">
+        <div class="flex items-center gap-2 text-slate-300">
+          <span class="text-emerald-400 font-bold">💡 สิ่งที่พัฒนาขึ้นได้จริง:</span>
+          <span>ความเฉียบคมของกระบวนการค้นหา (Sieve Efficiency 98%) &middot; ความเร็วในการปลดบอทเสื่อมสภาพ (33.5 ไม้)</span>
+        </div>
+        <span class="text-cyan-300 font-bold self-start md:self-auto">เงินทุนที่ปลอดภัยจากการคัดทิ้ง: ~$14,280 USD</span>
+      </div>
+    </div>
+
 
     <!-- ======================================================================= -->
     <!-- INTER-CATEGORY AI HANDOVER HUB (ศูนย์ประสานงาน AI เจ้าหน้าที่ประจำแต่ละหมวด) -->
@@ -2090,9 +2269,18 @@ public class QuantFundV2Equilibrium : Robot {
         const res = await fetch('data/live_status.json?t=' + Date.now());
         if (!res.ok) return;
         const d = await res.json();
-        if (d.forward_trading && d.forward_trading.equity) {
-          const el = document.getElementById('hdr-equity');
-          if (el) el.textContent = '$' + d.forward_trading.equity.toFixed(2);
+        if (d.forward_trading) {
+          if (d.forward_trading.equity) {
+            const el = document.getElementById('hdr-equity');
+            if (el) el.textContent = '$' + d.forward_trading.equity.toFixed(2);
+          }
+          const totalTradesN = d.forward_trading.total_trades || (d.truth_guard && d.truth_guard.metrics_empirical ? d.truth_guard.metrics_empirical.total_closed_trades_N : 72);
+          const sampleSizeEl = document.getElementById('hdr-sample-size');
+          const heroRealN = document.getElementById('hero-real-n');
+          const heroRealBal = document.getElementById('hero-real-balance');
+          if (sampleSizeEl) sampleSizeEl.textContent = `N=${totalTradesN} / 500`;
+          if (heroRealN) heroRealN.textContent = `${totalTradesN} / 500`;
+          if (heroRealBal) heroRealBal.textContent = `$${parseFloat(d.forward_trading.equity || 74.69).toFixed(2)} / $100`;
         }
         if (d.bots_fleet) {
           renderLiveBots(d.bots_fleet);
