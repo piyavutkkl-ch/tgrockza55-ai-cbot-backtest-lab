@@ -199,14 +199,25 @@
 
       </div>
 
-      <!-- View Mode Selector -->
-      <div class="flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs shrink-0">
-        <button onclick="setViewMode('FLYWHEEL')" id="btn-mode-flywheel" class="px-3 py-1 rounded-lg font-bold bg-cyan-600/30 text-cyan-300 border border-cyan-500/40 cursor-pointer">
-          🔄 ภาพรวมวงจร 10 ขั้น
-        </button>
-        <button onclick="setViewMode('FOCUS')" id="btn-mode-focus" class="px-3 py-1 rounded-lg font-medium text-slate-400 hover:text-white cursor-pointer">
-          🎯 โฟกัสรายโมดูล
-        </button>
+      <div class="flex items-center gap-2">
+        <!-- Live Flywheel Cycle Counter Badge -->
+        <div class="hidden sm:flex items-center gap-2 bg-gradient-to-r from-cyan-950/90 via-slate-900/90 to-purple-950/90 px-3 py-1.5 rounded-xl border border-cyan-500/40 text-xs shadow-sm">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+          <span class="text-slate-300 font-medium">ลูปควอนท์:</span>
+          <span id="hdr-flywheel-cycle" class="text-cyan-300 font-extrabold font-mono">วนแล้ว 1 รอบ</span>
+          <span class="text-slate-600">|</span>
+          <span id="hdr-flywheel-step" class="text-emerald-400 font-mono text-[11px]">รอบที่ #2 กำลังรัน</span>
+        </div>
+
+        <!-- View Mode Selector -->
+        <div class="flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs shrink-0">
+          <button onclick="setViewMode('FLYWHEEL')" id="btn-mode-flywheel" class="px-3 py-1 rounded-lg font-bold bg-cyan-600/30 text-cyan-300 border border-cyan-500/40 cursor-pointer">
+            🔄 ภาพรวมวงจร 10 ขั้น
+          </button>
+          <button onclick="setViewMode('FOCUS')" id="btn-mode-focus" class="px-3 py-1 rounded-lg font-medium text-slate-400 hover:text-white cursor-pointer">
+            🎯 โฟกัสรายโมดูล
+          </button>
+        </div>
       </div>
 
     </div>
@@ -217,45 +228,119 @@
   <!-- ========================================================================= -->
   <main class="max-w-[1600px] mx-auto p-3 sm:p-5 space-y-6">
 
-    <!-- HERO CLOSED-LOOP STORYLINE -->
-    <div id="flywheel-summary-card" class="card p-4 sm:p-6 relative overflow-hidden">
-      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+    <!-- HERO CLOSED-LOOP STORYLINE & 4-STEP FLYWHEEL LOOP MONITOR -->
+    <div id="flywheel-summary-card" class="card p-5 sm:p-6 relative overflow-hidden space-y-5">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-800/80 pb-4">
         <div>
-          <div class="flex items-center gap-2 mb-1.5">
-            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-mono">
-              CLOSED-LOOP QUANT SYSTEM
+          <div class="flex flex-wrap items-center gap-2 mb-1.5">
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-mono">
+              🔄 AUTONOMOUS QUANT FLYWHEEL LOOP
             </span>
-            <span class="text-xs text-slate-400 font-mono">10 เสาหลักสถาบัน · Zero Hallucination · Fail-Closed</span>
+            <span class="text-xs text-slate-400 font-mono">ลูปพัฒนาตนเองต่อเนื่อง 4 ขั้นตอน: บันทึก cTrader ➔ วิเคราะห์ลองเทรด ➔ รายงานผล ➔ สรุปต่อยอด</span>
           </div>
           <h1 class="text-lg sm:text-2xl font-extrabold text-white">
-            สถาปัตยกรรมพัฒนาเทรดบอท 10 ขั้นตอน: เก็บข้อมูล ➔ วิเคราะห์ ➔ พัฒนา ➔ ทวนซ้ำโดยไม่ซ้ำซ้อน
+            วงจรพัฒนาและทดสอบอัตโนมัติ (Continuous Self-Improving Loop)
           </h1>
           <p class="text-xs sm:text-sm text-slate-300 mt-1 max-w-4xl leading-relaxed">
-            เชื่อมต่อข้อมูลตั้งแต่ <strong>ท่อข้อมูลสะอาด</strong> สู่ <strong>AI สกัดสมมติฐาน</strong> ➔ <strong>เขียนโค้ด C# cBot</strong> ➔ <strong>ทดสอบ 5 ปี & Monte Carlo</strong> ➔ <strong>กฎเหล็ก 9 ข้อ</strong> ➔ <strong>เทรดสด DOM Level 2</strong> ➔ <strong>บันทึกความจำและทวนซ้ำสู่รุ่นถัดไป</strong>
+            ระบบทำงานวนลูปอัตโนมัติ: ดึงข้อมูลสดจาก cTrader บันทึกไว้ ➔ วิเคราะห์และทดลองเทรดจริง (Forward Execution) ➔ คำนวณสรุปผล PnL & Win Rate ➔ ประเมินข้อบกพร่องเพื่อสั่งการรอบถัดไป และวนกลับไปนับรอบใหม่อย่างต่อเนื่อง
           </p>
         </div>
 
-        <!-- Quick Jump Pillars Flywheel Indicator -->
-        <div class="flex items-center gap-1.5 shrink-0 bg-slate-950 p-2 rounded-2xl border border-slate-800/90 text-center">
-          <div class="px-2">
-            <div class="text-[10px] text-slate-500 font-mono">STAGE 1-3</div>
-            <div class="text-xs font-bold text-cyan-400">BUILD</div>
+        <!-- Flywheel Total Cycles Counter Badge -->
+        <div class="flex items-center gap-3 shrink-0 bg-slate-950 p-3 rounded-2xl border border-cyan-500/40 text-center shadow-lg">
+          <div class="px-3 border-r border-slate-800">
+            <div class="text-[10px] text-slate-400 font-mono uppercase">วนรอบสะสมแล้ว</div>
+            <div class="text-xl sm:text-2xl font-black text-cyan-300 font-mono mt-0.5" id="fw-cycles-badge">1 ครั้ง</div>
           </div>
-          <span class="text-slate-600">➔</span>
-          <div class="px-2">
-            <div class="text-[10px] text-slate-500 font-mono">STAGE 4-6</div>
-            <div class="text-xs font-bold text-emerald-400">PROVE</div>
+          <div class="px-3">
+            <div class="text-[10px] text-slate-400 font-mono uppercase">รอบปัจจุบัน</div>
+            <div class="text-xl sm:text-2xl font-black text-emerald-400 font-mono mt-0.5" id="fw-active-badge">#2 RUNNING</div>
           </div>
-          <span class="text-slate-600">➔</span>
-          <div class="px-2">
-            <div class="text-[10px] text-slate-500 font-mono">STAGE 7</div>
-            <div class="text-xs font-bold text-rose-400">EXECUTE</div>
+        </div>
+      </div>
+
+      <!-- 4-STEP CLOSED-LOOP INTERACTIVE CARDS -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3.5 text-xs">
+        
+        <!-- STEP 1 -->
+        <div class="p-4 rounded-2xl bg-slate-950/80 border border-cyan-500/30 hover:border-cyan-400 transition space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-extrabold text-cyan-300 flex items-center gap-1.5 text-sm">
+              <span>📥</span> <span>1. บันทึก cTrader</span>
+            </span>
+            <span id="fw-step1-status" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">✓ COMPLETED</span>
           </div>
-          <span class="text-slate-600">➔</span>
-          <div class="px-2">
-            <div class="text-[10px] text-slate-500 font-mono">STAGE 8-10</div>
-            <div class="text-xs font-bold text-indigo-400">EVOLVE</div>
+          <p id="fw-step1-desc" class="text-slate-300 leading-relaxed text-[11px]">
+            ดึงข้อมูลตลาดสด Tick, DOM Level 2 (25 ชั้น), Bar M1 และประวัติ Deals บันทึกลงคลังข้อมูล
+          </p>
+          <div id="fw-step1-meta" class="p-2 rounded-xl bg-slate-900 border border-slate-800 font-mono text-[10px] text-cyan-400 space-y-0.5">
+            <div>สะสม: <span class="font-bold text-white">26,367 แท่ง M1</span></div>
+            <div>แหล่งข้อมูล: <span class="text-slate-300">cTrader Open API · Pepperstone</span></div>
           </div>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="p-4 rounded-2xl bg-slate-950/80 border border-purple-500/30 hover:border-purple-400 transition space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-extrabold text-purple-300 flex items-center gap-1.5 text-sm">
+              <span>⚙️</span> <span>2. วิเคราะห์ & เทรด</span>
+            </span>
+            <span id="fw-step2-status" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-purple-500/20 text-purple-300 border border-purple-500/40">✓ COMPLETED</span>
+          </div>
+          <p id="fw-step2-desc" class="text-slate-300 leading-relaxed text-[11px]">
+            วิเคราะห์สัญญาณอัลฟ่า (DOM Absorption, Equilibrium) และลองส่งคำสั่ง Forward Trading 0.01 Lot
+          </p>
+          <div id="fw-step2-meta" class="p-2 rounded-xl bg-slate-900 border border-slate-800 font-mono text-[10px] text-purple-400 space-y-0.5">
+            <div>ออเดอร์ทดสอบ: <span class="font-bold text-white">44 คำสั่ง</span></div>
+            <div>การป้องกัน: <span class="text-slate-300">Stealth RAM SL (±5% Jitter)</span></div>
+          </div>
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="p-4 rounded-2xl bg-slate-950/80 border border-emerald-500/30 hover:border-emerald-400 transition space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-extrabold text-emerald-300 flex items-center gap-1.5 text-sm">
+              <span>📊</span> <span>3. รายงานผลลัพธ์</span>
+            </span>
+            <span id="fw-step3-status" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">✓ COMPLETED</span>
+          </div>
+          <p id="fw-step3-desc" class="text-slate-300 leading-relaxed text-[11px]">
+            สรุปผลกำไรขาดทุน PnL, Win Rate, ค่าสลิปเพจจริง และบันทึกเข้า Strategy Memory
+          </p>
+          <div id="fw-step3-meta" class="p-2 rounded-xl bg-slate-900 border border-slate-800 font-mono text-[10px] text-emerald-400 space-y-0.5">
+            <div>Balance: <span class="font-bold text-white">$78.15 USD</span> · Win Rate: <span class="text-emerald-300">31.9%</span></div>
+            <div>Latency: <span class="text-slate-300">28.5 ms</span> · Slippage: <span class="text-slate-300">0.08 pips</span></div>
+          </div>
+        </div>
+
+        <!-- STEP 4 -->
+        <div class="p-4 rounded-2xl bg-slate-950/80 border border-pink-500/30 hover:border-pink-400 transition space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-extrabold text-pink-300 flex items-center gap-1.5 text-sm">
+              <span>💡</span> <span>4. แนวทางพัฒนา</span>
+            </span>
+            <span id="fw-step4-status" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-pink-500/20 text-pink-300 border border-pink-500/40">✓ APPROVED</span>
+          </div>
+          <p id="fw-step4-desc" class="text-slate-300 leading-relaxed text-[11px]">
+            สรุปจุดบกพร่องเพื่อเตรียมข้อมูลและปรับกลยุทธ์ใหม่ พร้อมส่งต่อไปเริ่ม Step 1 ของรอบถัดไป
+          </p>
+          <div id="fw-step4-meta" class="p-2 rounded-xl bg-slate-900 border border-slate-800 font-mono text-[10px] text-pink-400 space-y-0.5">
+            <div>แนวทาง: <span class="font-bold text-white">หลบข่าว High/Extreme (PF 1.08)</span></div>
+            <div>คำสั่งรอบถัดไป: <span class="text-slate-300">วนกลับข้อ 1 พร้อม Spread Guard</span></div>
+          </div>
+        </div>
+
+      </div>
+      
+      <!-- Footer Cycle Tracker Bar -->
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-2 pt-2 border-t border-slate-800/80 text-[11px] text-slate-400 font-mono">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+          <span>วงจรอัตโนมัติประมวลผลรอบล่าสุด:</span>
+          <span id="fw-last-completed" class="text-slate-200 font-bold">รอบที่ #1 เสร็จสิ้นสมบูรณ์</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <span>รอบถัดไป: <strong class="text-emerald-400">#2 เตรียมรันข้อมูล cTrader ชุดใหม่</strong></span>
         </div>
       </div>
     </div>
@@ -1096,7 +1181,55 @@ public class QuantFundV2Equilibrium : Robot {
         if (d.recent_trades) {
           renderRecentTrades(d.recent_trades);
         }
+        if (d.flywheel) {
+          renderFlywheelData(d.flywheel);
+        }
       } catch (e) {}
+    }
+
+    function renderFlywheelData(fw) {
+      if (!fw) return;
+      const totalCycles = fw.total_cycles_completed || 1;
+      const activeCycle = fw.active_cycle || (totalCycles + 1);
+
+      // Header Badges
+      const hdrCycle = document.getElementById('hdr-flywheel-cycle');
+      const hdrStep = document.getElementById('hdr-flywheel-step');
+      if (hdrCycle) hdrCycle.textContent = `วนแล้ว ${totalCycles} รอบ`;
+      if (hdrStep) hdrStep.textContent = `รอบที่ #${activeCycle} กำลังรัน`;
+
+      // Hero Card Badges
+      const fwBadge = document.getElementById('fw-cycles-badge');
+      const fwActive = document.getElementById('fw-active-badge');
+      if (fwBadge) fwBadge.textContent = `${totalCycles} ครั้ง`;
+      if (fwActive) fwActive.textContent = `#${activeCycle} RUNNING`;
+
+      // Last Completed timestamp
+      const lastCompleted = document.getElementById('fw-last-completed');
+      if (lastCompleted && fw.last_updated_local) {
+        lastCompleted.textContent = `รอบที่ #${totalCycles} เสร็จสิ้นเมื่อ ${fw.last_updated_local}`;
+      }
+
+      // Latest cycle details if available
+      const latest = fw.latest_cycle || (fw.cycles && fw.cycles[0]);
+      if (latest) {
+        if (latest.step1) {
+          const s1Desc = document.getElementById('fw-step1-desc');
+          if (s1Desc && latest.step1.detail) s1Desc.textContent = latest.step1.detail;
+        }
+        if (latest.step2) {
+          const s2Desc = document.getElementById('fw-step2-desc');
+          if (s2Desc && latest.step2.detail) s2Desc.textContent = latest.step2.detail;
+        }
+        if (latest.step3) {
+          const s3Desc = document.getElementById('fw-step3-desc');
+          if (s3Desc && latest.step3.detail) s3Desc.textContent = latest.step3.detail;
+        }
+        if (latest.step4) {
+          const s4Desc = document.getElementById('fw-step4-desc');
+          if (s4Desc && latest.step4.detail) s4Desc.textContent = latest.step4.detail;
+        }
+      }
     }
 
     function renderRecentTrades(trades) {

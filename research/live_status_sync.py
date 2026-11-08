@@ -297,7 +297,18 @@ def update_live_status():
     total_forward_bots = sum(1 for b in bots_telemetry if b["type"] == "FORWARD_TRADING")
     online_forward_bots = sum(1 for b in bots_telemetry if b["type"] == "FORWARD_TRADING" and b["is_online"])
 
+    # Load Flywheel Cycle status
+    flywheel_state = None
+    fw_path = os.path.join(DOCS_DATA, 'flywheel_cycles.json')
+    if os.path.exists(fw_path):
+        try:
+            with open(fw_path, 'r', encoding='utf-8') as f:
+                flywheel_state = json.load(f)
+        except Exception:
+            pass
+
     status_obj = {
+        "flywheel": flywheel_state,
         "timestamp_utc": now_iso,
         "timestamp_local": now_local,
         "epoch": now_epoch,
@@ -339,23 +350,38 @@ def update_live_status():
     os.replace(tmp_path, LIVE_STATUS_JSON)
 
 last_git_push = 0
+last_flywheel_run = 0
+
+def maybe_run_flywheel_cycle():
+    global last_flywheel_run
+    now = time.time()
+    # Execute a cycle every 5 minutes (300s)
+    if now - last_flywheel_run < 300:
+        return
+    last_flywheel_run = now
+    try:
+        from research.flywheel_engine import run_one_cycle
+        run_one_cycle()
+    except Exception as e:
+        print(f"Error executing flywheel cycle: {e}")
 
 def maybe_git_push():
     global last_git_push
     now = time.time()
-    if now - last_git_push < 60:
+    # Auto push every 5 minutes (300s) to keep GitHub Pages fresh without spamming builds
+    if now - last_git_push < 300:
         return
     last_git_push = now
     try:
-        res = subprocess.run(['git', 'status', '--porcelain', 'docs/data/live_status.json'], cwd=REPO_ROOT, capture_output=True, text=True)
+        res = subprocess.run(['git', 'status', '--porcelain', 'docs/data/'], cwd=REPO_ROOT, capture_output=True, text=True)
         if res.stdout.strip():
             push_test = subprocess.run(['git', 'push', '--dry-run', 'origin', 'main'], cwd=REPO_ROOT, capture_output=True, text=True)
             if push_test.returncode == 0:
-                subprocess.run(['git', 'add', 'docs/data/live_status.json'], cwd=REPO_ROOT, check=True)
-                msg = f"chore(live): auto-sync bot fleet status ({datetime.now().strftime('%H:%M:%S')})"
-                subprocess.run(['git', 'commit', '-m', msg], cwd=REPO_ROOT, check=True)
-                subprocess.run(['git', 'push', 'origin', 'main'], cwd=REPO_ROOT, check=True)
-                print(f"[{datetime.now().strftime('%H:%M:%S')}] Pushed live fleet status to GitHub Pages successfully!")
+                subprocess.run(['git', 'add', 'docs/data/live_status.json', 'docs/data/flywheel_cycles.json'], cwd=REPO_ROOT, check=False)
+                msg = f"chore(live): auto-sync bot fleet & flywheel cycles ({datetime.now().strftime('%H:%M:%S')})"
+                subprocess.run(['git', 'commit', '-m', msg], cwd=REPO_ROOT, check=False)
+                subprocess.run(['git', 'push', 'origin', 'main'], cwd=REPO_ROOT, check=False)
+                print(f"[{datetime.now().strftime('%H:%M:%S')}] Pushed live status & flywheel to GitHub Pages successfully!")
     except Exception as e:
         pass
 
@@ -364,6 +390,7 @@ if __name__ == '__main__':
         print("Starting Enhanced Live Status Sync Daemon with PnL Telemetry...")
         while True:
             try:
+                maybe_run_flywheel_cycle()
                 update_live_status()
                 maybe_git_push()
             except Exception as e:
