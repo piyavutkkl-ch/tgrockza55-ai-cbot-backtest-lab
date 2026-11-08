@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="th" class="dark">
+<html lang="th" class="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -39,6 +39,113 @@
       border-color: #06b6d4 !important;
       box-shadow: 0 0 20px rgba(6, 182, 212, 0.35);
       color: #ffffff !important;
+    }
+  
+    /* ========================================================================= */
+    /* INSTITUTIONAL WHITE / LIGHT THEME STYLES (ธีมสีขาวมาตรฐานสถาบัน)          */
+    /* ========================================================================= */
+    html.light body {
+      background-color: #f8fafc !important;
+      color: #1e293b !important;
+    }
+    html.light .bg-grid {
+      background-image: radial-gradient(rgba(148, 163, 184, 0.22) 1px, transparent 1px) !important;
+      background-size: 20px 20px !important;
+    }
+    html.light header {
+      background-color: rgba(255, 255, 255, 0.95) !important;
+      border-color: #e2e8f0 !important;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05) !important;
+    }
+    html.light .card {
+      background: #ffffff !important;
+      border: 1px solid #e2e8f0 !important;
+      border-radius: 20px !important;
+      box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05) !important;
+      color: #1e293b !important;
+    }
+    html.light .card:hover {
+      border-color: #cbd5e1 !important;
+      box-shadow: 0 10px 25px -3px rgba(15, 23, 42, 0.08) !important;
+    }
+    html.light .bg-slate-950,
+    html.light .bg-slate-950\/80,
+    html.light .bg-slate-950\/90,
+    html.light .bg-slate-900,
+    html.light .bg-slate-900\/80,
+    html.light .bg-slate-900\/90,
+    html.light .bg-slate-900\/70,
+    html.light .bg-slate-900\/60,
+    html.light .bg-black\/60 {
+      background-color: #ffffff !important;
+    }
+    html.light .bg-slate-950\/50,
+    html.light .bg-slate-900\/40,
+    html.light .bg-slate-900\/50 {
+      background-color: #f8fafc !important;
+    }
+    html.light .border-slate-800,
+    html.light .border-slate-800\/80,
+    html.light .border-slate-800\/90,
+    html.light .border-slate-700 {
+      border-color: #e2e8f0 !important;
+    }
+    html.light .text-white {
+      color: #0f172a !important;
+    }
+    html.light .text-slate-100,
+    html.light .text-slate-200,
+    html.light .text-slate-300 {
+      color: #334155 !important;
+    }
+    html.light .text-slate-400 {
+      color: #64748b !important;
+    }
+    html.light .text-slate-500 {
+      color: #94a3b8 !important;
+    }
+    html.light .pillar-tab {
+      background-color: #ffffff !important;
+      border-color: #e2e8f0 !important;
+      color: #475569 !important;
+    }
+    html.light .pillar-tab:hover {
+      background-color: #f1f5f9 !important;
+      color: #0f172a !important;
+    }
+    html.light .pillar-tab.active-tab {
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(16, 185, 129, 0.15)) !important;
+      border-color: #0284c7 !important;
+      box-shadow: 0 0 16px rgba(2, 132, 199, 0.2) !important;
+      color: #0369a1 !important;
+      font-weight: 700 !important;
+    }
+    html.light #four-pillars-ensemble-card {
+      background: linear-gradient(135deg, #ffffff, #f0fdf4) !important;
+      border-color: #86efac !important;
+    }
+    html.light #strategy-foundry-card {
+      background: linear-gradient(135deg, #ffffff, #fffbeb) !important;
+      border-color: #fde68a !important;
+    }
+    html.light #flywheel-learnings-card {
+      background: linear-gradient(135deg, #ffffff, #eef2ff) !important;
+      border-color: #c7d2fe !important;
+    }
+    html.light #flywheel-summary-card {
+      background: linear-gradient(135deg, #ffffff, #f0f9ff) !important;
+      border-color: #bae6fd !important;
+    }
+    html.light #tradingview-studio-card {
+      background: #ffffff !important;
+      border-color: #e2e8f0 !important;
+    }
+    html.light table thead {
+      background-color: #f1f5f9 !important;
+      color: #475569 !important;
+    }
+    html.light table tbody tr:hover {
+      background-color: #f8fafc !important;
     }
   </style>
 </head>
@@ -102,6 +209,12 @@
         </a>
 
         <!-- Emergency Kill Switch -->
+        
+        <!-- Theme Switcher Toggle (White / Dark) -->
+        <button id="btn-theme-toggle" onclick="toggleTheme()" class="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold border border-slate-300 text-xs flex items-center gap-1.5 transition cursor-pointer shadow-sm" title="สลับระหว่างธีมสีขาว (White) และธีมมืด (Dark)">
+          <span id="theme-icon">☀️</span> <span id="theme-label" class="hidden sm:inline">ธีมสีขาว</span>
+        </button>
+    
         <button id="btn-kill-switch" onclick="toggleKillSwitch()" class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-rose-600 to-red-700 hover:from-rose-500 hover:to-red-600 text-white font-extrabold text-[11px] border border-rose-400/60 glow-rose flex items-center gap-1.5 transition cursor-pointer">
           <span class="w-2 h-2 rounded-full bg-white animate-ping"></span>
           <span>EMERGENCY KILL</span>
@@ -240,6 +353,58 @@
   <main class="max-w-[1600px] mx-auto p-3 sm:p-5 space-y-6">
 
     <!-- HERO CLOSED-LOOP STORYLINE & 4-STEP FLYWHEEL LOOP MONITOR -->
+    
+    <!-- ======================================================================= -->
+    <!-- TRADINGVIEW LIVE CHART & MICROSTRUCTURE STUDIO (สตูดิโอกราฟสด TradingView)-->
+    <!-- ======================================================================= -->
+    <div id="tradingview-studio-card" class="card p-5 sm:p-6 space-y-4 border border-sky-300 shadow-xl bg-white rounded-2xl">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-slate-200 pb-3">
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-2xl bg-sky-100 border border-sky-300 flex items-center justify-center text-2xl shadow-sm">
+            📈
+          </div>
+          <div>
+            <div class="flex flex-wrap items-center gap-2">
+              <h2 class="text-base sm:text-lg font-black text-slate-900">ห้องวิเคราะห์กราฟสดเชิงลึกสไตล์ TradingView (Live Microstructure Studio)</h2>
+              <span class="px-2.5 py-0.5 rounded text-[10px] font-mono font-bold bg-sky-100 text-sky-800 border border-sky-300">TRADINGVIEW REAL-TIME · LIGHT THEME</span>
+            </div>
+            <p class="text-xs text-slate-600 mt-0.5">
+              กราฟแท่งเทียนสดระดับสถาบัน: แสดงโครงสร้างราคาจริง, ระดับกำแพงสภาพคล่อง L2 DOM, กรอบ Breakout CHoCH, และเซสชันตลาดเพื่อยืนยันจุดเข้าออเดอร์
+            </p>
+          </div>
+        </div>
+
+        <!-- Symbol Switcher Tabs -->
+        <div class="flex items-center gap-1.5 bg-slate-100 p-1.5 rounded-xl border border-slate-200 font-mono text-xs">
+          <button onclick="changeTvSymbol('BINANCE:BTCUSDT', this)" class="tv-sym-btn px-3 py-1 rounded-lg bg-white text-sky-700 font-extrabold shadow-sm border border-slate-200 cursor-pointer">
+            ₿ BTCUSD (Asia Champion)
+          </button>
+          <button onclick="changeTvSymbol('BINANCE:ETHUSDT', this)" class="tv-sym-btn px-3 py-1 rounded-lg text-slate-600 hover:text-slate-900 cursor-pointer">
+            ⟠ ETHUSD (London Champion)
+          </button>
+          <button onclick="changeTvSymbol('CAPITALCOM:GOLD', this)" class="tv-sym-btn px-3 py-1 rounded-lg text-slate-600 hover:text-slate-900 cursor-pointer">
+            🥇 XAUUSD (NY Fader)
+          </button>
+        </div>
+      </div>
+
+      <!-- TradingView Interactive Embed Widget -->
+      <div class="rounded-xl overflow-hidden border border-slate-200 shadow-inner bg-white relative" style="height: 480px;">
+        <div id="tv_chart_container" style="height: 100%; width: 100%;"></div>
+      </div>
+
+      <!-- Chart Technical Annotation Box (คำอธิบายกราฟประกอบเพื่อความเข้าใจง่าย) -->
+      <div class="p-3.5 rounded-xl bg-sky-50 border border-sky-200 text-xs text-slate-700 space-y-1.5 leading-relaxed">
+        <div class="font-bold text-sky-900 flex items-center gap-1.5 text-xs">
+          <span>💡</span> <span>คำอธิบายโครงสร้างกราฟและตัวอย่างจุดเข้า (Why & How):</span>
+        </div>
+        <p class="text-[11px] text-slate-600">
+          <strong>จุดสังเกตตาม 4 เสาหลัก:</strong> เมื่อราคาวิ่งลงมาชนกำแพงสภาพคล่อง <span class="text-emerald-700 font-bold">L2 DOM Bid Wall (&gt;1.4x)</span> และเกิดไส้เทียนดีดตัว (Absorption Wick) จากนั้นแท่ง M1/M5 ปิดเหนือแนวสวิงเดิมเป็น <span class="text-sky-700 font-bold">Displacement CHoCH</span> ให้รอราคาย่อตัวกลับมา Retest ที่กรอบ <span class="text-amber-700 font-bold">Fibo Golden Zone 50-65%</span> เพื่อเข้า Buy โดยวาง Stop Loss ใต้กำแพง 15 pips และตั้งเป้า Take Profit ที่จุดดูดซับสภาพคล่องฝั่งตรงข้าม (Smart DOM Exit)
+        </p>
+      </div>
+    </div>
+    
+
     <div id="flywheel-summary-card" class="card p-5 sm:p-6 relative overflow-hidden space-y-5">
       <!-- TRUTH RESET MANDATE & STATISTICAL POWER BANNER -->
       <div class="p-3.5 rounded-2xl bg-gradient-to-r from-amber-950/50 via-slate-950 to-rose-950/40 border border-amber-500/50 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs shadow-md">
@@ -322,6 +487,44 @@
             </span>
             <span id="fw-step1-status" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">✓ COMPLETED</span>
           </div>
+          <div id="svg-step1-chart">
+    <div class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 mb-2 overflow-hidden shadow-inner">
+      <div class="flex items-center justify-between text-[10px] font-mono mb-1 text-slate-600">
+        <span class="font-bold flex items-center gap-1">📊 <span class="text-slate-800">Order Book L2 Depth (25 Layers)</span></span>
+        <span class="px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold border border-emerald-300">Spread: 0.15 pips</span>
+      </div>
+      <svg viewBox="0 0 380 95" class="w-full h-auto text-xs" xmlns="http://www.w3.org/2000/svg">
+        <!-- Background Grid -->
+        <rect x="0" y="0" width="380" height="95" fill="#ffffff" rx="6" stroke="#e2e8f0"/>
+        
+        <!-- Center Spread Divider -->
+        <line x1="190" y1="5" x2="190" y2="90" stroke="#cbd5e1" stroke-dasharray="3,3" stroke-width="1.5"/>
+        <text x="190" y="16" font-size="8" font-family="monospace" fill="#64748b" text-anchor="middle" font-weight="bold">MID $68,420.50</text>
+        
+        <!-- BID DEPTH BARS (Left - Green) -->
+        <text x="10" y="16" font-size="8" font-family="monospace" fill="#059669" font-weight="bold">← BIDS (Buyer Wall)</text>
+        <rect x="70" y="22" width="115" height="8" fill="#10b981" rx="2" opacity="0.85"/>
+        <rect x="95" y="33" width="90" height="8" fill="#10b981" rx="2" opacity="0.75"/>
+        <rect x="50" y="44" width="135" height="8" fill="#059669" rx="2" opacity="0.95"/> <!-- Huge Wall 1.4x -->
+        <rect x="110" y="55" width="75" height="8" fill="#10b981" rx="2" opacity="0.65"/>
+        <rect x="80" y="66" width="105" height="8" fill="#10b981" rx="2" opacity="0.80"/>
+        <rect x="60" y="77" width="125" height="8" fill="#059669" rx="2" opacity="0.90"/>
+        
+        <text x="45" y="50" font-size="7" font-family="monospace" fill="#047857" font-weight="extrabold">WALL 1.48x</text>
+        
+        <!-- ASK DEPTH BARS (Right - Red) -->
+        <text x="370" y="16" font-size="8" font-family="monospace" fill="#e11d48" font-weight="bold" text-anchor="end">ASKS (Seller Wall) →</text>
+        <rect x="195" y="22" width="90" height="8" fill="#f43f5e" rx="2" opacity="0.75"/>
+        <rect x="195" y="33" width="120" height="8" fill="#e11d48" rx="2" opacity="0.85"/>
+        <rect x="195" y="44" width="70" height="8" fill="#f43f5e" rx="2" opacity="0.65"/>
+        <rect x="195" y="55" width="130" height="8" fill="#be123c" rx="2" opacity="0.95"/> <!-- Ask Wall -->
+        <rect x="195" y="66" width="85" height="8" fill="#f43f5e" rx="2" opacity="0.70"/>
+        <rect x="195" y="77" width="100" height="8" fill="#f43f5e" rx="2" opacity="0.80"/>
+        
+        <text x="330" y="61" font-size="7" font-family="monospace" fill="#9f1239" font-weight="extrabold">WALL 1.42x</text>
+      </svg>
+    </div>
+    </div>
           <p id="fw-step1-desc" class="text-slate-300 leading-relaxed text-[11px]">
             บันทึกและประมวลผลข้อมูลสด 28,639 แท่ง M1 (BTC 7,715, ETH 7,654, XAU 6,099) พร้อม L2 DOM 25 ชั้นและ Tick Spreads แท้จริง
           </p>
@@ -341,6 +544,63 @@
             </span>
             <span id="fw-step2-status" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-purple-500/20 text-purple-300 border border-purple-500/40">✓ COMPLETED</span>
           </div>
+          <div id="svg-step2-chart">
+    <div class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 mb-2 overflow-hidden shadow-inner">
+      <div class="flex items-center justify-between text-[10px] font-mono mb-1 text-slate-600">
+        <span class="font-bold flex items-center gap-1">📈 <span class="text-slate-800">DOM Absorption & CHoCH Entry</span></span>
+        <span class="px-1.5 py-0.5 rounded bg-blue-100 text-blue-800 font-bold border border-blue-300">Win Rate: 59.1%</span>
+      </div>
+      <svg viewBox="0 0 380 95" class="w-full h-auto text-xs" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0" y="0" width="380" height="95" fill="#ffffff" rx="6" stroke="#e2e8f0"/>
+        
+        <!-- Green Liquidity Absorption Zone -->
+        <rect x="40" y="65" width="220" height="22" fill="#dcfce7" rx="3" stroke="#86efac" stroke-dasharray="2,2"/>
+        <text x="45" y="80" font-size="7.5" font-family="monospace" fill="#15803d" font-weight="bold">L2 DOM Absorption Wall ($68,380)</text>
+        
+        <!-- Candlesticks Downward Sweep -->
+        <!-- Candle 1 Red -->
+        <line x1="60" y1="20" x2="60" y2="48" stroke="#f43f5e" stroke-width="1.2"/>
+        <rect x="56" y="25" width="8" height="18" fill="#f43f5e" rx="1"/>
+        
+        <!-- Candle 2 Red -->
+        <line x1="85" y1="35" x2="85" y2="62" stroke="#f43f5e" stroke-width="1.2"/>
+        <rect x="81" y="40" width="8" height="18" fill="#f43f5e" rx="1"/>
+        
+        <!-- Candle 3 Absorption Wick Rejection -->
+        <line x1="110" y1="48" x2="110" y2="78" stroke="#059669" stroke-width="1.2"/>
+        <rect x="106" y="52" width="8" height="10" fill="#10b981" rx="1"/>
+        <circle cx="110" cy="78" r="3" fill="#059669"/>
+        <text x="117" y="86" font-size="7" font-family="monospace" fill="#047857" font-weight="bold">Absorption Wick</text>
+        
+        <!-- Candle 4 Strong Green Displacement CHoCH -->
+        <line x1="140" y1="28" x2="140" y2="60" stroke="#059669" stroke-width="1.2"/>
+        <rect x="136" y="32" width="8" height="24" fill="#059669" rx="1"/>
+        
+        <!-- CHoCH Breakout Line -->
+        <line x1="75" y1="38" x2="180" y2="38" stroke="#3b82f6" stroke-dasharray="3,3" stroke-width="1.2"/>
+        <text x="148" y="34" font-size="7.5" font-family="monospace" fill="#1d4ed8" font-weight="bold">CHoCH Breakout ↑</text>
+        
+        <!-- Candle 5 Retest Golden Zone -->
+        <line x1="170" y1="40" x2="170" y2="56" stroke="#f59e0b" stroke-width="1.2"/>
+        <rect x="166" y="43" width="8" height="8" fill="#f59e0b" rx="1"/>
+        
+        <!-- Candle 6 Rocket Long Entry -->
+        <line x1="200" y1="12" x2="200" y2="48" stroke="#059669" stroke-width="1.2"/>
+        <rect x="196" y="16" width="8" height="28" fill="#059669" rx="1"/>
+        
+        <!-- Entry Marker Arrow -->
+        <polygon points="170,68 165,76 175,76" fill="#059669"/>
+        <text x="180" y="74" font-size="8" font-family="monospace" fill="#047857" font-weight="extrabold">BUY ENTRY @ 50-65% Retest</text>
+        
+        <!-- SL & TP Target lines -->
+        <line x1="195" y1="14" x2="360" y2="14" stroke="#10b981" stroke-width="1.5"/>
+        <text x="360" y="12" font-size="7.5" font-family="monospace" fill="#059669" font-weight="bold" text-anchor="end">Smart DOM TP +$15.81</text>
+        
+        <line x1="160" y1="88" x2="360" y2="88" stroke="#e11d48" stroke-dasharray="2,2" stroke-width="1.2"/>
+        <text x="360" y="86" font-size="7.5" font-family="monospace" fill="#be123c" font-weight="bold" text-anchor="end">Structural SL 15 pips</text>
+      </svg>
+    </div>
+    </div>
           <p id="fw-step2-desc" class="text-slate-300 leading-relaxed text-[11px]">
             ทดสอบ 598 รูปแบบบนข้อมูลสดจริง: ค้นพบ BTC DOM Absorption Asia (Win Rate 59.1%, PF 2.01) และ ETH High-Wall London
           </p>
@@ -360,6 +620,62 @@
             </span>
             <span id="fw-step3-status" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">✓ COMPLETED</span>
           </div>
+          <div id="svg-step3-chart">
+    <div class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 mb-2 overflow-hidden shadow-inner">
+      <div class="flex items-center justify-between text-[10px] font-mono mb-1 text-slate-600">
+        <span class="font-bold flex items-center gap-1">💰 <span class="text-slate-800">7-Day Real Cumulative PnL</span></span>
+        <span class="px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold border border-emerald-300">PF 1.90 · 6/7 Days Green</span>
+      </div>
+      <svg viewBox="0 0 380 95" class="w-full h-auto text-xs" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0" y="0" width="380" height="95" fill="#ffffff" rx="6" stroke="#e2e8f0"/>
+        
+        <!-- Zero Line -->
+        <line x1="30" y1="75" x2="370" y2="75" stroke="#cbd5e1" stroke-width="1"/>
+        <text x="25" y="78" font-size="7" font-family="monospace" fill="#94a3b8" text-anchor="end">$0</text>
+        <text x="25" y="22" font-size="7" font-family="monospace" fill="#059669" text-anchor="end font-weight="bold">+$15.20</text>
+        
+        <!-- Daily Profit Bars (Bottom) -->
+        <!-- Day 1: 05 Oct -$0.18 -->
+        <rect x="50" y="75" width="22" height="4" fill="#f43f5e" rx="1"/>
+        <text x="61" y="90" font-size="6.5" font-family="monospace" fill="#64748b" text-anchor="middle">5 ต.ค.</text>
+        
+        <!-- Day 2: 01 Nov +$1.39 -->
+        <rect x="90" y="67" width="22" height="8" fill="#10b981" rx="1"/>
+        <text x="101" y="90" font-size="6.5" font-family="monospace" fill="#64748b" text-anchor="middle">1 พ.ย.</text>
+        
+        <!-- Day 3: 02 Nov +$5.47 -->
+        <rect x="130" y="45" width="22" height="30" fill="#059669" rx="1"/>
+        <text x="141" y="90" font-size="6.5" font-family="monospace" fill="#64748b" text-anchor="middle">2 พ.ย.</text>
+        
+        <!-- Day 4: 03 Nov +$2.76 -->
+        <rect x="170" y="60" width="22" height="15" fill="#10b981" rx="1"/>
+        <text x="181" y="90" font-size="6.5" font-family="monospace" fill="#64748b" text-anchor="middle">3 พ.ย.</text>
+        
+        <!-- Day 5: 05 Nov +$3.49 -->
+        <rect x="210" y="56" width="22" height="19" fill="#059669" rx="1"/>
+        <text x="221" y="90" font-size="6.5" font-family="monospace" fill="#64748b" text-anchor="middle">5 พ.ย.</text>
+        
+        <!-- Day 6: 06 Nov +$2.02 -->
+        <rect x="250" y="64" width="22" height="11" fill="#10b981" rx="1"/>
+        <text x="261" y="90" font-size="6.5" font-family="monospace" fill="#64748b" text-anchor="middle">6 พ.ย.</text>
+        
+        <!-- Day 7: 07 Nov +$0.26 -->
+        <rect x="290" y="73" width="22" height="2" fill="#10b981" rx="1"/>
+        <text x="301" y="90" font-size="6.5" font-family="monospace" fill="#64748b" text-anchor="middle">7 พ.ย.</text>
+        
+        <!-- Cumulative Equity Line (Top) -->
+        <polyline points="40,75 61,77 101,70 141,43 181,30 221,18 261,15 301,14 360,14" 
+                  fill="none" stroke="#0284c7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        
+        <!-- Shaded area under equity curve -->
+        <polygon points="40,75 61,77 101,70 141,43 181,30 221,18 261,15 301,14 360,14 360,75 40,75" 
+                 fill="#38bdf8" opacity="0.12"/>
+                 
+        <circle cx="360" cy="14" r="3.5" fill="#0284c7" stroke="#ffffff" stroke-width="1.5"/>
+        <text x="355" y="27" font-size="7.5" font-family="monospace" fill="#0369a1" font-weight="extrabold" text-anchor="end">+$15.20 USD (85.7% Win)</text>
+      </svg>
+    </div>
+    </div>
           <p id="fw-step3-desc" class="text-slate-300 leading-relaxed text-[11px]">
             ผลตอบแทนข้อมูลสด: Net PnL +$15.20 USD, Profit Factor 1.90, กำไรจริง 6 จาก 7 วัน (Daily Win Rate 85.7%), BTC กำไร 100% ทุกวัน
           </p>
@@ -378,6 +694,50 @@
             </span>
             <span id="fw-step4-status" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-pink-500/20 text-pink-300 border border-pink-500/40">✓ APPROVED</span>
           </div>
+          <div id="svg-step4-chart">
+    <div class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 mb-2 overflow-hidden shadow-inner">
+      <div class="flex items-center justify-between text-[10px] font-mono mb-1 text-slate-600">
+        <span class="font-bold flex items-center gap-1">🔄 <span class="text-slate-800">10-Stage Evolution Engine Loop</span></span>
+        <span class="px-1.5 py-0.5 rounded bg-purple-100 text-purple-800 font-bold border border-purple-300">Cycle #1 ➔ Cycle #2</span>
+      </div>
+      <svg viewBox="0 0 380 95" class="w-full h-auto text-xs" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0" y="0" width="380" height="95" fill="#ffffff" rx="6" stroke="#e2e8f0"/>
+        
+        <!-- Loop Track -->
+        <rect x="30" y="25" width="320" height="48" rx="24" fill="none" stroke="#e2e8f0" stroke-width="3"/>
+        <rect x="30" y="25" width="220" height="48" rx="24" fill="none" stroke="#8b5cf6" stroke-width="3" stroke-dasharray="8,4"/>
+        
+        <!-- Node 1: Cycle #1 Complete -->
+        <circle cx="54" cy="49" r="16" fill="#10b981" stroke="#ffffff" stroke-width="2"/>
+        <text x="54" y="52" font-size="8" font-family="monospace" fill="#ffffff" font-weight="extrabold" text-anchor="middle">#1</text>
+        <text x="54" y="80" font-size="7" font-family="monospace" fill="#059669" font-weight="bold" text-anchor="middle">PF 1.90 Done</text>
+        
+        <!-- Arrow 1 -->
+        <polygon points="105,46 115,49 105,52" fill="#8b5cf6"/>
+        
+        <!-- Node 2: Archive 122 Legacy -->
+        <circle cx="150" cy="49" r="14" fill="#f59e0b" stroke="#ffffff" stroke-width="2"/>
+        <text x="150" y="52" font-size="7.5" font-family="monospace" fill="#ffffff" font-weight="bold" text-anchor="middle">ARCH</text>
+        <text x="150" y="80" font-size="7" font-family="monospace" fill="#d97706" font-weight="bold" text-anchor="middle">122 Archived</text>
+        
+        <!-- Arrow 2 -->
+        <polygon points="205,46 215,49 205,52" fill="#8b5cf6"/>
+        
+        <!-- Node 3: 24/7 Watchdog Active -->
+        <circle cx="250" cy="49" r="15" fill="#0284c7" stroke="#ffffff" stroke-width="2"/>
+        <text x="250" y="52" font-size="7" font-family="monospace" fill="#ffffff" font-weight="bold" text-anchor="middle">WD 24/7</text>
+        <text x="250" y="80" font-size="7" font-family="monospace" fill="#0284c7" font-weight="bold" text-anchor="middle">Ingesting Ticks</text>
+        
+        <!-- Arrow 3 -->
+        <polygon points="295,46 305,49 295,52" fill="#8b5cf6"/>
+        
+        <!-- Node 4: Cycle #2 Running -->
+        <circle cx="330" cy="49" r="16" fill="#8b5cf6" stroke="#ffffff" stroke-width="2"/>
+        <text x="330" y="52" font-size="8" font-family="monospace" fill="#ffffff" font-weight="extrabold" text-anchor="middle">#2</text>
+        <text x="330" y="80" font-size="7" font-family="monospace" fill="#7c3aed" font-weight="bold" text-anchor="middle">RUNNING</text>
+      </svg>
+    </div>
+    </div>
           <p id="fw-step4-desc" class="text-slate-300 leading-relaxed text-[11px]">
             จัดเก็บ 122 รอบเก่าเข้าฐานข้อมูลถาวร และเริ่มต้นนับรอบ #1 ใหม่ในยุค Pure Live Microstructure สำเร็จ พร้อมรัน 24/7 Watchdog เข้าสู่รอบ #2
           </p>
@@ -440,6 +800,59 @@
       </div>
 
       <!-- Foundry 5-Stage Funnel Bar -->
+      <div id="svg-foundry-funnel">
+    <div class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 mb-2 overflow-hidden shadow-inner">
+      <div class="flex items-center justify-between text-[11px] font-mono mb-1 text-slate-700">
+        <span class="font-bold">🏭 แผนผังกระบวนการคัดกรอง 5 ชั้น (Quantitative Sieve Funnel)</span>
+        <span class="px-2 py-0.5 rounded bg-rose-100 text-rose-800 font-bold border border-rose-300">Rejection Rate: 98.0%</span>
+      </div>
+      <svg viewBox="0 0 520 80" class="w-full h-auto text-xs" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0" y="0" width="520" height="80" fill="#ffffff" rx="6" stroke="#e2e8f0"/>
+        
+        <!-- Funnel Step 1 -->
+        <polygon points="15,10 115,10 100,70 30,70" fill="#f0f9ff" stroke="#38bdf8" stroke-width="1"/>
+        <text x="65" y="28" font-size="8" font-family="monospace" fill="#0369a1" font-weight="bold" text-anchor="middle">1. สร้างไอเดีย</text>
+        <text x="65" y="44" font-size="11" font-family="monospace" fill="#0f172a" font-weight="black" text-anchor="middle">1,420 ชุด</text>
+        <text x="65" y="60" font-size="6.5" font-family="monospace" fill="#64748b" text-anchor="middle">AI + Papers</text>
+        
+        <!-- Funnel Arrow 1 -->
+        <polygon points="120,40 128,40 128,36 135,40 128,44 128,40" fill="#94a3b8"/>
+        
+        <!-- Funnel Step 2 -->
+        <polygon points="140,10 230,10 215,70 155,70" fill="#fff1f2" stroke="#f43f5e" stroke-width="1"/>
+        <text x="185" y="28" font-size="8" font-family="monospace" fill="#be123c" font-weight="bold" text-anchor="middle">2. สุสานคัดทิ้ง</text>
+        <text x="185" y="44" font-size="11" font-family="monospace" fill="#e11d48" font-weight="black" text-anchor="middle">1,392 ชุด</text>
+        <text x="185" y="60" font-size="6.5" font-family="monospace" fill="#9f1239" text-anchor="middle">98.0% Rejection</text>
+        
+        <!-- Funnel Arrow 2 -->
+        <polygon points="235,40 243,40 243,36 250,40 243,44 243,40" fill="#94a3b8"/>
+        
+        <!-- Funnel Step 3 -->
+        <polygon points="255,10 335,10 325,70 265,70" fill="#f0fdf4" stroke="#4ade80" stroke-width="1"/>
+        <text x="295" y="28" font-size="8" font-family="monospace" fill="#15803d" font-weight="bold" text-anchor="middle">3. รอดสู่ Sandbox</text>
+        <text x="295" y="44" font-size="11" font-family="monospace" fill="#059669" font-weight="black" text-anchor="middle">28 ชุด (2%)</text>
+        <text x="295" y="60" font-size="6.5" font-family="monospace" fill="#166534" text-anchor="middle">ผ่าน 5 ด่านตรวจ</text>
+        
+        <!-- Funnel Arrow 3 -->
+        <polygon points="340,40 348,40 348,36 355,40 348,44 348,40" fill="#94a3b8"/>
+        
+        <!-- Funnel Step 4 -->
+        <polygon points="360,10 435,10 425,70 370,70" fill="#f0fdfa" stroke="#2dd4bf" stroke-width="1.5"/>
+        <text x="397" y="28" font-size="8" font-family="monospace" fill="#0f766e" font-weight="bold" text-anchor="middle">4. เทรดสด 0.01L</text>
+        <text x="397" y="44" font-size="11" font-family="monospace" fill="#0d9488" font-weight="black" text-anchor="middle">3 บอท</text>
+        <text x="397" y="60" font-size="6.5" font-family="monospace" fill="#115e59" text-anchor="middle">BTC, ETH, XAU</text>
+        
+        <!-- Funnel Arrow 4 -->
+        <polygon points="440,40 448,40 448,36 455,40 448,44 448,40" fill="#94a3b8"/>
+        
+        <!-- Funnel Step 5 -->
+        <polygon points="460,10 510,10 500,70 470,70" fill="#faf5ff" stroke="#c084fc" stroke-width="1"/>
+        <text x="485" y="28" font-size="7.5" font-family="monospace" fill="#7e22ce" font-weight="bold" text-anchor="middle">5. ปลดออก</text>
+        <text x="485" y="44" font-size="10" font-family="monospace" fill="#9333ea" font-weight="black" text-anchor="middle">25 บอท</text>
+        <text x="485" y="60" font-size="6" font-family="monospace" fill="#6b21a8" text-anchor="middle">Auto-Retire</text>
+      </svg>
+    </div>
+    </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 font-mono text-xs">
         <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
           <div class="text-[10px] text-slate-400">1. สร้างไอเดีย (Ideation)</div>
@@ -600,6 +1013,43 @@
               <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">เสาที่ 1</span>
               <span class="text-[10px] text-slate-400">STRUCTURAL ANCHOR</span>
             </div>
+            <div id="svg-pillar1-blueprint">
+    <div class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 mb-2 overflow-hidden shadow-inner">
+      <div class="text-[9px] font-mono font-bold text-sky-800 flex justify-between items-center mb-0.5">
+        <span>BLUEPRINT 1: STRUCTURAL ANCHOR</span>
+        <span class="text-emerald-700">L2 DOM > 1.4x</span>
+      </div>
+      <svg viewBox="0 0 240 75" class="w-full h-auto text-xs" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0" y="0" width="240" height="75" fill="#ffffff" rx="4" stroke="#e2e8f0"/>
+        <!-- Value Area 70% Box -->
+        <rect x="25" y="15" width="190" height="42" fill="#f0f9ff" stroke="#38bdf8" stroke-dasharray="2,2" stroke-width="1"/>
+        <text x="30" y="24" font-size="6.5" font-family="monospace" fill="#0284c7" font-weight="bold">VAH (Value Area High)</text>
+        <text x="30" y="52" font-size="6.5" font-family="monospace" fill="#0284c7" font-weight="bold">VAL (Value Area Low)</text>
+        
+        <!-- L2 DOM Wall Bar at VAL -->
+        <rect x="60" y="55" width="140" height="6" fill="#10b981" rx="2"/>
+        <text x="130" y="60" font-size="5.5" font-family="monospace" fill="#ffffff" font-weight="extrabold" text-anchor="middle">L2 DOM BID WALL 1.52x</text>
+        
+        <!-- Candlesticks bouncing off VAL wall -->
+        <line x1="80" y1="20" x2="80" y2="38" stroke="#f43f5e" stroke-width="1"/>
+        <rect x="77" y="24" width="6" height="10" fill="#f43f5e"/>
+        
+        <line x1="110" y1="32" x2="110" y2="56" stroke="#f43f5e" stroke-width="1"/>
+        <rect x="107" y="38" width="6" height="14" fill="#f43f5e"/>
+        
+        <!-- Rejection Bounce Candle -->
+        <line x1="140" y1="36" x2="140" y2="56" stroke="#059669" stroke-width="1.2"/>
+        <rect x="137" y="38" width="6" height="12" fill="#10b981"/>
+        
+        <!-- Upward Bounce Candle -->
+        <line x1="170" y1="22" x2="170" y2="44" stroke="#059669" stroke-width="1.2"/>
+        <rect x="167" y="24" width="6" height="16" fill="#059669"/>
+        
+        <polygon points="140,68 136,73 144,73" fill="#059669"/>
+        <text x="148" y="72" font-size="6.5" font-family="monospace" fill="#047857" font-weight="bold">Anchor Bounce</text>
+      </svg>
+    </div>
+    </div>
             <div class="text-sm font-bold text-white">จุดได้เปรียบเชิงโครงสร้าง</div>
             <p class="text-[11px] text-slate-300 font-sans leading-relaxed">
               ห้ามเข้าออเดอร์ในโซนกลางอากาศ ต้องอิงกับ <strong>กำแพง L2 DOM Depth (&gt;1.4x)</strong>, โซนคุณค่า <strong>AMT 70% Value Area</strong>, หรือจุดยืดตัวสุดทาง <strong>VWAP &ge; 4.2&sigma;</strong>
@@ -613,6 +1063,41 @@
               <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">เสาที่ 2</span>
               <span class="text-[10px] text-slate-400">TIMING &amp; CHOCH</span>
             </div>
+            <div id="svg-pillar2-blueprint">
+    <div class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 mb-2 overflow-hidden shadow-inner">
+      <div class="text-[9px] font-mono font-bold text-amber-800 flex justify-between items-center mb-0.5">
+        <span>BLUEPRINT 2: CHOCH CONFIRMATION</span>
+        <span class="text-amber-700">Fibo 50-65%</span>
+      </div>
+      <svg viewBox="0 0 240 75" class="w-full h-auto text-xs" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0" y="0" width="240" height="75" fill="#ffffff" rx="4" stroke="#e2e8f0"/>
+        
+        <!-- Swing High CHoCH Line -->
+        <line x1="40" y1="30" x2="160" y2="30" stroke="#f59e0b" stroke-dasharray="2,2" stroke-width="1"/>
+        <text x="45" y="26" font-size="6" font-family="monospace" fill="#d97706" font-weight="bold">Swing High Level</text>
+        
+        <!-- Displacement Candle Breakout -->
+        <line x1="110" y1="18" x2="110" y2="52" stroke="#059669" stroke-width="1.2"/>
+        <rect x="107" y="22" width="6" height="24" fill="#059669"/>
+        <text x="117" y="24" font-size="6.5" font-family="monospace" fill="#047857" font-weight="bold">CHoCH ↑</text>
+        
+        <!-- Fibo Golden Zone Box (50-65%) -->
+        <rect x="130" y="34" width="55" height="12" fill="#fef3c7" stroke="#fde68a" stroke-width="1"/>
+        <text x="133" y="42" font-size="5.5" font-family="monospace" fill="#b45309" font-weight="bold">Fibo 50-65%</text>
+        
+        <!-- Pullback candle into Golden Zone -->
+        <line x1="150" y1="32" x2="150" y2="44" stroke="#f59e0b" stroke-width="1"/>
+        <rect x="147" y="35" width="6" height="6" fill="#f59e0b"/>
+        
+        <!-- Confirmed Entry Candle -->
+        <line x1="175" y1="14" x2="175" y2="40" stroke="#059669" stroke-width="1.2"/>
+        <rect x="172" y="16" width="6" height="20" fill="#059669"/>
+        
+        <circle cx="150" cy="46" r="3" fill="#059669"/>
+        <text x="156" y="52" font-size="6.5" font-family="monospace" fill="#047857" font-weight="extrabold">BUY RETEST</text>
+      </svg>
+    </div>
+    </div>
             <div class="text-sm font-bold text-white">ยืนยันด้วย CHoCH &amp; Flow</div>
             <p class="text-[11px] text-slate-300 font-sans leading-relaxed">
               ห้ามสวนทันทีที่เห็นแนวต้าน ต้องรอให้แท่ง M1/M5 <strong>เกิด CHoCH ทุบหลุด Swing ย่อย</strong> &rarr; ย่อตัว Retest โซน <strong>Fibo Golden Zone (50%-65%)</strong> หรือมี <strong>CVD Divergence (&Delta;CVD &lt; 0)</strong>
@@ -626,6 +1111,37 @@
               <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">เสาที่ 3</span>
               <span class="text-[10px] text-slate-400">EVENT &amp; SPREAD GATE</span>
             </div>
+            <div id="svg-pillar3-blueprint">
+    <div class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 mb-2 overflow-hidden shadow-inner">
+      <div class="text-[9px] font-mono font-bold text-rose-800 flex justify-between items-center mb-0.5">
+        <span>BLUEPRINT 3: NEWS VOID GATE</span>
+        <span class="text-rose-700">Drawdown -82%</span>
+      </div>
+      <svg viewBox="0 0 240 75" class="w-full h-auto text-xs" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0" y="0" width="240" height="75" fill="#ffffff" rx="4" stroke="#e2e8f0"/>
+        
+        <!-- Timeline track -->
+        <line x1="15" y1="35" x2="225" y2="35" stroke="#cbd5e1" stroke-width="1.5"/>
+        
+        <!-- Normal trading green zone -->
+        <rect x="15" y="25" width="55" height="20" fill="#dcfce7" rx="3"/>
+        <text x="42" y="38" font-size="6" font-family="monospace" fill="#15803d" font-weight="bold" text-anchor="middle">ACTIVE</text>
+        
+        <!-- RED NEWS VOID GATE BOX -->
+        <rect x="75" y="12" width="90" height="46" fill="#fee2e2" stroke="#ef4444" stroke-dasharray="3,2" rx="4"/>
+        <text x="120" y="26" font-size="7" font-family="monospace" fill="#b91c1c" font-weight="extrabold" text-anchor="middle">⛔ NEWS VOID GATE</text>
+        <text x="120" y="36" font-size="5.5" font-family="monospace" fill="#dc2626" text-anchor="middle">CPI / NFP / FOMC</text>
+        <text x="120" y="46" font-size="5" font-family="monospace" fill="#7f1d1d" text-anchor="middle">-30m to +120m BLACKOUT</text>
+        
+        <!-- Post news green zone -->
+        <rect x="170" y="25" width="55" height="20" fill="#dcfce7" rx="3"/>
+        <text x="197" y="38" font-size="6" font-family="monospace" fill="#15803d" font-weight="bold" text-anchor="middle">RESUME</text>
+        
+        <!-- Spread Shield Meter -->
+        <text x="15" y="68" font-size="6.5" font-family="monospace" fill="#475569" font-weight="bold">Spread Shield: <tspan fill="#059669">0.15p ≤ 1.5x (Safe)</tspan></text>
+      </svg>
+    </div>
+    </div>
             <div class="text-sm font-bold text-white">ปราการกั้นข่าว &amp; สเปรด</div>
             <p class="text-[11px] text-slate-300 font-sans leading-relaxed">
               บังคับ VETO ปิดสวิตช์ <strong>30 นาทีก่อน และ 60-120 นาทีหลังข่าวแดง (CPI/NFP/FOMC)</strong> เพื่อหลบ Slippage มหาศาล พร้อม <strong>Spread Shield</strong> ไม่เข้าถ้าสเปรดถ่างเกิน 1.5x
@@ -639,6 +1155,34 @@
               <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">เสาที่ 4</span>
               <span class="text-[10px] text-slate-400">STRUCTURAL EXIT &amp; RISK</span>
             </div>
+            <div id="svg-pillar4-blueprint">
+    <div class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 mb-2 overflow-hidden shadow-inner">
+      <div class="text-[9px] font-mono font-bold text-emerald-800 flex justify-between items-center mb-0.5">
+        <span>BLUEPRINT 4: EXIT & KELLY SIZING</span>
+        <span class="text-emerald-700">R:R ≥ 1:2.5</span>
+      </div>
+      <svg viewBox="0 0 240 75" class="w-full h-auto text-xs" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0" y="0" width="240" height="75" fill="#ffffff" rx="4" stroke="#e2e8f0"/>
+        
+        <!-- Target Line TP (Top) -->
+        <line x1="30" y1="18" x2="220" y2="18" stroke="#059669" stroke-width="1.5"/>
+        <text x="35" y="14" font-size="6.5" font-family="monospace" fill="#047857" font-weight="bold">Smart DOM TP +$15.81 (R:R 2.5R)</text>
+        
+        <!-- Breakeven Line -->
+        <line x1="80" y1="36" x2="220" y2="36" stroke="#0284c7" stroke-dasharray="2,2" stroke-width="1"/>
+        <text x="85" y="32" font-size="6" font-family="monospace" fill="#0369a1" font-weight="bold">1.0R Lock: Move SL to Breakeven</text>
+        
+        <!-- Entry Line -->
+        <line x1="30" y1="46" x2="220" y2="46" stroke="#64748b" stroke-width="1"/>
+        <circle cx="50" cy="46" r="3" fill="#0284c7"/>
+        <text x="56" y="49" font-size="6.5" font-family="monospace" fill="#334155" font-weight="bold">Entry Point (0.01 Lot)</text>
+        
+        <!-- Structural SL Line (Bottom) -->
+        <line x1="30" y1="62" x2="220" y2="62" stroke="#e11d48" stroke-width="1.5"/>
+        <text x="35" y="70" font-size="6.5" font-family="monospace" fill="#be123c" font-weight="bold">Structural SL: 15 pips (-$3.30 Max)</text>
+      </svg>
+    </div>
+    </div>
             <div class="text-sm font-bold text-white">ออกตามสมดุล &amp; คุมเสี่ยง Kelly</div>
             <p class="text-[11px] text-slate-300 font-sans leading-relaxed">
               วาง SL แคบหลังยอด Sweep (10-20 pips) &middot; ปิดกำไรที่จุดสมดุล <strong>Session VWAP Touch (R:R &ge; 1:2.5)</strong> &middot; <strong>ขยับบังทุน 1.0R</strong> ทันที &middot; ปรับขนาดไม้ด้วย <strong>Dynamic Kelly Sizing</strong>
@@ -2895,5 +3439,75 @@ public class AlphaSessionH1Bot : Robot {
   </script>
   <!-- In-Page Visual Feedback Widget -->
   <script src="feedback-widget.js"></script>
+
+  <!-- TradingView tv.js script -->
+  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+  <script type="text/javascript">
+    let tvWidget = null;
+    let currentTvSymbol = 'BINANCE:BTCUSDT';
+
+    function initTradingViewChart(symbol) {
+      currentTvSymbol = symbol || currentTvSymbol;
+      const isDark = document.documentElement.classList.contains('dark');
+      const themeName = isDark ? 'dark' : 'light';
+      const container = document.getElementById('tv_chart_container');
+      if (!container) return;
+      container.innerHTML = '';
+      
+      try {
+        tvWidget = new TradingView.widget({
+          "autosize": true,
+          "symbol": currentTvSymbol,
+          "interval": "15",
+          "timezone": "Asia/Bangkok",
+          "theme": themeName,
+          "style": "1",
+          "locale": "th_TH",
+          "toolbar_bg": isDark ? "#0f172a" : "#ffffff",
+          "enable_publishing": false,
+          "hide_side_toolbar": false,
+          "allow_symbol_change": true,
+          "container_id": "tv_chart_container"
+        });
+      } catch(e) {
+        console.error("TV widget error:", e);
+      }
+    }
+
+    function changeTvSymbol(symbol, btn) {
+      const btns = document.querySelectorAll('.tv-sym-btn');
+      btns.forEach(b => {
+        b.className = 'tv-sym-btn px-3 py-1 rounded-lg text-slate-600 hover:text-slate-900 cursor-pointer';
+      });
+      if (btn) {
+        btn.className = 'tv-sym-btn px-3 py-1 rounded-lg bg-white text-sky-700 font-extrabold shadow-sm border border-slate-200 cursor-pointer';
+      }
+      initTradingViewChart(symbol);
+    }
+
+    function toggleTheme() {
+      const htmlEl = document.documentElement;
+      const isCurrentlyDark = htmlEl.classList.contains('dark');
+      const newTheme = isCurrentlyDark ? 'light' : 'dark';
+      htmlEl.classList.remove('dark', 'light');
+      htmlEl.classList.add(newTheme);
+      
+      const icon = document.getElementById('theme-icon');
+      const label = document.getElementById('theme-label');
+      if (icon) icon.textContent = newTheme === 'light' ? '☀️' : '🌙';
+      if (label) label.textContent = newTheme === 'light' ? 'ธีมสีขาว' : 'ธีมมืด';
+      
+      localStorage.setItem('antigravity_theme', newTheme);
+      initTradingViewChart(currentTvSymbol);
+    }
+
+    // Auto load TV on init
+    const origInit = window.onload;
+    window.onload = function() {
+      if (origInit) origInit();
+      initTradingViewChart('BINANCE:BTCUSDT');
+    };
+  </script>
+    
 </body>
 </html>
