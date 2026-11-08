@@ -191,13 +191,13 @@
           </div>
         </div>
 
-        <!-- หมวด 5: การพัฒนา (10) -->
-        <div id="cat-pod-5" class="flex items-center gap-1 bg-slate-900/90 p-1 rounded-2xl border border-pink-500/30 shrink-0 shadow-sm transition-all duration-200">
-          <button onclick="toggleCategory(5, 10)" id="cat-btn-5" title="คลิกเพื่อย่อหุบ/ขยายหมวด 5" class="text-[10px] font-bold text-pink-300 bg-pink-950/90 hover:bg-pink-900/80 px-2.5 py-1.5 rounded-xl border border-pink-500/40 whitespace-nowrap cursor-pointer transition flex items-center gap-1.5">
-            <span>🔄</span> <span>5. การพัฒนา</span>
-            <span id="cat-arrow-5" class="text-[8px] font-mono text-pink-400/90">▼</span>
+        <!-- หมวด 4: การพัฒนา (10) -->
+        <div id="cat-pod-4" class="flex items-center gap-1 bg-slate-900/90 p-1 rounded-2xl border border-pink-500/30 shrink-0 shadow-sm transition-all duration-200">
+          <button onclick="toggleCategory(4, 10)" id="cat-btn-4" title="คลิกเพื่อย่อหุบ/ขยายหมวด 4" class="text-[10px] font-bold text-pink-300 bg-pink-950/90 hover:bg-pink-900/80 px-2.5 py-1.5 rounded-xl border border-pink-500/40 whitespace-nowrap cursor-pointer transition flex items-center gap-1.5">
+            <span>🔄</span> <span>4. การพัฒนา</span>
+            <span id="cat-arrow-4" class="text-[8px] font-mono text-pink-400/90">▼</span>
           </button>
-          <div id="cat-items-5" class="flex items-center gap-1 transition-all duration-200">
+          <div id="cat-items-4" class="flex items-center gap-1 transition-all duration-200">
             <button onclick="selectPillar(10)" id="tab-p10" class="pillar-tab px-2 py-1.5 rounded-xl border border-slate-800 bg-slate-900/80 text-slate-400 hover:text-white whitespace-nowrap flex items-center gap-1">
               <span class="w-4 h-4 rounded bg-pink-500/20 text-pink-300 font-mono font-bold flex items-center justify-center text-[9px]">10</span>
               <span>🔁 Feedback</span>
@@ -1227,66 +1227,93 @@
           <div>
             <div class="flex items-center gap-2">
               <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30">STAGE 3</span>
-              <h2 class="text-base sm:text-lg font-extrabold text-white">Strategy Development Agent (พัฒนากฎเข้าออก Indicator & โค้ด C# cBot)</h2>
+              <h2 class="text-base sm:text-lg font-extrabold text-white">Strategy DSL & Verified C# Compiler (สเปกกลยุทธ์แบบมีกรอบ & คอมไพเลอร์กันหลุด)</h2>
             </div>
-            <p class="text-xs text-slate-400">Quant Worker แปลงตรรกะจากสมมติฐานเป็นโค้ด C# มาตรฐานสถาบัน พร้อมตรวจสอบความปลอดภัยของโค้ดแบบ AST</p>
+            <p class="text-xs text-slate-400">เปลี่ยนจากการให้ AI เขียนโค้ดตามใจชอบ (Hallucination) เป็นการเขียนผ่าน <strong>Declarative DSL (YAML)</strong> พร้อมตัวตรวจ Lookahead Bias และคอมไพล์เป็น C# cBot มาตรฐานสถาบัน</p>
           </div>
         </div>
-        <span class="px-3 py-1 rounded-xl bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-xs font-mono font-bold">
-          BUILD 0 ERRORS · ITERATION #2
-        </span>
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1 rounded-xl bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-xs font-mono font-bold">
+            DSL SCHEMA v1.0 · AST VERIFIED
+          </span>
+        </div>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <!-- Rules Summary -->
-        <div class="space-y-3">
-          <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-2 text-xs">
-            <div class="font-bold text-amber-400 flex items-center gap-1.5">
-              <span>🎯</span> <span>กฎการเข้าออเดอร์ (Entry Rules)</span>
-            </div>
-            <ul class="text-slate-300 space-y-1 list-disc list-inside leading-relaxed text-[11px]">
-              <li><strong>เวลาทำการ:</strong> 13:00 - 17:00 UTC (New York Session Only)</li>
-              <li><strong>เงื่อนไขหลัก:</strong> Anchored VWAP Stretch ≥ 4.2 SD + จุดกลับตัว 15 แท่ง</li>
-              <li><strong>News Void Gate:</strong> ขนาดแท่งเทียนปัจจุบันต้องไม่เกิน 2.0x ATR (กรองข่าวแรง)</li>
-            </ul>
+      <!-- DSL vs Compiled C# Tabs -->
+      <div class="space-y-3">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+          <div class="flex items-center gap-2 text-xs font-mono">
+            <button onclick="switchDslTab('dsl')" id="btn-dsl-yaml" class="px-3 py-1 rounded-lg bg-blue-500/20 text-blue-300 border border-blue-500/40 font-bold cursor-pointer">📄 Declarative DSL (YAML Spec)</button>
+            <button onclick="switchDslTab('csharp')" id="btn-dsl-cs" class="px-3 py-1 rounded-lg bg-slate-900 text-slate-400 hover:text-white border border-slate-800 cursor-pointer">⚡ Compiled C# cBot Robot</button>
+            <button onclick="switchDslTab('rules')" id="btn-dsl-rules" class="px-3 py-1 rounded-lg bg-slate-900 text-slate-400 hover:text-white border border-slate-800 cursor-pointer">🛡️ Gating & Bias Checks</button>
           </div>
-
-          <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-2 text-xs">
-            <div class="font-bold text-emerald-400 flex items-center gap-1.5">
-              <span>🏁</span> <span>กฎการปิดออเดอร์ (Exit Rules)</span>
-            </div>
-            <ul class="text-slate-300 space-y-1 list-disc list-inside leading-relaxed text-[11px]">
-              <li><strong>จุดทำกำไร (TP):</strong> Equilibrium Session VWAP Touch (กลับเข้าค่าเฉลี่ยสถาบัน)</li>
-              <li><strong>จุดตัดขาดทุน (SL):</strong> Hard Stop Loss ที่ 2.0x ATR ล็อกความเสี่ยง ≤ 0.70% ทุน</li>
-              <li><strong>Time Stop:</strong> ปิดทันทีเมื่อถือเกิน 60 นาที (ป้องกันเงินจม)</li>
-            </ul>
-          </div>
+          <span class="text-[11px] font-mono text-emerald-400">research/strategy_dsl.py</span>
         </div>
 
-        <!-- C# Source & AST Audit -->
-        <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-2 text-xs font-mono">
+        <!-- TAB 1: DSL YAML -->
+        <div id="panel-dsl-yaml" class="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-2 text-xs font-mono">
           <div class="flex items-center justify-between text-slate-400 text-[11px]">
-            <span>File: QuantFundV2Equilibrium.cs</span>
-            <span class="text-emerald-400 font-bold">Static Audit: PASSED</span>
+            <span>Spec: H1 Session Seasonality & Trend Alpha (No Sub-second DOM)</span>
+            <span class="text-cyan-300 font-bold">Schema: Passed</span>
           </div>
-          <pre class="bg-black/60 p-3 rounded-lg text-emerald-300/90 text-[11px] overflow-x-auto leading-relaxed border border-slate-800">
+          <pre class="bg-black/60 p-3 rounded-lg text-cyan-300 text-[11px] overflow-x-auto leading-relaxed border border-slate-800 max-h-[220px]">
+strategy_id: ALPHA-SESSION-H1-001
+name: NY Auction Equilibrium & Session Trend
+universe: [XAUUSD, BTCUSD]
+timeframe: H1
+horizon: 24h
+warmup_bars: 50
+entry_rules:
+  long:
+    condition: "bars.Last(1).Close > donchian.Upper(20) and rsi(14) > 52 and session in ['LONDON', 'NEW_YORK']"
+  short:
+    condition: "bars.Last(1).Close < donchian.Lower(20) and rsi(14) < 48 and session in ['LONDON', 'NEW_YORK']"
+risk_rules:
+  stop_loss_mode: ATR
+  stop_loss_mult: 2.0
+  max_slippage_budget_pips: 0.8
+  max_spread_allowed: 0.25
+  kelly_fraction_cap: 0.007</pre>
+        </div>
+
+        <!-- TAB 2: COMPILED C# -->
+        <div id="panel-dsl-cs" class="hidden p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-2 text-xs font-mono">
+          <div class="flex items-center justify-between text-slate-400 text-[11px]">
+            <span>Target: cTrader Automate C# Robot (.NET 6 / 8)</span>
+            <span class="text-emerald-400 font-bold">AST Static Audit: 0 Errors</span>
+          </div>
+          <pre class="bg-black/60 p-3 rounded-lg text-emerald-300/90 text-[11px] overflow-x-auto leading-relaxed border border-slate-800 max-h-[220px]">
 [Robot(TimeZone = TimeZones.UTC, AccessRights = AccessRights.None)]
-public class QuantFundV2Equilibrium : Robot {
-    [Parameter("VWAP SD Threshold", DefaultValue = 4.2)]
-    public double SdThresh { get; set; }
+public class AlphaSessionH1Bot : Robot {
+    [Parameter("ATR Period", DefaultValue = 14)] public int AtrPeriod { get; set; }
+    [Parameter("ATR Multiplier", DefaultValue = 2.0)] public double AtrMult { get; set; }
     
-    // Fail-Closed Hard Stop Loss override
-    public override double? StopDistance => 2.0 * CurrentAtr;
+    // Fail-Closed Hard Stop Loss override (Zero Unhedged Leaks)
+    public override double? StopDistance => AtrMult * CurrentAtr;
     
     protected override void OnBarClosed() {
-        // Enforce .Last(1) to guarantee ZERO lookahead bias
-        var closedBar = Bars.Last(1);
-        if (IsNewsSpike(closedBar)) return;
-        ExecuteEquilibriumLogic();
+        // Enforce .Last(1) to strictly eliminate Lookahead Bias
+        var lastBar = Bars.Last(1);
+        if (IsHighNewsSpike(lastBar)) return;
+        if (CurrentSpreadPips > 0.25) return; // Calibrated Spread Gate
+        ExecuteSignal(lastBar);
     }
 }</pre>
-          <div class="text-[10px] text-slate-500 font-sans">
-            ✓ ล็อก StopDistance ในโค้ด · ✓ ใช้เฉพาะแท่งปิด .Last(1) ปลอดการแอบดูอนาคต 100%
+        </div>
+
+        <!-- TAB 3: GATING RULES -->
+        <div id="panel-dsl-rules" class="hidden grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+          <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+            <div class="text-amber-400 font-bold">1. Zero Lookahead Bias</div>
+            <p class="text-slate-300 text-[11px]">ห้ามใช้ `Bars.Last(0)` หรือ `Bars.Close` ปัจจุบันเด็ดขาด อนุญาตเฉพาะแท่งปิดแล้ว `Bars.Last(1)`</p>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+            <div class="text-teal-400 font-bold">2. Calibrated Cost Gating</div>
+            <p class="text-slate-300 text-[11px]">สเปรดและ Slippage ต้องไม่เกินงบประมาณที่คำนวณได้จริงจาก Pepperstone Live Fills</p>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+            <div class="text-rose-400 font-bold">3. Fail-Closed Stop Loss</div>
+            <p class="text-slate-300 text-[11px]">ล็อก Hard Stop ทันทีที่ส่งออเดอร์ ห้ามปล่อยลอยหรือใช้วิธีหวังพึ่งสัญญาณออกฝั่งตรงข้าม</p>
           </div>
         </div>
       </div>
@@ -1417,47 +1444,73 @@ public class QuantFundV2Equilibrium : Robot {
           <div>
             <div class="flex items-center gap-2">
               <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-teal-500/20 text-teal-300 border border-teal-500/30">STAGE 5</span>
-              <h2 class="text-base sm:text-lg font-extrabold text-white">Quant & Mathematics Agent (คำนวณสถิติ ความน่าจะเป็น Expectancy & Sharpe)</h2>
+              <h2 class="text-base sm:text-lg font-extrabold text-white">Quant Math & Calibrated Cost Model (โมเดลต้นทุนคำนวณจริง & พิสูจน์ทางสถิติ)</h2>
             </div>
-            <p class="text-xs text-slate-400">คำนวณด้วยสมการ Python Deterministic ล้วน ปราศจากการคาดเดา เพื่อพิสูจน์ความได้เปรียบเชิงสถิติ (Mathematical Edge)</p>
+            <p class="text-xs text-slate-400">แทนที่ค่าธรรมเนียมสมมุติด้วย <strong>การแจกแจงสถิติต้นทุนจริง</strong> (Spread, Slippage, Latency) จาก cTrader พร้อมย้ายกรอบเวลาจาก DOM Scalping สู่ H1–1D</p>
           </div>
         </div>
-        <span class="px-3 py-1 rounded-xl bg-teal-500/20 text-teal-300 border border-teal-500/30 text-xs font-mono font-bold">
-          OOS SHARPE: 0.72 · PF: 1.37
-        </span>
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1 rounded-xl bg-rose-500/20 text-rose-300 border border-rose-500/30 text-xs font-mono font-bold">
+            EMPIRICAL LATENCY: ~600ms ➔ PIVOT TO H1/1D
+          </span>
+        </div>
       </div>
 
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 text-center">
-        <div class="p-3 rounded-xl bg-slate-950 border border-slate-800">
-          <div class="text-[11px] text-slate-400">กำไรสุทธิ 5 ปี</div>
-          <div class="text-lg font-extrabold text-emerald-400 font-mono mt-1">+$7.73</div>
-          <div class="text-[10px] text-slate-500">1oz: +$61.63</div>
+      <!-- Real Calibrated Costs from Fills -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 text-xs font-mono">
+        <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+          <div class="flex justify-between items-center text-amber-400 font-bold">
+            <span>🪙 BTCUSD (44 Trades Audited)</span>
+            <span class="text-[10px] bg-amber-500/20 px-2 py-0.5 rounded">Pepperstone</span>
+          </div>
+          <div class="space-y-1 text-slate-300 text-[11px]">
+            <div class="flex justify-between"><span>Spread Median:</span><span class="text-white font-bold">$24.25</span></div>
+            <div class="flex justify-between"><span>Slippage P95:</span><span class="text-rose-400 font-bold">$24.53</span></div>
+            <div class="flex justify-between"><span>Latency Median:</span><span class="text-cyan-300 font-bold">578.5 ms</span></div>
+          </div>
+          <div class="text-[10px] text-slate-500 pt-1 border-t border-slate-800">ต้นทุนขั้นต่ำ ~$48.78 ต่อการเข้าเทรด 1 BTC</div>
         </div>
-        <div class="p-3 rounded-xl bg-slate-950 border border-slate-800">
-          <div class="text-[11px] text-slate-400">Profit Factor (5Y)</div>
-          <div class="text-lg font-extrabold text-emerald-400 font-mono mt-1">1.16</div>
-          <div class="text-[10px] text-emerald-400">OOS: 1.37</div>
+
+        <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+          <div class="flex justify-between items-center text-blue-400 font-bold">
+            <span>🔷 ETHUSD (12 Trades Audited)</span>
+            <span class="text-[10px] bg-blue-500/20 px-2 py-0.5 rounded">Pepperstone</span>
+          </div>
+          <div class="space-y-1 text-slate-300 text-[11px]">
+            <div class="flex justify-between"><span>Spread Median:</span><span class="text-white font-bold">$2.00</span></div>
+            <div class="flex justify-between"><span>Slippage P95:</span><span class="text-rose-400 font-bold">$0.13</span></div>
+            <div class="flex justify-between"><span>Latency Median:</span><span class="text-cyan-300 font-bold">719.0 ms</span></div>
+          </div>
+          <div class="text-[10px] text-slate-500 pt-1 border-t border-slate-800">Latency สูงสุดในพอร์ต ต้องใช้กรอบเวลา H1+</div>
         </div>
-        <div class="p-3 rounded-xl bg-slate-950 border border-slate-800">
-          <div class="text-[11px] text-slate-400">Sharpe Ratio</div>
-          <div class="text-lg font-extrabold text-cyan-300 font-mono mt-1">0.61</div>
-          <div class="text-[10px] text-cyan-300">OOS: 0.72</div>
+
+        <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+          <div class="flex justify-between items-center text-yellow-400 font-bold">
+            <span>🏆 XAUUSD (88 Trades Audited)</span>
+            <span class="text-[10px] bg-yellow-500/20 px-2 py-0.5 rounded">Pepperstone</span>
+          </div>
+          <div class="space-y-1 text-slate-300 text-[11px]">
+            <div class="flex justify-between"><span>Spread Median:</span><span class="text-white font-bold">$0.12 (1.2 pips)</span></div>
+            <div class="flex justify-between"><span>Slippage P95:</span><span class="text-rose-400 font-bold">$0.357</span></div>
+            <div class="flex justify-between"><span>Latency Median:</span><span class="text-cyan-300 font-bold">563.0 ms</span></div>
+          </div>
+          <div class="text-[10px] text-slate-500 pt-1 border-t border-slate-800">สเปรดต่ำสุด เหมาะสำหรับ Daily & Session Trend</div>
         </div>
-        <div class="p-3 rounded-xl bg-slate-950 border border-slate-800">
-          <div class="text-[11px] text-slate-400">Win Rate</div>
-          <div class="text-lg font-extrabold text-white font-mono mt-1">34.86%</div>
-          <div class="text-[10px] text-slate-400">RR 2.5:1 Edge</div>
+      </div>
+
+      <!-- Why Horizon Shift Warning Card -->
+      <div class="p-4 rounded-xl bg-slate-950 border border-cyan-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+        <div class="space-y-1">
+          <div class="text-white font-extrabold flex items-center gap-2">
+            <span>🧭 การเปลี่ยนผ่านเชิงยุทธศาสตร์: ละทิ้ง Sub-second DOM สู่ H1–1D Trend & Session Seasonality</span>
+          </div>
+          <p class="text-slate-300 text-[11px] leading-relaxed max-w-4xl">
+            ผลวัด Latency จริงยืนยันว่าการส่งคำสั่งผ่าน Retail API มีความล่าช้า 560–720 ms ซึ่งทำให้กลยุทธ์กินช่องราคาเศษวินาที (DOM Scalping) ล้มเหลวทางคณิตศาสตร์ทันทีเมื่อเจอกับ Slippage ระบบจึงมุ่งเน้น <strong>London/NY Open Trend & Volatility Breakout บน H1–1D</strong> ที่ความล่าช้าเศษวินาทีไม่มีผลกระทบต่อนัยสำคัญทางสถิติ
+          </p>
         </div>
-        <div class="p-3 rounded-xl bg-slate-950 border border-slate-800">
-          <div class="text-[11px] text-slate-400">Max Drawdown</div>
-          <div class="text-lg font-extrabold text-amber-400 font-mono mt-1">13.84%</div>
-          <div class="text-[10px] text-emerald-400">OOS: 4.34%</div>
-        </div>
-        <div class="p-3 rounded-xl bg-slate-950 border border-slate-800">
-          <div class="text-[11px] text-slate-400">โอกาสล้างพอร์ต (Ruin)</div>
-          <div class="text-lg font-extrabold text-emerald-400 font-mono mt-1">0.00%</div>
-          <div class="text-[10px] text-slate-500">Kelly Sizing &lt; 0.7%</div>
-        </div>
+        <span class="px-3 py-1.5 rounded-xl bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-mono font-bold whitespace-nowrap text-[11px]">
+          HORIZON: H1 to 1D
+        </span>
       </div>
     </section>
 
@@ -1477,78 +1530,115 @@ public class QuantFundV2Equilibrium : Robot {
           </div>
         </div>
         <span class="px-3 py-1 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-mono font-bold">
-          9 / 9 GATES PASSED
+          GATING: 2 / 6 PASSED · N=72 UNDERPOWERED
         </span>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
-        <!-- 9 Checklist Items -->
-        <div class="lg:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
-          <div class="p-2.5 rounded-xl bg-slate-950 border border-emerald-500/30">
-            <div class="flex justify-between font-mono text-[10px] text-emerald-400"><span>CHK-01</span><span>✓ TRUE</span></div>
-            <div class="font-bold text-white mt-1">Hard Stop Loss</div>
-            <div class="text-[10px] text-slate-400 mt-0.5">มี StopDistance ล็อกใน C#</div>
+        <!-- 6 Real Mathematical Validation Gates & Honest Gating -->
+        <div class="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
+          
+          <!-- GATE 1: DSR -->
+          <div class="p-3.5 rounded-xl bg-slate-950 border border-rose-500/40 space-y-1.5 ring-1 ring-rose-500/20">
+            <div class="flex justify-between items-center text-rose-400 font-bold">
+              <span>1. Deflated Sharpe Ratio (DSR)</span>
+              <span class="px-2 py-0.5 rounded text-[10px] bg-rose-500/20">✗ FAIL (p = 0.9638)</span>
+            </div>
+            <div class="text-slate-300 text-[11px] space-y-0.5 font-sans">
+              <div>สูตร: Bailey & López de Prado (2014) Eq 8 (หักล้าง Multiple Testing N=50)</div>
+              <div>สถิติจริง: <strong class="text-white font-mono">DSR Stat 0.0362 (p = 0.9638)</strong></div>
+              <div class="text-rose-400 text-[10px]">ไม่สามารถปฏิเสธ H0: Edge=0 (ต้อง p &lt; 0.05)</div>
+            </div>
           </div>
-          <div class="p-2.5 rounded-xl bg-slate-950 border border-emerald-500/30">
-            <div class="flex justify-between font-mono text-[10px] text-emerald-400"><span>CHK-02</span><span>✓ TRUE</span></div>
-            <div class="font-bold text-white mt-1">Risk / Trade ≤ 2%</div>
-            <div class="text-[10px] text-slate-400 mt-0.5">จริง 0.70% (ผ่านเกณฑ์)</div>
+
+          <!-- GATE 2: PBO via CSCV -->
+          <div class="p-3.5 rounded-xl bg-slate-950 border border-rose-500/40 space-y-1.5 ring-1 ring-rose-500/20">
+            <div class="flex justify-between items-center text-rose-400 font-bold">
+              <span>2. Overfitting Prob (PBO via CSCV)</span>
+              <span class="px-2 py-0.5 rounded text-[10px] bg-rose-500/20">✗ FAIL (PBO 60%)</span>
+            </div>
+            <div class="text-slate-300 text-[11px] space-y-0.5 font-sans">
+              <div>สูตร: Combinatorial Symmetric Cross-Val S=8 slices (70 splits)</div>
+              <div>ค่า PBO จริง: <strong class="text-rose-400 font-mono">60.0%</strong> (เกณฑ์ต้อง &lt; 20%)</div>
+              <div class="text-rose-400 text-[10px]">กลยุทธ์ที่ชนะในอดีตมีโอกาส 60% ที่จะแพ้เมื่อเทรดจริง</div>
+            </div>
           </div>
-          <div class="p-2.5 rounded-xl bg-slate-950 border border-emerald-500/30">
-            <div class="flex justify-between font-mono text-[10px] text-emerald-400"><span>CHK-03</span><span>✓ TRUE</span></div>
-            <div class="font-bold text-white mt-1">Max DD ≤ 18%</div>
-            <div class="text-[10px] text-slate-400 mt-0.5">จริง 13.84% (OOS 4.34%)</div>
+
+          <!-- GATE 3: SPRT -->
+          <div class="p-3.5 rounded-xl bg-slate-950 border border-amber-500/40 space-y-1.5 ring-1 ring-amber-500/20">
+            <div class="flex justify-between items-center text-amber-400 font-bold">
+              <span>3. Wald's SPRT (Sequential Ratio)</span>
+              <span class="px-2 py-0.5 rounded text-[10px] bg-amber-500/20 font-bold">⏳ COLLECT MORE</span>
+            </div>
+            <div class="text-slate-300 text-[11px] space-y-0.5 font-sans">
+              <div>สมมติฐาน: H0 (Edge=0) vs H1 (Edge=0.25)</div>
+              <div>Log-Likelihood Ratio: <strong class="text-amber-300 font-mono">-1.152</strong> (Bound: -2.25 ถึง +2.89)</div>
+              <div class="text-amber-300 text-[10px]">N=72 ยังอยู่ตรงกลาง ต้องสะสมเทรดเพิ่มจนถึง 500 ไม้</div>
+            </div>
           </div>
-          <div class="p-2.5 rounded-xl bg-slate-950 border border-emerald-500/30">
-            <div class="flex justify-between font-mono text-[10px] text-emerald-400"><span>CHK-04</span><span>✓ TRUE</span></div>
-            <div class="font-bold text-white mt-1">Profit Factor ≥ 1.15</div>
-            <div class="text-[10px] text-slate-400 mt-0.5">จริง 1.16 (Full Period)</div>
+
+          <!-- GATE 4: CUSUM Drift Watchdog -->
+          <div class="p-3.5 rounded-xl bg-slate-950 border border-emerald-500/40 space-y-1.5">
+            <div class="flex justify-between items-center text-emerald-400 font-bold">
+              <span>4. Page's CUSUM Negative Drift</span>
+              <span class="px-2 py-0.5 rounded text-[10px] bg-emerald-500/20">✓ HEALTHY</span>
+            </div>
+            <div class="text-slate-300 text-[11px] space-y-0.5 font-sans">
+              <div>ตรวจจับ Decay สะสม: <strong class="text-emerald-400 font-mono">1.54σ</strong> (เกณฑ์เตือน 2.0σ, ปลด 3.0σ)</div>
+              <div>สถานะปัจจุบัน: ยังไม่เข้าข่าย Degradation รุนแรง</div>
+              <div class="text-slate-400 text-[10px]">เฝ้าระวังต่อเนื่องทุกไม้ที่บันทึกจาก cTrader</div>
+            </div>
           </div>
-          <div class="p-2.5 rounded-xl bg-slate-950 border border-emerald-500/30">
-            <div class="flex justify-between font-mono text-[10px] text-emerald-400"><span>CHK-05</span><span>✓ TRUE</span></div>
-            <div class="font-bold text-white mt-1">OOS Profitable</div>
-            <div class="text-[10px] text-slate-400 mt-0.5">OOS PF 1.37 (+$5.11)</div>
+
+          <!-- GATE 5: Monte Carlo Permutation -->
+          <div class="p-3.5 rounded-xl bg-slate-950 border border-rose-500/40 space-y-1.5 ring-1 ring-rose-500/20">
+            <div class="flex justify-between items-center text-rose-400 font-bold">
+              <span>5. Monte Carlo (1,000 Shuffles)</span>
+              <span class="px-2 py-0.5 rounded text-[10px] bg-rose-500/20">✗ FAIL (p = 0.627)</span>
+            </div>
+            <div class="text-slate-300 text-[11px] space-y-0.5 font-sans">
+              <div>ชนะสัญญาณ Noise: <strong class="text-white font-mono">373 / 1000 รอบ (37.3%)</strong></div>
+              <div>ค่า p-value: <strong class="text-rose-400 font-mono">0.627</strong> (เกณฑ์ต้อง &lt; 0.05)</div>
+              <div class="text-rose-400 text-[10px]">ผลลัพธ์ยังไม่แตกต่างจากการสุ่มเหรียญหัวก้อย</div>
+            </div>
           </div>
-          <div class="p-2.5 rounded-xl bg-slate-950 border border-emerald-500/30">
-            <div class="flex justify-between font-mono text-[10px] text-emerald-400"><span>CHK-06</span><span>✓ TRUE</span></div>
-            <div class="font-bold text-white mt-1">Walk-Forward ≥ 60%</div>
-            <div class="text-[10px] text-slate-400 mt-0.5">จริง 80% (ชนะ 4/5 ปี)</div>
+
+          <!-- GATE 6: Calibrated Cost Stress -->
+          <div class="p-3.5 rounded-xl bg-slate-950 border border-emerald-500/40 space-y-1.5">
+            <div class="flex justify-between items-center text-emerald-400 font-bold">
+              <span>6. Cost Stress (Spread & Slip)</span>
+              <span class="px-2 py-0.5 rounded text-[10px] bg-emerald-500/20">✓ H1 PASSED</span>
+            </div>
+            <div class="text-slate-300 text-[11px] space-y-0.5 font-sans">
+              <div>ความทนทานต่อต้นทุน: Sub-second DOM = ✗ ตกทันที</div>
+              <div>H1 Trend Target &gt; 2.5x Cost: <strong class="text-emerald-400">ผ่านเกณฑ์ความทนทาน</strong></div>
+              <div class="text-emerald-300 text-[10px]">ยืนยันการใช้กรอบเวลา H1–1D ป้องกัน Decay</div>
+            </div>
           </div>
-          <div class="p-2.5 rounded-xl bg-slate-950 border border-emerald-500/30">
-            <div class="flex justify-between font-mono text-[10px] text-emerald-400"><span>CHK-07</span><span>✓ TRUE</span></div>
-            <div class="font-bold text-white mt-1">Monte Carlo 1,000</div>
-            <div class="text-[10px] text-slate-400 mt-0.5">Ruin 0.0% · 95% DD 20.69%</div>
-          </div>
-          <div class="p-2.5 rounded-xl bg-slate-950 border border-emerald-500/30">
-            <div class="flex justify-between font-mono text-[10px] text-emerald-400"><span>CHK-08</span><span>✓ TRUE</span></div>
-            <div class="font-bold text-white mt-1">No Lookahead Bias</div>
-            <div class="text-[10px] text-slate-400 mt-0.5">ใช้เฉพาะแท่งปิด .Last(1)</div>
-          </div>
-          <div class="p-2.5 rounded-xl bg-slate-950 border border-emerald-500/30">
-            <div class="flex justify-between font-mono text-[10px] text-emerald-400"><span>CHK-09</span><span>✓ TRUE</span></div>
-            <div class="font-bold text-white mt-1">AI Security Audit</div>
-            <div class="text-[10px] text-slate-400 mt-0.5">ไม่มีมาร์ติงเกล / ไร้บั๊กแฝง</div>
-          </div>
+
         </div>
 
-        <!-- Golden HITL Approval Card -->
-        <div class="lg:col-span-4 rounded-xl border-2 border-amber-500/70 bg-amber-950/20 p-4 flex flex-col justify-between glow-gold">
-          <div>
+        <!-- Golden HITL Approval Card (Honest State) -->
+        <div class="lg:col-span-4 rounded-xl border-2 border-amber-500/50 bg-amber-950/20 p-4 flex flex-col justify-between">
+          <div class="space-y-3">
             <div class="flex items-center justify-between mb-1">
               <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-amber-400 text-slate-950 uppercase">HUMAN GATEKEEPER</span>
-              <span class="text-xs font-mono text-amber-300">Stage 1 Waiting</span>
+              <span class="text-xs font-mono text-rose-400 font-bold">🔒 LOCKED (CRITICALLY UNDERPOWERED)</span>
             </div>
-            <div class="font-extrabold text-sm text-white mt-2">อนุมัติสู่ Paper Trading</div>
-            <p class="text-xs text-slate-300 mt-1 leading-relaxed">
-              ผ่าน 9/9 ข้อครบถ้วนแล้ว กฎสถาบันไม่อนุญาตให้ AI นำขึ้นรันเอง ต้องให้มนุษย์กดอนุมัติก่อน
+            <div class="font-extrabold text-sm text-white">ระบบล็อกไม่อนุมัติเพิ่มทุน (Fail-Closed)</div>
+            <p class="text-xs text-slate-300 leading-relaxed font-sans">
+              ตามหลักคณิตศาสตร์สถาบัน (Bailey & López de Prado 2014): สถิติปัจจุบัน <strong>N = 72 ไม้</strong> มีอำนาจการทดสอบเพียง <strong>14.4%</strong> (ต้องการอย่างน้อย 500–1,200 ไม้) และผล DSR (p=0.9638), PBO (60%) ยังไม่ผ่านเกณฑ์
             </p>
+            <div class="p-2.5 rounded-lg bg-black/50 border border-amber-500/30 text-[11px] font-mono text-amber-300">
+              ⚡ คำแนะนำของระบบ: ให้บอทรันเก็บข้อมูลด้วยขนาด 0.01 Lot ไปเรื่อยๆ ห้ามเพิ่มขนาดสัญญาจนกว่าสถิติจะครบ 500 ไม้
+            </div>
           </div>
           <div class="pt-3 border-t border-amber-500/30 flex gap-2">
-            <button onclick="approveStage1()" class="flex-1 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-extrabold transition cursor-pointer">
-              ✅ อนุมัติ Stage 1
+            <button disabled class="flex-1 py-2 rounded-xl bg-slate-800 text-slate-500 text-xs font-bold cursor-not-allowed">
+              🔒 ล็อกการอนุมัติ (รอข้อมูลครบ 500 ไม้)
             </button>
-            <button onclick="copyCliApprove()" class="px-3 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-bold transition cursor-pointer" title="คัดลอกคำสั่ง CLI">
-              💻
+            <button onclick="copyCliAuditStatus()" class="px-3 py-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white text-xs font-bold transition cursor-pointer" title="คัดลอกรายงานผลตรวจสถิติ">
+              📋
             </button>
           </div>
         </div>
@@ -2118,7 +2208,7 @@ public class QuantFundV2Equilibrium : Robot {
       1: 1, 2: 1, 3: 1,
       4: 2, 5: 2, 6: 2, 7: 2,
       8: 3, 9: 3,
-      10: 5
+      10: 4
     };
 
     function toggleCategory(catNum, defaultPillar) {

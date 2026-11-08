@@ -404,6 +404,7 @@ def update_live_status():
 
 last_git_push = 0
 last_flywheel_run = 0
+last_committed_trade_count = -1
 
 def maybe_run_flywheel_cycle():
     global last_flywheel_run
@@ -418,34 +419,49 @@ def maybe_run_flywheel_cycle():
     except Exception as e:
         print(f"Error executing flywheel cycle: {e}")
 
-def maybe_git_push():
-    global last_git_push
+def maybe_git_push(current_trade_count=None):
+    global last_git_push, last_committed_trade_count
     now = time.time()
-    # Auto push every 5 minutes (300s) to keep GitHub Pages fresh without spamming builds
-    if now - last_git_push < 300:
+    # Anti-spam commit rule (per PDF Blueprint item 2.3):
+    # Only push if actual new closed trades are recorded. Do not spam commits every 300s.
+    if current_trade_count is not None:
+        if last_committed_trade_count != -1 and current_trade_count == last_committed_trade_count:
+            return  # No new trades; keep sync local-only
+        if last_committed_trade_count == -1:
+            last_committed_trade_count = current_trade_count
+            return  # Baseline established; don't trigger immediate commit
+    
+    if now - last_git_push < 600:  # Minimum 10 minutes between pushes even with new trades
         return
     last_git_push = now
+
     try:
         res = subprocess.run(['git', 'status', '--porcelain', 'docs/data/'], cwd=REPO_ROOT, capture_output=True, text=True)
         if res.stdout.strip():
             push_test = subprocess.run(['git', 'push', '--dry-run', 'origin', 'main'], cwd=REPO_ROOT, capture_output=True, text=True)
             if push_test.returncode == 0:
-                subprocess.run(['git', 'add', 'docs/data/live_status.json', 'docs/data/flywheel_cycles.json'], cwd=REPO_ROOT, check=False)
-                msg = f"chore(live): auto-sync bot fleet & flywheel cycles ({datetime.now().strftime('%H:%M:%S')})"
+                subprocess.run(['git', 'add', 'docs/data/live_status.json', 'docs/data/flywheel_cycles.json', 'docs/data/truth_guard.json'], cwd=REPO_ROOT, check=False)
+                msg = f"chore(live): sync verified trade telemetry (N={current_trade_count})"
                 subprocess.run(['git', 'commit', '-m', msg], cwd=REPO_ROOT, check=False)
                 subprocess.run(['git', 'push', 'origin', 'main'], cwd=REPO_ROOT, check=False)
-                print(f"[{datetime.now().strftime('%H:%M:%S')}] Pushed live status & flywheel to GitHub Pages successfully!")
+                if current_trade_count is not None:
+                    last_committed_trade_count = current_trade_count
+                print(f"[{datetime.now().strftime('%H:%M:%S')}] Pushed verified telemetry to GitHub Pages (N={current_trade_count})")
     except Exception as e:
         pass
 
 if __name__ == '__main__':
     if '--daemon' in sys.argv:
-        print("Starting Enhanced Live Status Sync Daemon with PnL Telemetry...")
+        print("Starting Enhanced Live Status Sync Daemon (Commit-Spam Throttled)...")
         while True:
             try:
                 maybe_run_flywheel_cycle()
                 update_live_status()
-                maybe_git_push()
+                btc_trades = get_trades('BTCUSD')
+                eth_trades = get_trades('ETHUSD')
+                xau_trades = get_trades('XAUUSD')
+                closed_count = len([t for t in btc_trades + eth_trades + xau_trades if t.get('event') == 'CLOSE'])
+                maybe_git_push(current_trade_count=closed_count)
             except Exception as e:
                 print(f"Error in sync daemon: {e}")
             time.sleep(3)
