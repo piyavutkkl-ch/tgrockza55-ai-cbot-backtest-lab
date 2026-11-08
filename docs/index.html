@@ -212,9 +212,9 @@
         <div class="flex items-center gap-1.5 sm:gap-2 bg-gradient-to-r from-cyan-950/90 via-slate-900/90 to-purple-950/90 px-2.5 sm:px-3 py-1.5 rounded-xl border border-cyan-500/40 text-xs shadow-sm whitespace-nowrap shrink-0">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping shrink-0"></span>
           <span class="text-slate-300 font-medium whitespace-nowrap hidden sm:inline">ลูปควอนท์:</span>
-          <span id="hdr-flywheel-cycle" class="text-cyan-300 font-extrabold font-mono whitespace-nowrap">วนแล้ว 3 รอบ</span>
+          <span id="hdr-flywheel-cycle" class="text-cyan-300 font-extrabold font-mono whitespace-nowrap">วนแล้ว 1 รอบ</span>
           <span class="text-slate-600">|</span>
-          <span id="hdr-flywheel-step" class="text-emerald-400 font-mono text-[11px] whitespace-nowrap">รอบที่ #4 กำลังรัน</span>
+          <span id="hdr-flywheel-step" class="text-emerald-400 font-mono text-[11px] whitespace-nowrap">รอบที่ #2 กำลังรัน (ยุคข้อมูลสด)</span>
           <span class="text-slate-600 hidden md:inline">|</span>
           <span class="text-slate-400 whitespace-nowrap hidden md:inline">ขั้นตอน:</span>
           <span id="hdr-active-stage" class="text-amber-300 font-extrabold font-mono whitespace-nowrap truncate max-w-[150px] sm:max-w-[200px] md:max-w-[260px]" title="STAGE 1: Data Pipeline">STAGE 1: Data Pipeline</span>
@@ -293,18 +293,20 @@
           <div class="flex items-center gap-3 bg-slate-950 p-3 rounded-2xl border border-cyan-500/40 text-center shadow-lg w-full sm:w-auto justify-center">
             <div class="px-3 border-r border-slate-800">
               <div class="text-[10px] text-slate-400 font-mono uppercase">วนรอบสะสมแล้ว</div>
-              <div class="text-xl sm:text-2xl font-black text-cyan-300 font-mono mt-0.5" id="fw-cycles-badge">2 ครั้ง</div>
+              <div class="text-xl sm:text-2xl font-black text-cyan-300 font-mono mt-0.5" id="fw-cycles-badge">1 ครั้ง</div>
             </div>
             <div class="px-3">
               <div class="text-[10px] text-slate-400 font-mono uppercase">รอบปัจจุบัน</div>
-              <div class="text-xl sm:text-2xl font-black text-emerald-400 font-mono mt-0.5" id="fw-active-badge">#3 RUNNING</div>
+              <div class="text-xl sm:text-2xl font-black text-emerald-400 font-mono mt-0.5" id="fw-active-badge">#2 RUNNING</div>
             </div>
           </div>
           <!-- Interactive Cycle History Pills -->
           <div class="flex items-center gap-1.5 overflow-x-auto max-w-full text-[11px] font-mono" id="fw-cycle-history-pills">
             <span class="text-slate-500 text-[10px]">ดูประวัติรอบ:</span>
-            <button onclick="switchCycleView(2)" id="btn-cycle-2" class="px-2 py-0.5 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold cursor-pointer">รอบ #2 (ล่าสุด)</button>
-            <button onclick="switchCycleView(1)" id="btn-cycle-1" class="px-2 py-0.5 rounded-lg bg-slate-900 text-slate-400 hover:text-white border border-slate-800 cursor-pointer">รอบ #1</button>
+            <button onclick="switchCycleView(1)" id="btn-cycle-1" class="px-2 py-0.5 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold cursor-pointer">รอบ #1 (ข้อมูลสด 100%)</button>
+            <a href="data/archive_historical_cycles_v1.json" target="_blank" class="px-2 py-0.5 rounded-lg bg-slate-900 text-amber-400 hover:text-amber-300 border border-amber-500/30 flex items-center gap-1 cursor-pointer" title="เปิดดูประวัติรอบเดิม 122 รอบที่จัดเก็บเข้าคลังข้อมูลถาวร">
+              <span>🏛️ ฐานข้อมูล 122 รอบเก่า</span>
+            </a>
           </div>
         </div>
       </div>
@@ -321,10 +323,12 @@
             <span id="fw-step1-status" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">✓ COMPLETED</span>
           </div>
           <p id="fw-step1-desc" class="text-slate-300 leading-relaxed text-[11px]">
-            ดึงข้อมูลตลาดสด Tick, DOM Level 2 (25 ชั้น), Bar M1 และประวัติ Deals บันทึกลงคลังข้อมูล
+            บันทึกและประมวลผลข้อมูลสด 28,639 แท่ง M1 (BTC 7,715, ETH 7,654, XAU 6,099) พร้อม L2 DOM 25 ชั้นและ Tick Spreads แท้จริง
           </p>
           <div id="fw-step1-meta" class="p-2 rounded-xl bg-slate-900 border border-slate-800 font-mono text-[10px] text-cyan-400 space-y-0.5">
-            <div>สะสม: <span class="font-bold text-white">26,367 แท่ง M1</span></div>
+            <div>สะสม: <span class="font-bold text-white">28,639 แท่ง M1</span></div>
+            <div>แหล่งข้อมูล: <span class="text-slate-300">%LOCALAPPDATA%\BacktestLab\live (สด 100%)</span></div>
+          </div>
             <div>แหล่งข้อมูล: <span class="text-slate-300">cTrader Open API · Pepperstone</span></div>
           </div>
         </div>
@@ -338,10 +342,12 @@
             <span id="fw-step2-status" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-purple-500/20 text-purple-300 border border-purple-500/40">✓ COMPLETED</span>
           </div>
           <p id="fw-step2-desc" class="text-slate-300 leading-relaxed text-[11px]">
-            วิเคราะห์สัญญาณอัลฟ่า (DOM Absorption, Equilibrium) และลองส่งคำสั่ง Forward Trading 0.01 Lot
+            ทดสอบ 598 รูปแบบบนข้อมูลสดจริง: ค้นพบ BTC DOM Absorption Asia (Win Rate 59.1%, PF 2.01) และ ETH High-Wall London
           </p>
           <div id="fw-step2-meta" class="p-2 rounded-xl bg-slate-900 border border-slate-800 font-mono text-[10px] text-purple-400 space-y-0.5">
-            <div>ออเดอร์ทดสอบ: <span class="font-bold text-white">44 คำสั่ง</span></div>
+            <div>รอบทดสอบ: <span class="font-bold text-white">598 Sweeps (72 Trades)</span></div>
+            <div>เสาหลัก: <span class="text-slate-300">4 เสาหลัก + Smart DOM Exit</span></div>
+          </div>
             <div>การป้องกัน: <span class="text-slate-300">Stealth RAM SL (±5% Jitter)</span></div>
           </div>
         </div>
@@ -355,10 +361,11 @@
             <span id="fw-step3-status" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">✓ COMPLETED</span>
           </div>
           <p id="fw-step3-desc" class="text-slate-300 leading-relaxed text-[11px]">
-            สรุปผลกำไรขาดทุน PnL, Win Rate, ค่าสลิปเพจจริง และบันทึกเข้า Strategy Memory
+            ผลตอบแทนข้อมูลสด: Net PnL +$15.20 USD, Profit Factor 1.90, กำไรจริง 6 จาก 7 วัน (Daily Win Rate 85.7%), BTC กำไร 100% ทุกวัน
           </p>
           <div id="fw-step3-meta" class="p-2 rounded-xl bg-slate-900 border border-slate-800 font-mono text-[10px] text-emerald-400 space-y-0.5">
-            <div>Balance: <span class="font-bold text-white">$78.15 USD</span> · Win Rate: <span class="text-emerald-300">31.9%</span></div>
+            <div>Net PnL: <span class="font-bold text-emerald-300">+$15.20 USD</span> · PF: <span class="text-emerald-300">1.90</span></div>
+            <div>Daily Win Rate: <span class="text-emerald-300 font-bold">85.7% (6/7 วัน)</span> · BTC: <span class="text-white">100%</span></div>
             <div>Latency: <span class="text-slate-300">28.5 ms</span> · Slippage: <span class="text-slate-300">0.08 pips</span></div>
           </div>
         </div>
@@ -372,11 +379,11 @@
             <span id="fw-step4-status" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-pink-500/20 text-pink-300 border border-pink-500/40">✓ APPROVED</span>
           </div>
           <p id="fw-step4-desc" class="text-slate-300 leading-relaxed text-[11px]">
-            สรุปจุดบกพร่องเพื่อเตรียมข้อมูลและปรับกลยุทธ์ใหม่ พร้อมส่งต่อไปเริ่ม Step 1 ของรอบถัดไป
+            จัดเก็บ 122 รอบเก่าเข้าฐานข้อมูลถาวร และเริ่มต้นนับรอบ #1 ใหม่ในยุค Pure Live Microstructure สำเร็จ พร้อมรัน 24/7 Watchdog เข้าสู่รอบ #2
           </p>
           <div id="fw-step4-meta" class="p-2 rounded-xl bg-slate-900 border border-slate-800 font-mono text-[10px] text-pink-400 space-y-0.5">
-            <div>แนวทาง: <span class="font-bold text-white">หลบข่าว High/Extreme (PF 1.08)</span></div>
-            <div>คำสั่งรอบถัดไป: <span class="text-slate-300">วนกลับข้อ 1 พร้อม Spread Guard</span></div>
+            <div>สถานะ: <span class="font-bold text-white">นับรอบ #1 บนข้อมูลสดสำเร็จ</span></div>
+            <div>รอบถัดไป: <span class="text-slate-300">วนรอบ #2 สะสมข้อมูลสดต่อยอด</span></div>
           </div>
         </div>
 
@@ -402,10 +409,10 @@
         <div class="flex items-center gap-2">
           <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
           <span>วงจรอัตโนมัติประมวลผลรอบล่าสุด:</span>
-          <span id="fw-last-completed" class="text-slate-200 font-bold">รอบที่ #1 เสร็จสิ้นสมบูรณ์</span>
+          <span id="fw-last-completed" class="text-slate-200 font-bold">รอบที่ #1 เสร็จสิ้นสมบูรณ์ (ยุคข้อมูลเก็บสด 100% · L2 DOM & Flow)</span>
         </div>
         <div class="flex items-center gap-3">
-          <span>รอบถัดไป: <strong class="text-emerald-400">#4 เตรียมรันข้อมูล cTrader ชุดใหม่</strong></span>
+          <span>รอบถัดไป: <strong class="text-emerald-400">#2 วนรอบประมวลผลข้อมูลสดระลอกใหม่จาก 24/7 Watchdog</strong></span>
         </div>
       </div>
     </div>
@@ -2773,6 +2780,9 @@ public class AlphaSessionH1Bot : Robot {
           const label = isLatest ? `รอบ #${c.cycle_number} (ล่าสุด)` : `รอบ #${c.cycle_number}`;
           htmlPills += `<button onclick="switchCycleView(${c.cycle_number})" id="btn-cycle-${c.cycle_number}" class="${cls}">${label}</button>`;
         });
+        if (fw.archive_reference) {
+          htmlPills += `<a href="data/archive_historical_cycles_v1.json" target="_blank" class="px-2 py-0.5 rounded-lg bg-slate-900 text-amber-400 hover:text-amber-300 border border-amber-500/30 flex items-center gap-1 cursor-pointer" title="เปิดดูฐานข้อมูล 122 รอบเดิมที่จัดเก็บเข้าคลังประวัติศาสตร์">🏛️ ฐานข้อมูล 122 รอบเก่า</a>`;
+        }
         pillsContainer.innerHTML = htmlPills;
       }
 
