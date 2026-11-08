@@ -3,7 +3,7 @@
     "total_cycles_completed": 3,
     "active_cycle": 4,
     "current_step": "STEP_1_DATA_RECORDING",
-    "last_updated": "2026-11-08T05:46:56.835917+00:00",
+    "last_updated": "2026-11-08T05:52:42.768924+00:00",
     "cycles": [
       {
         "cycle_number": 3,
@@ -302,15 +302,45 @@
         "summary": "ได้แนวทางพัฒนาที่ชัดเจน อนุมัติการเข้าสู่รอบถัดไปอัตโนมัติ"
       }
     },
-    "last_updated_local": "08 Nov 2026, 12:46:56 น.",
+    "last_updated_local": "08 Nov 2026, 12:52:42 น.",
     "current_stage_number": 1,
     "current_stage_title": "STAGE 1: Data Pipeline (รวบรวมและตรวจสอบข้อมูล cTrader)",
     "current_stage_desc": "กำลังดึงข้อมูล Tick, DOM Level 2 (25 ชั้น) และแท่ง M1 ของ BTCUSD & ETHUSD เข้าสู่คลังข้อมูล",
-    "next_stage_title": "STAGE 7: Live Execution & Forward Testing"
+    "next_stage_title": "STAGE 7: Live Execution & Forward Testing",
+    "accumulated_learnings": {
+      "total_cycles": 3,
+      "summary_headline": "วนไปแล้ว 3 รอบ: ค้นพบ 4 กฎทองเชิงประจักษ์ที่พลิกผลตอบแทนจากขาดทุนสู่กำไรสถาบัน",
+      "cycle_learnings": [
+        {
+          "cycle_number": 1,
+          "title": "สัจธรรมความผันผวนของข่าว Extreme & ระยะเวลาถือครอง 60m",
+          "discovery": "วิเคราะห์ 1.67 ล้านแท่งพบว่า ข่าว CPI/FOMC/NFP ขยายกรอบราคา 6.3 - 6.65 เท่าจากปกติ การถือออเดอร์สั้น 1 นาทีมักเสียเปรียบค่าสเปรด แต่การถือ 60 นาทีที่ความมั่นใจ >= 60% เริ่มแสดงความได้เปรียบทางสถิติ (Win Rate 54.4%, PF 1.06)",
+          "impact": "ปรับปรุงกรอบเวลาถือครองจาก Scalp 1m มาเป็น Intraday 60m เพื่อให้กำไรครอบคลุมค่าคอมมิชชันและสเปรด"
+        },
+        {
+          "cycle_number": 2,
+          "title": "ตัวกรองข่าว (News Blackout Window) พลิกผลลัพธ์เป็นบวกทันที",
+          "discovery": "เมื่อทดสอบปิดกั้นคำสั่งซื้อขายก่อนข่าวแรง 30 นาที และหลังข่าว 120 นาที ผลตอบแทนที่ความมั่นใจ >= 60% พุ่งขึ้นจากเดิมติดลบ กลายมาเป็นกำไรสุทธิ +$439 USD (PF 1.08) และที่ความมั่นใจ >= 62% ได้กำไร +$608 USD (PF 1.28, Win 55.1%)",
+          "impact": "อนุมัติเป็นกฎเหล็ก News Void Gate ถาวรในทุกกลยุทธ์ เพื่อป้องกันการโดนลากช่วงตลาดไร้สภาพคล่อง"
+        },
+        {
+          "cycle_number": 3,
+          "title": "พฤติกรรม Slippage Spikes และการซ่อน SL ในหน่วยความจำ (Stealth RAM)",
+          "discovery": "จากการตรวจ Deals จริงพบว่าช่วงเปลี่ยนแท่ง M1 และช่วงสเปรดถ่าง > 2.2 pips คำสั่งที่ส่งแบบ Hard SL มีโอกาสถูก Stop Hunt สูง การเปลี่ยนมาใช้ Quantum Stealth RAM SL พร้อม Jitter ±5% ช่วยลดอัตราการโดนสลิปเพจและหลุดรอดการลากกินสภาพคล่องได้ดีขึ้น",
+          "impact": "นำระบบ Stealth Jitter SL มาใช้เป็นมาตรฐานหลักแทน Hard Broker SL ใน Forward Trading"
+        }
+      ],
+      "core_takeaways": [
+        "1. ห้ามเทรดช่วงข่าว Extreme (CPI, NFP, FOMC) เด็ดขาด — การหลบข่าว (News Void) คือปัจจัยหลักที่ทำให้กลยุทธ์พลิกกลับมามีกำไรสถาบัน",
+        "2. อย่าถือครองสั้นเกินไปในสภาวะสเปรดถ่าง — ระยะถือครอง 15-60 นาทีให้ Expectancy เหนือต้นทุนค่าคอมมิชชันและสเปรด",
+        "3. ต้องใช้ข้อมูล Order Book DOM Level 2 (25 ชั้น) เพื่อดูการดูดซับสภาพคล่อง แทนการพึ่งพาแค่อินดิเคเตอร์แท่งเทียนย้อนหลัง",
+        "4. ใช้ Quantum Stealth RAM SL (±5% Jitter) ซ่อนระดับตัดขาดทุนในหน่วยความจำ เพื่อป้องกันอัลกอริทึมล่าสภาพคล่อง (Stop Hunting)"
+      ]
+    }
   },
-  "timestamp_utc": "2026-11-08T05:52:28.277405+00:00",
-  "timestamp_local": "08 Nov 2026, 12:52:28 น.",
-  "epoch": 1794117148.1007535,
+  "timestamp_utc": "2026-11-08T05:57:30.351839+00:00",
+  "timestamp_local": "08 Nov 2026, 12:57:30 น.",
+  "epoch": 1794117450.0815828,
   "summary": {
     "total_bots": 5,
     "online_bots": 0,
@@ -358,7 +388,7 @@
       "win_rate": 22.7,
       "is_online": false,
       "status": "OFFLINE",
-      "heartbeat_seconds": 73266.5,
+      "heartbeat_seconds": 73568.5,
       "heartbeat_desc": "20 ชม. ที่แล้ว",
       "current_price": 76022.27,
       "spread": 15.858,
@@ -389,7 +419,7 @@
       "win_rate": 33.3,
       "is_online": false,
       "status": "OFFLINE",
-      "heartbeat_seconds": 73269.8,
+      "heartbeat_seconds": 73571.8,
       "heartbeat_desc": "20 ชม. ที่แล้ว",
       "current_price": 2244.52,
       "spread": 2.125,
@@ -420,8 +450,8 @@
       "win_rate": 36.4,
       "is_online": false,
       "status": "OFFLINE",
-      "heartbeat_seconds": 115048.0,
-      "heartbeat_desc": "31 ชม. ที่แล้ว",
+      "heartbeat_seconds": 115350.0,
+      "heartbeat_desc": "32 ชม. ที่แล้ว",
       "current_price": 4070.31,
       "spread": 0.171,
       "imbalance": -0.009,
@@ -451,7 +481,7 @@
       "win_rate": 0.0,
       "is_online": false,
       "status": "OFFLINE",
-      "heartbeat_seconds": 85620.7,
+      "heartbeat_seconds": 85922.7,
       "heartbeat_desc": "23 ชม. ที่แล้ว",
       "current_price": 4077.42,
       "spread": 1.541,
