@@ -204,9 +204,12 @@
         <div class="hidden sm:flex items-center gap-2 bg-gradient-to-r from-cyan-950/90 via-slate-900/90 to-purple-950/90 px-3 py-1.5 rounded-xl border border-cyan-500/40 text-xs shadow-sm">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
           <span class="text-slate-300 font-medium">ลูปควอนท์:</span>
-          <span id="hdr-flywheel-cycle" class="text-cyan-300 font-extrabold font-mono">วนแล้ว 1 รอบ</span>
+          <span id="hdr-flywheel-cycle" class="text-cyan-300 font-extrabold font-mono">วนแล้ว 3 รอบ</span>
           <span class="text-slate-600">|</span>
-          <span id="hdr-flywheel-step" class="text-emerald-400 font-mono text-[11px]">รอบที่ #2 กำลังรัน</span>
+          <span id="hdr-flywheel-step" class="text-emerald-400 font-mono text-[11px]">รอบที่ #4 กำลังรัน</span>
+          <span class="text-slate-600">|</span>
+          <span class="text-slate-400">ขั้นตอน:</span>
+          <span id="hdr-active-stage" class="text-amber-300 font-extrabold font-mono">STAGE 1: Data Pipeline</span>
         </div>
 
         <!-- View Mode Selector -->
@@ -340,6 +343,21 @@
 
       </div>
       
+      <!-- Current Active Stage Indicator (ระบุชัดเจนว่าอยู่ขั้นตอนไหนใน 10 ขั้นตอน) -->
+      <div class="p-3.5 rounded-xl bg-gradient-to-r from-amber-950/30 via-slate-900 to-cyan-950/30 border border-amber-500/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs shadow-sm">
+        <div class="flex items-center gap-2.5">
+          <span class="w-3 h-3 rounded-full bg-amber-400 animate-ping"></span>
+          <span class="text-slate-300 font-bold">📍 ขั้นตอนที่กำลังทำงานอยู่ (Active Stage):</span>
+          <span id="fw-active-stage-label" class="px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/40 font-mono font-black text-xs">
+            STAGE 1: Data Pipeline (รวบรวมและตรวจสอบข้อมูล cTrader)
+          </span>
+        </div>
+        <div class="flex items-center gap-2 text-slate-400 font-mono text-[11px]">
+          <span>ขั้นตอนถัดไปในวงจร:</span>
+          <strong id="fw-next-stage-label" class="text-cyan-300">STAGE 7: Live Execution & Forward Testing</strong>
+        </div>
+      </div>
+
       <!-- Footer Cycle Tracker Bar -->
       <div class="flex flex-col sm:flex-row items-center justify-between gap-2 pt-2 border-t border-slate-800/80 text-[11px] text-slate-400 font-mono">
         <div class="flex items-center gap-2">
@@ -1337,6 +1355,34 @@ public class QuantFundV2Equilibrium : Robot {
       const hdrStep = document.getElementById('hdr-flywheel-step');
       if (hdrCycle) hdrCycle.textContent = `วนแล้ว ${totalCycles} รอบ`;
       if (hdrStep) hdrStep.textContent = `รอบที่ #${activeCycle} กำลังรัน`;
+
+      // Update Active Stage across the page
+      const currentStageNum = fw.current_stage_number || 1;
+      const currentStageTitle = fw.current_stage_title || 'STAGE 1: Data Pipeline (รวบรวมข้อมูล cTrader)';
+      const nextStageTitle = fw.next_stage_title || 'STAGE 7: Live Execution & Forward Testing';
+
+      const hdrStage = document.getElementById('hdr-active-stage');
+      if (hdrStage) hdrStage.textContent = currentStageTitle;
+
+      const fwStageLabel = document.getElementById('fw-active-stage-label');
+      if (fwStageLabel) fwStageLabel.textContent = currentStageTitle;
+
+      const fwNextStage = document.getElementById('fw-next-stage-label');
+      if (fwNextStage) fwNextStage.textContent = nextStageTitle;
+
+      // Highlight the corresponding stage button in the 10 stages nav
+      for (let i = 1; i <= 10; i++) {
+        const tab = document.getElementById('tab-p' + i);
+        if (tab) {
+          if (i === currentStageNum) {
+            tab.style.borderColor = '#f59e0b';
+            tab.style.boxShadow = '0 0 15px rgba(245, 158, 11, 0.45)';
+          } else if (i !== currentPillar) {
+            tab.style.borderColor = '';
+            tab.style.boxShadow = '';
+          }
+        }
+      }
 
       // Hero Card Badges
       const fwBadge = document.getElementById('fw-cycles-badge');

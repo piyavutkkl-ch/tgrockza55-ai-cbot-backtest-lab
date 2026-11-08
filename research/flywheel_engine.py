@@ -24,6 +24,10 @@ def load_flywheel_state():
         "total_cycles_completed": 0,
         "active_cycle": 1,
         "current_step": "STEP_1_DATA_RECORDING",
+        "current_stage_number": 1,
+        "current_stage_title": "STAGE 1: Data Pipeline (รวบรวมและตรวจสอบข้อมูล cTrader)",
+        "current_stage_desc": "กำลังดึงข้อมูล Tick, DOM Level 2 (25 ชั้น) และแท่ง M1 ของ BTCUSD & ETHUSD เข้าสู่คลังข้อมูล",
+        "next_stage_title": "STAGE 7: Live Execution & Forward Testing",
         "last_updated": datetime.now(timezone.utc).isoformat(),
         "cycles": []
     }
@@ -92,6 +96,8 @@ def run_one_cycle():
     data_stats = inspect_recorded_data()
     step1_report = {
         "step_name": "1. บันทึกข้อมูล cTrader (Data Ingest & Recording)",
+        "stage_number": 1,
+        "stage_label": "STAGE 1: Data Pipeline",
         "status": "COMPLETED",
         "timestamp": datetime.now().strftime("%H:%M:%S น."),
         "sources": ["cTrader Open API", "Pepperstone Demo Account 5258778", "%LOCALAPPDATA%\\BacktestLab\\live"],
@@ -118,6 +124,8 @@ def run_one_cycle():
 
     step2_report = {
         "step_name": "2. วิเคราะห์ & ลองเทรดจริง (Analysis & Forward Execution)",
+        "stage_number": 7,
+        "stage_label": "STAGE 7: Live Execution",
         "status": "COMPLETED",
         "timestamp": datetime.now().strftime("%H:%M:%S น."),
         "engines_active": ["DOM_ABSORPTION", "QUANT_EQUILIBRIUM_V2", "HAWKES_VOLATILITY_BURST"],
@@ -151,6 +159,8 @@ def run_one_cycle():
 
     step3_report = {
         "step_name": "3. รายงานผลลัพธ์ (Performance & Tracking)",
+        "stage_number": 8,
+        "stage_label": "STAGE 8-9: Memory & Tracking",
         "status": "COMPLETED",
         "timestamp": datetime.now().strftime("%H:%M:%S น."),
         "current_balance": balance,
@@ -183,6 +193,8 @@ def run_one_cycle():
 
     step4_report = {
         "step_name": "4. แนวทางพัฒนา & ต่อยอด (Feedback & Evolution)",
+        "stage_number": 10,
+        "stage_label": "STAGE 10: Feedback Loop",
         "status": "COMPLETED",
         "timestamp": datetime.now().strftime("%H:%M:%S น."),
         "key_findings": insights,
@@ -209,6 +221,10 @@ def run_one_cycle():
     state["total_cycles_completed"] = cycle_num
     state["active_cycle"] = cycle_num + 1
     state["current_step"] = "STEP_1_DATA_RECORDING"
+    state["current_stage_number"] = 1
+    state["current_stage_title"] = "STAGE 1: Data Pipeline (รวบรวมและตรวจสอบข้อมูล cTrader)"
+    state["current_stage_desc"] = "กำลังดึงข้อมูล Tick, DOM Level 2 (25 ชั้น) และแท่ง M1 ของ BTCUSD & ETHUSD เข้าสู่คลังข้อมูล"
+    state["next_stage_title"] = "STAGE 7: Live Execution & Forward Testing"
     state["latest_cycle"] = cycle_summary
     
     # Keep last 50 cycles
