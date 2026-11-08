@@ -317,9 +317,29 @@ def update_live_status():
         except Exception:
             pass
 
+    # Load Behavioral, Discovery, Validation, and Evolution Data
+    def safe_load_json(filename):
+        fp = os.path.join(DOCS_DATA, filename)
+        if os.path.exists(fp):
+            try:
+                with open(fp, 'r', encoding='utf-8') as f:
+                    return json.load(f)
+            except Exception:
+                return None
+        return None
+
+    behavioral_data = safe_load_json('behavioral_alphas.json')
+    discovery_data = safe_load_json('alpha_discovery.json')
+    validation_data = safe_load_json('autonomous_validation.json')
+    evolution_data = safe_load_json('strategy_evolution.json')
+
     status_obj = {
         "flywheel": flywheel_state,
         "agent_handovers": handovers_data,
+        "behavioral_alphas": behavioral_data,
+        "alpha_discovery": discovery_data,
+        "autonomous_validation": validation_data,
+        "strategy_evolution": evolution_data,
         "timestamp_utc": now_iso,
         "timestamp_local": now_local,
         "epoch": now_epoch,
