@@ -307,8 +307,19 @@ def update_live_status():
         except Exception:
             pass
 
+    # Load Inter-Agent Handovers
+    handovers_data = None
+    ho_path = os.path.join(DOCS_DATA, 'agent_handovers.json')
+    if os.path.exists(ho_path):
+        try:
+            with open(ho_path, 'r', encoding='utf-8') as f:
+                handovers_data = json.load(f)
+        except Exception:
+            pass
+
     status_obj = {
         "flywheel": flywheel_state,
+        "agent_handovers": handovers_data,
         "timestamp_utc": now_iso,
         "timestamp_local": now_local,
         "epoch": now_epoch,
