@@ -54,6 +54,9 @@ namespace cAlgo.Robots
         private readonly StringBuilder _sb = new StringBuilder(1024);
         private StreamWriter _tick, _book;
         private DateTime _day = DateTime.MinValue, _lastBook = DateTime.MinValue, _lastFlush = DateTime.MinValue;
+        private DateTime _lastTick = DateTime.MinValue, _lastHeartbeat = DateTime.MinValue, _lastStallAlert = DateTime.MinValue;
+        private long _totalTicksRecorded = 0;
+        private string _webhookUrl = Environment.GetEnvironmentVariable("RECORDER_ALERT_WEBHOOK") ?? "";
         private bool _bookDirty, _firstBar = true;
         private FlowTracker _flow;
         private double _ladderBid, _ladderAsk; private int _ladderCount;      // สะสมระหว่างสองแถวของ flow
@@ -77,6 +80,7 @@ namespace cAlgo.Robots
             Directory.CreateDirectory(_dir);
 
             var now = bot.Server.TimeInUtc;
+            _lastTick = now;
             CompressOldDays(now.Date);
             _news = ReadNews();
             if (!test) RefreshCalendar(now);
@@ -95,6 +99,8 @@ namespace cAlgo.Robots
         public void OnTick() => Guard(() =>
         {
             var now = _bot.Server.TimeInUtc; Roll(now);
+            _lastTick = now;
+            _totalTicksRecorded++;
             double bid = _bot.Symbol.Bid, ask = _bot.Symbol.Ask, spread = ask - bid;
             _tick.Write(now.ToString("HH:mm:ss.fff", Inv)); _tick.Write(',');
             _tick.Write(bid.ToString(_price, Inv)); _tick.Write(',');
@@ -115,7 +121,97 @@ namespace cAlgo.Robots
             var now = _bot.Server.TimeInUtc;
             if (_bookDirty && (now - _lastBook).TotalSeconds >= _bookEvery) WriteBook(now);
             if ((now - _lastFlush).TotalSeconds >= 2) Flush(now);
+            CheckHeartbeatAndStall(now);
         });
+
+        private void CheckHeartbeatAndStall(DateTime now)
+        {
+            // 1. Write Heartbeat every 15 seconds
+            if ((now - _lastHeartbeat).TotalSeconds >= 15)
+            {
+                _lastHeartbeat = now;
+                try
+                {
+                    double secsSinceLastTick = _lastTick != DateTime.MinValue ? (now - _lastTick).TotalSeconds : 0.0;
+                    double curSpread = _bot.Symbol.Ask - _bot.Symbol.Bid;
+                    bool mktOpen = IsMarketOpen(now, _bot.SymbolName);
+                    string status = secsSinceLastTick > 120 && mktOpen ? "STALLED" : "RECORDING_ACTIVE";
+
+                    string json = "{\r\n" +
+                                  "  \"symbol\": \"" + _bot.SymbolName + "\",\r\n" +
+                                  "  \"time_utc\": \"" + now.ToString("yyyy-MM-dd HH:mm:ss", Inv) + "\",\r\n" +
+                                  "  \"status\": \"" + status + "\",\r\n" +
+                                  "  \"seconds_since_last_tick\": " + Num(secsSinceLastTick, "0.0") + ",\r\n" +
+                                  "  \"total_ticks_session\": " + _totalTicksRecorded + ",\r\n" +
+                                  "  \"current_spread\": " + Num(curSpread, "0.####") + ",\r\n" +
+                                  "  \"market_open\": " + (mktOpen ? "true" : "false") + "\r\n" +
+                                  "}";
+                    string hbPath = Path.Combine(_dir, "heartbeat.json");
+                    File.WriteAllText(hbPath, json, new UTF8Encoding(false));
+                }
+                catch { }
+            }
+
+            // 2. Check for Stall during open market hours (> 120s without ticks)
+            if (IsMarketOpen(now, _bot.SymbolName) && _lastTick != DateTime.MinValue && (now - _lastTick).TotalSeconds >= 120)
+            {
+                if ((now - _lastStallAlert).TotalSeconds >= 180)
+                {
+                    _lastStallAlert = now;
+                    int stalledSec = (int)(now - _lastTick).TotalSeconds;
+                    _bot.Print("[CRITICAL ALERT: RECORDER STALLED] No tick received for {0}s on {1}. Market is open!", stalledSec, _bot.SymbolName);
+
+                    try
+                    {
+                        string alertJson = "{\r\n" +
+                                          "  \"alert\": \"RECORDER_STALLED\",\r\n" +
+                                          "  \"symbol\": \"" + _bot.SymbolName + "\",\r\n" +
+                                          "  \"stalled_duration_sec\": " + stalledSec + ",\r\n" +
+                                          "  \"timestamp_utc\": \"" + now.ToString("yyyy-MM-dd HH:mm:ss", Inv) + "\",\r\n" +
+                                          "  \"severity\": \"CRITICAL\",\r\n" +
+                                          "  \"action_required\": \"Check cTrader broker connection and network stream\"\r\n" +
+                                          "}";
+                        File.WriteAllText(Path.Combine(_dir, "stall_alert.json"), alertJson, new UTF8Encoding(false));
+
+                        if (!string.IsNullOrEmpty(_webhookUrl))
+                        {
+                            SendStallWebhook(alertJson);
+                        }
+                    }
+                    catch { }
+
+                    // Auto-heal attempt: Flush and verify streams
+                    Flush(now);
+                }
+            }
+        }
+
+        private static bool IsMarketOpen(DateTime utc, string symbol)
+        {
+            string s = symbol.ToUpperInvariant();
+            if (s.Contains("BTC") || s.Contains("ETH")) return true; // Crypto 24/7
+            DayOfWeek day = utc.DayOfWeek;
+            int h = utc.Hour, m = utc.Minute;
+            if (day == DayOfWeek.Friday && (h > 21 || (h == 21 && m >= 55))) return false;
+            if (day == DayOfWeek.Saturday) return false;
+            if (day == DayOfWeek.Sunday && h < 22) return false;
+            return true;
+        }
+
+        private void SendStallWebhook(string jsonPayload)
+        {
+            Task.Run(async () =>
+            {
+                try
+                {
+                    using (var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json"))
+                    {
+                        await Http.PostAsync(_webhookUrl, content);
+                    }
+                }
+                catch { }
+            });
+        }
 
         /// <summary>เรียกทุกแท่งใหม่ หลังทฤษฎีคำนวณสัญญาณแล้ว — เขียนสรุปของแท่งที่เพิ่งปิด</summary>
         public void OnBar(TradeType? signal, double? pUp, int positions) => Guard(() =>

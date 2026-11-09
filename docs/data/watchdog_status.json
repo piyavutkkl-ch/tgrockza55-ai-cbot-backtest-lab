@@ -1,40 +1,97 @@
 {
-  "watchdog_heartbeat_utc": "2026-11-08T16:53:29.997699+00:00",
-  "daemon_uptime_seconds": 1098,
-  "active_supervisors": 3,
+  "watchdog_name": "LiveRecorder Fleet Supervisor & Stall Guard",
+  "audited_at_utc": "2026-11-09T18:28:32.175069+00:00",
+  "overall_status": "CRITICAL_ALERT",
+  "active_alerts_count": 4,
+  "active_alerts": [
+    {
+      "symbol": "BTCUSD",
+      "alert": "RECORDER_STALLED",
+      "duration_sec": 8692,
+      "last_seen": "2026-11-06 07:16",
+      "severity": "CRITICAL"
+    },
+    {
+      "symbol": "ETHUSD",
+      "alert": "RECORDER_STALLED",
+      "duration_sec": 8692,
+      "last_seen": "2026-11-06 07:16",
+      "severity": "CRITICAL"
+    },
+    {
+      "symbol": "XAUUSD",
+      "alert": "RECORDER_STALLED",
+      "duration_sec": 8692,
+      "last_seen": "2026-11-06 07:16",
+      "severity": "CRITICAL"
+    },
+    {
+      "symbol": "GOLD-PERP",
+      "alert": "RECORDER_STALLED",
+      "duration_sec": 8692,
+      "last_seen": "2026-11-06 07:16",
+      "severity": "CRITICAL"
+    }
+  ],
+  "stall_threshold_sec": 180,
   "symbols": {
     "BTCUSD": {
       "symbol": "BTCUSD",
-      "status": "RECORDING_ACTIVE",
-      "pid": 18436,
-      "uptime_seconds": 900,
-      "restart_count": 1,
-      "has_fresh_ticks": true,
-      "last_fresh_mtime_utc": "2026-11-08T16:53:29.623812+00:00",
-      "last_stoppage_utc": "2026-11-08T16:38:26.720296+00:00",
-      "inactivity_or_warmup_seconds": 0
+      "status": "STALLED",
+      "market_open": true,
+      "seconds_since_last_write": 8692,
+      "last_file": "min-2026-11.csv",
+      "last_mtime_utc": "2026-11-09T16:03:39.510603+00:00",
+      "last_record_time": "2026-11-06 07:16",
+      "total_files": 3,
+      "heartbeat": {},
+      "healthy": false,
+      "alert": "CRITICAL: Recording halted for 8692s during open market!"
     },
     "ETHUSD": {
       "symbol": "ETHUSD",
-      "status": "RECORDING_ACTIVE",
-      "pid": 5752,
-      "uptime_seconds": 1098,
-      "restart_count": 0,
-      "has_fresh_ticks": true,
-      "last_fresh_mtime_utc": "2026-11-08T16:53:28.753351+00:00",
-      "last_stoppage_utc": null,
-      "inactivity_or_warmup_seconds": 1
+      "status": "STALLED",
+      "market_open": true,
+      "seconds_since_last_write": 8692,
+      "last_file": "min-2026-11.csv",
+      "last_mtime_utc": "2026-11-09T16:03:39.518604+00:00",
+      "last_record_time": "2026-11-06 07:16",
+      "total_files": 3,
+      "heartbeat": {},
+      "healthy": false,
+      "alert": "CRITICAL: Recording halted for 8692s during open market!"
     },
     "XAUUSD": {
       "symbol": "XAUUSD",
-      "status": "WEEKEND_STANDBY",
-      "pid": null,
-      "uptime_seconds": 0,
-      "restart_count": 0,
-      "has_fresh_ticks": false,
-      "last_fresh_mtime_utc": null,
-      "last_stoppage_utc": null,
-      "inactivity_or_warmup_seconds": null
+      "status": "STALLED",
+      "market_open": true,
+      "seconds_since_last_write": 8692,
+      "last_file": "min-2026-11.csv",
+      "last_mtime_utc": "2026-11-09T16:03:39.531603+00:00",
+      "last_record_time": "2026-11-06 07:16",
+      "total_files": 3,
+      "heartbeat": {},
+      "healthy": false,
+      "alert": "CRITICAL: Recording halted for 8692s during open market!"
+    },
+    "GOLD-PERP": {
+      "symbol": "GOLD-PERP",
+      "status": "STALLED",
+      "market_open": true,
+      "seconds_since_last_write": 8692,
+      "last_file": "min-2026-11.csv",
+      "last_mtime_utc": "2026-11-09T16:03:39.523603+00:00",
+      "last_record_time": "2026-11-06 07:16",
+      "total_files": 2,
+      "heartbeat": {},
+      "healthy": false,
+      "alert": "CRITICAL: Recording halted for 8692s during open market!"
     }
-  }
+  },
+  "remediation_instructions": [
+    "1. Ensure cTrader terminal is running and connected to Pepperstone Demo #5258778",
+    "2. Verify cBot instance 'LiveRecorder' is active and receiving ticks",
+    "3. If stalled, check internet connectivity and broker stream status",
+    "4. cBot automatically attempts auto-healing and logs incident to stall_alert.json"
+  ]
 }
