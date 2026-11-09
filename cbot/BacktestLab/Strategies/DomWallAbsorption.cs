@@ -57,26 +57,26 @@ namespace cAlgo.Robots
             if (sym.Contains("BTC"))
             {
                 _lookback = 30;
-                _imbThresh = 0.02;
-                _defaultSl = 70.0;
-                _defaultRr = 1.5;
-                _spreadCeiling = 20.0; // เพดานสเปรด BTC $20 USD
+                _imbThresh = 0.025;
+                _defaultSl = 100.0;
+                _defaultRr = 1.8;
+                _spreadCeiling = 30.0; // เพดานสเปรด BTC $30 USD (สเปรดปกติ ~$15)
             }
             else if (sym.Contains("ETH"))
             {
-                _lookback = 10;
-                _imbThresh = 0.05;
-                _defaultSl = 1.5;
-                _defaultRr = 2.0;
-                _spreadCeiling = 2.2;  // เพดานสเปรด ETH $2.2 USD
+                _lookback = 15;
+                _imbThresh = 0.015;
+                _defaultSl = 2.5;
+                _defaultRr = 2.8;
+                _spreadCeiling = 3.0;  // เพดานสเปรด ETH $3.0 USD (สเปรดปกติ ~$2.0)
             }
             else if (sym.Contains("GOLD") || sym.Contains("XAU"))
             {
-                _lookback = 30;
-                _imbThresh = 0.02;
-                _defaultSl = 3.5;
-                _defaultRr = 2.0;
-                _spreadCeiling = 0.20; // เพดานสเปรดทอง $0.20 USD
+                _lookback = 15;
+                _imbThresh = 0.025;
+                _defaultSl = 4.0;
+                _defaultRr = 2.5;
+                _spreadCeiling = 0.25; // เพดานสเปรดทอง $0.25 USD (สเปรดปกติ ~$0.15)
             }
 
             // โอเวอร์ไรด์ด้วย P ถ้าผู้ใช้กำหนด

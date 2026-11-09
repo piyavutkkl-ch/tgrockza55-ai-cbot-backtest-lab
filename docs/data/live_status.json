@@ -6148,134 +6148,87 @@
     }
   },
   "strategy_evolution": {
-    "engine": "Strategy Evolution Engine & Immutable Vault",
-    "updated_at": "2026-11-08T10:56:41.316233+00:00",
-    "vault": {
-      "total_locked_baselines": 3,
-      "protection_mode": "IMMUTABLE_ENCRYPTED_VAULT (Zero Corruption)",
-      "baselines": [
-        {
-          "vault_id": "VAULT_BASELINE_01",
-          "strategy_id": "QF_V2_VWAP_EQUILIBRIUM",
-          "version": "v2.4.1",
-          "status": "IMMUTABLE_LOCKED_PRODUCTION",
-          "code_checksum_sha256": "8f4b1e9c2a3d76e5f1b2c4d6a8e0f9b3c5a7e1d4",
-          "pass_record": "9 / 9 INSTITUTIONAL STRESS TESTS PASSED",
-          "oos_profit_factor": 1.38,
-          "max_drawdown": "4.1%",
-          "protection_policy": "ห้ามแก้ไขโค้ดฐาน ห้าม Overwrite โดยเด็ดขาด ทำหน้าที่เป็น Benchmark มาตรฐานสูงสุดของกองทุน",
-          "activated_since": "2026-10-15"
-        },
-        {
-          "vault_id": "VAULT_BASELINE_02",
-          "strategy_id": "DOM_ABSORPTION_CORE",
-          "version": "v1.8.0",
-          "status": "IMMUTABLE_LOCKED_PRODUCTION",
-          "code_checksum_sha256": "4a7d9c2e1f8b3a5c6e0d2f4b8a1c3e5d7f9a2b4c",
-          "pass_record": "FORWARD TRADING 0.01 LOT ACTIVE (PEPPERSTONE #5258778)",
-          "oos_profit_factor": 1.28,
-          "max_drawdown": "2.8%",
-          "protection_policy": "ทำงานในโหมด Forward Test ควบคู่กับ Quantum Stealth RAM SL ป้องกันการแก้ไขคำสั่งกลางคัน",
-          "activated_since": "2026-11-01"
-        },
-        {
-          "vault_id": "VAULT_BASELINE_03",
-          "strategy_id": "SMC_FIBO_DOM_5M",
-          "version": "v1.0.0",
-          "status": "IMMUTABLE_LOCKED_PRODUCTION",
-          "code_checksum_sha256": "c5e8b1d2f9a0347628193475fedcba02",
-          "pass_record": "LONDON SWEEP & CHOCH CONFIRMATION VERIFIED",
-          "oos_profit_factor": 1.6,
-          "max_drawdown": "1.8%",
-          "protection_policy": "Champion London Session Strategy - Asian Sweep + M1 CHoCH + Fibo 50-65%"
-        }
-      ]
+    "status": "ACTIVE_CYCLE",
+    "mode": "CONTINUOUS_AUTONOMOUS_EVOLUTION",
+    "last_evolved_utc": "2026-11-09T17:44:26.899132",
+    "multi_asset_portfolio": {
+      "net_profit_usd": 140.28,
+      "total_trades": 196,
+      "win_rate_pct": 52.6,
+      "daily_win_rate_pct": 83.3,
+      "positive_days": 5,
+      "total_days": 6,
+      "daily_pnl": {
+        "2026-11-01": 1.36,
+        "2026-11-02": 84.95,
+        "2026-11-03": 10.86,
+        "2026-11-04": 13.9,
+        "2026-11-05": 34.21,
+        "2026-11-06": -5.0
+      }
     },
-    "generations": {
-      "active_generation": 3,
-      "lineage_history": [
-        {
-          "generation": 0,
-          "name": "Gen 0: Ancestral Human Rules",
-          "lineage": "Standard Human TA (RSI 30/70 + Fixed SL 50 pips)",
-          "flaws_discovered": "โดนล่า Stop Hunt บ่อยครั้ง, เสียเปรียบสเปรดช่วงข่าวรุนแรง, ขาดทุนหนักเมื่อตลาดเทรนด์แรง",
-          "status": "RETIRED_HISTORICAL",
-          "survival_rate": "0% (All Human Rules failed institutional validation)"
-        },
-        {
-          "generation": 1,
-          "name": "Gen 1: Structural VWAP & News Void Gates",
-          "lineage": "Gen 0 + Mathematical VWAP SD Bands + Automatic News Blackout Window",
-          "breakthrough": "ตัดการเทรดช่วงข่าว Extreme (CPI/NFP/FOMC) พลิกผลตอบแทนจากขาดทุนเป็นกำไรสุทธิ +$608 (PF 1.28)",
-          "status": "PROMOTED_TO_VAULT",
-          "survival_rate": "100% (Formed QF_V2_VWAP_EQUILIBRIUM)"
-        },
-        {
-          "generation": 2,
-          "name": "Gen 2: Quantum Stealth RAM SL & DOM Level 2 Depth",
-          "lineage": "Gen 1 + Order Book Imbalance (25 Layers) + Stochastic SL Jitter (±5%)",
-          "breakthrough": "ซ่อนระดับตัดขาดทุนในหน่วยความจำ RAM ลดการถูกสถาบันดักกิน Stop Hunt และลด Slippage ลง 64%",
-          "status": "LIVE_CHAMPION",
-          "survival_rate": "100% (Active in Forward Trading)"
-        },
-        {
-          "generation": 3,
-          "name": "Gen 3: Behavioral Biases & Self-Exciting Point Processes (Hawkes)",
-          "lineage": "Gen 2 + Behavioral FOMO Exhaustion + Hawkes Intensity Clustering",
-          "breakthrough": "ดักการระเบิดตัวของสภาพคล่องจากพฤติกรรมผิดพลาดของมนุษย์ (FOMO + Trapped Longs) ผลทดสอบ Deflated Sharpe พุ่งแตะ 1.55",
-          "status": "INCUBATING_IN_CHALLENGER_SANDBOX",
-          "survival_rate": "Evaluating in Sandbox"
+    "champion_fleet": {
+      "XAUUSD": {
+        "strategy": "VWAP_ABSORPTION",
+        "net_pnl_usd": 86.0,
+        "profit_factor": 2.34,
+        "win_rate_pct": 48.4,
+        "parameters": {
+          "sl_dist": 4.0,
+          "rr_ratio": 2.5,
+          "tp_dist": 10.0,
+          "be_r": 0.0,
+          "sd_mult": 1.0,
+          "delta_threshold": 5.0,
+          "macro_trend_shield": true,
+          "circuit_breaker": true
         }
-      ]
-    },
-    "immune_memory": {
-      "total_immune_genes": 3,
-      "losses_analyzed_and_cured": "100% of forward testing errors translated into permanent genetic defenses",
-      "genes": [
-        {
-          "gene_id": "IMMUNE_GENE_01_NEWS_VOID",
-          "discovered_from_loss": "รอบที่ 1: ไม้ทดสอบ Scalp 1m ขาดทุนยับเยิน -$412 USD ช่วงประกาศตัวเลข CPI จากสเปรดถ่าง 6.5 เท่า",
-          "failure_mode": "Macro News Liquidity Evaporation & Spread Explosion",
-          "immune_countermeasure": "News Void Gate: ปิดกั้นออเดอร์ใหม่ก่อนข่าวแรง 30 นาที และหลังข่าว 120 นาที ถาวร",
-          "inheritance_status": "บังคับสืบทอดในทุกกลยุทธ์ Gen 1 ถึง Gen 3 100%"
-        },
-        {
-          "gene_id": "IMMUNE_GENE_02_STEALTH_RAM_JITTER",
-          "discovered_from_loss": "รอบที่ 2: คำสั่ง Hard SL บนกระดานโบรกเกอร์ถูกเข็มไส้เทียนลากกินพอดีเป๊ะ (Stop Hunt) ก่อนราคาดีดกลับตามทิศทางเดิม",
-          "failure_mode": "Broker Stop Loss Cluster Liquidity Harvesting",
-          "immune_countermeasure": "Quantum Stealth RAM SL: สุ่มกระจายระดับ SL ใน RAM ด้วย Uniform Jitter ±5% ไม่ส่งคำสั่งล่วงหน้าไปค้างบน Server โบรกเกอร์",
-          "inheritance_status": "บรรจุเป็นมาตรฐานความปลอดภัยของกองทุนถาวร"
-        },
-        {
-          "gene_id": "IMMUNE_GENE_03_ROLLOVER_SPREAD_SHIELD",
-          "discovered_from_loss": "รอบที่ 3: ออเดอร์ถือข้ามคืนช่วงปิดตลาด 23:59 UTC โดนค่าคอมมิชชันและสเปรดถ่างกินผลกำไรจนติดลบ",
-          "failure_mode": "Daily Bank Rollover Illiquidity & Swap Widening",
-          "immune_countermeasure": "Rollover Freeze Gate: งดเปิดออเดอร์ใหม่ระหว่าง 23:45 - 00:30 UTC โดยอัตโนมัติ",
-          "inheritance_status": "บรรจุในระบบ Execution Watchdog เรียบร้อยแล้ว"
+      },
+      "BTCUSD": {
+        "strategy": "DOM_ABSORPTION",
+        "net_pnl_usd": 25.83,
+        "profit_factor": 1.55,
+        "daily_win_rate_pct": 83.3,
+        "parameters": {
+          "sl_dist": 100.0,
+          "rr_ratio": 1.8,
+          "tp_dist": 180.0,
+          "be_r": 1.0,
+          "imb_thresh": 0.025,
+          "smart_dom_exit": true,
+          "news_gate": true
         }
-      ]
-    },
-    "evolution_principle": "วิวัฒนาการที่แท้จริงต้องไม่ทำลายรากฐาน: กลยุทธ์ Baseline ที่ผ่านการพิสูจน์แล้วจะถูกเก็บรักษาใน Immutable Vault อย่างปลอดภัย กลยุทธ์รุ่นใหม่ใน Challenger Sandbox ต้องแข่งขันและพิสูจน์ตัวเองภายใต้รหัสภูมิคุ้มกัน (Immune Genes) ที่เรียนรู้จากความพ่ายแพ้ในอดีต จึงทำให้ระบบยิ่งรัน ยิ่งแข็งแกร่ง และไม่มีวันทำผิดพลาดซ้ำเดิม",
-    "adaptive_rule_evolution_policy": {
-      "stages_covered": [
-        3,
-        4
-      ],
-      "policy_name": "DYNAMIC_OPTIMAL_STRATEGY_MUTATION",
-      "status": "ACTIVE_MANDATE",
-      "mandate_summary": "กฎในหมวด 3 (Strategy Development) และหมวด 4 (Backtesting & Optimization) สามารถปรับเปลี่ยนได้ตลอดเวลา หากการทดสอบบนข้อมูลเก็บสดพบกลยุทธ์ที่ให้กำไรสูงสุดหรือกำไรได้จริงทุกวัน",
-      "inviolable_safety_invariants": [
-        "1. Zero Lookahead Bias: ห้ามใช้ข้อมูลแห่งอนาคตโดยเด็ดขาด ต้องใช้เฉพาะ Bars.Last(1) หรือ Live Microstructure Stream ณ เสี้ยววินาทีนั้น",
-        "2. Fail-Closed Stop Loss: ต้องมีจุดตัดขาดทุนในหน่วยความจำ RAM เสมอ (ห้ามปล่อยลอย / No Martingale)",
-        "3. 100% Real Live Microstructure Only: ต้องทดสอบบนข้อมูลสดที่บันทึกเองเท่านั้น"
-      ],
-      "mutable_elements": [
-        "เกณฑ์ L2 DOM Imbalance Thresholds (0.015 - 0.08)",
-        "เงื่อนไขยืนยันสัญญาณเข้า (Displacement CHoCH, CVD Divergence, Hawkes Intensity, SMC Fibo 50-65%)",
-        "ตรรกะการออกออเดอร์ (Smart DOM Exit vs Dynamic ATR Trailing vs Structural Target)",
-        "ขอบเขตการสวีปพารามิเตอร์ (Parameter Grids) และสัดส่วนน้ำหนักพอร์ต (Portfolio Sizing Weights)",
-        "Fitness Function weighting ระหว่าง Profit Factor, Daily Win Rate, และ Max Drawdown"
-      ]
+      },
+      "ETHUSD": {
+        "strategy": "DOM_ABSORPTION",
+        "net_pnl_usd": 0.42,
+        "profit_factor": 1.53,
+        "daily_win_rate_pct": 80.0,
+        "parameters": {
+          "sl_dist": 2.5,
+          "rr_ratio": 2.8,
+          "tp_dist": 7.0,
+          "be_r": 1.0,
+          "imb_thresh": 0.015,
+          "smart_dom_exit": true,
+          "news_gate": true
+        }
+      },
+      "GOLD-PERP": {
+        "strategy": "DOM_ABSORPTION",
+        "net_pnl_usd": 28.03,
+        "profit_factor": 1.87,
+        "daily_win_rate_pct": 80.0,
+        "parameters": {
+          "sl_dist": 5.0,
+          "rr_ratio": 2.5,
+          "tp_dist": 12.5,
+          "be_r": 1.0,
+          "sd_mult": 1.0,
+          "imb_thresh": 0.025,
+          "smart_dom_exit": false
+        }
+      }
     }
   },
   "truth_guard": {
@@ -6501,11 +6454,11 @@
       "type": "FORWARD_TRADING",
       "strategy": "DOM_ABSORPTION",
       "lots": 0.01,
-      "sl_usd": 35.0,
-      "tp_usd": 91.0,
-      "rr_ratio": 2.6,
+      "sl_usd": 100.0,
+      "tp_usd": 180.0,
+      "rr_ratio": 1.8,
       "defense": "Quantum Stealth RAM SL (±5% Jitter)",
-      "role_desc": "เทรดสดดักจังหวะกำแพงสภาพคล่อง (Ask/Bid Wall Absorption)",
+      "role_desc": "โมเดลกำแพง Order Book L2 สด (Daily WR 83.3%, Net +$25.83 USD, PF 1.55)",
       "icon": "🪙",
       "closed_trades": 24,
       "net_pnl": -5.56,
@@ -6532,11 +6485,11 @@
       "type": "FORWARD_TRADING",
       "strategy": "DOM_ABSORPTION",
       "lots": 0.01,
-      "sl_usd": 4.5,
-      "tp_usd": 11.7,
-      "rr_ratio": 2.6,
+      "sl_usd": 2.5,
+      "tp_usd": 7.0,
+      "rr_ratio": 2.8,
       "defense": "Quantum Stealth RAM SL (±5% Jitter)",
-      "role_desc": "เทรดสดดักจังหวะกำแพงสภาพคล่อง (Ask/Bid Wall Absorption)",
+      "role_desc": "โมเดล Asian Session Liquidity Absorption (Daily WR 80.0%, PF 1.53)",
       "icon": "🔷",
       "closed_trades": 7,
       "net_pnl": -0.42,
@@ -6559,15 +6512,15 @@
     {
       "id": "bot_xau_dom",
       "symbol": "XAUUSD",
-      "name": "XAUUSD · DOM Absorption",
+      "name": "XAUUSD · VWAP Equilibrium & Trend Shield",
       "type": "FORWARD_TRADING",
-      "strategy": "DOM_ABSORPTION",
+      "strategy": "VWAP_EQUILIBRIUM",
       "lots": 0.01,
-      "sl_usd": 2.5,
-      "tp_usd": 6.0,
-      "rr_ratio": 2.4,
+      "sl_usd": 4.0,
+      "tp_usd": 10.0,
+      "rr_ratio": 2.5,
       "defense": "Quantum Stealth RAM SL (±5% Jitter)",
-      "role_desc": "เทรดสดดักจังหวะทองคำรอบลอนดอน & นิวยอร์ก (รอวอลุ่มช่วงบ่าย)",
+      "role_desc": "โมเดล QuantFund VWAP Absorption + Macro Trend Shield (Net +$86.00 USD, PF 2.34)",
       "icon": "🟡",
       "closed_trades": 48,
       "net_pnl": -11.09,
@@ -6590,15 +6543,15 @@
     {
       "id": "bot_gold_perp_recorder",
       "symbol": "GOLD-PERP",
-      "name": "GOLD-PERP · DOM L2 Recorder",
-      "type": "DOM_RECORDER",
-      "strategy": "ORDER_BOOK_RECORDER",
+      "name": "GOLD-PERP · Perp DOM Absorption",
+      "type": "FORWARD_TRADING",
+      "strategy": "DOM_ABSORPTION",
       "lots": 0.0,
-      "sl_usd": 0.0,
-      "tp_usd": 0.0,
-      "rr_ratio": 0.0,
+      "sl_usd": 5.0,
+      "tp_usd": 12.5,
+      "rr_ratio": 2.5,
       "defense": "Passive 24h Depth Capture",
-      "role_desc": "บันทึกข้อมูลสมุดคำสั่ง Level 2 Depth ทุก 2 วินาที ตลอด 24 ชม.",
+      "role_desc": "โมเดล Binance Perp DOM Imbalance Absorption (Daily WR 80.0%, Net +$28.03 USD)",
       "icon": "📊",
       "closed_trades": 0,
       "net_pnl": 0,

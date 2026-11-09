@@ -19,10 +19,10 @@ import itertools
 from datetime import datetime
 from collections import defaultdict
 
-sys.stdout.reconfigure(encoding='utf-8')
-
 appdata = os.environ.get('LOCALAPPDATA', '')
-LIVE_BASE = os.path.join(appdata, 'BacktestLab', 'live')
+local_live = os.path.join(appdata, 'BacktestLab', 'live') if appdata else ''
+repo_live = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data', 'live')
+LIVE_BASE = local_live if local_live and os.path.exists(local_live) else repo_live
 
 def load_and_preprocess(symbol):
     mins = sorted(glob.glob(os.path.join(LIVE_BASE, symbol, 'min-*.csv')))
