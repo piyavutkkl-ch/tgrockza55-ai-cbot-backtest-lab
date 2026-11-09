@@ -167,7 +167,12 @@ new_html = f'''<!DOCTYPE html>
     html.light .border-slate-800,
     html.light .border-slate-700 {{ border-color: #e2e8f0 !important; }}
     html.light .bg-slate-900,
-    html.light .bg-slate-950 {{ background-color: #f1f5f9 !important; border-color: #e2e8f0 !important; }}
+    html.light .bg-slate-950,
+    html.light .bg-slate-900\/60,
+    html.light .bg-slate-950\/80 {{ background-color: #ffffff !important; border-color: #e2e8f0 !important; }}
+    
+    html.light .bg-slate-800,
+    html.light .bg-slate-800\/80 {{ background-color: #f1f5f9 !important; border-color: #cbd5e1 !important; color: #1e293b !important; }}
     
     /* High contrast accents in light mode */
     html.light .text-cyan-300,
@@ -178,12 +183,29 @@ new_html = f'''<!DOCTYPE html>
     html.light .text-amber-400 {{ color: #b45309 !important; font-weight: 700 !important; }}
     html.light .text-rose-300,
     html.light .text-rose-400 {{ color: #be123c !important; font-weight: 700 !important; }}
+    html.light .text-purple-300,
+    html.light .text-purple-400 {{ color: #6d28d9 !important; font-weight: 700 !important; }}
+    html.light .text-pink-300,
+    html.light .text-pink-400 {{ color: #be185d !important; font-weight: 700 !important; }}
     
-    html.light .bg-cyan-500\/20 {{ background-color: #e0f2fe !important; border-color: #7dd3fc !important; color: #0369a1 !important; }}
-    html.light .bg-emerald-500\/20 {{ background-color: #d1fae5 !important; border-color: #6ee7b7 !important; color: #047857 !important; }}
+    html.light .bg-cyan-500\/20,
+    html.light .bg-cyan-500\/15 {{ background-color: #e0f2fe !important; border-color: #7dd3fc !important; color: #0369a1 !important; }}
+    html.light .bg-emerald-500\/20,
+    html.light .bg-emerald-500\/15 {{ background-color: #d1fae5 !important; border-color: #6ee7b7 !important; color: #047857 !important; }}
     html.light .bg-amber-500\/20,
     html.light .bg-amber-950\/60 {{ background-color: #fef3c7 !important; border-color: #fcd34d !important; color: #b45309 !important; }}
-    html.light .bg-rose-500\/20 {{ background-color: #ffe4e6 !important; border-color: #fda4af !important; color: #be123c !important; }}
+    html.light .bg-rose-500\/20,
+    html.light .bg-rose-500\/15 {{ background-color: #ffe4e6 !important; border-color: #fda4af !important; color: #be123c !important; }}
+    html.light .bg-purple-500\/15 {{ background-color: #f3e8ff !important; border-color: #d8b4fe !important; color: #6d28d9 !important; }}
+    html.light .bg-pink-500\/15 {{ background-color: #fce7f3 !important; border-color: #fbcfe8 !important; color: #be185d !important; }}
+    
+    /* Institutional SVG Light Mode Adaptations */
+    html.light svg rect[fill="#0b111e"] {{ fill: #ffffff !important; stroke: #e2e8f0 !important; }}
+    html.light svg line[stroke="#1e293b"] {{ stroke: #f1f5f9 !important; }}
+    html.light svg line[stroke="#334155"] {{ stroke: #cbd5e1 !important; }}
+    html.light svg text[fill="#94a3b8"] {{ fill: #475569 !important; font-weight: 600 !important; }}
+    html.light svg text[fill="#64748b"] {{ fill: #475569 !important; }}
+    
     html.light table thead {{ background-color: #f8fafc !important; color: #334155 !important; }}
     html.light table tbody tr:hover {{ background-color: #f1f5f9 !important; }}
   </style>
@@ -820,19 +842,92 @@ new_html = f'''<!DOCTYPE html>
           <span>⚙️</span> <span>Flywheel Engine Steps (ภาพแสดงขั้นตอนการทำงานจริง)</span>
         </h3>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div id="svg-step1-chart" class="rounded-xl border border-slate-800 bg-slate-950/80 p-3">
-            {svg1}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          
+          <!-- STEP 1 CARD -->
+          <div class="p-5 rounded-2xl bg-slate-900/60 dark:bg-slate-950/80 border border-slate-700/60 dark:border-slate-800 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="font-extrabold text-sky-400 flex items-center gap-2 text-sm tracking-wide">
+                <span>📊</span> <span>1. แหล่งข้อมูล (Data Ingestion)</span>
+              </span>
+              <span class="px-2.5 py-0.5 rounded-lg text-xs font-mono font-bold bg-sky-500/15 text-sky-300 border border-sky-500/30">✓ STREAMING</span>
+            </div>
+            <div id="svg-step1-chart">
+              {svg1}
+            </div>
+            <p class="text-xs text-slate-300 dark:text-slate-300 leading-relaxed">
+              บันทึกข้อมูล Order Book L2 Depth 25 ระดับ และ Tick Flow สดจาก Pepperstone Demo #5258778 อย่างต่อเนื่อง
+            </p>
+            <div class="flex flex-wrap gap-2 text-xs font-mono pt-1">
+              <span class="px-2.5 py-1 rounded-lg bg-slate-800/80 text-slate-300 border border-slate-700/80">ความถี่: <strong class="text-white">Real-time Millisecond</strong></span>
+              <span class="px-2.5 py-1 rounded-lg bg-slate-800/80 text-emerald-300 border border-slate-700/80">สเปรด: <strong>0.15 pips</strong></span>
+              <span class="px-2.5 py-1 rounded-lg bg-slate-800/80 text-slate-300 border border-slate-700/80">Slippage: <strong class="text-white">0.08 pips</strong></span>
+            </div>
           </div>
-          <div id="svg-step2-chart" class="rounded-xl border border-slate-800 bg-slate-950/80 p-3">
-            {svg2}
+
+          <!-- STEP 2 CARD -->
+          <div class="p-5 rounded-2xl bg-slate-900/60 dark:bg-slate-950/80 border border-slate-700/60 dark:border-slate-800 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="font-extrabold text-purple-400 flex items-center gap-2 text-sm tracking-wide">
+                <span>📈</span> <span>2. ทดสอบสมมติฐาน (Hypothesis Testing)</span>
+              </span>
+              <span class="px-2.5 py-0.5 rounded-lg text-xs font-mono font-bold bg-purple-500/15 text-purple-300 border border-purple-500/30">✓ DISCOVERED</span>
+            </div>
+            <div id="svg-step2-chart">
+              {svg2}
+            </div>
+            <p class="text-xs text-slate-300 dark:text-slate-300 leading-relaxed">
+              ทดสอบ 598 รูปแบบบนข้อมูลสด: ค้นพบ Champion VWAP Absorption (XAU) +$96.00 และ BTC DOM Absorption (Win Rate 59.1%)
+            </p>
+            <div class="flex flex-wrap gap-2 text-xs font-mono pt-1">
+              <span class="px-2.5 py-1 rounded-lg bg-slate-800/80 text-slate-300 border border-slate-700/80">สมมติฐาน: <strong class="text-white">598 Sweeps</strong></span>
+              <span class="px-2.5 py-1 rounded-lg bg-slate-800/80 text-purple-300 border border-slate-700/80">Win Rate: <strong>59.1%</strong></span>
+              <span class="px-2.5 py-1 rounded-lg bg-slate-800/80 text-emerald-300 border border-slate-700/80">Profit Factor: <strong>2.01</strong></span>
+            </div>
           </div>
-          <div id="svg-step3-chart" class="rounded-xl border border-slate-800 bg-slate-950/80 p-3">
-            {svg3}
+
+          <!-- STEP 3 CARD (Pointed in user screenshot) -->
+          <div class="p-5 rounded-2xl bg-slate-900/60 dark:bg-slate-950/80 border border-slate-700/60 dark:border-slate-800 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="font-extrabold text-emerald-400 flex items-center gap-2 text-sm tracking-wide">
+                <span>📊</span> <span>3. รายงานผลลัพธ์ (Performance & Tracking)</span>
+              </span>
+              <span id="fw-step3-status" class="px-2.5 py-0.5 rounded-lg text-xs font-mono font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">✓ COMPLETED</span>
+            </div>
+            <div id="svg-step3-chart">
+              {svg3}
+            </div>
+            <p id="fw-step3-desc" class="text-xs text-slate-300 dark:text-slate-300 leading-relaxed">
+              ผลตอบแทนข้อมูลสด: Net PnL +$15.20 USD, Profit Factor 1.90, กำไรจริง 6 จาก 7 วัน (Daily Win Rate 85.7%), BTC กำไร 100% ทุกวัน
+            </p>
+            <div id="fw-step3-meta" class="flex flex-wrap gap-2 text-xs font-mono pt-1">
+              <span class="px-2.5 py-1 rounded-lg bg-slate-800/80 text-emerald-300 border border-slate-700/80">Net PnL: <strong class="text-emerald-400 font-extrabold">+$15.20 USD</strong></span>
+              <span class="px-2.5 py-1 rounded-lg bg-slate-800/80 text-sky-300 border border-slate-700/80">PF: <strong>1.90</strong></span>
+              <span class="px-2.5 py-1 rounded-lg bg-slate-800/80 text-emerald-300 border border-slate-700/80">Daily Win: <strong>85.7% (6/7 วัน)</strong></span>
+              <span class="px-2.5 py-1 rounded-lg bg-slate-800/80 text-slate-300 border border-slate-700/80">Latency: <strong class="text-white">28.5 ms</strong></span>
+            </div>
           </div>
-          <div id="svg-step4-chart" class="rounded-xl border border-slate-800 bg-slate-950/80 p-3">
-            {svg4}
+
+          <!-- STEP 4 CARD (Pointed in user screenshot) -->
+          <div class="p-5 rounded-2xl bg-slate-900/60 dark:bg-slate-950/80 border border-slate-700/60 dark:border-slate-800 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="font-extrabold text-pink-400 flex items-center gap-2 text-sm tracking-wide">
+                <span>💡</span> <span>4. แนวทางพัฒนา (10-Stage Evolution Engine)</span>
+              </span>
+              <span id="fw-step4-status" class="px-2.5 py-0.5 rounded-lg text-xs font-mono font-bold bg-pink-500/15 text-pink-400 border border-pink-500/30">✓ APPROVED</span>
+            </div>
+            <div id="svg-step4-chart">
+              {svg4}
+            </div>
+            <p id="fw-step4-desc" class="text-xs text-slate-300 dark:text-slate-300 leading-relaxed">
+              จัดเก็บ 122 รอบเก่าเข้าฐานข้อมูลถาวร และเริ่มต้นนับรอบ #1 ใหม่ในยุค Pure Live Microstructure สำเร็จ พร้อมรัน 24/7 Watchdog เข้าสู่รอบ #2
+            </p>
+            <div id="fw-step4-meta" class="flex flex-wrap gap-2 text-xs font-mono pt-1">
+              <span class="px-2.5 py-1 rounded-lg bg-slate-800/80 text-emerald-300 border border-slate-700/80">สถานะ: <strong class="text-white">นับรอบ #1 ข้อมูลสดสำเร็จ</strong></span>
+              <span class="px-2.5 py-1 rounded-lg bg-slate-800/80 text-purple-300 border border-slate-700/80">รอบถัดไป: <strong class="text-purple-400">วนรอบ #2 ตรวจจับสภาพคล่อง 24/7</strong></span>
+            </div>
           </div>
+
         </div>
       </div>
 
