@@ -18,9 +18,20 @@ DOCS_DATA_DIR = os.path.join(ROOT, 'docs', 'data')
 FLYWHEEL_FILE = os.path.join(DOCS_DATA_DIR, 'flywheel_cycles.json')
 LIVE_STATUS_FILE = os.path.join(DOCS_DATA_DIR, 'live_status.json')
 CHAMPIONS_FILE = os.path.join(DOCS_DATA_DIR, 'autonomous_champions.json')
+LOG_FILE = os.path.join(ROOT, 'research', 'evolver_daemon.log')
 
 sys.path.insert(0, os.path.join(ROOT, 'research'))
 from verify_100pct_daily_portfolio import load_live_bars, run_simulation
+
+def log_msg(msg):
+    now_utc = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')
+    line = f"[{now_utc}] {msg}"
+    print(line, flush=True)
+    try:
+        with open(LOG_FILE, 'a', encoding='utf-8') as f:
+            f.write(line + "\n")
+    except Exception:
+        pass
 
 def load_flywheel():
     if os.path.exists(FLYWHEEL_FILE):
@@ -42,7 +53,10 @@ def run_single_evolution_cycle(cycle_num):
     symbols = ['XAUUSD', 'GOLD-PERP', 'BTCUSD', 'ETHUSD']
     tested_symbol = random.choice(symbols)
     bars = load_live_bars(tested_symbol)
-    
+    if not bars:
+        log_msg(f"Skipping {tested_symbol} (no live bars available)")
+        return
+        
     # Generate experimental mutation
     if 'XAU' in tested_symbol or 'GOLD' in tested_symbol:
         sl = round(random.uniform(3.5, 5.5), 1)
@@ -128,25 +142,26 @@ def run_single_evolution_cycle(cycle_num):
         except Exception:
             pass
             
-    print(f"[{now_str}] Completed Cycle #{cycle_num}: {discovery}")
+    log_msg(f"Cycle #{cycle_num} Complete: {discovery}")
 
 def main():
     fw = load_flywheel()
-    current_cycle = fw.get('total_cycles_completed', 238)
+    current_cycle = fw.get('total_cycles_completed', 239)
     
-    # Check if single run or continuous loop
     if len(sys.argv) > 1 and sys.argv[1] == '--single':
         current_cycle += 1
         run_single_evolution_cycle(current_cycle)
     else:
-        print("="*80)
-        print("♾️ STARTING CONTINUOUS INFINITE QUANT EVOLUTION DAEMON")
-        print("Press Ctrl+C to stop at any time.")
-        print("="*80)
+        log_msg("================================================================================")
+        log_msg("♾️ CONTINUOUS INFINITE QUANT EVOLVER DAEMON ACTIVE (24/7 AUTONOMOUS LOOP)")
+        log_msg("================================================================================")
         while True:
             current_cycle += 1
-            run_single_evolution_cycle(current_cycle)
-            time.sleep(15)  # Rest between evolution cycles
+            try:
+                run_single_evolution_cycle(current_cycle)
+            except Exception as e:
+                log_msg(f"Error in Cycle #{current_cycle}: {e}")
+            time.sleep(10)  # Continuous steady cadence (10s per cycle)
 
 if __name__ == '__main__':
     main()
