@@ -1,0 +1,286 @@
+{
+  "registry_version": "V4.0-INSTITUTIONAL",
+  "updated_at_utc": "2026-11-10T05:37:00.026770+00:00",
+  "total_strategies": 9,
+  "strategies": {
+    "STR-001": {
+      "strategy_id": "STR-001",
+      "version": "1.0.0",
+      "name": "Multi-Timeframe Trend Following",
+      "hypothesis": "Asset prices in strong directional trends exhibit momentum persistence when entering on minor pullbacks.",
+      "parameters": {
+        "sl_dist": 5.0,
+        "rr_ratio": 2.5,
+        "tp_dist": 12.5,
+        "risk_per_trade_pct": 1.0
+      },
+      "suitable_market_regimes": [
+        "STRONG_UPTREND",
+        "STRONG_DOWNTREND"
+      ],
+      "suitable_trading_sessions": [
+        "LONDON",
+        "NEW_YORK",
+        "LONDON_NY_OVERLAP"
+      ],
+      "suitable_news_conditions": [
+        "CLEAR"
+      ],
+      "failure_conditions": [
+        "Chop / Range transition",
+        "Premature trend exhaustion"
+      ],
+      "execution_cost_sensitivity": "LOW",
+      "validation_status": "EXPERIMENTAL",
+      "historical_metrics": {},
+      "context_performance": {}
+    },
+    "STR-002": {
+      "strategy_id": "STR-002",
+      "version": "1.0.0",
+      "name": "Session VWAP Mean Reversion",
+      "hypothesis": "Prices oscillating in range-bound markets mean-revert to the volume-weighted average price (VWAP).",
+      "parameters": {
+        "sl_dist": 4.0,
+        "rr_ratio": 2.0,
+        "tp_dist": 8.0,
+        "risk_per_trade_pct": 1.0
+      },
+      "suitable_market_regimes": [
+        "RANGE_BOUND",
+        "SIDEWAY"
+      ],
+      "suitable_trading_sessions": [
+        "ASIA",
+        "LONDON"
+      ],
+      "suitable_news_conditions": [
+        "CLEAR"
+      ],
+      "failure_conditions": [
+        "Sudden trend breakout",
+        "News volatility expansion"
+      ],
+      "execution_cost_sensitivity": "HIGH",
+      "validation_status": "EXPERIMENTAL",
+      "historical_metrics": {},
+      "context_performance": {}
+    },
+    "STR-003": {
+      "strategy_id": "STR-003",
+      "version": "1.0.0",
+      "name": "Liquidity Sweep & Stop Hunt Reversal",
+      "hypothesis": "False breakouts past key structural levels absorb retail stop liquidity, creating high-probability sharp reversals.",
+      "parameters": {
+        "sl_dist": 4.5,
+        "rr_ratio": 3.0,
+        "tp_dist": 13.5,
+        "risk_per_trade_pct": 1.0
+      },
+      "suitable_market_regimes": [
+        "FALSE_BREAKOUT",
+        "REVERSAL"
+      ],
+      "suitable_trading_sessions": [
+        "LONDON",
+        "NEW_YORK",
+        "LONDON_NY_OVERLAP"
+      ],
+      "suitable_news_conditions": [
+        "CLEAR"
+      ],
+      "failure_conditions": [
+        "True runaway breakout with massive institutional volume"
+      ],
+      "execution_cost_sensitivity": "MEDIUM",
+      "validation_status": "EXPERIMENTAL",
+      "historical_metrics": {},
+      "context_performance": {}
+    },
+    "STR-004": {
+      "strategy_id": "STR-004",
+      "version": "1.0.0",
+      "name": "Volatility Expansion Breakout",
+      "hypothesis": "When price pierces multi-hour consolidation with aggressive volume delta, it initiates a sustained momentum leg.",
+      "parameters": {
+        "sl_dist": 5.5,
+        "rr_ratio": 2.8,
+        "tp_dist": 15.4,
+        "risk_per_trade_pct": 1.0
+      },
+      "suitable_market_regimes": [
+        "BREAKOUT",
+        "VOLATILITY_EXPANSION"
+      ],
+      "suitable_trading_sessions": [
+        "LONDON",
+        "NEW_YORK",
+        "LONDON_NY_OVERLAP"
+      ],
+      "suitable_news_conditions": [
+        "CLEAR"
+      ],
+      "failure_conditions": [
+        "Bull/Bear traps",
+        "False breakout re-absorption"
+      ],
+      "execution_cost_sensitivity": "LOW",
+      "validation_status": "EXPERIMENTAL",
+      "historical_metrics": {},
+      "context_performance": {}
+    },
+    "STR-005": {
+      "strategy_id": "STR-005",
+      "version": "1.0.0",
+      "name": "Post-News Directional Reaction",
+      "hypothesis": "After economic news releases settle (15-30 mins post-event), directional momentum establishes a multi-hour trend.",
+      "parameters": {
+        "sl_dist": 6.0,
+        "rr_ratio": 3.0,
+        "tp_dist": 18.0,
+        "risk_per_trade_pct": 1.0
+      },
+      "suitable_market_regimes": [
+        "NEWS_DRIVEN",
+        "STRONG_UPTREND",
+        "STRONG_DOWNTREND"
+      ],
+      "suitable_trading_sessions": [
+        "NEW_YORK",
+        "LONDON_NY_OVERLAP"
+      ],
+      "suitable_news_conditions": [
+        "POST_NEWS_VOLATILITY"
+      ],
+      "failure_conditions": [
+        "Whipsaw news repricing",
+        "Conflicting economic data components"
+      ],
+      "execution_cost_sensitivity": "MEDIUM",
+      "validation_status": "EXPERIMENTAL",
+      "historical_metrics": {},
+      "context_performance": {}
+    },
+    "STR-006": {
+      "strategy_id": "STR-006",
+      "version": "1.0.0",
+      "name": "L2 DOM Order Flow Imbalance",
+      "hypothesis": "Significant DOM volume imbalances at key psychological levels signal aggressive institutional accumulation or distribution.",
+      "parameters": {
+        "sl_dist": 4.0,
+        "rr_ratio": 2.5,
+        "tp_dist": 10.0,
+        "risk_per_trade_pct": 1.0
+      },
+      "suitable_market_regimes": [
+        "REVERSAL",
+        "RANGE_BOUND"
+      ],
+      "suitable_trading_sessions": [
+        "ALL"
+      ],
+      "suitable_news_conditions": [
+        "CLEAR"
+      ],
+      "failure_conditions": [
+        "Spoofing / phantom orders in order book",
+        "Flash liquidity pulls"
+      ],
+      "execution_cost_sensitivity": "HIGH",
+      "validation_status": "EXPERIMENTAL",
+      "historical_metrics": {},
+      "context_performance": {}
+    },
+    "STR-007": {
+      "strategy_id": "STR-007",
+      "version": "1.0.0",
+      "name": "Extreme Volatility Stretch Reversal",
+      "hypothesis": "Extreme deviations (>2.5 SD from VWAP) during non-news periods represent overextended retail positioning prone to sharp snaps.",
+      "parameters": {
+        "sl_dist": 5.0,
+        "rr_ratio": 3.0,
+        "tp_dist": 15.0,
+        "risk_per_trade_pct": 1.0
+      },
+      "suitable_market_regimes": [
+        "REVERSAL",
+        "VOLATILITY_EXPANSION"
+      ],
+      "suitable_trading_sessions": [
+        "ASIA",
+        "LONDON",
+        "NEW_YORK"
+      ],
+      "suitable_news_conditions": [
+        "CLEAR"
+      ],
+      "failure_conditions": [
+        "Structural multi-day trend repricing"
+      ],
+      "execution_cost_sensitivity": "MEDIUM",
+      "validation_status": "EXPERIMENTAL",
+      "historical_metrics": {},
+      "context_performance": {}
+    },
+    "STR-008": {
+      "strategy_id": "STR-008",
+      "version": "1.0.0",
+      "name": "Session Opening Range Expansion",
+      "hypothesis": "The initial 15-minute range of the London or NY session defines institutional inventory imbalance for the day.",
+      "parameters": {
+        "sl_dist": 5.0,
+        "rr_ratio": 2.5,
+        "tp_dist": 12.5,
+        "risk_per_trade_pct": 1.0
+      },
+      "suitable_market_regimes": [
+        "BREAKOUT",
+        "VOLATILITY_EXPANSION"
+      ],
+      "suitable_trading_sessions": [
+        "LONDON",
+        "NEW_YORK",
+        "LONDON_NY_OVERLAP"
+      ],
+      "suitable_news_conditions": [
+        "CLEAR"
+      ],
+      "failure_conditions": [
+        "Asian range continuation",
+        "Mid-morning chop"
+      ],
+      "execution_cost_sensitivity": "LOW",
+      "validation_status": "EXPERIMENTAL",
+      "historical_metrics": {},
+      "context_performance": {}
+    },
+    "STR-009": {
+      "strategy_id": "STR-009",
+      "version": "1.0.0",
+      "name": "Capital Defense & No-Trade Mode",
+      "hypothesis": "Preserving capital during illiquid, erratic, or uncertain market states is an active institutional trading edge.",
+      "parameters": {
+        "sl_dist": 4.0,
+        "rr_ratio": 2.5,
+        "tp_dist": 10.0,
+        "risk_per_trade_pct": 1.0
+      },
+      "suitable_market_regimes": [
+        "THIN_LIQUIDITY",
+        "HIGH_UNCERTAINTY",
+        "NEWS_DRIVEN"
+      ],
+      "suitable_trading_sessions": [
+        "ALL"
+      ],
+      "suitable_news_conditions": [
+        "ALL"
+      ],
+      "failure_conditions": [],
+      "execution_cost_sensitivity": "ZERO",
+      "validation_status": "CHAMPION",
+      "historical_metrics": {},
+      "context_performance": {}
+    }
+  }
+}
