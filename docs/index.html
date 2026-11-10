@@ -625,6 +625,45 @@
         </div>
       </div>
 
+      <!-- Architecture V4: Multi-Dimensional Market Intelligence & Context Fingerprinting Studio -->
+      <div id="market-intelligence-v4-card" class="card-surface p-6 space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800/80 pb-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-sky-500/20 text-sky-300 border border-sky-500/40 font-mono">
+                ARCHITECTURE V4
+              </span>
+              <h3 class="text-base font-bold text-white flex items-center gap-2">
+                <span>🧠</span> <span>Adaptive Market Intelligence &amp; Context Fingerprint Engine</span>
+              </h3>
+            </div>
+            <p class="text-xs text-slate-400 mt-1">
+              ระบบจำแนก 13 สภาวะตลาด, ตรวจจับบริบทเซสชัน, ข่าวเศรษฐกิจมหภาค, และการเลือกกลยุทธ์อัตโนมัติ (STR-001 - STR-009)
+            </p>
+          </div>
+          <div class="flex items-center gap-2 text-xs font-mono text-slate-400">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>24/7 Intelligence Daemon: <strong class="text-emerald-400 font-bold">Active</strong></span>
+          </div>
+        </div>
+
+        <!-- 4-Asset Market Intelligence Grid -->
+        <div id="market-intel-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
+          <!-- Dynamically injected via renderMarketIntelligenceV4 -->
+        </div>
+
+        <!-- Context Attribution & Strategy Switching Audit Banner -->
+        <div id="market-intel-audit-bar" class="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="flex items-center gap-2">
+            <span class="text-amber-400 font-mono font-bold">🛡️ Institutional Risk Governor V4:</span>
+            <span class="text-slate-300 font-mono text-[11px]">Daily Loss Limit: <strong class="text-emerald-400">-$10.00 USD</strong> | Daily Flat Cutoff: <strong class="text-amber-300">21:45 UTC</strong> | Environment: <strong class="text-sky-300">Pepperstone Demo #5258778</strong></span>
+          </div>
+          <div id="intel-recent-switch" class="text-slate-400 font-mono text-[11px] truncate max-w-md">
+            <!-- Recent switch injected dynamically -->
+          </div>
+        </div>
+      </div>
+
       <!-- Live Bot Fleet Cards & DOM Tug-of-War Grid -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
@@ -1523,7 +1562,64 @@
 
         if (d.bots_fleet) renderLiveBots(d.bots_fleet);
         if (d.recent_trades) renderRecentTrades(d.recent_trades);
+        if (d.market_intelligence_v4) renderMarketIntelligenceV4(d.market_intelligence_v4);
       } catch (e) {}
+    }
+
+    function renderMarketIntelligenceV4(intel) {
+      const grid = document.getElementById('market-intel-grid');
+      if (!grid || !intel || !intel.assets) return;
+      
+      const badgeColors = {
+        'STRONG_UPTREND': 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
+        'STRONG_DOWNTREND': 'bg-rose-500/15 text-rose-400 border-rose-500/30',
+        'BREAKOUT': 'bg-sky-500/15 text-sky-400 border-sky-500/30',
+        'VOLATILITY_EXPANSION': 'bg-teal-500/15 text-teal-400 border-teal-500/30',
+        'VOLATILITY_COMPRESSION': 'bg-indigo-500/15 text-indigo-400 border-indigo-500/30',
+        'RANGE_BOUND': 'bg-amber-500/15 text-amber-400 border-amber-500/30',
+        'SIDEWAY': 'bg-slate-700/30 text-slate-300 border-slate-600',
+        'REVERSAL': 'bg-purple-500/15 text-purple-400 border-purple-500/30',
+        'THIN_LIQUIDITY': 'bg-orange-500/15 text-orange-400 border-orange-500/30',
+        'HIGH_UNCERTAINTY': 'bg-red-500/15 text-red-400 border-red-500/30',
+        'NEWS_DRIVEN': 'bg-fuchsia-500/15 text-fuchsia-400 border-fuchsia-500/30'
+      };
+
+      grid.innerHTML = Object.values(intel.assets).map(a => {
+        const badgeCls = badgeColors[a.primary_regime] || 'bg-slate-800 text-slate-300 border-slate-700';
+        return `
+          <div class="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-2 hover:border-slate-700 transition">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-white text-sm tracking-tight font-mono">${a.symbol}</span>
+              <span class="text-xs font-mono font-bold text-slate-200">$${Number(a.latest_price).toLocaleString()}</span>
+            </div>
+            <div class="flex items-center justify-between gap-1 text-[11px]">
+              <span class="px-2 py-0.5 rounded border font-mono font-semibold truncate ${badgeCls}">
+                ${a.primary_regime}
+              </span>
+              <span class="text-slate-400 font-mono text-[10px]">${a.trading_session}</span>
+            </div>
+            <div class="text-[11px] text-slate-400 flex items-center justify-between border-t border-slate-800/60 pt-1.5 font-mono">
+              <span>Spread: <strong class="text-slate-200">${a.spread}</strong></span>
+              <span>Delta: <strong class="${a.order_flow_delta >= 0 ? 'text-emerald-400' : 'text-rose-400'}">${a.order_flow_delta > 0 ? '+' : ''}${a.order_flow_delta}</strong></span>
+            </div>
+            <div class="text-[11px] bg-slate-950/60 p-2 rounded-lg border border-slate-800/80 space-y-1">
+              <div class="flex items-center justify-between font-mono">
+                <span class="text-sky-300 font-bold">${a.selected_strategy_id}</span>
+                <span class="text-amber-300 font-bold">Score: ${a.suitability_score}</span>
+              </div>
+              <p class="text-[10px] text-slate-400 truncate" title="${a.audit_reason}">
+                ${a.selected_strategy_name} (${a.action})
+              </p>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      const switchEl = document.getElementById('intel-recent-switch');
+      if (switchEl && intel.recent_strategy_switches && intel.recent_strategy_switches.length) {
+        const last = intel.recent_strategy_switches[intel.recent_strategy_switches.length - 1];
+        switchEl.innerHTML = `Last Switch: <span class="text-slate-300 font-mono">${last.from_strategy} ➔ <strong class="text-sky-400">${last.to_strategy}</strong> (${last.market_regime}, Score: ${last.score})</span>`;
+      }
     }
 
     function renderRecentTrades(trades) {
