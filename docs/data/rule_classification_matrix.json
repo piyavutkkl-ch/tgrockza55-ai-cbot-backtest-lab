@@ -1,0 +1,111 @@
+{
+  "matrix_version": "V4.0-INSTITUTIONAL",
+  "updated_at_utc": "2026-11-10T04:56:00Z",
+  "paradigm": "Observe -> Understand -> Research -> Build -> Prove -> Select -> Execute -> Analyze -> Learn -> Evolve",
+  "tier_1_immutable_hard_constraints": {
+    "authority": "IMMUTABLE_SYSTEM_HARD_LIMITS",
+    "ai_override_allowed": false,
+    "rules": {
+      "prohibit_lookahead_bias": {
+        "status": "ENFORCED",
+        "description": "Strict prohibition of future data leakage; use only closed bars (.Last(1) / Count - 2)"
+      },
+      "prohibit_data_leakage": {
+        "status": "ENFORCED",
+        "description": "Strict separation between In-Sample, Validation, and Out-of-Sample datasets"
+      },
+      "mandatory_stop_loss": {
+        "status": "ENFORCED",
+        "description": "Every single order MUST have an approved Stop Loss distance > 0"
+      },
+      "prohibit_martingale_and_grid": {
+        "status": "ENFORCED",
+        "description": "Strict prohibition of lot multiplication, unhedged grid, or expanding risk upon drawdown"
+      },
+      "hard_max_risk_per_trade_pct": {
+        "status": "ENFORCED",
+        "value": 2.0,
+        "description": "Maximum risk allocated to any individual order cannot exceed 2.0% of portfolio equity"
+      },
+      "portfolio_daily_loss_ceiling_usd": {
+        "status": "ENFORCED",
+        "value": 10.0,
+        "description": "Daily circuit breaker: all trading halted if daily portfolio loss reaches -$10.00 USD"
+      },
+      "symbol_max_consecutive_losses": {
+        "status": "ENFORCED",
+        "value": 2,
+        "description": "Symbol shut down for the day after 2 consecutive stop-outs"
+      },
+      "max_open_positions": {
+        "status": "ENFORCED",
+        "value": 1,
+        "description": "Maximum 1 concurrent active position per symbol"
+      },
+      "daily_flat_enforcement_utc": {
+        "status": "ENFORCED",
+        "value": 2145,
+        "description": "Mandatory liquidation of all open positions by 21:45 UTC; strictly no overnight holding"
+      },
+      "prohibit_overnight_holding": {
+        "status": "ENFORCED",
+        "description": "All positions must be closed prior to trading day close / rollover"
+      },
+      "broker_close_confirmation": {
+        "status": "ENFORCED",
+        "description": "Verification of actual fill and execution receipt from broker API"
+      },
+      "demo_environment_quarantine": {
+        "status": "ENFORCED",
+        "target": "Pepperstone Demo #5258778",
+        "description": "Execution quarantined strictly to Demo; live account transition requires owner OTP/auth"
+      },
+      "audit_trail_logging": {
+        "status": "ENFORCED",
+        "description": "Tamper-proof chronological recording of all decisions, regime classifications, and orders"
+      },
+      "fail_closed_data_sanity": {
+        "status": "ENFORCED",
+        "stall_threshold_sec": 180,
+        "description": "Automatic trading halt if data stream freezes, corrupts, or produces NaN values"
+      }
+    }
+  },
+  "tier_2_adaptive_rules": {
+    "authority": "ADAPTIVE_AI_OPTIMIZATION_BOUNDED",
+    "ai_override_allowed": true,
+    "deployment_gate": "REQUIRES_STATISTICAL_VALIDATION",
+    "parameters": {
+      "sl_dist": {"min": 1.0, "max": 250.0, "unit": "points/ticks"},
+      "rr_ratio": {"min": 1.0, "max": 5.0, "unit": "ratio"},
+      "be_ratio": {"min": 0.0, "max": 2.0, "unit": "R-multiple"},
+      "daily_target_usd": {"min": 5.0, "max": 30.0, "unit": "USD"},
+      "max_daily_losses": {"min": 1, "max": 2, "unit": "count"},
+      "spread_threshold": {
+        "XAUUSD": {"min": 0.05, "max": 0.25, "unit": "points"},
+        "GOLD-PERP": {"min": 0.20, "max": 2.20, "unit": "USD"},
+        "BTCUSD": {"min": 5.0, "max": 35.0, "unit": "USD"},
+        "ETHUSD": {"min": 0.5, "max": 3.5, "unit": "USD"}
+      },
+      "news_pre_blackout_min": {"min": 15, "max": 60, "unit": "minutes"},
+      "news_post_blackout_min": {"min": 30, "max": 120, "unit": "minutes"},
+      "max_holding_bars": {"min": 5, "max": 240, "unit": "M1 bars"},
+      "switching_hysteresis_bars": {"min": 15, "max": 60, "unit": "M1 bars"}
+    }
+  },
+  "tier_3_open_research_hypotheses": {
+    "authority": "UNBOUNDED_AI_RESEARCH_EXPLORATION",
+    "documentation_required": true,
+    "active_families": [
+      {"id": "STR-001", "name": "Trend Following", "regime": "Strong Uptrend / Strong Downtrend"},
+      {"id": "STR-002", "name": "Mean Reversion", "regime": "Sideway / Range-bound"},
+      {"id": "STR-003", "name": "Liquidity Sweep Reversal", "regime": "Liquidity Sweep / Stop Hunt"},
+      {"id": "STR-004", "name": "Momentum Breakout", "regime": "Breakout / Volatility Expansion"},
+      {"id": "STR-005", "name": "News Reaction", "regime": "Post-News Price Reaction"},
+      {"id": "STR-006", "name": "Order Flow Imbalance", "regime": "DOM Absorption / Delta Divergence"},
+      {"id": "STR-007", "name": "Volatility Reversal", "regime": "Extreme Band Extension / Exhaustion"},
+      {"id": "STR-008", "name": "Session Opening Range", "regime": "London / NY Open Range Expansion"},
+      {"id": "STR-009", "name": "No Trade", "regime": "Thin Liquidity / High Uncertainty / Spread Spike"}
+    ]
+  }
+}
