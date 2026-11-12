@@ -264,6 +264,10 @@ new_html = f'''<!DOCTYPE html>
           <span id="theme-icon">🌙</span> <span id="theme-label" class="hidden sm:inline">ธีมมืด</span>
         </button>
 
+        <a href="terminal.html" class="px-3 py-1.5 rounded-xl bg-sky-500/15 hover:bg-sky-500/25 text-sky-300 border border-sky-500/40 font-bold text-xs flex items-center gap-1.5 transition">
+          <span>📈</span> <span>cTrader Live Terminal</span>
+        </a>
+
         <a href="pro.html" class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700 font-bold text-xs flex items-center gap-1.5 transition">
           <span>🕯️</span> <span>Candlestick Lab</span>
         </a>
