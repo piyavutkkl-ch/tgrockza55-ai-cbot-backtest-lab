@@ -49,6 +49,7 @@ class AdaptiveStrategySelector:
         spread = fingerprint['microstructure']['spread']
         
         # 1. Deterministic Risk Governor Check
+        day_str = t_str.split()[0] if ' ' in t_str else None
         gov_ok, gov_msg = self.risk_governor.can_open_trade(
             symbol=symbol,
             current_spread=spread,
@@ -56,7 +57,8 @@ class AdaptiveStrategySelector:
             min_to_news=fingerprint['news_context']['min_to_next'],
             news_impact=fingerprint['news_context']['next_impact'],
             min_since_news=fingerprint['news_context']['min_since_last'],
-            last_impact=fingerprint['news_context']['last_impact']
+            last_impact=fingerprint['news_context']['last_impact'],
+            date_str=day_str
         )
         
         if not gov_ok:
@@ -66,6 +68,15 @@ class AdaptiveStrategySelector:
         is_daily_flat = fingerprint['time_context']['is_daily_flat_triggered']
         if is_daily_flat:
             return self._route_to_no_trade(t_str, "Mandatory Daily Flat active (21:45 UTC cutoff)", fingerprint)
+
+        # 2.1 Asset-Specific Statistical Session Gates
+        hour = fingerprint['time_context']['hour_utc']
+        if symbol == 'GOLD-PERP' and (hour >= 22 or hour < 2):
+            return self._route_to_no_trade(t_str, "Midnight spread widening avoidance (22:00-02:00 UTC)", fingerprint)
+        elif symbol == 'BTCUSD' and not (13 <= hour < 21):
+            return self._route_to_no_trade(t_str, "Off-session low depth avoidance (BTC active: 13:00-21:00 NY)", fingerprint)
+        elif symbol == 'ETHUSD' and not (0 <= hour < 7):
+            return self._route_to_no_trade(t_str, "Off-session low depth avoidance (ETH active: 00:00-07:00 ASIA)", fingerprint)
 
         # 3. Strategy Eligibility Filtering & Scoring
         candidates: List[Dict[str, Any]] = []
@@ -156,16 +167,31 @@ class AdaptiveStrategySelector:
         conf = fp.get('confidence_score', 0.5)
         is_spread_elevated = fp['microstructure']['is_spread_elevated']
         delta = abs(fp['microstructure']['order_flow_delta'])
+        symbol = fp.get('symbol', '')
         
         if primary_regime in strat.suitable_regimes:
-            score += 40.0
+            score += 30.0
         elif any(r in strat.suitable_regimes for r in active_regimes):
-            score += 20.0
-            
-        if not is_spread_elevated or strat.execution_cost_sensitivity == "LOW":
             score += 15.0
             
+        if not is_spread_elevated or strat.execution_cost_sensitivity == "LOW":
+            score += 10.0
+            
         if delta > 10.0:
+            score += 10.0
+
+        # Proven Statistical Champion Boost
+        if strat.validation_status == "CHAMPION":
+            score += 15.0
+
+        # Asset-Specific Champion Affinity
+        CHAMPION_MAP = {
+            'XAUUSD': 'STR-010',
+            'GOLD-PERP': 'STR-006',
+            'BTCUSD': 'STR-006',
+            'ETHUSD': 'STR-006'
+        }
+        if CHAMPION_MAP.get(symbol) == strat.strategy_id:
             score += 15.0
             
         score += conf * 10.0

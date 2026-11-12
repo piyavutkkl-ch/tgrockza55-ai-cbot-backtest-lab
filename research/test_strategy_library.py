@@ -26,8 +26,8 @@ class TestStrategyLibrary(unittest.TestCase):
         self.registry = StrategyRegistry()
 
     def test_01_core_fleet_loaded(self):
-        self.assertEqual(len(self.registry.strategies), 9)
-        for i in range(1, 10):
+        self.assertEqual(len(self.registry.strategies), 10)
+        for i in range(1, 11):
             sid = f"STR-{i:03d}"
             self.assertIn(sid, self.registry.strategies)
 

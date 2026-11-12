@@ -1,7 +1,7 @@
 {
   "registry_version": "V4.0-INSTITUTIONAL",
-  "updated_at_utc": "2026-11-10T05:37:00.026770+00:00",
-  "total_strategies": 9,
+  "updated_at_utc": "2026-11-12T06:46:56.394238+00:00",
+  "total_strategies": 10,
   "strategies": {
     "STR-001": {
       "strategy_id": "STR-001",
@@ -167,14 +167,15 @@
       "name": "L2 DOM Order Flow Imbalance",
       "hypothesis": "Significant DOM volume imbalances at key psychological levels signal aggressive institutional accumulation or distribution.",
       "parameters": {
-        "sl_dist": 4.0,
+        "sl_dist": 5.0,
         "rr_ratio": 2.5,
-        "tp_dist": 10.0,
+        "tp_dist": 12.5,
         "risk_per_trade_pct": 1.0
       },
       "suitable_market_regimes": [
         "REVERSAL",
-        "RANGE_BOUND"
+        "RANGE_BOUND",
+        "SIDEWAY"
       ],
       "suitable_trading_sessions": [
         "ALL"
@@ -187,7 +188,7 @@
         "Flash liquidity pulls"
       ],
       "execution_cost_sensitivity": "HIGH",
-      "validation_status": "EXPERIMENTAL",
+      "validation_status": "CHAMPION",
       "historical_metrics": {},
       "context_performance": {}
     },
@@ -278,6 +279,39 @@
       ],
       "failure_conditions": [],
       "execution_cost_sensitivity": "ZERO",
+      "validation_status": "CHAMPION",
+      "historical_metrics": {},
+      "context_performance": {}
+    },
+    "STR-010": {
+      "strategy_id": "STR-010",
+      "version": "1.0.0",
+      "name": "Anchored VWAP Equilibrium & Macro Shield",
+      "hypothesis": "Fading extreme standard deviation stretches from daily Anchored VWAP strictly in the direction of the EMA50/EMA200 macro trend yields high-probability mean-reverting absorption.",
+      "parameters": {
+        "sl_dist": 5.0,
+        "rr_ratio": 3.0,
+        "tp_dist": 15.0,
+        "risk_per_trade_pct": 1.0
+      },
+      "suitable_market_regimes": [
+        "RANGE_BOUND",
+        "SIDEWAY",
+        "REVERSAL",
+        "WEAK_TREND",
+        "VOLATILITY_EXPANSION"
+      ],
+      "suitable_trading_sessions": [
+        "ALL"
+      ],
+      "suitable_news_conditions": [
+        "CLEAR"
+      ],
+      "failure_conditions": [
+        "Macro trend inversion",
+        "Extreme runaway news gap"
+      ],
+      "execution_cost_sensitivity": "LOW",
       "validation_status": "CHAMPION",
       "historical_metrics": {},
       "context_performance": {}

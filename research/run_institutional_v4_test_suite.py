@@ -27,6 +27,7 @@ TEST_STEPS = [
     ("Multi-Objective Statistical Validation", [PYTHON_EXE, "-m", "unittest", "research/test_statistical_validation.py"]),
     ("Performance Attribution & AI Critic", [PYTHON_EXE, "research/performance_attribution_engine.py"]),
     ("Knowledge Memory & Experiment Registry", [PYTHON_EXE, "research/experiment_registry.py"]),
+    ("Chronological Market Replay Engine", [PYTHON_EXE, "research/market_replay_engine.py"]),
     ("Event-Driven Market Intelligence Daemon", [PYTHON_EXE, "research/event_driven_intelligence_daemon.py", "--single"]),
     ("Executive Dashboard UI Verification", [PYTHON_EXE, "tools/verify_white_theme_and_charts.py"])
 ]

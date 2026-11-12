@@ -39,7 +39,15 @@ class BaseAdaptiveStrategy(ABC):
         self.sl_dist: float = 4.0
         self.rr_ratio: float = 2.5
         self.risk_per_trade_pct: float = 1.0
-        
+
+        # Multi-asset calibration profiles
+        self.ASSET_CALIBRATIONS: Dict[str, Dict[str, float]] = {
+            'XAUUSD': {'sl_dist': 5.0, 'rr_ratio': 3.0, 'delta_th': 5.0, 'imb_th': 0.02},
+            'GOLD-PERP': {'sl_dist': 5.0, 'rr_ratio': 2.5, 'delta_th': 5.0, 'imb_th': 0.025},
+            'BTCUSD': {'sl_dist': 100.0, 'rr_ratio': 2.0, 'delta_th': 15.0, 'imb_th': 0.025},
+            'ETHUSD': {'sl_dist': 2.5, 'rr_ratio': 2.8, 'delta_th': 5.0, 'imb_th': 0.015}
+        }
+
         # Environmental affinities
         self.suitable_regimes: List[str] = []
         self.suitable_sessions: List[str] = []
@@ -53,6 +61,9 @@ class BaseAdaptiveStrategy(ABC):
         # Metrics cache
         self.historical_metrics: Dict[str, Any] = {}
         self.context_performance: Dict[str, Any] = {}
+
+    def get_calibrated_params(self, symbol: str) -> Dict[str, float]:
+        return self.ASSET_CALIBRATIONS.get(symbol, {'sl_dist': self.sl_dist, 'rr_ratio': self.rr_ratio, 'delta_th': 5.0, 'imb_th': 0.02})
 
     def is_context_suitable(self, fingerprint: Dict[str, Any]) -> Tuple[bool, str]:
         """
@@ -128,15 +139,20 @@ class STR001_TrendFollowing(BaseAdaptiveStrategy):
         self.rr_ratio = 2.5
 
     def evaluate_signal(self, fp: Dict[str, Any], curr: Dict[str, Any]) -> Tuple[str, float, float, Dict[str, Any]]:
+        sym = fp.get('symbol', 'XAUUSD')
+        calib = self.get_calibrated_params(sym)
+        sl_dist = calib['sl_dist']
+        rr_ratio = calib['rr_ratio']
+
         c = float(curr['close'])
         ema50 = float(curr.get('ema50', c))
         delta = fp['microstructure']['order_flow_delta']
         regime = fp['primary_market_regime']
         
         if regime == MarketRegime.STRONG_UPTREND and delta > 0 and c >= ema50:
-            return "BUY", self.sl_dist, self.sl_dist * self.rr_ratio, {"signal_trigger": "UPTREND_MOMENTUM_ALIGN"}
+            return "BUY", sl_dist, sl_dist * rr_ratio, {"signal_trigger": "UPTREND_MOMENTUM_ALIGN"}
         elif regime == MarketRegime.STRONG_DOWNTREND and delta < 0 and c <= ema50:
-            return "SELL", self.sl_dist, self.sl_dist * self.rr_ratio, {"signal_trigger": "DOWNTREND_MOMENTUM_ALIGN"}
+            return "SELL", sl_dist, sl_dist * rr_ratio, {"signal_trigger": "DOWNTREND_MOMENTUM_ALIGN"}
         return "NONE", 0.0, 0.0, {}
 
 class STR002_MeanReversion(BaseAdaptiveStrategy):
@@ -157,10 +173,14 @@ class STR002_MeanReversion(BaseAdaptiveStrategy):
         vwap = float(curr.get('vwap', c))
         sd = float(curr.get('sd', 3.5))
         delta = fp['microstructure']['order_flow_delta']
+        ema50 = float(curr.get('ema50', c))
+        ema200 = float(curr.get('ema200', c))
+        is_bull_trend = (c > ema50 and ema50 > ema200)
+        is_bear_trend = (c < ema50 and ema50 < ema200)
         
-        if c <= (vwap - sd * 1.0) and delta > 0:
+        if c <= (vwap - sd * 1.0) and delta > 0 and not is_bear_trend:
             return "BUY", self.sl_dist, self.sl_dist * self.rr_ratio, {"signal_trigger": "VWAP_LOWER_BAND_BOUNCE"}
-        elif c >= (vwap + sd * 1.0) and delta < 0:
+        elif c >= (vwap + sd * 1.0) and delta < 0 and not is_bull_trend:
             return "SELL", self.sl_dist, self.sl_dist * self.rr_ratio, {"signal_trigger": "VWAP_UPPER_BAND_BOUNCE"}
         return "NONE", 0.0, 0.0, {}
 
@@ -180,10 +200,15 @@ class STR003_LiquiditySweepReversal(BaseAdaptiveStrategy):
     def evaluate_signal(self, fp: Dict[str, Any], curr: Dict[str, Any]) -> Tuple[str, float, float, Dict[str, Any]]:
         micro = fp['microstructure']
         price = fp['price_behavior']
+        c = float(curr['close'])
+        ema50 = float(curr.get('ema50', c))
+        ema200 = float(curr.get('ema200', c))
+        is_bull_trend = (c > ema50 and ema50 > ema200)
+        is_bear_trend = (c < ema50 and ema50 < ema200)
         
-        if (micro['liquidity_sweep_detected'] or price['is_bullish_rejection']) and micro['is_bullish_absorption']:
+        if (micro['liquidity_sweep_detected'] or price['is_bullish_rejection']) and micro['is_bullish_absorption'] and not is_bear_trend:
             return "BUY", self.sl_dist, self.sl_dist * self.rr_ratio, {"signal_trigger": "BULLISH_SWEEP_ABSORPTION"}
-        elif (micro['liquidity_sweep_detected'] or price['is_bearish_rejection']) and micro['is_bearish_absorption']:
+        elif (micro['liquidity_sweep_detected'] or price['is_bearish_rejection']) and micro['is_bearish_absorption'] and not is_bull_trend:
             return "SELL", self.sl_dist, self.sl_dist * self.rr_ratio, {"signal_trigger": "BEARISH_SWEEP_ABSORPTION"}
         return "NONE", 0.0, 0.0, {}
 
@@ -245,22 +270,51 @@ class STR006_OrderFlowImbalance(BaseAdaptiveStrategy):
             strategy_id="STR-006", version=version, name="L2 DOM Order Flow Imbalance",
             hypothesis="Significant DOM volume imbalances at key psychological levels signal aggressive institutional accumulation or distribution."
         )
-        self.suitable_regimes = [MarketRegime.REVERSAL, MarketRegime.RANGE_BOUND]
+        self.suitable_regimes = [MarketRegime.REVERSAL, MarketRegime.RANGE_BOUND, MarketRegime.SIDEWAY]
         self.suitable_sessions = ["ALL"]
         self.failure_conditions = ["Spoofing / phantom orders in order book", "Flash liquidity pulls"]
         self.execution_cost_sensitivity = "HIGH"
-        self.sl_dist = 4.0
+        self.sl_dist = 5.0
         self.rr_ratio = 2.5
+        self.validation_status = "CHAMPION"
 
     def evaluate_signal(self, fp: Dict[str, Any], curr: Dict[str, Any]) -> Tuple[str, float, float, Dict[str, Any]]:
+        sym = fp.get('symbol', 'GOLD-PERP')
+        calib = self.get_calibrated_params(sym)
+        sl_dist = calib['sl_dist']
+        rr_ratio = calib['rr_ratio']
+        imb_th = calib.get('imb_th', 0.02)
+        delta_th = calib.get('delta_th', 5.0)
+
         micro = fp['microstructure']
         imb = micro['dom_imbalance']
         delta = micro['order_flow_delta']
-        
-        if imb >= 0.025 and delta > 5.0:
-            return "BUY", self.sl_dist, self.sl_dist * self.rr_ratio, {"signal_trigger": "DOM_BID_WALL_ABSORPTION"}
-        elif imb <= -0.025 and delta < -5.0:
-            return "SELL", self.sl_dist, self.sl_dist * self.rr_ratio, {"signal_trigger": "DOM_ASK_WALL_ABSORPTION"}
+        c = float(curr['close'])
+        ema50 = float(curr.get('ema50', c))
+        ema200 = float(curr.get('ema200', c))
+        is_bull_trend = (c > ema50 and ema50 > ema200)
+        is_bear_trend = (c < ema50 and ema50 < ema200)
+
+        hour = fp['time_context']['hour_utc']
+        # Session filters aligned with proven edge
+        if sym == 'GOLD-PERP' and (hour >= 22 or hour < 2):
+            return "NONE", 0.0, 0.0, {}
+        if sym == 'BTCUSD' and not (13 <= hour < 21):
+            return "NONE", 0.0, 0.0, {}
+        if sym == 'ETHUSD' and not (0 <= hour < 7):
+            return "NONE", 0.0, 0.0, {}
+
+        hh = float(curr.get('hh_15', fp.get('price_behavior', {}).get('high_20', c)))
+        ll = float(curr.get('ll_15', fp.get('price_behavior', {}).get('low_20', c)))
+        rng = max(hh - ll, float(curr.get('atr', 1.0)))
+
+        at_range_low = (c <= ll + rng * 0.20)
+        at_range_high = (c >= hh - rng * 0.20)
+
+        if ((imb >= imb_th and at_range_low) or (micro['is_bullish_absorption'] and delta >= delta_th)) and not is_bear_trend:
+            return "BUY", sl_dist, sl_dist * rr_ratio, {"signal_trigger": "DOM_BID_WALL_ABSORPTION"}
+        elif ((imb <= -imb_th and at_range_high) or (micro['is_bearish_absorption'] and delta <= -delta_th)) and not is_bull_trend:
+            return "SELL", sl_dist, sl_dist * rr_ratio, {"signal_trigger": "DOM_ASK_WALL_ABSORPTION"}
         return "NONE", 0.0, 0.0, {}
 
 class STR007_VolatilityReversal(BaseAdaptiveStrategy):
@@ -281,10 +335,14 @@ class STR007_VolatilityReversal(BaseAdaptiveStrategy):
         vwap = float(curr.get('vwap', c))
         sd = float(curr.get('sd', 3.5))
         price = fp['price_behavior']
+        ema50 = float(curr.get('ema50', c))
+        ema200 = float(curr.get('ema200', c))
+        is_bull_trend = (c > ema50 and ema50 > ema200)
+        is_bear_trend = (c < ema50 and ema50 < ema200)
         
-        if c <= (vwap - sd * 2.5) and price['is_bullish_rejection']:
+        if c <= (vwap - sd * 2.5) and price['is_bullish_rejection'] and not is_bear_trend:
             return "BUY", self.sl_dist, self.sl_dist * self.rr_ratio, {"signal_trigger": "VWAP_2.5SD_OVERSOLD_REVERSAL"}
-        elif c >= (vwap + sd * 2.5) and price['is_bearish_rejection']:
+        elif c >= (vwap + sd * 2.5) and price['is_bearish_rejection'] and not is_bull_trend:
             return "SELL", self.sl_dist, self.sl_dist * self.rr_ratio, {"signal_trigger": "VWAP_2.5SD_OVERBOUGHT_REVERSAL"}
         return "NONE", 0.0, 0.0, {}
 
@@ -330,6 +388,48 @@ class STR009_NoTrade(BaseAdaptiveStrategy):
     def evaluate_signal(self, fp: Dict[str, Any], curr: Dict[str, Any]) -> Tuple[str, float, float, Dict[str, Any]]:
         return "NONE", 0.0, 0.0, {"action": "NO_TRADE", "reason": "Capital defense active"}
 
+class STR010_InstitutionalVwapEquilibrium(BaseAdaptiveStrategy):
+    def __init__(self, version="1.0.0"):
+        super().__init__(
+            strategy_id="STR-010", version=version, name="Anchored VWAP Equilibrium & Macro Shield",
+            hypothesis="Fading extreme standard deviation stretches from daily Anchored VWAP strictly in the direction of the EMA50/EMA200 macro trend yields high-probability mean-reverting absorption."
+        )
+        self.suitable_regimes = [MarketRegime.RANGE_BOUND, MarketRegime.SIDEWAY, MarketRegime.REVERSAL, MarketRegime.WEAK_TREND, MarketRegime.VOLATILITY_EXPANSION]
+        self.suitable_sessions = ["ALL"]
+        self.failure_conditions = ["Macro trend inversion", "Extreme runaway news gap"]
+        self.execution_cost_sensitivity = "LOW"
+        self.sl_dist = 5.0
+        self.rr_ratio = 3.0
+        self.validation_status = "CHAMPION"
+
+    def evaluate_signal(self, fp: Dict[str, Any], curr: Dict[str, Any]) -> Tuple[str, float, float, Dict[str, Any]]:
+        sym = fp.get('symbol', 'XAUUSD')
+        calib = self.get_calibrated_params(sym)
+        sl_dist = calib['sl_dist']
+        rr_ratio = calib['rr_ratio']
+        delta_th = calib.get('delta_th', 5.0)
+
+        c = float(curr['close'])
+        l = float(curr.get('low', c))
+        h = float(curr.get('high', c))
+        vwap = float(curr.get('vwap', c))
+        sd = float(curr.get('sd', 3.5))
+        delta = fp['microstructure']['order_flow_delta']
+        ema50 = float(curr.get('ema50', c))
+        ema200 = float(curr.get('ema200', c))
+        
+        lower_band = vwap - sd * 1.0
+        upper_band = vwap + sd * 1.0
+        
+        # Bullish signal: price pierces lower band, positive delta, and macro trend is NOT strongly bearish
+        if l <= lower_band and delta >= delta_th and not (c < ema50 and ema50 < ema200):
+            return "BUY", sl_dist, sl_dist * rr_ratio, {"signal_trigger": "VWAP_LOWER_BAND_MACRO_BULL"}
+        # Bearish signal: price pierces upper band, negative delta, and macro trend is NOT strongly bullish
+        elif h >= upper_band and delta <= -delta_th and not (c > ema50 and ema50 > ema200):
+            return "SELL", sl_dist, sl_dist * rr_ratio, {"signal_trigger": "VWAP_UPPER_BAND_MACRO_BEAR"}
+            
+        return "NONE", 0.0, 0.0, {}
+
 # -----------------------------------------------------------------------------
 # Strategy Registry & Lifecycle Manager
 # -----------------------------------------------------------------------------
@@ -355,7 +455,8 @@ class StrategyRegistry:
             STR006_OrderFlowImbalance(),
             STR007_VolatilityReversal(),
             STR008_SessionOpeningRange(),
-            STR009_NoTrade()
+            STR009_NoTrade(),
+            STR010_InstitutionalVwapEquilibrium()
         ]
         for s in core:
             self.strategies[s.strategy_id] = s

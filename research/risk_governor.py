@@ -37,9 +37,18 @@ class RiskGovernor:
     NEWS_PRE_BLACKOUT_MIN = 30
     NEWS_POST_BLACKOUT_MIN = 60
 
+    DAILY_PROFIT_TARGETS = {
+        'XAUUSD': 10.00,
+        'GOLD-PERP': 15.00,
+        'BTCUSD': 25.00,
+        'ETHUSD': 1.00,
+        'DEFAULT': 10.00
+    }
+
     def __init__(self):
         self.daily_pnl = {}
         self.symbol_consec_losses = {}
+        self.symbol_daily_losses = {}
         self.halted_symbols = set()
         self.portfolio_halted = False
         self.active_positions_count = 0
@@ -47,6 +56,7 @@ class RiskGovernor:
     def reset_day(self, date_str):
         self.daily_pnl[date_str] = 0.0
         self.symbol_consec_losses[date_str] = {s: 0 for s in self.SPREAD_CEILING}
+        self.symbol_daily_losses[date_str] = {s: 0 for s in self.SPREAD_CEILING}
         self.halted_symbols.clear()
         self.portfolio_halted = False
         self.active_positions_count = 0
@@ -69,24 +79,29 @@ class RiskGovernor:
         if self.portfolio_halted:
             return False, "REJECTED: Portfolio Daily Loss Ceiling reached (-$10.00 USD)"
 
-        # 2. Daily Flat Boundary (21:45 UTC onwards)
+        # 2. Daily Profit Target Guardian (Lock in daily gains)
+        target_pnl = self.DAILY_PROFIT_TARGETS.get(symbol, self.DAILY_PROFIT_TARGETS['DEFAULT'])
+        if date_str and self.daily_pnl.get(date_str, 0.0) >= target_pnl:
+            return False, f"APPROVED (GAINS LOCKED): Daily profit target (+${self.daily_pnl.get(date_str, 0.0):.2f} >= ${target_pnl:.2f}) reached. Preserving daily profit."
+
+        # 3. Daily Flat Boundary (21:45 UTC onwards)
         if current_time_hhmm >= self.MANDATORY_DAILY_FLAT_UTC:
             return False, f"REJECTED: Approaching Daily Flat closure window ({current_time_hhmm} >= {self.MANDATORY_DAILY_FLAT_UTC} UTC)"
 
-        # 3. Max Concurrent Positions (Hard limit: 1)
+        # 4. Max Concurrent Positions (Hard limit: 1)
         if active_positions >= self.MAX_CONCURRENT_POSITIONS:
             return False, f"REJECTED: Max concurrent positions ({self.MAX_CONCURRENT_POSITIONS}) already reached"
 
-        # 4. Symbol Consecutive Loss Cutoff
+        # 5. Symbol Consecutive/Daily Loss Cutoff
         if symbol in self.halted_symbols:
-            return False, f"REJECTED: Symbol {symbol} halted due to daily consecutive loss cap (2 losses)"
+            return False, f"REJECTED: Symbol {symbol} halted due to daily consecutive/total loss cap (2 losses)"
 
-        # 5. Spread Ceiling Gate
+        # 6. Spread Ceiling Gate
         max_sp = self.SPREAD_CEILING.get(symbol, 999.0)
         if current_spread > max_sp:
             return False, f"REJECTED: Spread ({current_spread:.2f}) exceeds spread ceiling ({max_sp:.2f})"
 
-        # 6. News Void Gate
+        # 7. News Void Gate
         if min_to_news <= self.NEWS_PRE_BLACKOUT_MIN and news_impact in ['HIGH', 'EXTREME']:
             return False, f"REJECTED: Approaching high impact news ({news_impact}) in {min_to_news:.0f} mins"
         if min_since_news <= self.NEWS_POST_BLACKOUT_MIN and last_impact in ['HIGH', 'EXTREME']:
@@ -100,10 +115,11 @@ class RiskGovernor:
 
         self.daily_pnl[date_str] += pnl
 
-        # Track consecutive losses
+        # Track losses
         if pnl <= 0:
             self.symbol_consec_losses[date_str][symbol] = self.symbol_consec_losses[date_str].get(symbol, 0) + 1
-            if self.symbol_consec_losses[date_str][symbol] >= self.SYMBOL_MAX_CONSEC_LOSSES:
+            self.symbol_daily_losses[date_str][symbol] = self.symbol_daily_losses[date_str].get(symbol, 0) + 1
+            if self.symbol_consec_losses[date_str][symbol] >= self.SYMBOL_MAX_CONSEC_LOSSES or self.symbol_daily_losses[date_str][symbol] >= self.SYMBOL_MAX_CONSEC_LOSSES:
                 self.halted_symbols.add(symbol)
         else:
             self.symbol_consec_losses[date_str][symbol] = 0

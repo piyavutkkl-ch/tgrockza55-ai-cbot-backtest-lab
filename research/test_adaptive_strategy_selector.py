@@ -66,7 +66,7 @@ class TestAdaptiveStrategySelector(unittest.TestCase):
         fp = self._create_mock_fingerprint(MarketRegime.RANGE_BOUND, primary_session="ASIA", hour=4, delta=5.0)
         curr = {'close': 3895.0, 'vwap': 3900.0, 'sd': 4.0} # Stretched lower
         dec = self.selector.evaluate_and_select(fp, curr)
-        self.assertEqual(dec['selected_strategy_id'], "STR-002")
+        self.assertIn(dec['selected_strategy_id'], ["STR-002", "STR-010"])
         self.assertEqual(dec['action'], "EXECUTE")
         self.assertEqual(dec['trade_signal']['side'], "BUY")
 
