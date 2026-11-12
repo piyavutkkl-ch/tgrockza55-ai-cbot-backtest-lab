@@ -198,10 +198,10 @@
           <span class="px-1.5 py-0.5 rounded text-[11px] bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30">+$96.00</span>
         </div>
 
-        <!-- Access Mode Badge (Public Visitor vs Owner Admin) -->
-        <div id="visitor-mode-badge" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 text-xs font-mono text-slate-300">
-          <span class="h-2 w-2 rounded-full bg-slate-400"></span>
-          <span id="hdr-auth-label">👁️ PUBLIC VISITOR (VIEW-ONLY)</span>
+        <!-- Access Mode Badge (Public Research Lab) -->
+        <div id="visitor-mode-badge" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 text-xs font-mono text-emerald-400">
+          <span class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>🌐 PUBLIC RESEARCH LAB</span>
         </div>
 
         <!-- Theme Toggle Button -->
@@ -209,33 +209,17 @@
           <span id="theme-icon">🌙</span> <span id="theme-label" class="hidden sm:inline">ธีมมืด</span>
         </button>
 
-        <!-- Owner Login Button -->
-        <button id="btn-admin-auth" onclick="openAdminLoginModal()" class="px-3 py-1.5 rounded-xl bg-sky-500/15 hover:bg-sky-500/25 text-sky-300 border border-sky-500/40 font-bold text-xs flex items-center gap-1.5 transition cursor-pointer">
-          <span>🔐</span> <span id="btn-admin-auth-text">Owner Login</span>
-        </button>
-
-        <a href="auth.html" class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700 font-bold text-xs hidden md:flex items-center gap-1 transition">
-          <span>🔗</span> <span>cTrader OAuth2</span>
-        </a>
-
-        <a href="pro.html" class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700 font-bold text-xs hidden sm:flex items-center gap-1.5 transition">
+        <a href="pro.html" class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700 font-bold text-xs flex items-center gap-1.5 transition">
           <span>🕯️</span> <span>Candlestick Lab</span>
         </a>
 
-        <!-- Emergency Kill Switch (Protected) -->
-        <button id="btn-kill-switch" onclick="toggleKillSwitch()" class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-rose-600 to-red-700 hover:from-rose-500 hover:to-red-600 text-white font-extrabold text-xs border border-rose-400/50 flex items-center gap-1.5 transition cursor-pointer shadow-md">
-          <span class="w-2 h-2 rounded-full bg-white animate-ping"></span>
-          <span>EMERGENCY KILL</span>
-        </button>
+        <a href="research.html" class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700 font-bold text-xs hidden md:flex items-center gap-1.5 transition">
+          <span>🔬</span> <span>193 Papers &amp; Alphas</span>
+        </a>
 
       </div>
     </div>
   </header>
-
-  <!-- Emergency Kill Banner (Toggled by Kill Switch) -->
-  <div id="kill-alert-banner" class="hidden bg-gradient-to-r from-rose-900 via-red-800 to-rose-900 text-white text-center font-extrabold py-2 px-4 text-xs tracking-widest border-b border-rose-500 animate-pulse">
-    🚨 EMERGENCY KILL SWITCH ENGAGED · ระงับการเปิดออเดอร์ใหม่ทั้งหมด (Execution Watchdog Alert)
-  </div>
 
   <!-- ========================================================================= -->
   <!-- 2. SEGMENTED INTERACTIVE ZONE CONTROL (Point #3: Segmented Switch)         -->
@@ -719,22 +703,7 @@
             </table>
           </div>
 
-          <!-- Stage 5 Protected Admin Controller (Deliverable C) -->
-          <div id="idx-z2-admin-panel" class="hidden p-4 rounded-xl bg-slate-900/90 border border-amber-500/40 space-y-3">
-            <div class="text-xs font-bold text-amber-300 flex items-center justify-between">
-              <span>👑 Owner Admin Command Bar</span>
-              <span class="text-[10px] font-mono text-emerald-400">JWT Verified</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <input type="number" id="idx-admin-lot" value="0.01" step="0.01" min="0.01" max="1.0" class="w-20 px-2.5 py-1.5 rounded-lg bg-slate-950 border border-slate-700 text-white font-mono text-xs">
-              <button onclick="sendIdxAdminCommand('RESUME')" class="flex-1 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition cursor-pointer">
-                ▶ Resume
-              </button>
-              <button onclick="sendIdxAdminCommand('PAUSE')" class="flex-1 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs transition cursor-pointer">
-                ⏸ Pause
-              </button>
-            </div>
-          </div>
+
 
         </div>
 
@@ -1202,49 +1171,7 @@
   <!-- MODALS: OWNER ADMIN LOGIN & HITL STAGE 1 APPROVE                          -->
   <!-- ========================================================================= -->
 
-  <!-- Owner Admin Login Modal -->
-  <div id="admin-login-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="card-surface max-w-md w-full p-6 space-y-4 relative">
-      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-        <div class="flex items-center gap-2 text-amber-300 font-bold text-sm">
-          <span>🔐</span> <span>Owner Admin Authentication Gateway</span>
-        </div>
-        <button onclick="closeAdminLoginModal()" class="text-slate-400 hover:text-white font-mono text-lg cursor-pointer">✕</button>
-      </div>
 
-      <div class="text-xs text-slate-300 leading-relaxed">
-        ยืนยันตัวตนสำหรับเจ้าของพอร์ต (<code class="text-amber-300">piyavut.ch@gmail.com</code>) เพื่อปลดล็อกสิทธิ์สั่งการบอทสด Emergency Kill Switch, Lot Size และ Stage 1 HITL
-      </div>
-
-      <div id="admin-login-form" class="space-y-3">
-        <div>
-          <label class="text-[11px] text-slate-400 font-mono">Owner Email:</label>
-          <input type="email" id="admin-email-input" value="piyavut.ch@gmail.com" class="w-full mt-1 px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white font-mono text-xs focus:border-amber-400 outline-none">
-        </div>
-        <div>
-          <label class="text-[11px] text-slate-400 font-mono">Password (Supabase Auth):</label>
-          <input type="password" id="admin-password-input" placeholder="••••••••" class="w-full mt-1 px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white font-mono text-xs focus:border-amber-400 outline-none">
-        </div>
-        <div class="flex gap-2 pt-2">
-          <button onclick="submitAdminLogin()" class="flex-1 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition cursor-pointer">
-            🔑 ล็อกอินทันที
-          </button>
-          <button onclick="sendAdminMagicLink()" class="flex-1 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs border border-slate-700 transition cursor-pointer">
-            ✉️ ส่ง Magic Link
-          </button>
-        </div>
-      </div>
-
-      <div id="admin-session-active-box" class="hidden space-y-3 text-center py-2">
-        <div class="text-emerald-400 font-bold text-sm">✅ ยืนยันตัวตนในฐานะ Owner Admin เรียบร้อยแล้ว</div>
-        <button onclick="logoutOwnerAdmin()" class="px-4 py-2 rounded-xl bg-rose-600/30 hover:bg-rose-600 text-rose-300 border border-rose-500/40 text-xs font-bold transition cursor-pointer">
-          🚪 ออกจากระบบ (Logout)
-        </button>
-      </div>
-
-      <div id="admin-auth-status-msg" class="hidden text-xs font-mono p-2.5 rounded-lg border"></div>
-    </div>
-  </div>
 
   <!-- HITL Stage 1 Modal -->
   <div id="hitl-cli-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
@@ -1275,17 +1202,11 @@
   <script>
     let currentPillar = 1;
     let currentViewMode = 'FLYWHEEL';
-    let killSwitchEngaged = false;
     let currentIdxStrategy = 'vwap_absorption_xau';
-    let isOwnerAdmin = false;
-    let adminJwtToken = null;
-    let sbClient = null;
     let tvWidget = null;
     let currentTvSymbol = 'BINANCE:BTCUSDT';
-    const OWNER_EMAIL = (typeof OWNER_ADMIN_EMAIL !== 'undefined' ? OWNER_ADMIN_EMAIL : 'piyavut.ch@gmail.com').toLowerCase();
 
     function init() {
-      initAdminAuth();
       switchIdxStrategy('vwap_absorption_xau');
       fetchBacktestData();
       renderLiveBots();
@@ -1679,144 +1600,7 @@
       initTradingViewChart(symbol);
     }
 
-    // Deliverable C: Owner Admin Auth
-    function initAdminAuth() {
-      try {
-        if (window.supabase && typeof SUPABASE_URL !== 'undefined' && typeof SUPABASE_ANON_KEY !== 'undefined') {
-          sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-          sbClient.auth.getSession().then(({ data }) => {
-            if (data && data.session) verifyAdminSession(data.session);
-          });
-          sbClient.auth.onAuthStateChange((_event, session) => {
-            verifyAdminSession(session);
-          });
-        }
-      } catch (e) {}
-      updateAdminModeUI();
-    }
 
-    function verifyAdminSession(session) {
-      if (session && session.user && session.user.email && session.user.email.toLowerCase() === OWNER_EMAIL) {
-        isOwnerAdmin = true;
-        adminJwtToken = session.access_token;
-      } else {
-        isOwnerAdmin = false;
-        adminJwtToken = null;
-      }
-      updateAdminModeUI();
-    }
-
-    function updateAdminModeUI() {
-      const badge = document.getElementById('visitor-mode-badge');
-      const authBtn = document.getElementById('btn-admin-auth');
-      const z2Panel = document.getElementById('idx-z2-admin-panel');
-
-      if (isOwnerAdmin) {
-        if (badge) {
-          badge.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-950/70 border border-amber-500/40 text-xs font-mono text-amber-300';
-          badge.innerHTML = '<span>👑</span><span>OWNER ADMIN: UNLOCKED</span>';
-        }
-        if (authBtn) authBtn.textContent = '🔓 Owner Admin (' + OWNER_EMAIL + ')';
-        if (z2Panel) z2Panel.classList.remove('hidden');
-      } else {
-        if (badge) {
-          badge.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 text-xs font-mono text-slate-300';
-          badge.innerHTML = '<span>👁️</span><span>PUBLIC VISITOR (VIEW-ONLY)</span>';
-        }
-        if (authBtn) authBtn.textContent = '🔐 Owner Login';
-        if (z2Panel) z2Panel.classList.add('hidden');
-      }
-    }
-
-    function openAdminLoginModal() {
-      const m = document.getElementById('admin-login-modal');
-      if (!m) return;
-      m.classList.remove('hidden');
-    }
-
-    function closeAdminLoginModal() {
-      const m = document.getElementById('admin-login-modal');
-      if (m) m.classList.add('hidden');
-    }
-
-    async function submitAdminLogin() {
-      const email = (document.getElementById('admin-email-input')?.value || '').trim().toLowerCase();
-      const password = document.getElementById('admin-password-input')?.value || '';
-      const statusEl = document.getElementById('admin-auth-status-msg');
-      if (statusEl) statusEl.classList.remove('hidden');
-
-      if (email !== OWNER_EMAIL) {
-        if (statusEl) {
-          statusEl.className = 'text-xs font-mono p-2.5 rounded-lg bg-rose-950/60 border border-rose-500/40 text-rose-300';
-          statusEl.textContent = '❌ ปฏิเสธการเข้าถึง: อนุญาตเฉพาะอีเมลเจ้าของ (' + OWNER_EMAIL + ') เท่านั้น';
-        }
-        return;
-      }
-      if (!sbClient) return;
-      const { data, error } = await sbClient.auth.signInWithPassword({ email, password });
-      if (error) {
-        if (statusEl) {
-          statusEl.className = 'text-xs font-mono p-2.5 rounded-lg bg-rose-950/60 border border-rose-500/40 text-rose-300';
-          statusEl.textContent = '❌ ล็อกอินไม่สำเร็จ: ' + error.message;
-        }
-        return;
-      }
-      verifyAdminSession(data.session);
-      closeAdminLoginModal();
-    }
-
-    async function sendAdminMagicLink() {
-      const email = (document.getElementById('admin-email-input')?.value || '').trim().toLowerCase();
-      const statusEl = document.getElementById('admin-auth-status-msg');
-      if (statusEl) statusEl.classList.remove('hidden');
-      if (!sbClient) return;
-      const { error } = await sbClient.auth.signInWithOtp({ email, options: { emailRedirectTo: window.location.href } });
-      if (error) {
-        if (statusEl) statusEl.textContent = '❌ ส่งลิงก์ไม่สำเร็จ: ' + error.message;
-      } else {
-        if (statusEl) {
-          statusEl.className = 'text-xs font-mono p-2.5 rounded-lg bg-emerald-950/60 border border-emerald-500/40 text-emerald-300';
-          statusEl.textContent = '✅ ส่ง Magic Link ไปที่ ' + email + ' แล้ว';
-        }
-      }
-    }
-
-    async function logoutOwnerAdmin() {
-      if (sbClient) await sbClient.auth.signOut();
-      isOwnerAdmin = false;
-      adminJwtToken = null;
-      updateAdminModeUI();
-      closeAdminLoginModal();
-    }
-
-    async function sendIdxAdminCommand(action) {
-      if (!isOwnerAdmin) {
-        openAdminLoginModal();
-        return;
-      }
-      const lot = parseFloat(document.getElementById('idx-admin-lot')?.value || '0.01');
-      alert('✅ [Owner Admin] ส่งคำสั่ง ' + action + ' (Lot: ' + lot + ') สำเร็จ');
-    }
-
-    function toggleKillSwitch() {
-      if (!isOwnerAdmin) {
-        openAdminLoginModal();
-        return;
-      }
-      killSwitchEngaged = !killSwitchEngaged;
-      const banner = document.getElementById('kill-alert-banner');
-      const btn = document.getElementById('btn-kill-switch');
-      if (banner) banner.classList.toggle('hidden', !killSwitchEngaged);
-      if (btn) {
-        if (killSwitchEngaged) {
-          btn.innerHTML = '<span>🚨 HALTED (KILL ON)</span>';
-          btn.className = 'px-3.5 py-1.5 rounded-xl bg-rose-700 text-white font-black text-xs animate-pulse cursor-pointer shadow-lg';
-        } else {
-          btn.innerHTML = '<span class="w-2 h-2 rounded-full bg-white animate-ping"></span><span>EMERGENCY KILL</span>';
-          btn.className = 'px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-rose-600 to-red-700 text-white font-extrabold text-xs border border-rose-400/50 flex items-center gap-1.5 transition cursor-pointer shadow-md';
-        }
-      }
-    }
 
     // Theme Switcher Logic (Dark Terminal vs Clean High-Contrast Light)
     function toggleTheme() {
