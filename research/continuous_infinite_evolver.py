@@ -22,6 +22,8 @@ LOG_FILE = os.path.join(ROOT, 'research', 'evolver_daemon.log')
 
 sys.path.insert(0, os.path.join(ROOT, 'research'))
 from verify_100pct_daily_portfolio import load_live_bars, run_simulation
+from experiment_registry import ExperimentRegistry
+from event_driven_intelligence_daemon import EventDrivenIntelligenceDaemon
 
 def log_msg(msg):
     now_utc = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')
@@ -141,7 +143,34 @@ def run_single_evolution_cycle(cycle_num):
                 json.dump(ls, f, indent=2, ensure_ascii=False)
         except Exception:
             pass
-            
+
+    # Record to Permanent Knowledge Memory (ExperimentRegistry)
+    try:
+        exp_reg = ExperimentRegistry()
+        is_dup, _ = exp_reg.is_duplicate_experiment(cfg['type'], cfg, f"LIVE-{tested_symbol}")
+        if not is_dup:
+            exp_reg.record_experiment(
+                strategy_id=cfg['type'],
+                strategy_version="1.0.0",
+                hypothesis=f"Cycle #{cycle_num} mutation on {tested_symbol}: SL={cfg['sl']}, RR={cfg['rr']}",
+                parameters=cfg,
+                dataset_id=f"LIVE-{tested_symbol}",
+                market_context=f"Real Recorded M1 & L2 DOM Flow ({len(bars)} bars)",
+                test_period="2026-11-01 to 2026-11-06",
+                results={'trades': len(trades), 'win_rate': round(wr, 1), 'net_pnl_usd': round(net, 2), 'daily_win_rate_pct': round(d_wr, 1)},
+                failure_reasons=[] if net > 0 else ["SUBOPTIMAL_PARAMETER_ATTRIBUTION"],
+                successful_conditions=["POSITIVE_DAILY_EDGE"] if net > 0 else []
+            )
+    except Exception as e:
+        log_msg(f"ExperimentRegistry note: {e}")
+
+    # Trigger Market Intelligence Pulse across all 4 assets
+    try:
+        daemon = EventDrivenIntelligenceDaemon()
+        daemon.process_cycle()
+    except Exception as e:
+        log_msg(f"Intelligence pulse note: {e}")
+
     log_msg(f"Cycle #{cycle_num} Complete: {discovery}")
 
 def main():
