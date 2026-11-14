@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Archive / System — AI Quant Backtest Lab</title>
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('cbot_quant_theme_v1');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="assets/shell.css" />
+</head>
+<body data-page="archive-system.html">
+  <div id="app-shell"></div>
+  <div id="page-main-template" hidden>
+    <div class="placeholder-wrap">
+      <section class="card placeholder-hero">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+          <span class="badge badge-gold">🚧 กำลังพัฒนา (Placeholder หน้า 7 / 8)</span>
+          <span class="badge badge-muted">Archive &amp; System Utilities</span>
+        </div>
+        <h1 style="margin:0;font-size:22px;">📦 Archive / System</h1>
+        <p style="margin:0;color:var(--text-secondary);">
+          ศูนย์รวมหน้าเอกสารบันทึกประวัติ การส่งข้อเสนอแนะ ผลทดสอบชุดเก่า และนโยบายความเป็นส่วนตัวของระบบ (รวม 4 หน้าเดิมไว้ในหมวดเดียว)
+        </p>
+        <div class="placeholder-grid">
+          <div class="placeholder-module">
+            <strong>Chat Transcript Archive</strong>
+            <span style="font-size:12px;color:var(--text-muted);">บันทึกการค้นคว้าและบทสนทนาเชิงวิจัย</span>
+            <a href="old-web/chat_transcript.html" class="btn-secondary-link" style="margin-top:6px;">ดูหน้าเดิม: chat_transcript.html →</a>
+          </div>
+          <div class="placeholder-module">
+            <strong>Legacy Backtest Results</strong>
+            <span style="font-size:12px;color:var(--text-muted);">คลังผลทดสอบเดิมก่อนย้ายโครงสร้าง</span>
+            <a href="old-web/legacy.html" class="btn-secondary-link" style="margin-top:6px;">ดูหน้าเดิม: legacy.html →</a>
+          </div>
+          <div class="placeholder-module">
+            <strong>Feedback Studio</strong>
+            <span style="font-size:12px;color:var(--text-muted);">บันทึกข้อเสนอแนะและรายการปรับปรุงหน้าเว็บ</span>
+            <a href="old-web/feedback.html" class="btn-secondary-link" style="margin-top:6px;">ดูหน้าเดิม: feedback.html →</a>
+          </div>
+          <div class="placeholder-module">
+            <strong>Privacy Policy</strong>
+            <span style="font-size:12px;color:var(--text-muted);">ข้อมูลนโยบายความเป็นส่วนตัวของระบบ</span>
+            <a href="old-web/privacy.html" class="btn-secondary-link" style="margin-top:6px;">ดูหน้าเดิม: privacy.html →</a>
+          </div>
+        </div>
+        <div>
+          <a href="index.html" class="btn-primary-link">← กลับหน้า Overview</a>
+        </div>
+      </section>
+    </div>
+  </div>
+  <script type="module">
+    import { mountShell, loadShellTelemetryOnly } from './assets/shell.js';
+    mountShell({ activePage: 'archive-system.html', onRetry: loadShellTelemetryOnly });
+    loadShellTelemetryOnly();
+  </script>
+</body>
+</html>

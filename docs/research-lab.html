@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Research Lab — AI Quant Backtest Lab</title>
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('cbot_quant_theme_v1');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="assets/shell.css" />
+</head>
+<body data-page="research-lab.html">
+  <div id="app-shell"></div>
+  <div id="page-main-template" hidden>
+    <div class="placeholder-wrap">
+      <section class="card placeholder-hero">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+          <span class="badge badge-gold">🚧 กำลังพัฒนา (Placeholder หน้า 3 / 8)</span>
+          <span class="badge badge-purple">Strategy Discovery &amp; Hypothesis</span>
+        </div>
+        <h1 style="margin:0;font-size:22px;">🧠 Research Lab</h1>
+        <p style="margin:0;color:var(--text-secondary);">
+          พื้นที่ค้นหา Edge จากงานวิจัย 193 Papers, สร้างสมมติฐานใหม่ (Hypothesis Generation) และพัฒนากลยุทธ์ผ่าน Strategy Foundry
+        </p>
+        <div class="placeholder-grid">
+          <div class="placeholder-module">
+            <strong>Academic Research &amp; Benchmark</strong>
+            <span style="font-size:12px;color:var(--text-muted);">รวมผลสแกน Paper 193 เรื่องและผลทดสอบเบื้องต้น</span>
+            <a href="old-web/research.html" class="btn-secondary-link" style="margin-top:6px;">ดูหน้าเดิม: research.html →</a>
+          </div>
+          <div class="placeholder-module">
+            <strong>Foundry &amp; Alpha Graveyard</strong>
+            <span style="font-size:12px;color:var(--text-muted);">คัดกรอง 1,420 สมมติฐาน (ปฏิเสธโมเดลที่ล้มเหลวอัตโนมัติ)</span>
+            <a href="old-web/pro.html" class="btn-secondary-link" style="margin-top:6px;">ดูหน้าเดิม: pro.html →</a>
+          </div>
+          <div class="placeholder-module">
+            <strong>Strategy Rules Library</strong>
+            <span style="font-size:12px;color:var(--text-muted);">คลังกฎกลยุทธ์และโครงสร้างที่จดทะเบียน</span>
+            <a href="old-web/strategies.html" class="btn-secondary-link" style="margin-top:6px;">ดูหน้าเดิม: strategies.html →</a>
+          </div>
+        </div>
+        <div>
+          <a href="index.html" class="btn-primary-link">← กลับหน้า Overview</a>
+        </div>
+      </section>
+    </div>
+  </div>
+  <script type="module">
+    import { mountShell, loadShellTelemetryOnly } from './assets/shell.js';
+    mountShell({ activePage: 'research-lab.html', onRetry: loadShellTelemetryOnly });
+    loadShellTelemetryOnly();
+  </script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Experiment Lab — AI Quant Backtest Lab</title>
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('cbot_quant_theme_v1');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="assets/shell.css" />
+</head>
+<body data-page="experiment-lab.html">
+  <div id="app-shell"></div>
+  <div id="page-main-template" hidden>
+    <div class="placeholder-wrap">
+      <section class="card placeholder-hero">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+          <span class="badge badge-gold">🚧 กำลังพัฒนา (Placeholder หน้า 4 / 8)</span>
+          <span class="badge badge-blue">Backtest Studio &amp; Version Comparison</span>
+        </div>
+        <h1 style="margin:0;font-size:22px;">🧪 Experiment Lab</h1>
+        <p style="margin:0;color:var(--text-secondary);">
+          ศูนย์ทดลอง Backtest เปรียบเทียบ Version ของพารามิเตอร์ การแข่งขัน Nightly Showdown (Champion vs Challenger) และการทดสอบซ้ำ
+        </p>
+        <div class="placeholder-grid">
+          <div class="placeholder-module">
+            <strong>Backtest Run Inspector</strong>
+            <span style="font-size:12px;color:var(--text-muted);">ตรวจสอบผลลัพธ์แต่ละ Run และค่าสถิติ</span>
+            <a href="old-web/run.html" class="btn-secondary-link" style="margin-top:6px;">ดูหน้าเดิม: run.html →</a>
+          </div>
+          <div class="placeholder-module">
+            <strong>Phase 1 Study &amp; Calibration</strong>
+            <span style="font-size:12px;color:var(--text-muted);">ทดสอบโมเดลรายนาทีและการทำนายสัญญาณ</span>
+            <a href="old-web/phase1.html" class="btn-secondary-link" style="margin-top:6px;">ดูหน้าเดิม: phase1.html →</a>
+          </div>
+          <div class="placeholder-module">
+            <strong>Champion Registry Arena</strong>
+            <span style="font-size:12px;color:var(--text-muted);">เปรียบเทียบ Champion รายสินทรัพย์ (champion_registry.json)</span>
+            <span class="badge badge-muted" style="width:fit-content;margin-top:6px;">กำลังออกแบบ UI ใหม่</span>
+          </div>
+        </div>
+        <div>
+          <a href="index.html" class="btn-primary-link">← กลับหน้า Overview</a>
+        </div>
+      </section>
+    </div>
+  </div>
+  <script type="module">
+    import { mountShell, loadShellTelemetryOnly } from './assets/shell.js';
+    mountShell({ activePage: 'experiment-lab.html', onRetry: loadShellTelemetryOnly });
+    loadShellTelemetryOnly();
+  </script>
+</body>
+</html>

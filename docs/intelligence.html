@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Intelligence — AI Quant Backtest Lab</title>
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('cbot_quant_theme_v1');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="assets/shell.css" />
+</head>
+<body data-page="intelligence.html">
+  <div id="app-shell"></div>
+  <div id="page-main-template" hidden>
+    <div class="placeholder-wrap">
+      <section class="card placeholder-hero" id="reports">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+          <span class="badge badge-gold">🚧 กำลังพัฒนา (Placeholder หน้า 5 / 8)</span>
+          <span class="badge badge-green">Analytics, Diagnostics &amp; Reports</span>
+        </div>
+        <h1 style="margin:0;font-size:22px;">📊 Intelligence</h1>
+        <p style="margin:0;color:var(--text-secondary);">
+          วิเคราะห์ผลลัพธ์เชิงลึก กลไกการทำงานของกลยุทธ์ จุดแข็ง จุดอ่อน และความสม่ำเสมอแยกตามช่วงเวลาและวันในสัปดาห์
+        </p>
+        <div class="placeholder-grid">
+          <div class="placeholder-module">
+            <strong>Executive Summary &amp; Heikin Ashi Study</strong>
+            <span style="font-size:12px;color:var(--text-muted);">สรุปผลการวิจัยและตัวอย่างสัญญาณจริง</span>
+            <a href="old-web/summary.html" class="btn-secondary-link" style="margin-top:6px;">ดูหน้าเดิม: summary.html →</a>
+          </div>
+          <div class="placeholder-module">
+            <strong>Day-of-Week Statistics</strong>
+            <span style="font-size:12px;color:var(--text-muted);">เปรียบเทียบผลตอบแทนและพฤติกรรมรายวัน</span>
+            <a href="old-web/daystudy.html" class="btn-secondary-link" style="margin-top:6px;">ดูหน้าเดิม: daystudy.html →</a>
+          </div>
+          <div class="placeholder-module">
+            <strong>Chart &amp; Signal Diagnostics</strong>
+            <span style="font-size:12px;color:var(--text-muted);">วิเคราะห์ทฤษฎีกราฟ จุดเข้า และโครงสร้างตลาด</span>
+            <a href="old-web/chart.html" class="btn-secondary-link" style="margin-top:6px;">ดูหน้าเดิม: chart.html →</a>
+          </div>
+        </div>
+        <div>
+          <a href="index.html" class="btn-primary-link">← กลับหน้า Overview</a>
+        </div>
+      </section>
+    </div>
+  </div>
+  <script type="module">
+    import { mountShell, loadShellTelemetryOnly } from './assets/shell.js';
+    mountShell({ activePage: 'intelligence.html', onRetry: loadShellTelemetryOnly });
+    loadShellTelemetryOnly();
+  </script>
+</body>
+</html>

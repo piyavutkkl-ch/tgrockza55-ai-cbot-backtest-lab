@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data Center — AI Quant Backtest Lab</title>
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('cbot_quant_theme_v1');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="assets/shell.css" />
+</head>
+<body data-page="data-center.html">
+  <div id="app-shell"></div>
+  <div id="page-main-template" hidden>
+    <div class="placeholder-wrap">
+      <section class="card placeholder-hero">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+          <span class="badge badge-gold">🚧 กำลังพัฒนา (Placeholder หน้า 2 / 8)</span>
+          <span class="badge badge-blue">โหมดจำลองการเทรด (Interactive Paper Trading Simulator จากชุดข้อมูลบันทึกจริง)</span>
+        </div>
+        <h1 style="margin:0;font-size:22px;">📡 Data Center</h1>
+        <p style="margin:0;color:var(--text-secondary);">
+          ศูนย์รวบรวมข้อมูล Tick, DOM (Order Book L2), Spread, Order Flow และการตรวจสอบคุณภาพข้อมูล รวมถึงระบบจำลองกราฟจากข้อมูลที่บันทึกจริง
+        </p>
+        <div class="placeholder-grid">
+          <div class="placeholder-module">
+            <strong>Interactive Paper Trading Simulator</strong>
+            <span style="font-size:12px;color:var(--text-muted);">กราฟจำลองการเทรดจากชุดข้อมูลบันทึกจริง</span>
+            <a href="old-web/terminal.html" class="btn-secondary-link" style="margin-top:6px;">ดูหน้าเดิม: terminal.html →</a>
+          </div>
+          <div class="placeholder-module">
+            <strong>Data Stream &amp; Watchdog Health</strong>
+            <span style="font-size:12px;color:var(--text-muted);">ตรวจสอบความต่อเนื่องของไฟล์บันทึก M1 &amp; DOM ราย Symbol</span>
+            <span class="badge badge-muted" style="width:fit-content;margin-top:6px;">แหล่งข้อมูล: watchdog_status.json</span>
+          </div>
+          <div class="placeholder-module">
+            <strong>Execution Cost &amp; Spread Calibration</strong>
+            <span style="font-size:12px;color:var(--text-muted);">ค่าเฉลี่ย Spread / Slippage / Latency จริงจากพอร์ต Demo</span>
+            <span class="badge badge-muted" style="width:fit-content;margin-top:6px;">แหล่งข้อมูล: calibrated_costs.json</span>
+          </div>
+        </div>
+        <div>
+          <a href="index.html" class="btn-primary-link">← กลับหน้า Overview</a>
+        </div>
+      </section>
+    </div>
+  </div>
+  <script type="module">
+    import { mountShell, loadShellTelemetryOnly } from './assets/shell.js';
+    mountShell({ activePage: 'data-center.html', onRetry: loadShellTelemetryOnly });
+    loadShellTelemetryOnly();
+  </script>
+</body>
+</html>
