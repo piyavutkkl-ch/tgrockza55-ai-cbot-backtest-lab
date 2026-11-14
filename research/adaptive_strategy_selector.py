@@ -100,9 +100,10 @@ class AdaptiveStrategySelector:
         # 4. Sort Candidates by Score
         candidates.sort(key=lambda x: x['suitability_score'], reverse=True)
         
-        # 5. Routing Decision
-        if not candidates or candidates[0]['suitability_score'] < self.MIN_SUITABILITY_SCORE:
-            return self._route_to_no_trade(t_str, "No candidate met minimum suitability score threshold (60.0)", fingerprint)
+        # 5. Routing Decision (Adaptive Threshold to Minimize Opportunity Cost)
+        adaptive_threshold = self.get_adaptive_threshold(regime)
+        if not candidates or candidates[0]['suitability_score'] < adaptive_threshold:
+            return self._route_to_no_trade(t_str, f"No candidate met adaptive suitability threshold ({adaptive_threshold:.1f} for {regime})", fingerprint)
             
         top_candidate = candidates[0]
         selected_id = top_candidate['strategy_id']
@@ -196,6 +197,18 @@ class AdaptiveStrategySelector:
             
         score += conf * 10.0
         return min(100.0, score)
+
+    def get_adaptive_threshold(self, regime: str) -> float:
+        """
+        Dynamically adjusts the No-Trade threshold based on market regime
+        to minimize opportunity cost during high-conviction momentum phases.
+        """
+        if regime in [MarketRegime.STRONG_UPTREND, MarketRegime.STRONG_DOWNTREND, MarketRegime.BREAKOUT, MarketRegime.NEWS_DRIVEN]:
+            return 45.0  # Aggressive participation: capture strong breakouts & trends
+        elif regime in [MarketRegime.VOLATILITY_EXPANSION, MarketRegime.REVERSAL]:
+            return 50.0  # Moderate participation
+        else:
+            return 60.0  # Conservative participation: avoid sideways chop
 
     def _route_to_no_trade(self, t_str: str, reason: str, fp: Dict[str, Any]) -> Dict[str, Any]:
         """Explicit routing to STR-009 No Trade."""

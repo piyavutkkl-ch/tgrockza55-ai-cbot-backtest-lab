@@ -45,8 +45,10 @@ class RiskGovernor:
         'DEFAULT': 10.00
     }
 
-    def __init__(self):
+    def __init__(self, mode="DEMO_EVOLUTION"):
+        self.mode = mode  # DEMO_EVOLUTION (trailing floor) or STRICT_CONSERVATIVE (hard cap)
         self.daily_pnl = {}
+        self.daily_peak_pnl = {}
         self.symbol_consec_losses = {}
         self.symbol_daily_losses = {}
         self.halted_symbols = set()
@@ -55,6 +57,7 @@ class RiskGovernor:
 
     def reset_day(self, date_str):
         self.daily_pnl[date_str] = 0.0
+        self.daily_peak_pnl[date_str] = 0.0
         self.symbol_consec_losses[date_str] = {s: 0 for s in self.SPREAD_CEILING}
         self.symbol_daily_losses[date_str] = {s: 0 for s in self.SPREAD_CEILING}
         self.halted_symbols.clear()
@@ -79,10 +82,20 @@ class RiskGovernor:
         if self.portfolio_halted:
             return False, "REJECTED: Portfolio Daily Loss Ceiling reached (-$10.00 USD)"
 
-        # 2. Daily Profit Target Guardian (Lock in daily gains)
+        # 2. Dynamic Trailing Profit Guardian (Minimize Opportunity Cost)
+        curr_pnl = self.daily_pnl.get(date_str, 0.0) if date_str else 0.0
+        peak_pnl = self.daily_peak_pnl.get(date_str, 0.0) if date_str else 0.0
         target_pnl = self.DAILY_PROFIT_TARGETS.get(symbol, self.DAILY_PROFIT_TARGETS['DEFAULT'])
-        if date_str and self.daily_pnl.get(date_str, 0.0) >= target_pnl:
-            return False, f"APPROVED (GAINS LOCKED): Daily profit target (+${self.daily_pnl.get(date_str, 0.0):.2f} >= ${target_pnl:.2f}) reached. Preserving daily profit."
+
+        if self.mode == "DEMO_EVOLUTION":
+            # Dynamic Trailing Lock: Allows profits to run, locking 60% of peak once target reached
+            if peak_pnl >= target_pnl:
+                locked_floor = max(target_pnl * 0.5, peak_pnl * 0.60)
+                if curr_pnl < locked_floor:
+                    return False, f"APPROVED (TRAILING GAINS LOCKED): PnL dropped below trailing floor (+${curr_pnl:.2f} < +${locked_floor:.2f} from peak +${peak_pnl:.2f})"
+        else:
+            if curr_pnl >= target_pnl:
+                return False, f"APPROVED (GAINS LOCKED): Daily profit target (+${curr_pnl:.2f} >= ${target_pnl:.2f}) reached. Preserving daily profit."
 
         # 3. Daily Flat Boundary (21:45 UTC onwards)
         if current_time_hhmm >= self.MANDATORY_DAILY_FLAT_UTC:
@@ -114,6 +127,8 @@ class RiskGovernor:
             self.reset_day(date_str)
 
         self.daily_pnl[date_str] += pnl
+        if self.daily_pnl[date_str] > self.daily_peak_pnl.get(date_str, 0.0):
+            self.daily_peak_pnl[date_str] = self.daily_pnl[date_str]
 
         # Track losses
         if pnl <= 0:
