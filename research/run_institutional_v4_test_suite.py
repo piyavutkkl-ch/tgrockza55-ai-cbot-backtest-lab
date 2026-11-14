@@ -24,6 +24,7 @@ TEST_STEPS = [
     ("Market Intelligence & Fingerprinting", [PYTHON_EXE, "-m", "unittest", "research/test_market_intelligence.py"]),
     ("Adaptive Strategy Library (STR-001 - STR-009)", [PYTHON_EXE, "-m", "unittest", "research/test_strategy_library.py"]),
     ("Adaptive Strategy Selector & Switching", [PYTHON_EXE, "-m", "unittest", "research/test_adaptive_strategy_selector.py"]),
+    ("Attribution Matrix & Dynamic Feedback Loop", [PYTHON_EXE, "-m", "unittest", "research/test_attribution_matrix_feedback.py"]),
     ("Multi-Objective Statistical Validation", [PYTHON_EXE, "-m", "unittest", "research/test_statistical_validation.py"]),
     ("Performance Attribution & AI Critic", [PYTHON_EXE, "research/performance_attribution_engine.py"]),
     ("Knowledge Memory & Experiment Registry", [PYTHON_EXE, "research/experiment_registry.py"]),

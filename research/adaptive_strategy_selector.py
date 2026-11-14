@@ -29,9 +29,17 @@ class AdaptiveStrategySelector:
     MIN_HYSTERESIS_BARS = 15      # Prevent switching strategies within 15 bars unless critical
     MIN_SUITABILITY_SCORE = 60.0  # Threshold to activate a strategy; below this routes to STR-009
 
-    def __init__(self, registry: StrategyRegistry, risk_governor: RiskGovernor):
+    def __init__(self, registry: StrategyRegistry, risk_governor: RiskGovernor, memory_recorder: Optional[Any] = None):
         self.registry = registry
         self.risk_governor = risk_governor
+        if memory_recorder is None:
+            try:
+                from strategy_memory_recorder import StrategyMemoryRecorder
+                self.memory_recorder = StrategyMemoryRecorder()
+            except Exception:
+                self.memory_recorder = None
+        else:
+            self.memory_recorder = memory_recorder
         
         self.current_active_strategy_id: str = "STR-009"
         self.bars_since_last_switch: int = 999
@@ -197,9 +205,30 @@ class AdaptiveStrategySelector:
         }
         if CHAMPION_MAP.get(symbol) == strat.strategy_id:
             score += 15.0
-            
+
+        # Empirical Regime-Strategy Attribution Feedback Loop (วงจรตัดตัวแพ้-ดันตัวชนะ)
+        if self.memory_recorder:
+            try:
+                attr_weight = self.memory_recorder.get_attribution_weight(strat.strategy_id, primary_regime)
+                perf = self.memory_recorder.get_regime_performance(strat.strategy_id, primary_regime)
+                
+                # Rule 1: BANNED strategy in this regime is completely zeroed out (วงจรตัดตัวแพ้)
+                if attr_weight == 0.0 or (perf and perf.get('status') == 'BANNED'):
+                    return 0.0
+
+                # Rule 2: PENALIZED strategy loses 35 points and gets scaled down
+                if attr_weight <= 0.3 or (perf and perf.get('status') == 'PENALIZED'):
+                    score -= 35.0
+                    score = max(0.0, score * attr_weight)
+                # Rule 3: PROMOTED strategy gains 15 points and multiplier boost (วงจรดันตัวชนะ)
+                elif attr_weight > 1.2 or (perf and perf.get('status') == 'PROMOTED'):
+                    score += 15.0
+                    score *= attr_weight
+            except Exception:
+                pass
+
         score += conf * 10.0
-        return min(100.0, score)
+        return min(100.0, max(0.0, score))
 
     def get_adaptive_threshold(self, regime: str) -> float:
         """

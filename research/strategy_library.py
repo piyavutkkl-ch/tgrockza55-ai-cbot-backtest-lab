@@ -286,9 +286,9 @@ class STR006_OrderFlowImbalance(BaseAdaptiveStrategy):
         imb_th = calib.get('imb_th', 0.02)
         delta_th = calib.get('delta_th', 5.0)
 
-        micro = fp['microstructure']
-        imb = micro['dom_imbalance']
-        delta = micro['order_flow_delta']
+        micro = fp.get('microstructure', {})
+        imb = micro.get('dom_imbalance', 0.0)
+        delta = micro.get('order_flow_delta', 0.0)
         c = float(curr['close'])
         ema50 = float(curr.get('ema50', c))
         ema200 = float(curr.get('ema200', c))
@@ -311,9 +311,9 @@ class STR006_OrderFlowImbalance(BaseAdaptiveStrategy):
         at_range_low = (c <= ll + rng * 0.20)
         at_range_high = (c >= hh - rng * 0.20)
 
-        if ((imb >= imb_th and at_range_low) or (micro['is_bullish_absorption'] and delta >= delta_th)) and not is_bear_trend:
+        if ((imb >= imb_th and at_range_low) or (micro.get('is_bullish_absorption', False) and delta >= delta_th)) and not is_bear_trend:
             return "BUY", sl_dist, sl_dist * rr_ratio, {"signal_trigger": "DOM_BID_WALL_ABSORPTION"}
-        elif ((imb <= -imb_th and at_range_high) or (micro['is_bearish_absorption'] and delta <= -delta_th)) and not is_bull_trend:
+        elif ((imb <= -imb_th and at_range_high) or (micro.get('is_bearish_absorption', False) and delta <= -delta_th)) and not is_bull_trend:
             return "SELL", sl_dist, sl_dist * rr_ratio, {"signal_trigger": "DOM_ASK_WALL_ABSORPTION"}
         return "NONE", 0.0, 0.0, {}
 

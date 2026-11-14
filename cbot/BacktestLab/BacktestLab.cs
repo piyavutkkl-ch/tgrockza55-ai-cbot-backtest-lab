@@ -164,6 +164,12 @@ namespace cAlgo.Robots
             }
         }
 
+        private Position[] GetBotPositions()
+        {
+            return Positions.Where(p => p.SymbolName == SymbolName && 
+                (p.Label == Label || (p.Label != null && p.Label.Contains("|")))).ToArray();
+        }
+
         // แท่งราคาที่แนบไปกับเทรด ให้หน้าเว็บวาดกราฟ
         //   เทรดตัวอย่าง (ต่อวันในสัปดาห์ เอาชนะ/แพ้อย่างละ ExamplesPerGroup) ได้กรอบกว้าง — แสดงในหัวข้อ "ตัวอย่างกราฟ"
         //   เทรดที่เหลือได้กรอบแคบ — แสดงเมื่อกดแถวในรายการเทรด; จำนวนแท่งรวมจำกัดที่ MaxReportBars (เกินแล้วเทรดเก่าสุดไม่มีกราฟ)
@@ -298,7 +304,7 @@ namespace cAlgo.Robots
 
         private void CheckStealthStops()
         {
-            foreach (var pos in Positions.FindAll(Label, SymbolName))
+            foreach (var pos in GetBotPositions())
             {
                 StealthPosition sp;
                 if (!_stealthPositions.TryGetValue(pos.Id, out sp)) continue;
@@ -329,22 +335,22 @@ namespace cAlgo.Robots
             _equity.Add(Server.Time, Account.Equity);
 
             var flat = InFlatWindow(Server.Time);
-            foreach (var pos in Positions.FindAll(Label, SymbolName))
+            foreach (var pos in GetBotPositions())
             {
                 if (flat || _strategy.ShouldExit(pos)) Close(pos);
                 else Manage(pos);
             }
 
             var signal = _strategy.Signal();   // เรียกทุกแท่ง เพื่อให้สถานะของทฤษฎีเดินต่อเนื่อง
-            if (_recorder != null) _recorder.OnBar(signal, _strategy.Prediction, Positions.FindAll(Label, SymbolName).Length);
+            if (_recorder != null) _recorder.OnBar(signal, _strategy.Prediction, GetBotPositions().Length);
             if (signal == null || flat || !_canTrade) return;
 
             if (_strategy.ExitOnOppositeSignal)
-                foreach (var pos in Positions.FindAll(Label, SymbolName).Where(p => p.TradeType != signal.Value))
+                foreach (var pos in GetBotPositions().Where(p => p.TradeType != signal.Value))
                     Close(pos);
 
             // ถือพร้อมกันได้ตามที่ทฤษฎีกำหนด (ปกติ 1) แต่ไม่เกิน 3 ไม้ และ 3 ไม้ต้องไม่ไปทางเดียวกันทั้งหมด
-            var open = Positions.FindAll(Label, SymbolName);
+            var open = GetBotPositions();
             if (open.Length >= Math.Min(3, _strategy.MaxPositions)) return;
             if (open.Length >= 2 && open.All(p => p.TradeType == signal.Value)) return;
 
@@ -392,11 +398,13 @@ namespace cAlgo.Robots
                 brokerTp = null;
             }
 
-            var clock = System.Diagnostics.Stopwatch.StartNew();
-            var result = ExecuteMarketOrder(signal.Value, SymbolName, volume, Label, brokerSl, brokerTp, _strategy.SignalTag);
-            clock.Stop();
             string curStrat = _strategy != null ? _strategy.Code : StrategyCode;
             string curRegime = CurrentMarketRegime;
+            string tradeLabel = $"{curStrat}|{curRegime}";
+
+            var clock = System.Diagnostics.Stopwatch.StartNew();
+            var result = ExecuteMarketOrder(signal.Value, SymbolName, volume, tradeLabel, brokerSl, brokerTp, _strategy.SignalTag);
+            clock.Stop();
             if (_recorder != null)
             {
                 if (result.IsSuccessful && result.Position != null)
@@ -449,7 +457,7 @@ namespace cAlgo.Robots
         {
             var p = args.Position;
             _stealthPositions.Remove(p.Id);
-            if (_recorder == null || p.Label != Label || p.SymbolName != SymbolName) return;
+            if (_recorder == null || p.SymbolName != SymbolName || (p.Label != Label && (p.Label == null || !p.Label.Contains("|")))) return;
 
             double? expected = null; double seen;
             if (args.Reason == PositionCloseReason.StopLoss) expected = p.StopLoss;
@@ -510,7 +518,7 @@ namespace cAlgo.Robots
 
             if (RunningMode == RunningMode.RealTime || _strategy.IsUtility || (!SendResults && !SaveLocal)) return;
 
-            var openCount = Positions.FindAll(Label, SymbolName).Length;
+            var openCount = GetBotPositions().Length;
             if (openCount > 0) Print("Note: {0} position(s) still open at the end are not counted as trades.", openCount);
 
             var report = BuildReport();
@@ -521,7 +529,7 @@ namespace cAlgo.Robots
         private object BuildReport()
         {
             var trades = History
-                .Where(t => t.Label == Label && t.SymbolName == SymbolName)
+                .Where(t => (t.Label == Label || (t.Label != null && t.Label.Contains("|"))) && t.SymbolName == SymbolName)
                 .OrderBy(t => t.ClosingTime)
                 .ToList();
 
