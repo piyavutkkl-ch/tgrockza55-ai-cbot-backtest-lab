@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ANTIGRAVITY QUANT · One-Stop AI Trading & DOM Command Center</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="../style.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+Thai:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script>
@@ -55,6 +55,8 @@
   </style>
 </head>
 <body class="bg-[#070b12] text-[#e2e8f0] antialiased min-h-screen bg-grid-pattern">
+<div id="old-web-banner" style="background:linear-gradient(90deg,#111827,#0f172a);border-bottom:1px solid rgba(245,179,1,0.35);color:#e2e8f0;padding:6px 16px;font-family:system-ui,-apple-system,sans-serif;font-size:12px;line-height:1.4;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;flex-shrink:0;position:relative;z-index:60;"><span>📁 <strong>เว็บเวอร์ชันเดิม (เก็บถาวร)</strong></span><span style="opacity:.45">·</span><a href="../index.html" style="color:#f5b301;text-decoration:none;font-weight:700;padding:2px 10px;border-radius:6px;border:1px solid rgba(245,179,1,0.4);background:rgba(245,179,1,0.1);">← กลับไปเว็บใหม่</a></div>
+
 
   <!-- ========================================================================= -->
   <!-- 1. TOP COMMAND HEADER & GLOBAL TELEMETRY BAR (Inspired by Antigravity UI) -->
@@ -1458,7 +1460,7 @@ python -m quant_fund_v2.run_v2 --symbol XAUUSD --approve-paper</pre>
     let killSwitchActive = false;
     let hitlStageStatus = 'WAITING_STAGE_1';
 
-    // Default Fallback for Quant Fund V2 (Updated automatically via fetch('data/quant_fund_v2_status.json'))
+    // Default Fallback for Quant Fund V2 (Updated automatically via fetch('../data/quant_fund_v2_status.json'))
     let QF_V2_DATA = {
       symbol: "XAUUSD",
       policy_version: "RISK-POL-V2.0",
@@ -2094,7 +2096,7 @@ python -m quant_fund_v2.run_v2 --symbol XAUUSD --approve-paper</pre>
 
     async function fetchQuantFundV2Data() {
       try {
-        const res = await fetch('data/quant_fund_v2_status.json?t=' + Date.now());
+        const res = await fetch('../data/quant_fund_v2_status.json?t=' + Date.now());
         if (res.ok) {
           QF_V2_DATA = await res.json();
           if (QF_V2_DATA.data_quality_report && QF_V2_DATA.data_quality_report.dataset_sha256) {
@@ -2111,7 +2113,7 @@ python -m quant_fund_v2.run_v2 --symbol XAUUSD --approve-paper</pre>
       } catch (e) {}
 
       try {
-        const resAlerts = await fetch('data/web_alerts.json?t=' + Date.now());
+        const resAlerts = await fetch('../data/web_alerts.json?t=' + Date.now());
         if (resAlerts.ok) {
           const alertData = await resAlerts.json();
           if (alertData.alerts && alertData.alerts.length) {
@@ -2122,7 +2124,7 @@ python -m quant_fund_v2.run_v2 --symbol XAUUSD --approve-paper</pre>
       } catch (e) {}
 
       try {
-        const resSupa = await fetch('data/supabase_v2_backup_latest.json?t=' + Date.now());
+        const resSupa = await fetch('../data/supabase_v2_backup_latest.json?t=' + Date.now());
         if (resSupa.ok) {
           const supaData = await resSupa.json();
           if (supaData.supabase_recent_runs && supaData.supabase_recent_runs.length) {
@@ -3448,7 +3450,7 @@ python -m quant_fund_v2.run_v2 --symbol XAUUSD --approve-paper</pre>
     // Real-Time Polling function to update live forward trading metrics every 3 seconds
     async function fetchLiveStatus() {
       try {
-        const res = await fetch('data/live_status.json?t=' + Date.now());
+        const res = await fetch('../data/live_status.json?t=' + Date.now());
         if (!res.ok) return;
         const data = await res.json();
         
@@ -3491,6 +3493,6 @@ python -m quant_fund_v2.run_v2 --symbol XAUUSD --approve-paper</pre>
   <button onclick="try{localStorage.setItem('agq_theme','visual')}catch(e){};location.href='index.html'" style="padding:8px 16px;color:#cbd5e1;background:none;border:0;cursor:pointer">🎨 ภาพ</button>
   <button style="padding:8px 16px;background:#10b981;color:#020617;border:0">📋 ละเอียด</button>
 </div>
-<script src="feedback-widget.js"></script>
+<script src="../feedback-widget.js"></script>
 </body>
 </html>
