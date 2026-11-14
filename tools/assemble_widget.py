@@ -2,7 +2,8 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-WIDGET_DATA_PATH = Path("/tmp/widget_data.json")
+DOCS = ROOT / "docs"
+WIDGET_DATA_PATH = DOCS / "data" / "terminal_compact.json"
 ARTIFACT_DIR = Path("/home/antigravity/.gemini/jetski/brain/v1/default/jetski_remote_agents_3p/c16d8f07-3746-43cb-bcbf-0a7d6b6ac8e9")
 ARTIFACT_DIR.mkdir(parents=True, exist_ok=True)
 OUT_PATH = ARTIFACT_DIR / "ctrader_stream_chart.html"
@@ -69,6 +70,15 @@ html_head = """<!DOCTYPE html>
           <button onclick="togglePlay()" id="w-btn-play" class="px-1.5 py-0.5 rounded font-bold text-sky-400 text-[9px]">⏸️</button>
         </div>
       </div>
+    </div>
+
+    <!-- Paper Trading Simulator Mode Banner -->
+    <div class="px-2 py-1 rounded-md bg-sky-500/10 border border-sky-500/25 text-[10px] font-mono text-sky-300 flex items-center justify-between">
+      <div class="flex items-center gap-1.5">
+        <span>🎮</span>
+        <span class="font-bold">โหมดจำลองการเทรด (Interactive Paper Trading Simulator จากชุดข้อมูลบันทึกจริง)</span>
+      </div>
+      <span class="text-[9px] text-[var(--muted-foreground)]">Delay 1m</span>
     </div>
 
     <!-- QuickTrade Bar -->

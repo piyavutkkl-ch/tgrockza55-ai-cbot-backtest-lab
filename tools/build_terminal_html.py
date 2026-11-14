@@ -96,6 +96,12 @@ html_content = f'''<!DOCTYPE html>
         </div>
       </div>
 
+      <!-- Simulator Mode Notice -->
+      <div class="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-sky-950/80 border border-sky-500/40 font-mono text-[11px] text-sky-200">
+        <span class="text-amber-400">🎮</span>
+        <span class="font-bold">โหมดจำลองการเทรด (Interactive Paper Trading Simulator จากชุดข้อมูลบันทึกจริง)</span>
+      </div>
+
       <!-- Asset Tabs -->
       <div class="flex items-center gap-1 bg-[#151a27] p-0.5 rounded-lg border border-slate-800 font-mono">
         <button onclick="switchSymbol('XAUUSD')" id="tab-sym-XAUUSD" class="px-2.5 py-1 rounded font-bold text-xs bg-amber-500/20 text-amber-300 border border-amber-500/40 transition flex items-center gap-1">
@@ -155,7 +161,7 @@ html_content = f'''<!DOCTYPE html>
 
       <!-- Account Balance -->
       <div class="hidden lg:flex items-center gap-2 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 font-mono">
-        <span class="text-slate-400">Balance:</span>
+        <span class="text-slate-400">Balance (Paper):</span>
         <span id="header-balance" class="font-bold text-emerald-400">$10,000.00</span>
       </div>
     </div>
@@ -197,6 +203,10 @@ html_content = f'''<!DOCTYPE html>
             <div class="text-[10px] uppercase font-bold tracking-wider text-emerald-200">BUY</div>
             <div id="quick-ask-price" class="text-sm font-black tabular-nums tracking-tight">3895.25</div>
           </button>
+
+          <span class="hidden 2xl:inline-block text-[10px] font-mono text-amber-300/90 px-2 py-0.5 rounded bg-amber-950/40 border border-amber-500/30">
+            🎮 โหมดจำลองการเทรด (Interactive Paper Trading Simulator จากชุดข้อมูลบันทึกจริง)
+          </span>
         </div>
 
         <!-- OHLC Tooltip & Metric Strip -->

@@ -230,7 +230,7 @@ new_html = f'''<!DOCTYPE html>
               <span class="font-extrabold text-sky-400 text-base">QUANT</span>
               <span class="px-2 py-0.5 text-[11px] font-mono font-bold rounded-md bg-sky-500/15 text-sky-300 border border-sky-500/30">V3 PLATFORM</span>
             </div>
-            <div class="text-[11px] text-slate-400">Institutional cBot Quant Architecture & Lifecycle</div>
+            <div class="text-[11px] text-slate-300 font-medium">ระบบวิจัยและทดสอบบอทเทรดอัตโนมัติ (Live Forward Testing บน Pepperstone)</div>
           </div>
         </a>
       </div>
@@ -264,7 +264,7 @@ new_html = f'''<!DOCTYPE html>
           <span id="theme-icon">🌙</span> <span id="theme-label" class="hidden sm:inline">ธีมมืด</span>
         </button>
 
-        <a href="terminal.html" class="px-3 py-1.5 rounded-xl bg-sky-500/15 hover:bg-sky-500/25 text-sky-300 border border-sky-500/40 font-bold text-xs flex items-center gap-1.5 transition">
+        <a href="terminal.html" class="px-3 py-1.5 rounded-xl bg-sky-500/15 hover:bg-sky-500/25 text-sky-300 border border-sky-500/40 font-bold text-xs flex items-center gap-1.5 transition" title="โหมดจำลองการเทรด (Interactive Paper Trading Simulator จากชุดข้อมูลบันทึกจริง)">
           <span>📈</span> <span>cTrader Live Terminal</span>
         </a>
 
@@ -322,289 +322,120 @@ new_html = f'''<!DOCTYPE html>
   <main class="max-w-[1600px] mx-auto p-4 sm:p-6 lg:p-8 space-y-8">
 
     <!-- ======================================================================= -->
-    <!-- 3. HERO KEY METRICS CARDS (Point #2: 24-32px Bold Typography)           -->
+    <!-- 1. MAIN PAGE EXECUTIVE TITLE BANNER                                     -->
     <!-- ======================================================================= -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      
-      <!-- Card 1: Balance / Equity -->
-      <div class="card-surface p-5 space-y-1">
-        <div class="flex items-center justify-between text-xs text-slate-400 font-medium uppercase tracking-wider">
-          <span>Real Account Balance</span>
-          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-        </div>
-        <div id="hero-equity" class="text-3xl font-extrabold font-mono text-emerald-400 tracking-tight">
-          $82.93 <span class="text-xs font-normal text-slate-400">USD</span>
-        </div>
-        <div class="text-xs text-slate-400 font-mono flex items-center justify-between pt-1">
-          <span>Deposit: $100.00</span>
-          <span class="text-emerald-400 font-bold">Online #5258778</span>
-        </div>
+    <div class="border-b border-slate-800/80 pb-4 space-y-1">
+      <div class="flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+        <h1 class="text-xl sm:text-2xl font-black text-white tracking-tight">
+          ระบบวิจัยและทดสอบบอทเทรดอัตโนมัติ (Live Forward Testing บน Pepperstone)
+        </h1>
       </div>
-
-      <!-- Card 2: Champion Net Profit -->
-      <div class="card-surface p-5 space-y-1">
-        <div class="flex items-center justify-between text-xs text-slate-400 font-medium uppercase tracking-wider">
-          <span>Champion Net PnL (XAU)</span>
-          <span class="px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-300 text-[11px] font-bold">M1 Verified</span>
-        </div>
-        <div id="hero-net-profit" class="text-3xl font-extrabold font-mono text-emerald-400 tracking-tight">
-          +$96.00 <span class="text-xs font-normal text-slate-400">USD</span>
-        </div>
-        <div class="text-xs text-slate-400 font-mono flex items-center justify-between pt-1">
-          <span>Strategy: VWAP Absorption</span>
-          <span class="text-sky-300 font-bold">Trend Shield</span>
-        </div>
-      </div>
-
-      <!-- Card 3: Profit Factor & Win Rate -->
-      <div class="card-surface p-5 space-y-1">
-        <div class="flex items-center justify-between text-xs text-slate-400 font-medium uppercase tracking-wider">
-          <span>Profit Factor & Win Rate</span>
-          <span class="px-1.5 py-0.5 rounded bg-sky-500/15 text-sky-300 text-[11px] font-bold">PF 3.00</span>
-        </div>
-        <div class="text-3xl font-extrabold font-mono text-white tracking-tight">
-          3.00 <span class="text-lg font-normal text-slate-400">PF</span> · 50.0% <span class="text-xs font-normal text-slate-400">WR</span>
-        </div>
-        <div class="text-xs text-slate-400 font-mono flex items-center justify-between pt-1">
-          <span>Trades: 24 ไม้ (3,345 Bars)</span>
-          <span class="text-slate-300">Max DD: $12.00</span>
-        </div>
-      </div>
-
-      <!-- Card 4: Statistical Power Gauge -->
-      <div class="card-surface p-5 space-y-1">
-        <div class="flex items-center justify-between text-xs text-slate-400 font-medium uppercase tracking-wider">
-          <span>Sample Power (Truth Reset)</span>
-          <span class="px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-300 text-[11px] font-bold">N=79</span>
-        </div>
-        <div id="hero-sample-n" class="text-3xl font-extrabold font-mono text-amber-400 tracking-tight">
-          N=79 <span class="text-sm font-normal text-slate-400">/ 500 ไม้</span>
-        </div>
-        <div class="text-xs text-slate-400 font-mono flex items-center justify-between pt-1">
-          <span>Progress: 15.8%</span>
-          <span class="text-amber-300 font-medium">รอ 500 ไม้พิสูจน์ Edge</span>
-        </div>
-      </div>
-
+      <p class="text-xs sm:text-sm text-slate-400">
+        ศูนย์กลางมอนิเตอร์บอทสด, วิเคราะห์ผลการทดสอบย้อนหลัง (Backtest), และการจำลองคำสั่งซื้อขายแบบเรียลไทม์
+      </p>
     </div>
 
     <!-- ======================================================================= -->
-    <!-- 4. 10-STAGE PROGRESS STEPPER (Point #1: Clean Stepped Progress Bar)      -->
+    <!-- 2. HERO KEY METRICS: GROUPED BY ACCOUNT TYPE                           -->
     <!-- ======================================================================= -->
-    <div id="sec-lifecycle-stepper" class="card-surface p-6 space-y-4">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800/80 pb-3">
-        <div>
-          <h2 class="text-lg font-bold text-white flex items-center gap-2">
-            <span>🔄</span> <span>10-Stage Institutional Lifecycle (สถาปัตยกรรมวงจรพัฒนาเทรดบอท 10 ขั้น)</span>
-          </h2>
-          <p class="text-xs text-slate-400 mt-0.5">
-            กระบวนการแบบปิด (Closed-Loop Flywheel): เก็บข้อมูล ➔ สกัดสมมติฐาน ➔ เขียน C# cBot ➔ ตรวจสอบความเสี่ยง ➔ เทรดสด ➔ ทวนซ้ำ
-          </p>
-        </div>
-        <div class="flex items-center gap-1.5 text-xs font-mono">
-          <button onclick="setViewMode('FLYWHEEL')" id="btn-mode-flywheel" class="px-3 py-1 rounded-lg font-bold bg-sky-500/20 text-sky-300 border border-sky-500/40 cursor-pointer">
-            ภาพรวม 10 ขั้น
-          </button>
-          <button onclick="setViewMode('FOCUS')" id="btn-mode-focus" class="px-3 py-1 rounded-lg font-medium text-slate-400 hover:text-white cursor-pointer">
-            โฟกัสรายโมดูล
-          </button>
-        </div>
-      </div>
-
-      <!-- Modern Stepper Nodes Bar -->
-      <div class="overflow-x-auto pb-2">
-        <div class="flex items-center min-w-[900px] justify-between relative px-2">
-          
-          <!-- Background Progress Line -->
-          <div class="absolute left-6 right-6 top-4 h-0.5 bg-slate-800 -z-0"></div>
-
-          <!-- 10 Step Nodes -->
-          <button onclick="selectPillar(1)" id="tab-p1" class="pillar-tab group flex flex-col items-center gap-1.5 z-10 cursor-pointer">
-            <span class="w-8 h-8 rounded-full bg-slate-900 border-2 border-sky-500 text-sky-400 font-mono font-bold text-xs flex items-center justify-center group-hover:scale-110 transition shadow-md">1</span>
-            <span class="text-[11px] font-semibold text-slate-300 group-hover:text-white whitespace-nowrap">Data Pipe</span>
-          </button>
-
-          <button onclick="selectPillar(2)" id="tab-p2" class="pillar-tab group flex flex-col items-center gap-1.5 z-10 cursor-pointer">
-            <span class="w-8 h-8 rounded-full bg-slate-900 border-2 border-slate-700 text-slate-400 font-mono font-bold text-xs flex items-center justify-center group-hover:scale-110 transition">2</span>
-            <span class="text-[11px] font-semibold text-slate-400 group-hover:text-white whitespace-nowrap">Alpha Gen</span>
-          </button>
-
-          <button onclick="selectPillar(3)" id="tab-p3" class="pillar-tab group flex flex-col items-center gap-1.5 z-10 cursor-pointer">
-            <span class="w-8 h-8 rounded-full bg-slate-900 border-2 border-slate-700 text-slate-400 font-mono font-bold text-xs flex items-center justify-center group-hover:scale-110 transition">3</span>
-            <span class="text-[11px] font-semibold text-slate-400 group-hover:text-white whitespace-nowrap">Strategy Dev</span>
-          </button>
-
-          <button onclick="selectPillar(4)" id="tab-p4" class="pillar-tab group flex flex-col items-center gap-1.5 z-10 cursor-pointer">
-            <span class="w-8 h-8 rounded-full bg-slate-900 border-2 border-slate-700 text-slate-400 font-mono font-bold text-xs flex items-center justify-center group-hover:scale-110 transition">4</span>
-            <span class="text-[11px] font-semibold text-slate-400 group-hover:text-white whitespace-nowrap">Backtest Lab</span>
-          </button>
-
-          <button onclick="selectPillar(5)" id="tab-p5" class="pillar-tab group flex flex-col items-center gap-1.5 z-10 cursor-pointer">
-            <span class="w-8 h-8 rounded-full bg-slate-900 border-2 border-slate-700 text-slate-400 font-mono font-bold text-xs flex items-center justify-center group-hover:scale-110 transition">5</span>
-            <span class="text-[11px] font-semibold text-slate-400 group-hover:text-white whitespace-nowrap">Quant Math</span>
-          </button>
-
-          <button onclick="selectPillar(6)" id="tab-p6" class="pillar-tab group flex flex-col items-center gap-1.5 z-10 cursor-pointer">
-            <span class="w-8 h-8 rounded-full bg-slate-900 border-2 border-slate-700 text-slate-400 font-mono font-bold text-xs flex items-center justify-center group-hover:scale-110 transition">6</span>
-            <span class="text-[11px] font-semibold text-slate-400 group-hover:text-white whitespace-nowrap">Risk Gate</span>
-          </button>
-
-          <button onclick="selectPillar(7)" id="tab-p7" class="pillar-tab group flex flex-col items-center gap-1.5 z-10 cursor-pointer">
-            <span class="w-8 h-8 rounded-full bg-slate-900 border-2 border-slate-700 text-slate-400 font-mono font-bold text-xs flex items-center justify-center group-hover:scale-110 transition">7</span>
-            <span class="text-[11px] font-semibold text-slate-400 group-hover:text-white whitespace-nowrap">Live Exec</span>
-          </button>
-
-          <button onclick="selectPillar(8)" id="tab-p8" class="pillar-tab group flex flex-col items-center gap-1.5 z-10 cursor-pointer">
-            <span class="w-8 h-8 rounded-full bg-slate-900 border-2 border-slate-700 text-slate-400 font-mono font-bold text-xs flex items-center justify-center group-hover:scale-110 transition">8</span>
-            <span class="text-[11px] font-semibold text-slate-400 group-hover:text-white whitespace-nowrap">Memory</span>
-          </button>
-
-          <button onclick="selectPillar(9)" id="tab-p9" class="pillar-tab group flex flex-col items-center gap-1.5 z-10 cursor-pointer">
-            <span class="w-8 h-8 rounded-full bg-slate-900 border-2 border-slate-700 text-slate-400 font-mono font-bold text-xs flex items-center justify-center group-hover:scale-110 transition">9</span>
-            <span class="text-[11px] font-semibold text-slate-400 group-hover:text-white whitespace-nowrap">Tracking</span>
-          </button>
-
-          <button onclick="selectPillar(10)" id="tab-p10" class="pillar-tab group flex flex-col items-center gap-1.5 z-10 cursor-pointer">
-            <span class="w-8 h-8 rounded-full bg-slate-900 border-2 border-slate-700 text-slate-400 font-mono font-bold text-xs flex items-center justify-center group-hover:scale-110 transition">10</span>
-            <span class="text-[11px] font-semibold text-slate-400 group-hover:text-white whitespace-nowrap">Feedback</span>
-          </button>
-
-        </div>
-      </div>
-    </div>
-
-    <!-- ======================================================================= -->
-    <!-- 5. ZONE 1: STRATEGY BACKTEST LAB (ห้องทดลองย้อนหลัง)                      -->
-    <!-- ======================================================================= -->
-    <section id="sec-zone-1" class="space-y-6">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
       
-      <!-- Section Header -->
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
-        <div>
+      <!-- หมวดที่ 1: พอร์ตสดปัจจุบัน (Live Demo) -->
+      <div class="lg:col-span-4 card-surface p-5 space-y-3 border-emerald-500/30 bg-emerald-950/10">
+        <div class="flex items-center justify-between border-b border-slate-800/80 pb-2">
           <div class="flex items-center gap-2">
-            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30 font-mono">
-              ZONE 1
-            </span>
-            <h2 class="text-xl font-bold text-white tracking-tight">Strategy Backtest Lab (ห้องทดลองย้อนหลัง)</h2>
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="text-xs font-bold text-emerald-400 tracking-wide uppercase">พอร์ตสดปัจจุบัน (Live Demo)</span>
           </div>
-          <p class="text-xs text-slate-400 mt-1">
-            ผลการทดสอบย้อนหลังบนข้อมูลประวัติศาสตร์ 1 นาที (M1) และ Tick Spreads จริงของ Pepperstone · คัดเลือกเฉพาะโมเดลที่พิสูจน์แล้วว่าชนะค่าคอมมิชชั่น
-          </p>
+          <span class="text-[11px] font-mono text-slate-400">Pepperstone #5258778</span>
         </div>
-
-        <!-- Strategy Switcher Tabs -->
-        <div class="flex items-center gap-1.5 bg-slate-900/90 p-1 rounded-xl border border-slate-800 text-xs">
-          <button onclick="switchIdxStrategy('vwap_absorption_xau')" id="idx-strat-vwap_absorption_xau" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40 cursor-pointer transition">
-            🔥 VWAP Absorption (XAU)
-          </button>
-          <button onclick="switchIdxStrategy('dom_absorption_btc')" id="idx-strat-dom_absorption_btc" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 text-slate-400 border border-slate-800 hover:text-white cursor-pointer transition">
-            ⚡ DOM Absorption (BTC)
-          </button>
-          <button onclick="switchIdxStrategy('dom_absorption_eth')" id="idx-strat-dom_absorption_eth" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 text-slate-400 border border-slate-800 hover:text-white cursor-pointer transition">
-            🛡️ DOM Absorption (ETH)
-          </button>
-          <button onclick="switchIdxStrategy('dom_fade')" id="idx-strat-dom_fade" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 text-slate-400 border border-slate-800 hover:text-white cursor-pointer transition">
-            📦 DOM Fade (Baseline)
-          </button>
-        </div>
-      </div>
-
-      <!-- Strategy Details & Equity Curve Grid -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
-        <!-- Left: Strategy Summary & Parameters -->
-        <div class="card-surface p-6 space-y-4">
-          <div>
-            <div class="text-xs font-mono text-amber-400 font-bold uppercase tracking-wider" id="idx-bt-name">VWAP Extended Absorption + Macro Trend Shield</div>
-            <div class="text-xs text-slate-400 mt-0.5" id="idx-bt-desc">ดักจุดกลับตัวเมื่อราคาหลุดกรอบ Anchored VWAP SD >= 3.8 พร้อมตัวกรองข่าว</div>
-          </div>
-
-          <div class="grid grid-cols-2 gap-3 py-2 border-y border-slate-800/80 font-mono text-xs">
-            <div>
-              <div class="text-slate-400">Net Profit</div>
-              <div id="idx-bt-net" class="text-2xl font-black text-emerald-400">+$96.00 USD</div>
-            </div>
-            <div>
-              <div class="text-slate-400">Profit Factor</div>
-              <div id="idx-bt-pf" class="text-2xl font-black text-white">3.00</div>
-            </div>
-            <div>
-              <div class="text-slate-400">Win Rate</div>
-              <div id="idx-bt-wr" class="text-lg font-bold text-emerald-300">50.0%</div>
-            </div>
-            <div>
-              <div class="text-slate-400">Max Drawdown</div>
-              <div id="idx-bt-dd" class="text-lg font-bold text-slate-300">$12.00 (0.12%)</div>
-            </div>
-          </div>
-
-          <!-- Parameter List -->
-          <div>
-            <div class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">กลไกและพารามิเตอร์ที่ผ่านการ Optimize</div>
-            <div id="idx-bt-params" class="space-y-1.5 text-xs font-mono">
-              <div class="flex justify-between border-b border-slate-900 pb-1">
-                <span class="text-slate-400">Entry Anchor:</span>
-                <span class="text-sky-300 font-bold">Anchored VWAP SD 3.8</span>
-              </div>
-              <div class="flex justify-between border-b border-slate-900 pb-1">
-                <span class="text-slate-400">Exit Target:</span>
-                <span class="text-sky-300 font-bold">Touch VWAP Baseline</span>
-              </div>
-              <div class="flex justify-between border-b border-slate-900 pb-1">
-                <span class="text-slate-400">Stop Loss:</span>
-                <span class="text-rose-400 font-bold">15 Pips / SD Band Exit</span>
-              </div>
-              <div class="flex justify-between border-b border-slate-900 pb-1">
-                <span class="text-slate-400">News Void Filter:</span>
-                <span class="text-emerald-400 font-bold">True (Void ATR > 2.0x)</span>
-              </div>
-            </div>
+        <div>
+          <div class="text-[11px] font-medium text-slate-400 uppercase tracking-wider">ยอดเงินในพอร์ตสด (Account Balance)</div>
+          <div id="hero-equity" class="text-3xl font-extrabold font-mono text-emerald-400 tracking-tight mt-0.5">
+            $82.93 <span class="text-xs font-normal text-slate-400">USD</span>
           </div>
         </div>
 
-        <!-- Center & Right: Equity Curve SVG & Trade Log -->
-        <div class="lg:col-span-2 card-surface p-6 space-y-4">
-          <div class="flex items-center justify-between border-b border-slate-800/80 pb-3">
-            <h3 class="text-sm font-bold text-white flex items-center gap-2">
-              <span>📈</span> <span>Cumulative Backtest Equity Curve (เส้นการเติบโตของพอร์ต)</span>
-            </h3>
-            <span id="idx-bt-trades" class="text-xs font-mono font-bold text-sky-400">24 ไม้</span>
-          </div>
-
-          <!-- SVG Equity Chart Container -->
-          <div class="rounded-xl bg-slate-950/80 border border-slate-800 p-3 overflow-hidden">
-            <svg id="idx-equity-svg" viewBox="0 0 600 150" class="w-full h-auto text-xs">
-              <!-- Rendered dynamically by switchIdxStrategy -->
-            </svg>
-          </div>
-
-          <!-- Recent Backtest Trades Table -->
-          <div>
-            <div class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">ประวัติการเทรดย้อนหลังล่าสุด (Sample Trades)</div>
-            <div class="overflow-x-auto rounded-xl border border-slate-800">
-              <table class="w-full text-xs font-mono text-left">
-                <thead class="bg-slate-900/90 text-slate-400 border-b border-slate-800">
-                  <tr>
-                    <th class="py-2 px-3">#</th>
-                    <th class="py-2 px-3">Side</th>
-                    <th class="py-2 px-3 text-right">Entry</th>
-                    <th class="py-2 px-3 text-right">Exit</th>
-                    <th class="py-2 px-3 text-right">Net PnL</th>
-                    <th class="py-2 px-3">Exit Reason</th>
-                  </tr>
-                </thead>
-                <tbody id="idx-bt-trades-tbody" class="divide-y divide-slate-900">
-                  <!-- Injected via switchIdxStrategy -->
-                </tbody>
-              </table>
-            </div>
-          </div>
-
+        <div class="text-xs text-slate-400 font-mono flex items-center justify-between pt-1 border-t border-slate-800/60">
+          <span>เงินต้นเริ่มต้น: $100.00</span>
+          <span class="text-emerald-400 font-bold">สถานะ: ออนไลน์</span>
         </div>
-
       </div>
 
-    </section>
+      <!-- หมวดที่ 2: ผลการทดสอบย้อนหลัง (Backtest Lab) -->
+      <div class="lg:col-span-8 card-surface p-5 space-y-3 border-amber-500/30 bg-amber-950/10">
+        <div class="flex items-center justify-between border-b border-slate-800/80 pb-2">
+          <div class="flex items-center gap-2">
+            <span class="text-amber-400 font-bold text-xs">🔬</span>
+            <span class="text-xs font-bold text-amber-400 tracking-wide uppercase">ผลการทดสอบย้อนหลัง (Backtest Lab)</span>
+          </div>
+          <span class="text-[11px] font-mono text-slate-400">โมเดล Champion: VWAP_ABSORPTION</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          
+          <!-- Card 2: Champion Net Profit -->
+          <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800/80 space-y-1">
+            <div class="text-[11px] font-medium text-slate-400 uppercase tracking-wider">กำไรจำลองย้อนหลัง (Net PnL)</div>
+            <div id="hero-net-profit" class="text-2xl font-extrabold font-mono text-emerald-400 tracking-tight">
+              +$96.00 <span class="text-xs font-normal text-slate-400">USD</span>
+            </div>
+            <div class="text-[11px] text-slate-400 font-mono pt-1">
+              <span>ทองคำ XAUUSD (M1)</span>
+            </div>
+          </div>
+
+          <!-- Card 3: Profit Factor & Win Rate -->
+          <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800/80 space-y-1">
+            <div class="text-[11px] font-medium text-slate-400 uppercase tracking-wider">PF & Win Rate ย้อนหลัง</div>
+            <div class="text-2xl font-extrabold font-mono text-white tracking-tight">
+              3.00 <span class="text-xs font-normal text-slate-400">PF</span> · 50% <span class="text-xs font-normal text-slate-400">WR</span>
+            </div>
+            <div class="text-[11px] text-slate-400 font-mono pt-1">
+              <span>ทดสอบ 24 ไม้ (3,345 Bars)</span>
+            </div>
+          </div>
+
+          <!-- Card 4: Statistical Power Gauge -->
+          <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800/80 space-y-1">
+            <div class="text-[11px] font-medium text-slate-400 uppercase tracking-wider">จำนวนไม้ทดสอบ (Sample Size)</div>
+            <div id="hero-sample-n" class="text-2xl font-extrabold font-mono text-amber-400 tracking-tight">
+              N=79 <span class="text-xs font-normal text-slate-400">/ 500 ไม้</span>
+            </div>
+            <div class="text-[11px] text-slate-400 font-mono pt-1">
+              <span>ความคืบหน้าทดสอบ: 15.8%</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- cTrader Live Terminal Callout Banner -->
+    <div class="p-4 rounded-xl bg-gradient-to-r from-sky-950/60 via-slate-900 to-indigo-950/50 border border-sky-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-sky-500/20 text-sky-400 border border-sky-500/30 flex items-center justify-center text-lg font-bold shrink-0">
+          📈
+        </div>
+        <div>
+          <div class="font-bold text-white text-sm flex items-center gap-2 flex-wrap">
+            <span>cTrader Live Trading Terminal</span>
+            <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-sky-500/20 text-sky-300 border border-sky-500/40">
+              โหมดจำลองการเทรด (Interactive Paper Trading Simulator จากชุดข้อมูลบันทึกจริง)
+            </span>
+          </div>
+          <div class="text-[11px] text-slate-400 mt-0.5">
+            กราฟจำลองการเทรดแบบเรียลไทม์ (ดีเลย์ 1 นาที / 60s Buffer) พร้อมสมุดคำสั่ง Depth of Market (DoM) และปุ่ม QuickTrade
+          </div>
+        </div>
+      </div>
+      <a href="terminal.html" class="px-4 py-2 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold font-mono text-xs transition flex items-center gap-1.5 justify-center shadow-md shrink-0">
+        <span>เปิดหน้าเทรดจำลอง</span> <span>➔</span>
+      </a>
+    </div>
 
     <!-- ======================================================================= -->
     <!-- 6. ZONE 2: BOT FLEET LIVE MONITOR & TRADINGVIEW STUDIO                  -->
@@ -771,6 +602,250 @@ new_html = f'''<!DOCTYPE html>
     </section>
 
     <!-- ======================================================================= -->
+    <!-- 5. ZONE 1: STRATEGY BACKTEST LAB (ห้องทดลองย้อนหลัง)                      -->
+    <!-- ======================================================================= -->
+    <section id="sec-zone-1" class="space-y-6">
+      
+      <!-- Section Header -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30 font-mono">
+              ZONE 1
+            </span>
+            <h2 class="text-xl font-bold text-white tracking-tight">Strategy Backtest Lab (ห้องทดลองย้อนหลัง)</h2>
+          </div>
+          <p class="text-xs text-slate-400 mt-1">
+            ผลการทดสอบย้อนหลังบนข้อมูลประวัติศาสตร์ 1 นาที (M1) และ Tick Spreads จริงของ Pepperstone · คัดเลือกเฉพาะโมเดลที่พิสูจน์แล้วว่าชนะค่าคอมมิชชั่น
+          </p>
+        </div>
+
+        <!-- Strategy Switcher Tabs -->
+        <div class="flex items-center gap-1.5 bg-slate-900/90 p-1 rounded-xl border border-slate-800 text-xs">
+          <button onclick="switchIdxStrategy('vwap_absorption_xau')" id="idx-strat-vwap_absorption_xau" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40 cursor-pointer transition">
+            🔥 VWAP Absorption (XAU)
+          </button>
+          <button onclick="switchIdxStrategy('dom_absorption_btc')" id="idx-strat-dom_absorption_btc" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 text-slate-400 border border-slate-800 hover:text-white cursor-pointer transition">
+            ⚡ DOM Absorption (BTC)
+          </button>
+          <button onclick="switchIdxStrategy('dom_absorption_eth')" id="idx-strat-dom_absorption_eth" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 text-slate-400 border border-slate-800 hover:text-white cursor-pointer transition">
+            🛡️ DOM Absorption (ETH)
+          </button>
+          <button onclick="switchIdxStrategy('dom_fade')" id="idx-strat-dom_fade" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 text-slate-400 border border-slate-800 hover:text-white cursor-pointer transition">
+            📦 DOM Fade (Baseline)
+          </button>
+        </div>
+      </div>
+
+      <!-- Strategy Details & Equity Curve Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Left: Strategy Summary & Parameters -->
+        <div class="card-surface p-6 space-y-4">
+          <div>
+            <div class="text-xs font-mono text-amber-400 font-bold uppercase tracking-wider" id="idx-bt-name">VWAP Extended Absorption + Macro Trend Shield</div>
+            <div class="text-xs text-slate-400 mt-0.5" id="idx-bt-desc">ดักจุดกลับตัวเมื่อราคาหลุดกรอบ Anchored VWAP SD >= 3.8 พร้อมตัวกรองข่าว</div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 py-2 border-y border-slate-800/80 font-mono text-xs">
+            <div>
+              <div class="text-slate-400">Net Profit</div>
+              <div id="idx-bt-net" class="text-2xl font-black text-emerald-400">+$96.00 USD</div>
+            </div>
+            <div>
+              <div class="text-slate-400">Profit Factor</div>
+              <div id="idx-bt-pf" class="text-2xl font-black text-white">3.00</div>
+            </div>
+            <div>
+              <div class="text-slate-400">Win Rate</div>
+              <div id="idx-bt-wr" class="text-lg font-bold text-emerald-300">50.0%</div>
+            </div>
+            <div>
+              <div class="text-slate-400">Max Drawdown</div>
+              <div id="idx-bt-dd" class="text-lg font-bold text-slate-300">$12.00 (0.12%)</div>
+            </div>
+          </div>
+
+          <!-- Parameter List -->
+          <div>
+            <div class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">กลไกและพารามิเตอร์ที่ผ่านการ Optimize</div>
+            <div id="idx-bt-params" class="space-y-1.5 text-xs font-mono">
+              <div class="flex justify-between border-b border-slate-900 pb-1">
+                <span class="text-slate-400">Entry Anchor:</span>
+                <span class="text-sky-300 font-bold">Anchored VWAP SD 3.8</span>
+              </div>
+              <div class="flex justify-between border-b border-slate-900 pb-1">
+                <span class="text-slate-400">Exit Target:</span>
+                <span class="text-sky-300 font-bold">Touch VWAP Baseline</span>
+              </div>
+              <div class="flex justify-between border-b border-slate-900 pb-1">
+                <span class="text-slate-400">Stop Loss:</span>
+                <span class="text-rose-400 font-bold">15 Pips / SD Band Exit</span>
+              </div>
+              <div class="flex justify-between border-b border-slate-900 pb-1">
+                <span class="text-slate-400">News Void Filter:</span>
+                <span class="text-emerald-400 font-bold">True (Void ATR > 2.0x)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Center & Right: Equity Curve SVG & Trade Log -->
+        <div class="lg:col-span-2 card-surface p-6 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800/80 pb-3">
+            <h3 class="text-sm font-bold text-white flex items-center gap-2">
+              <span>📈</span> <span>Cumulative Backtest Equity Curve (เส้นการเติบโตของพอร์ต)</span>
+            </h3>
+            <span id="idx-bt-trades" class="text-xs font-mono font-bold text-sky-400">24 ไม้</span>
+          </div>
+
+          <!-- SVG Equity Chart Container -->
+          <div class="rounded-xl bg-slate-950/80 border border-slate-800 p-3 overflow-hidden">
+            <svg id="idx-equity-svg" viewBox="0 0 600 150" class="w-full h-auto text-xs">
+              <!-- Rendered dynamically by switchIdxStrategy -->
+            </svg>
+          </div>
+
+          <!-- Recent Backtest Trades Table -->
+          <div>
+            <div class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">ประวัติการเทรดย้อนหลังล่าสุด (Sample Trades)</div>
+            <div class="overflow-x-auto rounded-xl border border-slate-800">
+              <table class="w-full text-xs font-mono text-left">
+                <thead class="bg-slate-900/90 text-slate-400 border-b border-slate-800">
+                  <tr>
+                    <th class="py-2 px-3">#</th>
+                    <th class="py-2 px-3">Side</th>
+                    <th class="py-2 px-3 text-right">Entry</th>
+                    <th class="py-2 px-3 text-right">Exit</th>
+                    <th class="py-2 px-3 text-right">Net PnL</th>
+                    <th class="py-2 px-3">Exit Reason</th>
+                  </tr>
+                </thead>
+                <tbody id="idx-bt-trades-tbody" class="divide-y divide-slate-900">
+                  <!-- Injected via switchIdxStrategy -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ======================================================================= -->
+    <!-- COLLAPSIBLE ACCORDION: THEORETICAL FOUNDATIONS & 10-STAGE FLYWHEEL     -->
+    <!-- ======================================================================= -->
+    <div id="theory-accordion-wrapper" class="rounded-2xl border border-slate-800 bg-slate-900/40 overflow-hidden transition-all shadow-sm">
+      <button onclick="toggleTheoryAccordion()" id="btn-theory-accordion" class="w-full px-6 py-4 flex items-center justify-between gap-4 text-left hover:bg-slate-800/40 transition cursor-pointer">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-sky-500/20 text-sky-300 border border-sky-500/30 flex items-center justify-center text-base font-bold shadow-sm shrink-0">
+            📖
+          </div>
+          <div>
+            <div class="text-sm font-bold text-white flex items-center gap-2 flex-wrap">
+              <span>คลิกเพื่อดูทฤษฎีและคณิตศาสตร์เบื้องหลัง</span>
+              <span class="text-[11px] font-mono font-bold text-sky-400 bg-sky-500/10 px-2 py-0.5 rounded border border-sky-500/20">10 Stages · 4 Pillars · Funnel</span>
+            </div>
+            <div class="text-xs text-slate-400 mt-0.5">
+              แสดงโครงสร้างสถาปัตยกรรม 10 ขั้น (10-Stage Lifecycle), สถาปัตยกรรม 4 เสาหลักป้องกัน Overfitting, และผังคัดกรองสมมติฐาน Funnel
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 text-xs font-mono font-bold text-sky-400 shrink-0">
+          <span id="label-theory-accordion">เปิดดูทฤษฎี</span>
+          <span id="icon-theory-accordion" class="text-sm transition-transform duration-200">▼</span>
+        </div>
+      </button>
+
+      <!-- Collapsible Body (Default Hidden) -->
+      <div id="theory-accordion-body" class="hidden border-t border-slate-800 p-6 space-y-8 bg-slate-950/40">
+        <!-- ======================================================================= -->
+    <!-- 4. 10-STAGE PROGRESS STEPPER (Point #1: Clean Stepped Progress Bar)      -->
+    <!-- ======================================================================= -->
+    <div id="sec-lifecycle-stepper" class="card-surface p-6 space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800/80 pb-3">
+        <div>
+          <h2 class="text-lg font-bold text-white flex items-center gap-2">
+            <span>🔄</span> <span>10-Stage Institutional Lifecycle (สถาปัตยกรรมวงจรพัฒนาเทรดบอท 10 ขั้น)</span>
+          </h2>
+          <p class="text-xs text-slate-400 mt-0.5">
+            กระบวนการแบบปิด (Closed-Loop Flywheel): เก็บข้อมูล ➔ สกัดสมมติฐาน ➔ เขียน C# cBot ➔ ตรวจสอบความเสี่ยง ➔ เทรดสด ➔ ทวนซ้ำ
+          </p>
+        </div>
+        <div class="flex items-center gap-1.5 text-xs font-mono">
+          <button onclick="setViewMode('FLYWHEEL')" id="btn-mode-flywheel" class="px-3 py-1 rounded-lg font-bold bg-sky-500/20 text-sky-300 border border-sky-500/40 cursor-pointer">
+            ภาพรวม 10 ขั้น
+          </button>
+          <button onclick="setViewMode('FOCUS')" id="btn-mode-focus" class="px-3 py-1 rounded-lg font-medium text-slate-400 hover:text-white cursor-pointer">
+            โฟกัสรายโมดูล
+          </button>
+        </div>
+      </div>
+
+      <!-- Modern Stepper Nodes Bar -->
+      <div class="overflow-x-auto pb-2">
+        <div class="flex items-center min-w-[900px] justify-between relative px-2">
+          
+          <!-- Background Progress Line -->
+          <div class="absolute left-6 right-6 top-4 h-0.5 bg-slate-800 -z-0"></div>
+
+          <!-- 10 Step Nodes -->
+          <button onclick="selectPillar(1)" id="tab-p1" class="pillar-tab group flex flex-col items-center gap-1.5 z-10 cursor-pointer">
+            <span class="w-8 h-8 rounded-full bg-slate-900 border-2 border-sky-500 text-sky-400 font-mono font-bold text-xs flex items-center justify-center group-hover:scale-110 transition shadow-md">1</span>
+            <span class="text-[11px] font-semibold text-slate-300 group-hover:text-white whitespace-nowrap">Data Pipe</span>
+          </button>
+
+          <button onclick="selectPillar(2)" id="tab-p2" class="pillar-tab group flex flex-col items-center gap-1.5 z-10 cursor-pointer">
+            <span class="w-8 h-8 rounded-full bg-slate-900 border-2 border-slate-700 text-slate-400 font-mono font-bold text-xs flex items-center justify-center group-hover:scale-110 transition">2</span>
+            <span class="text-[11px] font-semibold text-slate-400 group-hover:text-white whitespace-nowrap">Alpha Gen</span>
+          </button>
+
+          <button onclick="selectPillar(3)" id="tab-p3" class="pillar-tab group flex flex-col items-center gap-1.5 z-10 cursor-pointer">
+            <span class="w-8 h-8 rounded-full bg-slate-900 border-2 border-slate-700 text-slate-400 font-mono font-bold text-xs flex items-center justify-center group-hover:scale-110 transition">3</span>
+            <span class="text-[11px] font-semibold text-slate-400 group-hover:text-white whitespace-nowrap">Strategy Dev</span>
+          </button>
+
+          <button onclick="selectPillar(4)" id="tab-p4" class="pillar-tab group flex flex-col items-center gap-1.5 z-10 cursor-pointer">
+            <span class="w-8 h-8 rounded-full bg-slate-900 border-2 border-slate-700 text-slate-400 font-mono font-bold text-xs flex items-center justify-center group-hover:scale-110 transition">4</span>
+            <span class="text-[11px] font-semibold text-slate-400 group-hover:text-white whitespace-nowrap">Backtest Lab</span>
+          </button>
+
+          <button onclick="selectPillar(5)" id="tab-p5" class="pillar-tab group flex flex-col items-center gap-1.5 z-10 cursor-pointer">
+            <span class="w-8 h-8 rounded-full bg-slate-900 border-2 border-slate-700 text-slate-400 font-mono font-bold text-xs flex items-center justify-center group-hover:scale-110 transition">5</span>
+            <span class="text-[11px] font-semibold text-slate-400 group-hover:text-white whitespace-nowrap">Quant Math</span>
+          </button>
+
+          <button onclick="selectPillar(6)" id="tab-p6" class="pillar-tab group flex flex-col items-center gap-1.5 z-10 cursor-pointer">
+            <span class="w-8 h-8 rounded-full bg-slate-900 border-2 border-slate-700 text-slate-400 font-mono font-bold text-xs flex items-center justify-center group-hover:scale-110 transition">6</span>
+            <span class="text-[11px] font-semibold text-slate-400 group-hover:text-white whitespace-nowrap">Risk Gate</span>
+          </button>
+
+          <button onclick="selectPillar(7)" id="tab-p7" class="pillar-tab group flex flex-col items-center gap-1.5 z-10 cursor-pointer">
+            <span class="w-8 h-8 rounded-full bg-slate-900 border-2 border-slate-700 text-slate-400 font-mono font-bold text-xs flex items-center justify-center group-hover:scale-110 transition">7</span>
+            <span class="text-[11px] font-semibold text-slate-400 group-hover:text-white whitespace-nowrap">Live Exec</span>
+          </button>
+
+          <button onclick="selectPillar(8)" id="tab-p8" class="pillar-tab group flex flex-col items-center gap-1.5 z-10 cursor-pointer">
+            <span class="w-8 h-8 rounded-full bg-slate-900 border-2 border-slate-700 text-slate-400 font-mono font-bold text-xs flex items-center justify-center group-hover:scale-110 transition">8</span>
+            <span class="text-[11px] font-semibold text-slate-400 group-hover:text-white whitespace-nowrap">Memory</span>
+          </button>
+
+          <button onclick="selectPillar(9)" id="tab-p9" class="pillar-tab group flex flex-col items-center gap-1.5 z-10 cursor-pointer">
+            <span class="w-8 h-8 rounded-full bg-slate-900 border-2 border-slate-700 text-slate-400 font-mono font-bold text-xs flex items-center justify-center group-hover:scale-110 transition">9</span>
+            <span class="text-[11px] font-semibold text-slate-400 group-hover:text-white whitespace-nowrap">Tracking</span>
+          </button>
+
+          <button onclick="selectPillar(10)" id="tab-p10" class="pillar-tab group flex flex-col items-center gap-1.5 z-10 cursor-pointer">
+            <span class="w-8 h-8 rounded-full bg-slate-900 border-2 border-slate-700 text-slate-400 font-mono font-bold text-xs flex items-center justify-center group-hover:scale-110 transition">10</span>
+            <span class="text-[11px] font-semibold text-slate-400 group-hover:text-white whitespace-nowrap">Feedback</span>
+          </button>
+
+        </div>
+      </div>
+    </div>
+        <!-- ======================================================================= -->
     <!-- 7. 4-PILLAR QUANT ARCHITECTURE & MATHEMATICAL VALIDATION SUITE           -->
     <!-- ======================================================================= -->
     <section id="sec-pillar-ensemble" class="space-y-6">
@@ -956,7 +1031,8 @@ new_html = f'''<!DOCTYPE html>
       </div>
 
     </section>
-
+      </div>
+    </div>
   </main>
 
   <!-- ========================================================================= -->
@@ -1008,6 +1084,36 @@ new_html = f'''<!DOCTYPE html>
       const currentTheme = document.documentElement.classList.contains('light') ? 'light' : 'dark';
       updateThemeToggleButton(currentTheme);
       initTradingViewChart('BINANCE:BTCUSDT');
+    }}
+
+    // Collapsible Accordion Logic
+    function toggleTheoryAccordion() {{
+      const body = document.getElementById('theory-accordion-body');
+      const label = document.getElementById('label-theory-accordion');
+      const icon = document.getElementById('icon-theory-accordion');
+      const isHidden = body.classList.contains('hidden');
+      if (isHidden) {{
+        body.classList.remove('hidden');
+        label.textContent = 'ย่อเก็บทฤษฎี (Collapse)';
+        icon.style.transform = 'rotate(180deg)';
+      }} else {{
+        body.classList.add('hidden');
+        label.textContent = 'เปิดดูทฤษฎี';
+        icon.style.transform = 'rotate(0deg)';
+      }}
+    }}
+
+    function openTheoryAccordion() {{
+      const body = document.getElementById('theory-accordion-body');
+      const label = document.getElementById('label-theory-accordion');
+      const icon = document.getElementById('icon-theory-accordion');
+      if (body && body.classList.contains('hidden')) {{
+        body.classList.remove('hidden');
+        if (label) label.textContent = 'ย่อเก็บทฤษฎี (Collapse)';
+        if (icon) icon.style.transform = 'rotate(180deg)';
+      }}
+      const el = document.getElementById('theory-accordion-wrapper');
+      if (el) el.scrollIntoView({{ behavior: 'smooth', block: 'start' }});
     }}
 
     // Interactive Zone Switching (Point #3: Segmented Switch)
