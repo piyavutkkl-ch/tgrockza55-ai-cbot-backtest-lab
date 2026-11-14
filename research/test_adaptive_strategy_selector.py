@@ -98,5 +98,25 @@ class TestAdaptiveStrategySelector(unittest.TestCase):
         self.assertEqual(dec2['action'], "MAINTAIN_ACTIVE_POSITION")
         self.assertEqual(dec2['active_strategy_id'], "STR-001")
 
+    def test_06_dynamic_hysteresis(self):
+        # Breakout / Strong trend has 5-bar hysteresis
+        self.assertEqual(self.selector.get_dynamic_hysteresis_bars(MarketRegime.STRONG_UPTREND), 5)
+        self.assertEqual(self.selector.get_dynamic_hysteresis_bars(MarketRegime.BREAKOUT), 5)
+        # Volatility expansion has 8-bar hysteresis
+        self.assertEqual(self.selector.get_dynamic_hysteresis_bars(MarketRegime.VOLATILITY_EXPANSION), 8)
+        # Elevated spread demands 20-bar hysteresis to protect from chop
+        self.assertEqual(self.selector.get_dynamic_hysteresis_bars(MarketRegime.BREAKOUT, is_spread_elevated=True), 20)
+        # Sideways baseline is 15 bars
+        self.assertEqual(self.selector.get_dynamic_hysteresis_bars(MarketRegime.SIDEWAY), 15)
+
+    def test_07_adaptive_threshold(self):
+        # Strong trend lowered to 45.0 to minimize opportunity cost
+        self.assertEqual(self.selector.get_adaptive_threshold(MarketRegime.STRONG_UPTREND), 45.0)
+        self.assertEqual(self.selector.get_adaptive_threshold(MarketRegime.BREAKOUT), 45.0)
+        # Reversal / Volatility at 50.0
+        self.assertEqual(self.selector.get_adaptive_threshold(MarketRegime.REVERSAL), 50.0)
+        # Sideways chop at 60.0
+        self.assertEqual(self.selector.get_adaptive_threshold(MarketRegime.SIDEWAY), 60.0)
+
 if __name__ == '__main__':
     unittest.main()

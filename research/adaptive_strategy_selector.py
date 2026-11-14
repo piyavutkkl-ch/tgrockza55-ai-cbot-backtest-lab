@@ -121,9 +121,12 @@ class AdaptiveStrategySelector:
                     "fingerprint": fingerprint
                 }
                 
-            # Hysteresis check (unless emergency regime shift)
+            # Dynamic Hysteresis check (unless emergency regime shift)
             is_emergency_shift = regime in [MarketRegime.NEWS_DRIVEN, MarketRegime.THIN_LIQUIDITY]
-            if self.bars_since_last_switch < self.MIN_HYSTERESIS_BARS and not is_emergency_shift:
+            is_spread_elevated = fingerprint.get('microstructure', {}).get('is_spread_elevated', False)
+            required_hysteresis = self.get_dynamic_hysteresis_bars(regime, is_spread_elevated)
+
+            if self.bars_since_last_switch < required_hysteresis and not is_emergency_shift:
                 # Maintain current strategy to avoid whipsawing
                 selected_strat = self.registry.get_strategy(self.current_active_strategy_id)
                 selected_id = self.current_active_strategy_id
@@ -209,6 +212,22 @@ class AdaptiveStrategySelector:
             return 50.0  # Moderate participation
         else:
             return 60.0  # Conservative participation: avoid sideways chop
+
+    def get_dynamic_hysteresis_bars(self, regime: str, is_spread_elevated: bool = False) -> int:
+        """
+        Dynamically adjusts hysteresis threshold based on regime speed & microstructure.
+        - High conviction momentum/breakout: 5 bars (quick response to capture opportunities).
+        - Volatility expansion / reversal: 8 bars.
+        - Elevated spread: 20 bars (defend against whipsaws during illiquid spread widening).
+        - Standard baseline: 15 bars.
+        """
+        if is_spread_elevated:
+            return 20
+        if regime in [MarketRegime.BREAKOUT, MarketRegime.STRONG_UPTREND, MarketRegime.STRONG_DOWNTREND, MarketRegime.NEWS_DRIVEN]:
+            return 5
+        elif regime in [MarketRegime.VOLATILITY_EXPANSION, MarketRegime.REVERSAL]:
+            return 8
+        return 15
 
     def _route_to_no_trade(self, t_str: str, reason: str, fp: Dict[str, Any]) -> Dict[str, Any]:
         """Explicit routing to STR-009 No Trade."""

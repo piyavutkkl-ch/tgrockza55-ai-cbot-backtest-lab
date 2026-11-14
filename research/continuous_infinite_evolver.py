@@ -59,33 +59,43 @@ def run_single_evolution_cycle(cycle_num):
         log_msg(f"Skipping {tested_symbol} (no live bars available)")
         return
         
-    # Generate experimental mutation
+    # Generate experimental mutation (exploring Dynamic Trailing Floor & Opportunity Cost minimization)
+    use_trailing = random.choice([True, False])
+    trailing_ratio = random.choice([0.50, 0.60, 0.70])
+
     if 'XAU' in tested_symbol or 'GOLD' in tested_symbol:
         sl = round(random.uniform(3.5, 5.5), 1)
         rr = round(random.uniform(2.2, 3.5), 1)
         be = random.choice([0.0, 1.0])
-        tgt = random.choice([10.0, 15.0, 20.0])
+        tgt = random.choice([10.0, 15.0, 25.0, 50.0])
         cfg = {
             'type': 'VWAP_ABSORPTION' if 'XAU' in tested_symbol else 'DOM_ABSORPTION',
             'sl': sl, 'rr': rr, 'be_r': be, 'sd_mult': 1.0,
             'delta_th': 5.0, 'imb_th': 0.025,
             'session_filter': 'ALL' if 'XAU' in tested_symbol else 'NO_MIDNIGHT',
-            'daily_target': tgt, 'max_daily_losses': 2, 'macro_trend': True
+            'daily_target': tgt, 'max_daily_losses': 2, 'macro_trend': True,
+            'trailing_floor': use_trailing, 'trailing_ratio': trailing_ratio
         }
     elif 'BTC' in tested_symbol:
         sl = round(random.choice([80.0, 100.0, 120.0]), 1)
         rr = round(random.choice([1.8, 2.0, 2.4]), 1)
         imb = round(random.choice([0.02, 0.025, 0.03]), 3)
+        tgt = random.choice([5.0, 10.0, 20.0])
         cfg = {
             'type': 'DOM_ABSORPTION', 'sl': sl, 'rr': rr, 'be_r': 1.0,
-            'imb_th': imb, 'smart_dom': True, 'session_filter': 'ALL', 'macro_trend': True
+            'imb_th': imb, 'smart_dom': True, 'session_filter': 'ALL', 'macro_trend': True,
+            'daily_target': tgt, 'max_daily_losses': 2,
+            'trailing_floor': use_trailing, 'trailing_ratio': trailing_ratio
         }
     else: # ETH
         sl = round(random.choice([2.0, 2.5, 3.0]), 1)
         rr = round(random.choice([2.5, 2.8, 3.0]), 1)
+        tgt = random.choice([5.0, 10.0, 15.0])
         cfg = {
             'type': 'DOM_ABSORPTION', 'sl': sl, 'rr': rr, 'be_r': 1.0,
-            'imb_th': 0.015, 'smart_dom': True, 'session_filter': 'ASIA', 'macro_trend': True
+            'imb_th': 0.015, 'smart_dom': True, 'session_filter': 'ASIA', 'macro_trend': True,
+            'daily_target': tgt, 'max_daily_losses': 2,
+            'trailing_floor': use_trailing, 'trailing_ratio': trailing_ratio
         }
         
     trades, daily_pnl = run_simulation(bars, tested_symbol, cfg)
@@ -96,7 +106,8 @@ def run_single_evolution_cycle(cycle_num):
     tot_d = len(daily_pnl)
     d_wr = pos_d / tot_d * 100.0 if tot_d else 0.0
     
-    discovery = f"ทดสอบสมมติฐานการกลายพันธุ์ {tested_symbol} ({cfg['type']}): SL={cfg['sl']}, RR={cfg['rr']}, Daily WR={d_wr:.1f}%, Net=+${net:.2f} USD"
+    opp_str = f", Trailing Floor={trailing_ratio*100:.0f}%" if use_trailing else ", Static Capped"
+    discovery = f"ทดสอบสมมติฐานการกลายพันธุ์ {tested_symbol} ({cfg['type']}): SL={cfg['sl']}, RR={cfg['rr']}{opp_str}, Daily WR={d_wr:.1f}%, Net=+${net:.2f} USD"
     
     # Update Flywheel Cycles JSON
     fw = load_flywheel()

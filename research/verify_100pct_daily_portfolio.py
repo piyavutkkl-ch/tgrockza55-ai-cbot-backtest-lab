@@ -126,6 +126,7 @@ def run_simulation(bars, symbol, cfg):
     
     trades = []
     daily_pnl = defaultdict(float)
+    daily_peak = defaultdict(float)
     daily_losses = defaultdict(int)
     pos = None
     
@@ -184,6 +185,8 @@ def run_simulation(bars, symbol, cfg):
                 pnl = (exit_price - entry) * lot_scale if side == 'BUY' else (entry - exit_price) * lot_scale
                 pnl -= (sp * lot_scale + comm)
                 daily_pnl[pos['day']] += pnl
+                if daily_pnl[pos['day']] > daily_peak[pos['day']]:
+                    daily_peak[pos['day']] = daily_pnl[pos['day']]
                 if pnl <= 0:
                     daily_losses[pos['day']] += 1
                     
@@ -196,9 +199,20 @@ def run_simulation(bars, symbol, cfg):
                 pos = None
                 continue
                 
-        # 2. Daily Guardian Gates
-        if daily_pnl[day] >= daily_target:
-            continue
+        # 2. Daily Guardian Gates (Dynamic Trailing Profit Floor)
+        use_trailing_floor = cfg.get('trailing_floor', False)
+        trailing_ratio = cfg.get('trailing_ratio', 0.60)
+        
+        if use_trailing_floor:
+            peak = daily_peak.get(day, 0.0)
+            if peak >= daily_target:
+                floor = max(daily_target * 0.5, peak * trailing_ratio)
+                if daily_pnl[day] < floor:
+                    continue  # Trailing floor locked, protects winning day while allowing runner
+        else:
+            if daily_pnl[day] >= daily_target:
+                continue
+                
         if daily_losses[day] >= max_daily_losses:
             continue
             

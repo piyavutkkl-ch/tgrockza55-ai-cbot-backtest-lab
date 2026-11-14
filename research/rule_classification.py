@@ -71,7 +71,7 @@ class RuleClassificationMatrix:
         'sl_dist': {'min': 1.0, 'max': 250.0},
         'rr_ratio': {'min': 1.0, 'max': 5.0},
         'be_ratio': {'min': 0.0, 'max': 2.0},
-        'daily_target_usd': {'min': 5.0, 'max': 30.0},
+        'daily_target_usd': {'min': 5.0, 'max': 500.0}, # Expanded: allows trend-following trailing runners
         'max_daily_losses': {'min': 1, 'max': 2}, # Capped by HARD limit of 2
         'spread_threshold': {
             'XAUUSD': {'min': 0.05, 'max': 0.25},
@@ -82,7 +82,9 @@ class RuleClassificationMatrix:
         'news_pre_blackout_min': {'min': 15, 'max': 60},
         'news_post_blackout_min': {'min': 30, 'max': 120},
         'max_holding_bars': {'min': 5, 'max': 240},
-        'switching_hysteresis_bars': {'min': 15, 'max': 60}
+        'switching_hysteresis_bars': {'min': 3, 'max': 60}, # Expanded: allows fast 3-5 bar momentum reaction
+        'adaptive_no_trade_threshold': {'min': 35.0, 'max': 75.0},
+        'trailing_profit_lock_ratio': {'min': 0.30, 'max': 0.80}
     }
 
     # -------------------------------------------------------------------------
