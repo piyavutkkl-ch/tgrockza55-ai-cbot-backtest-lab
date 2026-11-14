@@ -24,6 +24,7 @@ sys.path.insert(0, os.path.join(ROOT, 'research'))
 from verify_100pct_daily_portfolio import load_live_bars, run_simulation
 from experiment_registry import ExperimentRegistry
 from event_driven_intelligence_daemon import EventDrivenIntelligenceDaemon
+from strategy_memory_recorder import StrategyMemoryRecorder
 
 def log_msg(msg):
     now_utc = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')
@@ -174,6 +175,19 @@ def run_single_evolution_cycle(cycle_num):
             )
     except Exception as e:
         log_msg(f"ExperimentRegistry note: {e}")
+
+    # Record Conditional Edge by Regime into strategy_memory (quant_fund_v2.sqlite)
+    try:
+        mem_rec = StrategyMemoryRecorder()
+        mem_rec.record_simulation_regime_memory(
+            symbol=tested_symbol,
+            trades=trades,
+            default_strategy_id=cfg['type'],
+            default_regime="RANGE_BOUND" if "VWAP" in cfg['type'] else "VOLATILITY_EXPANSION",
+            notes_prefix=f"Flywheel Cycle #{cycle_num}"
+        )
+    except Exception as e:
+        log_msg(f"StrategyMemory note: {e}")
 
     # Trigger Market Intelligence Pulse across all 4 assets
     try:

@@ -114,6 +114,55 @@ namespace cAlgo.Robots
         // ราคา SL / TP ตอนเปิดของแต่ละ position (History ไม่เก็บไว้ให้)
         private readonly Dictionary<int, double?[]> _stops = new Dictionary<int, double?[]>();
         private readonly Dictionary<int, TradePlan> _plans = new Dictionary<int, TradePlan>();
+        private readonly Dictionary<int, string> _posStrategy = new Dictionary<int, string>();
+        private readonly Dictionary<int, string> _posRegime = new Dictionary<int, string>();
+
+        public string CurrentMarketRegime
+        {
+            get
+            {
+                if (_strategy != null && !string.IsNullOrEmpty(_strategy.CurrentRegime) && _strategy.CurrentRegime != "UNKNOWN")
+                    return _strategy.CurrentRegime;
+                return DetectMarketRegime();
+            }
+        }
+
+        private string DetectMarketRegime()
+        {
+            if (Bars == null || Bars.Count < 50) return "INITIALIZING";
+            try
+            {
+                double c = Bars.ClosePrices.Last(1);
+                double high20 = double.MinValue;
+                double low20 = double.MaxValue;
+                double atrSum = 0;
+                for (int i = 1; i <= 20; i++)
+                {
+                    high20 = Math.Max(high20, Bars.HighPrices.Last(i));
+                    low20 = Math.Min(low20, Bars.LowPrices.Last(i));
+                    if (i <= 14) atrSum += (Bars.HighPrices.Last(i) - Bars.LowPrices.Last(i));
+                }
+                double atr = atrSum / 14.0;
+                double range = high20 - low20;
+                double lastBody = Math.Abs(c - Bars.OpenPrices.Last(1));
+
+                if (atr > 0 && lastBody > atr * 1.8) return "BREAKOUT";
+                if (atr > 0 && range > atr * 4.5)
+                {
+                    double maFast = 0, maSlow = 0;
+                    for (int i = 1; i <= 20; i++) maFast += Bars.ClosePrices.Last(i);
+                    for (int i = 1; i <= 50; i++) maSlow += Bars.ClosePrices.Last(i);
+                    maFast /= 20.0; maSlow /= 50.0;
+                    return maFast > maSlow ? "STRONG_UPTREND" : "STRONG_DOWNTREND";
+                }
+                if (atr > 0 && range < atr * 2.5) return "RANGE_BOUND";
+                return "SIDEWAY";
+            }
+            catch
+            {
+                return "SIDEWAY";
+            }
+        }
 
         // แท่งราคาที่แนบไปกับเทรด ให้หน้าเว็บวาดกราฟ
         //   เทรดตัวอย่าง (ต่อวันในสัปดาห์ เอาชนะ/แพ้อย่างละ ExamplesPerGroup) ได้กรอบกว้าง — แสดงในหัวข้อ "ตัวอย่างกราฟ"
@@ -346,16 +395,20 @@ namespace cAlgo.Robots
             var clock = System.Diagnostics.Stopwatch.StartNew();
             var result = ExecuteMarketOrder(signal.Value, SymbolName, volume, Label, brokerSl, brokerTp, _strategy.SignalTag);
             clock.Stop();
+            string curStrat = _strategy != null ? _strategy.Code : StrategyCode;
+            string curRegime = CurrentMarketRegime;
             if (_recorder != null)
             {
                 if (result.IsSuccessful && result.Position != null)
-                    _recorder.OrderOpened(result.Position, expected, clock.Elapsed.TotalMilliseconds, _strategy.Prediction);
+                    _recorder.OrderOpened(result.Position, expected, clock.Elapsed.TotalMilliseconds, _strategy.Prediction, curStrat, curRegime);
                 else
-                    _recorder.OrderFailed(signal.Value, result.Error.HasValue ? result.Error.Value.ToString() : "unknown");
+                    _recorder.OrderFailed(signal.Value, result.Error.HasValue ? result.Error.Value.ToString() : "unknown", curStrat, curRegime);
             }
             if (result.IsSuccessful && result.Position != null)
             {
                 var p = result.Position;
+                _posStrategy[p.Id] = curStrat;
+                _posRegime[p.Id] = curRegime;
                 _stops[p.Id] = new[] { p.StopLoss, p.TakeProfit };
 
                 if (StealthStops && baseDistance > 0)
@@ -404,8 +457,13 @@ namespace cAlgo.Robots
             else if (_expectedClose.TryGetValue(p.Id, out seen)) expected = seen;
             _expectedClose.Remove(p.Id);
 
+            string posStrat = _posStrategy.TryGetValue(p.Id, out var sVal) ? sVal : (_strategy != null ? _strategy.Code : StrategyCode);
+            string posReg = _posRegime.TryGetValue(p.Id, out var rVal) ? rVal : CurrentMarketRegime;
+            _posStrategy.Remove(p.Id);
+            _posRegime.Remove(p.Id);
+
             var deal = History.LastOrDefault(t => t.PositionId == p.Id);
-            _recorder.OrderClosed(p, args.Reason.ToString(), expected, deal != null ? deal.ClosingPrice : (double?)null);
+            _recorder.OrderClosed(p, args.Reason.ToString(), expected, deal != null ? deal.ClosingPrice : (double?)null, posStrat, posReg);
         }
 
         private class TradePlan

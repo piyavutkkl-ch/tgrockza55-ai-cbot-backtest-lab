@@ -34,6 +34,7 @@ from risk_governor import RiskGovernor
 from statistical_validation_engine import StatisticalValidationEngine
 from performance_attribution_engine import PerformanceAttributionEngine, AICritic
 from experiment_registry import ExperimentRegistry
+from strategy_memory_recorder import StrategyMemoryRecorder
 from verify_100pct_daily_portfolio import load_live_bars
 
 class MarketReplayEngine:
@@ -46,6 +47,7 @@ class MarketReplayEngine:
         self.risk_governor = RiskGovernor()
         self.selector = AdaptiveStrategySelector(self.strategy_registry, self.risk_governor)
         self.experiment_registry = ExperimentRegistry()
+        self.memory_recorder = StrategyMemoryRecorder()
         
         # Friction models by asset
         if 'XAU' in symbol:
@@ -104,6 +106,8 @@ class MarketReplayEngine:
                         "entry_time": pos['entry_time'],
                         "exit_time": bars[i-1]['time'],
                         "strategy_id": pos['strategy_id'],
+                        "strategy_name": pos.get('strategy_name', pos['strategy_id']),
+                        "market_regime": pos.get('market_regime', "RANGE_BOUND"),
                         "side": side,
                         "entry_price": round(entry, 2),
                         "exit_price": round(fill_price, 2),
@@ -188,6 +192,8 @@ class MarketReplayEngine:
                         "entry_time": pos['entry_time'],
                         "exit_time": t_str,
                         "strategy_id": pos['strategy_id'],
+                        "strategy_name": pos.get('strategy_name', pos['strategy_id']),
+                        "market_regime": pos.get('market_regime', fp['primary_market_regime']),
                         "side": side,
                         "entry_price": round(entry, 2),
                         "exit_price": round(fill_price, 2),
@@ -226,6 +232,7 @@ class MarketReplayEngine:
                 
                 active_position = {
                     "strategy_id": decision['selected_strategy_id'],
+                    "strategy_name": decision['selected_strategy_name'],
                     "entry_time": t_str,
                     "entry_idx": i,
                     "side": side,
@@ -234,7 +241,8 @@ class MarketReplayEngine:
                     "tp_price": tp_price,
                     "sl_dist": sl_dist,
                     "be_locked": False,
-                    "fingerprint": fp
+                    "fingerprint": fp,
+                    "market_regime": fp['primary_market_regime']
                 }
 
         # -----------------------------------------------------------------
@@ -257,6 +265,17 @@ class MarketReplayEngine:
 
         critique = AICritic.critique_strategy_performance(val_res, {'failure_distribution': failure_dist})
 
+        # -----------------------------------------------------------------
+        # 6. Record Conditional Edge by Regime into strategy_memory (quant_fund_v2.sqlite)
+        # -----------------------------------------------------------------
+        memory_records = self.memory_recorder.record_simulation_regime_memory(
+            symbol=self.symbol,
+            trades=trades,
+            default_strategy_id="STR-001",
+            default_regime=MarketRegime.RANGE_BOUND,
+            notes_prefix=f"Chronological Replay ({n - 50} bars)"
+        )
+
         return {
             "status": "COMPLETED",
             "symbol": self.symbol,
@@ -267,6 +286,7 @@ class MarketReplayEngine:
             "validation": val_res,
             "failure_distribution": dict(failure_dist),
             "critic_verdict": critique,
+            "strategy_memory_persisted": len(memory_records),
             "final_equity_usd": round(self.starting_capital + sum(t['pnl'] for t in trades), 2)
         }
 

@@ -83,6 +83,9 @@ namespace cAlgo.Robots
         /// <summary>ป้ายของสัญญาณล่าสุด — robot ใส่เป็น Comment ของ position (ทฤษฎีรวมใช้แยกว่าออเดอร์มาจากทฤษฎีย่อยไหน)</summary>
         public virtual string SignalTag => null;
 
+        /// <summary>สภาวะตลาดที่ทฤษฎีตรวจพบในแท่งปัจจุบัน (เช่น STRONG_UPTREND, RANGE_BOUND, BREAKOUT ฯลฯ)</summary>
+        public virtual string CurrentRegime => "UNKNOWN";
+
         /// <summary>ทฤษฎีที่ใช้โมเดล: P(ราคาขึ้น) ของแท่งล่าสุดที่ปิดแล้ว หลังเรียก Signal() — ตัวบันทึกตลาดสดเก็บไว้เทียบกับผลจริง</summary>
         public virtual double? Prediction => null;
 

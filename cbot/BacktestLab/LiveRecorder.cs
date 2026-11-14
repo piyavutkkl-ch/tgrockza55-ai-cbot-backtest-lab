@@ -38,7 +38,7 @@ namespace cAlgo.Robots
         private const int MaxLevels = 25;
         private const string MinuteHeader = "time,open,high,low,close,tickVolume,ticks,spreadAvg,spreadMax,books,bidVol,askVol,imbalance,depthUpdates," +
                                             "nextNews,nextImpact,minToNext,lastNews,lastImpact,minSinceLast,pUp,signal,positions,equity";
-        private const string TradeHeader = "time,event,id,side,units,price,expected,slippage,latencyMs,spread,stopLoss,pUp,reason,gross,commission,swap,net,balance";
+        private const string TradeHeader = "time,event,id,side,units,price,expected,slippage,latencyMs,spread,stopLoss,pUp,reason,gross,commission,swap,net,balance,strategyCode,marketRegime";
 
         /// <summary>folder = "live" ตอนรันสด; ตอนทดสอบใน backtest ใช้ชื่ออื่นเสมอ (ค่าเริ่มต้น live-test) เพื่อไม่ให้ปนกับข้อมูลจริง</summary>
         public static string Root(string folder) =>
@@ -48,7 +48,7 @@ namespace cAlgo.Robots
 
         private readonly Robot _bot;
         private readonly MarketDepth _depth;
-        private readonly string _dir, _newsDir, _price;
+        private readonly string _dir, _newsDir, _price, _strategy;
         private readonly int _bookEvery;
         private readonly bool _test;
         private readonly StringBuilder _sb = new StringBuilder(1024);
@@ -73,7 +73,7 @@ namespace cAlgo.Robots
         public LiveRecorder(Robot bot, MarketDepth depth, Ticks history, int bookSeconds, string testFolder, string strategy)
         {
             bool test = testFolder != null;
-            _bot = bot; _depth = depth; _bookEvery = Math.Max(1, bookSeconds); _test = test;
+            _bot = bot; _depth = depth; _bookEvery = Math.Max(1, bookSeconds); _test = test; _strategy = strategy;
             _dir = Path.Combine(Root(!test ? "live" : testFolder == "live" || testFolder == "1" ? "live-test" : testFolder), bot.SymbolName);
             _newsDir = Path.Combine(Reporter.Folder, "data", "news");
             _price = "F" + bot.Symbol.Digits;
@@ -245,29 +245,37 @@ namespace cAlgo.Robots
         });
 
         /// <summary>ออเดอร์เปิดแล้ว: expected = ราคาที่เห็นตอนสั่ง, slippage เป็นบวก = ได้ราคาแย่กว่าที่เห็น</summary>
-        public void OrderOpened(Position p, double expected, double latencyMs, double? pUp) => Guard(() =>
+        public void OrderOpened(Position p, double expected, double latencyMs, double? pUp, string strategyCode = null, string marketRegime = null) => Guard(() =>
         {
             double slip = p.TradeType == TradeType.Buy ? p.EntryPrice - expected : expected - p.EntryPrice;
+            string strat = !string.IsNullOrEmpty(strategyCode) ? strategyCode : (!string.IsNullOrEmpty(_strategy) ? _strategy : "UNKNOWN");
+            string regime = !string.IsNullOrEmpty(marketRegime) ? marketRegime : "UNKNOWN";
             Append("trades.csv", TradeHeader, string.Join(",", Stamp(_bot.Server.TimeInUtc), "OPEN", p.Id, p.TradeType, Num(p.VolumeInUnits, "0.##"),
                 p.EntryPrice.ToString(_price, Inv), expected.ToString(_price, Inv), Num(slip, "0.###"), Num(latencyMs, "0"),
                 Num(_bot.Symbol.Ask - _bot.Symbol.Bid, "0.###"), p.StopLoss.HasValue ? p.StopLoss.Value.ToString(_price, Inv) : "",
                 pUp.HasValue ? Num(pUp.Value, "0.####") : "", (p.Comment ?? "").Replace(',', ' '),        // แถว OPEN: ช่อง reason = ป้ายของกฎที่เปิดไม้นี้
-                "", "", "", "", Num(_bot.Account.Balance, "0.00")));
+                "", "", "", "", Num(_bot.Account.Balance, "0.00"), strat, regime));
         });
 
-        public void OrderFailed(TradeType side, string error) => Guard(() =>
-            Append("trades.csv", TradeHeader, string.Join(",", Stamp(_bot.Server.TimeInUtc), "FAILED", "", side, "", "", "", "", "", "", "", "", error, "", "", "", "", "")));
+        public void OrderFailed(TradeType side, string error, string strategyCode = null, string marketRegime = null) => Guard(() =>
+        {
+            string strat = !string.IsNullOrEmpty(strategyCode) ? strategyCode : (!string.IsNullOrEmpty(_strategy) ? _strategy : "UNKNOWN");
+            string regime = !string.IsNullOrEmpty(marketRegime) ? marketRegime : "UNKNOWN";
+            Append("trades.csv", TradeHeader, string.Join(",", Stamp(_bot.Server.TimeInUtc), "FAILED", "", side, "", "", "", "", "", "", "", "", error, "", "", "", "", "", strat, regime));
+        });
 
         /// <summary>ออเดอร์ปิดแล้ว: expected = ราคา SL/TP หรือราคาที่เห็นตอนสั่งปิด (ว่าง = ไม่ทราบ)</summary>
-        public void OrderClosed(Position p, string reason, double? expected, double? price) => Guard(() =>
+        public void OrderClosed(Position p, string reason, double? expected, double? price, string strategyCode = null, string marketRegime = null) => Guard(() =>
         {
             string slip = "";
             if (expected.HasValue && price.HasValue)
                 slip = Num(p.TradeType == TradeType.Buy ? expected.Value - price.Value : price.Value - expected.Value, "0.###");
+            string strat = !string.IsNullOrEmpty(strategyCode) ? strategyCode : (!string.IsNullOrEmpty(_strategy) ? _strategy : "UNKNOWN");
+            string regime = !string.IsNullOrEmpty(marketRegime) ? marketRegime : "UNKNOWN";
             Append("trades.csv", TradeHeader, string.Join(",", Stamp(_bot.Server.TimeInUtc), "CLOSE", p.Id, p.TradeType, Num(p.VolumeInUnits, "0.##"),
                 price.HasValue ? price.Value.ToString(_price, Inv) : "", expected.HasValue ? expected.Value.ToString(_price, Inv) : "", slip, "",
                 Num(_bot.Symbol.Ask - _bot.Symbol.Bid, "0.###"), "", "", reason,
-                Num(p.GrossProfit, "0.00"), Num(p.Commissions, "0.00"), Num(p.Swap, "0.00"), Num(p.NetProfit, "0.00"), Num(_bot.Account.Balance, "0.00")));
+                Num(p.GrossProfit, "0.00"), Num(p.Commissions, "0.00"), Num(p.Swap, "0.00"), Num(p.NetProfit, "0.00"), Num(_bot.Account.Balance, "0.00"), strat, regime));
         });
 
         public void Stop() => Guard(() =>
