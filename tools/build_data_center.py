@@ -14,14 +14,19 @@ from __future__ import annotations
 
 import csv
 import json
+import os
+import shutil
 import statistics
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List
 
 ROOT = Path(__file__).resolve().parent.parent
-LIVE_DIR = ROOT / "data" / "live"
+REPO_LIVE_DIR = ROOT / "data" / "live"
 DOCS_DATA_DIR = ROOT / "docs" / "data"
+
+_local_appdata = os.environ.get("LOCALAPPDATA", "")
+PC_LIVE_DIR = Path(_local_appdata) / "BacktestLab" / "live" if _local_appdata else None
 
 SYMBOL_CONFIG: Dict[str, Dict[str, Any]] = {
     "XAUUSD": {
@@ -145,7 +150,27 @@ def parse_trades(sym_dir: Path) -> List[Dict[str, Any]]:
 
 
 def build_symbol(sym: str, cfg: Dict[str, Any]) -> Dict[str, Any]:
-    sym_dir = LIVE_DIR / sym
+    repo_sym_dir = REPO_LIVE_DIR / sym
+    pc_sym_dir = (PC_LIVE_DIR / sym) if PC_LIVE_DIR else None
+
+    # Sync trades from PC to repo if available
+    if pc_sym_dir and pc_sym_dir.exists():
+        pc_trades = pc_sym_dir / "trades.csv"
+        repo_trades = repo_sym_dir / "trades.csv"
+        if pc_trades.exists():
+            repo_sym_dir.mkdir(parents=True, exist_ok=True)
+            if not repo_trades.exists() or pc_trades.stat().st_size > repo_trades.stat().st_size:
+                try:
+                    shutil.copy2(pc_trades, repo_trades)
+                except Exception:
+                    pass
+
+    # Pick directory with min-*.csv files (prefer PC if present and non-empty)
+    if pc_sym_dir and pc_sym_dir.exists() and list(pc_sym_dir.glob("min-*.csv")):
+        sym_dir = pc_sym_dir
+    else:
+        sym_dir = repo_sym_dir
+
     min_files = sorted(sym_dir.glob("min-*.csv"))
     flow_files = sorted(sym_dir.glob("flow-*.csv"))
 
@@ -240,7 +265,7 @@ def build_symbol(sym: str, cfg: Dict[str, Any]) -> Dict[str, Any]:
                 prev_ts = t_sec
                 prev_time_str = tstr
 
-    trades = parse_trades(sym_dir)
+    trades = parse_trades(pc_sym_dir) if (pc_sym_dir and (pc_sym_dir / "trades.csv").exists()) else parse_trades(sym_dir)
     exec_latencies = [t["latencyMs"] for t in trades if t.get("latencyMs") is not None]
 
     # Pick a sensible default replay start index (last ~200 bars remaining to replay)

@@ -430,6 +430,7 @@ def maybe_run_flywheel_cycle():
 def rebuild_ui_summaries():
     """Rebuild modular 8-page Web UI summary JSONs after telemetry updates."""
     builders = [
+        os.path.join(REPO_ROOT, 'tools', 'build_data_center.py'),
         os.path.join(REPO_ROOT, 'tools', 'build_overview_summary.py'),
         os.path.join(REPO_ROOT, 'tools', 'build_intelligence_summary.py'),
         os.path.join(REPO_ROOT, 'tools', 'build_audit_summary.py'),
@@ -469,6 +470,14 @@ def maybe_git_push(current_trade_count=None):
                     'docs/data/intelligence_summary.json',
                     'docs/data/audit_summary.json',
                     'docs/assets/database_catalog.json',
+                    'docs/data/dc_meta.json',
+                    'docs/data/dc_XAUUSD.json',
+                    'docs/data/dc_BTCUSD.json',
+                    'docs/data/dc_ETHUSD.json',
+                    'docs/data/dc_GOLD-PERP.json',
+                    'data/live/BTCUSD/trades.csv',
+                    'data/live/ETHUSD/trades.csv',
+                    'data/live/XAUUSD/trades.csv',
                 ]
                 existing_files = [f for f in files_to_add if os.path.exists(os.path.join(REPO_ROOT, f))]
                 if existing_files:
