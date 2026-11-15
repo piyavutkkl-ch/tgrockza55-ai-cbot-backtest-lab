@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="th" data-theme="dark">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Archive / System — AI Quant Backtest Lab</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Archive / System &amp; Visual Feedback Studio — AI Quant Backtest Lab (Page 7 / 8)</title>
+  <meta name="description" content="System Archive, AI Research Transcript, Legacy Runs, Interactive Visual Feedback Studio, and Governance &amp; Privacy for the Antigravity Quant Platform.">
   <script>
     (function () {
       try {
@@ -12,53 +13,521 @@
       } catch (e) {}
     })();
   </script>
-  <link rel="stylesheet" href="assets/shell.css" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2322D3EE' stroke-width='2'%3E%3Cpath d='M12 2L4 5.5v6.5c0 5 3.4 9.5 8 10.5 4.6-1 8-5.5 8-10.5V5.5L12 2z'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&family=Noto+Sans+Thai:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/shell.css">
+  <link rel="stylesheet" href="assets/archive-system.css">
 </head>
-<body data-page="archive-system.html">
+<body data-page="archive-system.html" class="page-archive-system">
   <div id="app-shell"></div>
+
   <div id="page-main-template" hidden>
-    <div class="placeholder-wrap">
-      <section class="card placeholder-hero">
-        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
-          <span class="badge badge-gold">🚧 กำลังพัฒนา (Placeholder หน้า 7 / 8)</span>
-          <span class="badge badge-muted">Archive &amp; System Utilities</span>
+    <h1 class="sr-only">Archive / System &amp; Visual Feedback Studio (Page 7 / 8)</h1>
+
+    <!-- Workspace 4-Tab Bar -->
+    <div class="workspace-tabs-bar">
+      <div class="workspace-tabs" role="tablist" aria-label="Archive &amp; System Workspace Sections">
+        <button class="ws-tab" role="tab" aria-selected="false" data-tab="transcript" id="tab-btn-transcript" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+          <span>AI Research Transcript</span>
+          <span class="ws-tab-pill" id="pill-count-transcript">40</span>
+        </button>
+
+        <button class="ws-tab" role="tab" aria-selected="false" data-tab="legacy" id="tab-btn-legacy" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><polyline points="12 7 12 12 15 14"></polyline></svg>
+          <span>Legacy Runs</span>
+          <span class="ws-tab-pill" id="pill-count-legacy">123+</span>
+        </button>
+
+        <button class="ws-tab active" role="tab" aria-selected="true" data-tab="studio" id="tab-btn-studio" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>
+          <span>Visual Feedback Studio</span>
+          <span class="ws-tab-pill" id="pill-count-tickets">0</span>
+        </button>
+
+        <button class="ws-tab" role="tab" aria-selected="false" data-tab="governance" id="tab-btn-governance" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>
+          <span>Governance &amp; Privacy</span>
+          <span class="ws-tab-pill" id="pill-count-rules">14/14</span>
+        </button>
+      </div>
+
+      <div class="workspace-meta-right">
+        <div class="mini-telemetry-chip mono" title="Live Pepperstone Demo #5258778 &amp; XAUUSD Telemetry">
+          <span style="color:var(--text-muted);">XAUUSD</span>
+          <strong id="ws-xau-price">–</strong>
+          <span class="sep">·</span>
+          <span style="color:var(--text-muted);">Equity</span>
+          <strong id="ws-equity">–</strong>
+          <span id="ws-pnl">–</span>
         </div>
-        <h1 style="margin:0;font-size:22px;">📦 Archive / System</h1>
-        <p style="margin:0;color:var(--text-secondary);">
-          ศูนย์รวมหน้าเอกสารบันทึกประวัติ การส่งข้อเสนอแนะ ผลทดสอบชุดเก่า และนโยบายความเป็นส่วนตัวของระบบ (รวม 4 หน้าเดิมไว้ในหมวดเดียว)
-        </p>
-        <div class="placeholder-grid">
-          <div class="placeholder-module">
-            <strong>Chat Transcript Archive</strong>
-            <span style="font-size:12px;color:var(--text-muted);">บันทึกการค้นคว้าและบทสนทนาเชิงวิจัย</span>
-            <a href="old-web/chat_transcript.html" class="btn-secondary-link" style="margin-top:6px;">ดูหน้าเดิม: chat_transcript.html →</a>
-          </div>
-          <div class="placeholder-module">
-            <strong>Legacy Backtest Results</strong>
-            <span style="font-size:12px;color:var(--text-muted);">คลังผลทดสอบเดิมก่อนย้ายโครงสร้าง</span>
-            <a href="old-web/legacy.html" class="btn-secondary-link" style="margin-top:6px;">ดูหน้าเดิม: legacy.html →</a>
-          </div>
-          <div class="placeholder-module">
-            <strong>Feedback Studio</strong>
-            <span style="font-size:12px;color:var(--text-muted);">บันทึกข้อเสนอแนะและรายการปรับปรุงหน้าเว็บ</span>
-            <a href="old-web/feedback.html" class="btn-secondary-link" style="margin-top:6px;">ดูหน้าเดิม: feedback.html →</a>
-          </div>
-          <div class="placeholder-module">
-            <strong>Privacy Policy</strong>
-            <span style="font-size:12px;color:var(--text-muted);">ข้อมูลนโยบายความเป็นส่วนตัวของระบบ</span>
-            <a href="old-web/privacy.html" class="btn-secondary-link" style="margin-top:6px;">ดูหน้าเดิม: privacy.html →</a>
+        <div class="page-meta-chip mono" id="data-status-badge">
+          <span class="status-dot ok" id="data-status-dot"></span>
+          <span id="data-status-text">LIVE ARCHIVE SYNCED</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Workspace Main Panels -->
+    <div class="workspace-body">
+      <!-- ------------------------------------------------------------------- -->
+      <!-- TAB 3 (DEFAULT ACTIVE): VISUAL FEEDBACK STUDIO                      -->
+      <!-- ------------------------------------------------------------------- -->
+      <section class="tab-panel active" id="panel-studio" role="tabpanel" aria-labelledby="tab-btn-studio">
+        <div class="studio-grid">
+          <!-- LEFT: RESEARCH LOGS ARCHIVE -->
+          <aside class="card logs-archive-panel" aria-label="Research Logs Archive">
+            <div class="panel-header">
+              <div class="panel-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
+                <span>Research Logs Archive</span>
+              </div>
+              <span class="count-badge" id="archive-total-badge">Total: – logs</span>
+            </div>
+
+            <div class="logs-search-row">
+              <div class="search-input-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="search" id="archive-log-search" class="search-input" placeholder="Search logs, keyword, or date..." aria-label="Search archived research logs">
+              </div>
+              <select id="archive-log-filter" class="filter-select" aria-label="Filter archived logs by category">
+                <option value="all">All</option>
+                <option value="ui">UI</option>
+                <option value="strategy">Cycle</option>
+                <option value="research">Research</option>
+                <option value="risk">Risk</option>
+                <option value="system">System</option>
+              </select>
+            </div>
+
+            <div class="logs-list" id="archive-logs-list" role="listbox" aria-label="Archived log items"></div>
+          </aside>
+
+          <!-- RIGHT: STUDIO CANVAS + BOTTOM LOG DETAILS INSPECTOR -->
+          <div class="studio-right">
+            <div class="card studio-stage-card">
+              <div class="studio-toolbar">
+                <div class="toolbar-group">
+                  <button type="button" class="tool-btn active" id="mode-inspect-btn" title="Click any dashboard card to highlight and annotate">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"></path></svg>
+                    <span>Select Element</span>
+                  </button>
+                  <button type="button" class="tool-btn" id="mode-crop-btn" title="Drag a freehand crop box over the preview stage (Shortcut: C)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.13 1L6 16a2 2 0 0 0 2 2h15"></path><path d="M1 6.13L16 6a2 2 0 0 1 2 2v15"></path></svg>
+                    <span>Drag Crop (C)</span>
+                  </button>
+                  <label class="tool-btn" title="Upload an image or press Ctrl+V to paste a screenshot">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                    <span>Upload / Paste</span>
+                    <input type="file" id="studio-upload-input" accept="image/*" hidden>
+                  </label>
+                  <button type="button" class="tool-btn" id="btn-reset-stage" title="Restore live dashboard preview stage">
+                    <span>Reset Stage</span>
+                  </button>
+                </div>
+
+                <div class="toolbar-group">
+                  <span style="font-size:11px; color:var(--text-muted);">Selected:</span>
+                  <code class="selector-chip" id="toolbar-selector-chip">div.risk-card:nth-child(1)</code>
+                </div>
+              </div>
+
+              <!-- Interactive Canvas Area -->
+              <div class="studio-stage-wrap" id="studio-stage-wrap">
+                <!-- SVG Pointer Connector Line -->
+                <svg class="connector-svg" id="connector-svg" aria-hidden="true">
+                  <defs>
+                    <marker id="cyan-arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+                      <path d="M0,1 L7,4 L0,7 Z" fill="#22D3EE"></path>
+                    </marker>
+                  </defs>
+                  <line id="connector-line" x1="0" y1="0" x2="0" y2="0" stroke="#22D3EE" stroke-width="1.8" marker-end="url(#cyan-arrow)"></line>
+                </svg>
+
+                <!-- Embedded Live Preview Frame -->
+                <div class="embedded-frame" id="embedded-frame">
+                  <div class="embedded-topbar">
+                    <div class="embedded-brand">
+                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#22D3EE" stroke-width="2" aria-hidden="true"><path d="M12 2L4 5.5v6.5c0 5 3.4 9.5 8 10.5 4.6-1 8-5.5 8-10.5V5.5L12 2z"></path></svg>
+                      <span>QuantGuard</span>
+                      <span style="color:var(--text-muted); font-weight:500;">Auto Trading Governance</span>
+                    </div>
+                    <div class="embedded-metrics">
+                      <span id="stage-live-pill" style="color:var(--green);">● LIVE</span>
+                      <span>XAUUSD <strong id="stage-xau-val" style="color:var(--text-primary);">–</strong></span>
+                      <span>Equity <strong id="stage-eq-val" style="color:var(--text-primary);">–</strong></span>
+                      <span>Net P&amp;L <strong id="stage-pnl-val">–</strong></span>
+                      <span id="stage-health-badge" style="color:var(--green);">System Monitored</span>
+                    </div>
+                  </div>
+
+                  <div class="embedded-body">
+                    <div class="embedded-mini-nav" aria-hidden="true">
+                      <div class="mini-nav-pill active">Dashboard</div>
+                      <div class="mini-nav-pill">Strategy</div>
+                      <div class="mini-nav-pill">Risk Control</div>
+                      <div class="mini-nav-pill">Audit Log</div>
+                      <div class="mini-nav-pill">Reports</div>
+                      <div class="mini-nav-pill">Settings</div>
+                    </div>
+
+                    <div class="embedded-content" id="embedded-content">
+                      <!-- Inspectable Card 1: 10-Stage Institutional Lifecycle -->
+                      <div class="lifecycle-card inspectable" data-selector="div.lifecycle-card" data-label="10-Stage Institutional Lifecycle">
+                        <div class="lifecycle-head">
+                          <div>
+                            <div class="lifecycle-title">10-Stage Institutional Lifecycle</div>
+                            <div class="lifecycle-sub" id="stage-lifecycle-sub">From Data to Continuous Improvement</div>
+                          </div>
+                          <span class="count-badge mono" id="stage-cycle-pill">Cycle #328</span>
+                        </div>
+                        <div class="lifecycle-track" id="lifecycle-track"></div>
+                      </div>
+
+                      <!-- Inspectable Cards Row -->
+                      <div class="stage-cards-row">
+                        <!-- Card 2 (Default Selected): 24/7 Watchdog & Risk Governor -->
+                        <div class="risk-card inspectable" id="target-risk-card" data-selector="div.risk-card:nth-child(1)" data-label="24/7 Watchdog & Risk Governor">
+                          <div class="card-head-row">
+                            <div class="card-head-title">
+                              <div class="card-icon-box">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="8.5 12 10.5 14 12.5 10 15.5 13"></polyline></svg>
+                              </div>
+                              <div>
+                                <div class="card-title-text">24/7 Watchdog &amp; Risk Governor</div>
+                                <div class="card-subtitle-text">Real-time Risk Control · Demo #5258778</div>
+                              </div>
+                            </div>
+                            <span class="status-pill-sm" id="risk-card-status">ACTIVE</span>
+                          </div>
+
+                          <div class="gauge-wrap">
+                            <svg class="gauge-svg" viewBox="0 0 200 112" aria-hidden="true">
+                              <defs>
+                                <linearGradient id="riskArcGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                  <stop offset="0%" stop-color="#22C55E"></stop>
+                                  <stop offset="55%" stop-color="#F59E0B"></stop>
+                                  <stop offset="100%" stop-color="#EF4444"></stop>
+                                </linearGradient>
+                              </defs>
+                              <path d="M 22 96 A 78 78 0 0 1 178 96" fill="none" stroke="rgba(148,163,184,0.14)" stroke-width="14" stroke-linecap="round"></path>
+                              <path id="risk-gauge-arc" d="M 22 96 A 78 78 0 0 1 178 96" fill="none" stroke="url(#riskArcGrad)" stroke-width="14" stroke-linecap="round"></path>
+                              <circle id="risk-gauge-needle" cx="62" cy="36" r="5" fill="#F8FAFC" stroke="#22D3EE" stroke-width="2.5"></circle>
+                            </svg>
+                            <div class="gauge-center-val">
+                              <div class="big" id="risk-loss-val">-$2.68</div>
+                              <div class="limit" id="risk-limit-val">/ -$10.00 ceiling</div>
+                            </div>
+                          </div>
+
+                          <div class="risk-footer-line">
+                            <span style="color:var(--amber);">▲</span>
+                            <span id="risk-footer-text">Max Single Deal Loss: <strong class="mono" style="color:var(--cyan);">-$2.68 / -$10.00</strong></span>
+                          </div>
+                        </div>
+
+                        <!-- Card 3: Flat Cutoff -->
+                        <div class="cutoff-card inspectable" id="target-cutoff-card" data-selector="div.cutoff-card:nth-child(2)" data-label="Flat Cutoff (21:45 UTC)">
+                          <div class="card-head-row">
+                            <div class="card-head-title">
+                              <div class="card-icon-box">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                              </div>
+                              <div>
+                                <div class="card-title-text">Flat Cutoff</div>
+                                <div class="card-subtitle-text">Stop Trading at Night (Immutable)</div>
+                              </div>
+                            </div>
+                            <span class="status-pill-sm" style="color:var(--cyan); border-color:rgba(34,211,238,0.35); background:var(--cyan-dim);">TIER-1</span>
+                          </div>
+
+                          <div class="cutoff-clock-body">
+                            <div class="cutoff-time-big">21:45:00</div>
+                            <div class="cutoff-tz">UTC</div>
+                          </div>
+
+                          <div class="cutoff-countdown-pill">
+                            <span>🌙</span>
+                            <span>Auto Flat in: <strong class="mono" id="card-cutoff-remaining" style="color:var(--text-primary);">--h --m</strong></span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Uploaded / Pasted Screenshot Canvas Stage -->
+                <div class="uploaded-image-stage" id="uploaded-image-stage">
+                  <img id="uploaded-preview-img" alt="Uploaded screenshot for visual feedback annotation">
+                </div>
+
+                <!-- Freehand Drag Crop Overlay -->
+                <div class="crop-overlay-layer" id="crop-overlay-layer">
+                  <div class="crop-marquee" id="crop-marquee"></div>
+                </div>
+
+                <!-- Glowing Cyan Selection Bounding Box -->
+                <div class="cyan-selection-box" id="cyan-selection-box" aria-hidden="true">
+                  <span class="selection-tag-pill" id="selection-tag-pill">div.risk-card:nth-child(1)</span>
+                  <span class="handle tl"></span>
+                  <span class="handle tr"></span>
+                  <span class="handle bl"></span>
+                  <span class="handle br"></span>
+                </div>
+
+                <!-- Floating Annotation Popover -->
+                <div class="annotation-popover" id="annotation-popover" role="dialog" aria-label="Annotate UI Element">
+                  <div class="popover-header" id="popover-drag-handle">
+                    <div class="popover-title">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                      <span>Annotate UI Element</span>
+                    </div>
+                    <button type="button" class="popover-close" id="btn-close-popover" aria-label="Minimize annotation popover">&times;</button>
+                  </div>
+
+                  <div class="popover-body">
+                    <div class="thumb-box">
+                      <canvas id="popover-thumb-canvas" width="220" height="150"></canvas>
+                      <div class="thumb-meta" id="popover-thumb-dims">Snapshot · Live DOM</div>
+                    </div>
+
+                    <div class="popover-fields">
+                      <div>
+                        <div class="field-label">DOM Selector</div>
+                        <input type="text" id="popover-selector-input" class="selector-tag-input" value="div.risk-card:nth-child(1)" readonly aria-label="Selected DOM selector">
+                      </div>
+
+                      <div>
+                        <label for="popover-note-input" class="field-label">Add your note...</label>
+                        <textarea id="popover-note-input" class="note-textarea" placeholder="Describe the UI fix for AI (e.g. Change color to red when loss > 80%)">Change color to red when loss &gt; 80%</textarea>
+                      </div>
+
+                      <button type="button" class="send-fix-btn" id="btn-send-ui-fix">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                        <span>Send UI Fix to AI</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <button type="button" class="reopen-popover-btn" id="btn-reopen-popover">
+                  <span>✏️ Annotate Selected Element</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- BOTTOM INSPECTOR: LOG DETAILS | JSON | DIFF | SCREENSHOTS -->
+            <div class="card inspector-card">
+              <div class="inspector-bar">
+                <div class="inspector-tabs" role="tablist" aria-label="Log Inspector Views">
+                  <button type="button" class="insp-tab active" data-insp="details" id="insp-btn-details">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                    <span>Log Details</span>
+                  </button>
+                  <button type="button" class="insp-tab" data-insp="json" id="insp-btn-json">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                    <span>JSON</span>
+                  </button>
+                  <button type="button" class="insp-tab" data-insp="diff" id="insp-btn-diff">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><line x1="6" y1="3" x2="6" y2="15"></line><circle cx="18" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><path d="M18 9a9 9 0 0 1-9 9"></path></svg>
+                    <span>Diff</span>
+                  </button>
+                  <button type="button" class="insp-tab" data-insp="screenshots" id="insp-btn-screenshots">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                    <span>Screenshots <span class="ws-tab-pill" id="insp-ticket-count">0</span></span>
+                  </button>
+                </div>
+
+                <div class="inspector-actions">
+                  <button type="button" class="tool-btn" id="btn-insp-download" title="Download current inspector content">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    <span>Download</span>
+                  </button>
+                  <button type="button" class="tool-btn" id="btn-insp-copy" title="Copy current inspector content">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="inspector-body" id="inspector-body"></div>
+            </div>
           </div>
         </div>
-        <div>
-          <a href="index.html" class="btn-primary-link">← กลับหน้า Overview</a>
+      </section>
+
+      <!-- ------------------------------------------------------------------- -->
+      <!-- TAB 1: AI RESEARCH TRANSCRIPT                                       -->
+      <!-- ------------------------------------------------------------------- -->
+      <section class="tab-panel" id="panel-transcript" role="tabpanel" aria-labelledby="tab-btn-transcript">
+        <div class="section-toolbar">
+          <div class="pill-tabs">
+            <button type="button" class="pill-tab active" data-tr-mode="chat" id="tr-mode-chat">Full Research Chat (40 Turns)</button>
+            <button type="button" class="pill-tab" data-tr-mode="handovers" id="tr-mode-handovers">Multi-Agent Handovers (8 Officers)</button>
+          </div>
+
+          <div class="toolbar-group">
+            <div class="search-input-wrap" style="width:260px;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <input type="search" id="tr-search-input" class="search-input" placeholder="Search turns, arXiv, strategy..." aria-label="Search AI research transcript">
+            </div>
+            <select id="tr-role-filter" class="filter-select" aria-label="Filter transcript by role">
+              <option value="all">All Roles</option>
+              <option value="user">User Prompts</option>
+              <option value="assistant">AI Quant</option>
+            </select>
+            <a href="old-web/chat_transcript.html" target="_blank" rel="noopener" class="tool-btn">Legacy Transcript View ↗</a>
+          </div>
+        </div>
+
+        <div id="transcript-container" class="transcript-list"></div>
+      </section>
+
+      <!-- ------------------------------------------------------------------- -->
+      <!-- TAB 2: LEGACY RUNS                                                  -->
+      <!-- ------------------------------------------------------------------- -->
+      <section class="tab-panel" id="panel-legacy" role="tabpanel" aria-labelledby="tab-btn-legacy">
+        <div class="kpi-strip" id="legacy-kpi-strip">
+          <div class="card kpi-card">
+            <div class="kpi-label">Archived Historical Cycles (V1)</div>
+            <div class="kpi-value" id="leg-kpi-v1">–</div>
+            <div class="kpi-sub">Historical Broker Data Era</div>
+          </div>
+          <div class="card kpi-card">
+            <div class="kpi-label">Live Microstructure Cycles</div>
+            <div class="kpi-value" id="leg-kpi-fw" style="color:var(--cyan);">–</div>
+            <div class="kpi-sub">Pure Live Evolution Flywheel</div>
+          </div>
+          <div class="card kpi-card">
+            <div class="kpi-label">Backtest &amp; Champion Engines</div>
+            <div class="kpi-value" id="leg-kpi-bt" style="color:var(--green);">–</div>
+            <div class="kpi-sub">Verified Multi-Asset Benchmarks</div>
+          </div>
+          <div class="card kpi-card">
+            <div class="kpi-label">Supabase V2 Backup Snapshot</div>
+            <div class="kpi-value" id="leg-kpi-sb">–</div>
+            <div class="kpi-sub" id="leg-kpi-sb-sub">PostgreSQL Audit Archive</div>
+          </div>
+        </div>
+
+        <div class="section-toolbar">
+          <div class="pill-tabs" id="legacy-source-tabs">
+            <button type="button" class="pill-tab active" data-leg-src="strategies">Backtest &amp; Champions</button>
+            <button type="button" class="pill-tab" data-leg-src="flywheel">Flywheel Cycles (Live)</button>
+            <button type="button" class="pill-tab" data-leg-src="historical">Historical Cycles (V1)</button>
+            <button type="button" class="pill-tab" data-leg-src="supabase">Supabase &amp; Experiments</button>
+          </div>
+
+          <div class="toolbar-group">
+            <div class="search-input-wrap" style="width:240px;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <input type="search" id="legacy-search-input" class="search-input" placeholder="Search symbol, run ID, note..." aria-label="Search legacy runs">
+            </div>
+            <a href="old-web/legacy.html" target="_blank" rel="noopener" class="tool-btn">Legacy Runs Page ↗</a>
+          </div>
+        </div>
+
+        <div class="card data-table-wrap">
+          <table class="data-table">
+            <thead id="legacy-thead"></thead>
+            <tbody id="legacy-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ------------------------------------------------------------------- -->
+      <!-- TAB 4: GOVERNANCE & PRIVACY                                         -->
+      <!-- ------------------------------------------------------------------- -->
+      <section class="tab-panel" id="panel-governance" role="tabpanel" aria-labelledby="tab-btn-governance">
+        <div class="kpi-strip">
+          <div class="card kpi-card">
+            <div class="kpi-label">Tier-1 Hard Constraints</div>
+            <div class="kpi-value" style="color:var(--green);" id="gov-kpi-rules">14 / 14</div>
+            <div class="kpi-sub">Immutable · AI Override Disabled</div>
+          </div>
+          <div class="card kpi-card">
+            <div class="kpi-label">Statistical Truth Guard</div>
+            <div class="kpi-value" style="color:var(--amber);" id="gov-kpi-power">N = –</div>
+            <div class="kpi-sub" id="gov-kpi-power-sub">Target 500 trades preliminary</div>
+          </div>
+          <div class="card kpi-card">
+            <div class="kpi-label">Security Audit V4</div>
+            <div class="kpi-value" style="color:var(--cyan);" id="gov-kpi-audit">6 / 6 CLEAN</div>
+            <div class="kpi-sub">Pepperstone Demo #5258778 Quarantine</div>
+          </div>
+          <div class="card kpi-card">
+            <div class="kpi-label">Portal Access &amp; Privacy</div>
+            <div class="kpi-value" style="color:var(--sky);">READ-ONLY</div>
+            <div class="kpi-sub">Zero Client Secrets · Local UI Cache Only</div>
+          </div>
+        </div>
+
+        <div class="gov-grid">
+          <div class="card gov-section-card">
+            <div class="gov-section-head">
+              <div>
+                <div style="font-size:14px; font-weight:700;">Tier-1 Immutable Hard Constraints</div>
+                <div style="font-size:11px; color:var(--text-muted);" id="gov-matrix-meta">Rule Classification Matrix V4.0</div>
+              </div>
+              <span class="status-tag pass">AI OVERRIDE: FALSE</span>
+            </div>
+            <div id="gov-tier1-list"></div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:14px;">
+            <div class="card gov-section-card">
+              <div class="gov-section-head">
+                <div>
+                  <div style="font-size:14px; font-weight:700;">9/9 Gatekeeper Validation &amp; OOS Proof</div>
+                  <div style="font-size:11px; color:var(--text-muted);" id="gov-v2-meta">Deterministic Math Verification</div>
+                </div>
+                <span class="status-tag pass" id="gov-checklist-badge">9 / 9 PASS</span>
+              </div>
+              <div id="gov-v2-checklist"></div>
+            </div>
+
+            <div class="card gov-section-card">
+              <div class="gov-section-head">
+                <div>
+                  <div style="font-size:14px; font-weight:700;">Security Audit V4 &amp; Privacy Policy</div>
+                  <div style="font-size:11px; color:var(--text-muted);">Public GitHub Pages &amp; Data Isolation</div>
+                </div>
+                <div style="display:flex; gap:6px; align-items:center;">
+                  <a href="old-web/feedback.html" target="_blank" rel="noopener" class="tool-btn">Feedback Doc ↗</a>
+                  <a href="old-web/privacy.html" target="_blank" rel="noopener" class="tool-btn">Privacy Doc ↗</a>
+                </div>
+              </div>
+              <div id="gov-security-list"></div>
+              <div id="gov-privacy-list" style="margin-top:10px; padding-top:10px; border-top:1px solid var(--border-subtle); font-size:12px; color:var(--text-secondary); line-height:1.6;"></div>
+            </div>
+          </div>
         </div>
       </section>
     </div>
+
+    <!-- Toast Notification -->
+    <div class="studio-toast" id="studio-toast" role="status" aria-live="polite">
+      <div class="toast-check">✓</div>
+      <div>
+        <div style="font-size:12.5px; font-weight:700;" id="toast-title">UI Fix Request Sent Successfully</div>
+        <div class="mono" style="font-size:11px; opacity:0.85;" id="toast-sub">Ticket: FB-20261114-0001</div>
+      </div>
+      <button type="button" class="popover-close" id="btn-dismiss-toast" aria-label="Dismiss notification">&times;</button>
+    </div>
+
+    <!-- Legacy Record Detail Drawer -->
+    <div class="drawer-backdrop" id="drawer-backdrop"></div>
+    <aside class="side-drawer" id="side-drawer" aria-label="Legacy Record Inspector Drawer">
+      <div class="panel-header" style="padding:14px 16px;">
+        <div class="panel-title" id="drawer-title">Archive Record Details</div>
+        <button type="button" class="popover-close" id="btn-drawer-close" aria-label="Close drawer">&times;</button>
+      </div>
+      <div id="drawer-body" style="flex:1; overflow-y:auto; padding:16px;"></div>
+    </aside>
   </div>
-  <script type="module">
-    import { mountShell, loadShellTelemetryOnly } from './assets/shell.js';
-    mountShell({ activePage: 'archive-system.html', onRetry: loadShellTelemetryOnly });
-    loadShellTelemetryOnly();
-  </script>
+
+  <script type="module" src="assets/archive-system.js"></script>
 </body>
 </html>
