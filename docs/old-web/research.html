@@ -10,7 +10,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Backtest Lab · งานวิจัย 193 เปเปอร์ & 13 Quant Engines</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="../style.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script>
@@ -149,6 +149,8 @@
   </style>
 </head>
 <body class="min-h-screen flex flex-col font-sans antialiased selection:bg-brand-500 selection:text-white">
+<div id="old-web-banner" style="background:linear-gradient(90deg,#111827,#0f172a);border-bottom:1px solid rgba(245,179,1,0.35);color:#e2e8f0;padding:6px 16px;font-family:system-ui,-apple-system,sans-serif;font-size:12px;line-height:1.4;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;flex-shrink:0;position:relative;z-index:60;"><span>📁 <strong>เว็บเวอร์ชันเดิม (เก็บถาวร)</strong></span><span style="opacity:.45">·</span><a href="../index.html" style="color:#f5b301;text-decoration:none;font-weight:700;padding:2px 10px;border-radius:6px;border:1px solid rgba(245,179,1,0.4);background:rgba(245,179,1,0.1);">← กลับไปเว็บใหม่</a></div>
+
 
   <!-- TOP GLOBAL NAVIGATION -->
   <header class="sticky top-0 z-50 bg-[#111827]/90 backdrop-blur-md border-b border-slate-800/80 px-4 py-2.5 flex flex-wrap items-center justify-between gap-3">
@@ -1366,8 +1368,8 @@
           if (msg.media) {
             mediaHtml = `
               <div class="mb-3 rounded-xl overflow-hidden border border-blue-500/30 max-w-md bg-slate-950 shadow-md">
-                <a href="${msg.media}" target="_blank" title="คลิกเพื่อดูรูปขนาดเต็ม">
-                  <img src="${msg.media}" alt="ภาพแนบจากผู้ใช้" class="w-full h-auto object-cover hover:opacity-90 transition cursor-zoom-in" />
+                <a href="${((u) => (u && !/^(https?:|data:|blob:|\/|\.\.\/|#)/.test(u)) ? '../' + u : u)(msg.media)}" target="_blank" title="คลิกเพื่อดูรูปขนาดเต็ม">
+                  <img src="${((u) => (u && !/^(https?:|data:|blob:|\/|\.\.\/|#)/.test(u)) ? '../' + u : u)(msg.media)}" alt="ภาพแนบจากผู้ใช้" class="w-full h-auto object-cover hover:opacity-90 transition cursor-zoom-in" />
                 </a>
               </div>
             `;
@@ -1422,7 +1424,7 @@
                 </div>
                 <div class="flex items-center gap-2.5 self-end sm:self-center shrink-0">
                   <span class="text-[11px] font-mono text-emerald-400 bg-emerald-950/80 px-2.5 py-1 rounded border border-emerald-800/50 font-bold">${msg.artifact.badge}</span>
-                  <a href="${msg.artifact.url}" target="_blank" class="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow transition flex items-center gap-1.5">
+                  <a href="${((u) => (u && !/^(https?:|data:|blob:|\/|\.\.\/|#)/.test(u)) ? '../' + u : u)(msg.artifact.url)}" target="_blank" class="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow transition flex items-center gap-1.5">
                     <span>📖</span> เปิดอ่านรีพอร์ต
                   </a>
                 </div>

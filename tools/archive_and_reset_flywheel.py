@@ -143,7 +143,7 @@ def main():
             "stage_label": "STAGE 1: Data Pipeline",
             "status": "COMPLETED",
             "timestamp": cycle_1_time,
-            "sources": ["%LOCALAPPDATA%\\BacktestLab\\live", "cTrader Open API", "Pepperstone Demo Account 5258778"],
+            "sources": ["%LOCALAPPDATA%\\BacktestLab\\live", "Pepperstone Demo Account 5258778"],
             "symbols": ["BTCUSD", "ETHUSD", "XAUUSD"],
             "total_recorded_minutes": 28639,
             "detail": "บันทึกและประมวลผลข้อมูลสด 28,639 แท่ง M1 (BTC 7,715, ETH 7,654, XAU 6,099) พร้อม L2 DOM 25 ชั้นและ Tick Spreads แท้จริง",

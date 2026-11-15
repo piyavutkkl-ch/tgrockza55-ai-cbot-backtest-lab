@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Antigravity Quant Intelligence — ศูนย์วิเคราะห์ผลลัพธ์คู่เงิน ตารางความร้อน Day & Session Heatmap และแผนภาพโครงสร้างราคา Microstructure (Absorption & CHoCH)" />
+  <title>Intelligence — AI Quant Backtest Lab (Page 5/8)</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230d1424'/%3E%3Cpath d='M7 22l6-7 4 4 8-9' fill='none' stroke='%2322c55e' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('cbot_quant_theme_v1');
+        if (t === 'light' || t === 'dark') {
+          document.documentElement.setAttribute('data-theme', t);
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/shell.css" />
+  <link rel="stylesheet" href="assets/intelligence.css" />
+</head>
+<body data-page="intelligence.html">
+  <div id="app-shell"></div>
+
+  <div id="page-main-template" hidden>
+    <div class="intel-wrap">
+      <!-- Compact Page Heading Strip -->
+      <section class="intel-header-row" aria-label="หัวข้อหน้าวิเคราะห์ผลลัพธ์และพฤติกรรมราคา">
+        <div class="intel-title-col">
+          <div class="intel-breadcrumb">
+            <span class="intel-page-badge">PAGE 5 / 8</span>
+            <span class="intel-flow-trail">ภาพรวมคู่เงิน ➔ ช่วงเวลา ➔ พฤติกรรมแท่งเทียน</span>
+          </div>
+          <h1 class="intel-h1">📊 Intelligence — ศูนย์วิเคราะห์ผลลัพธ์และพฤติกรรมราคา</h1>
+        </div>
+        <div class="intel-actions">
+          <span class="intel-sync-note" id="syncNote">Data snapshot: กำลังโหลด…</span>
+          <button type="button" class="intel-btn-refresh" id="btnRefreshData" aria-label="โหลดข้อมูลล่าสุดใหม่">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
+            <span>Refresh</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Compact Live Ticker Strip with Inline SVG Sparklines -->
+      <section class="intel-ticker-strip" id="intelTickers" aria-label="ราคาล่าสุดจาก Live Feed"></section>
+
+      <!-- Offline / Fetch Fallback Banner -->
+      <div class="intel-offline-banner" id="offlineBanner" hidden role="alert">
+        <span id="offlineBannerText">ไม่สามารถเชื่อมต่อข้อมูลล่าสุดได้ — กำลังแสดงสถานะสำรอง</span>
+      </div>
+
+      <!-- =============================================================== -->
+      <!-- SECTION 1: PERFORMANCE MATRIX (ภาพรวมเปรียบเทียบคู่เงิน)         -->
+      <!-- =============================================================== -->
+      <section class="card intel-panel" id="sectionMatrix" aria-labelledby="matrixTitle">
+        <div class="intel-panel-head">
+          <div class="intel-title-group">
+            <h2 id="matrixTitle">Performance Matrix</h2>
+            <button type="button" class="intel-info-btn" data-info="matrix" aria-label="คำอธิบาย Performance Matrix" title="ดูสูตรและเกณฑ์วัดผล Performance Matrix">i</button>
+            <span class="intel-panel-sub" id="matrixSubtitle">ตารางเปรียบเทียบคู่เงินพร้อม Inline Progress Bar</span>
+          </div>
+          <div class="segmented-tabs" role="tablist" aria-label="เลือกชุดข้อมูลเปรียบเทียบคู่เงิน" id="matrixModeTabs">
+            <button type="button" class="seg-tab active" role="tab" aria-selected="true" data-mode="champion">Champion (L2 DOM)</button>
+            <button type="button" class="seg-tab" role="tab" aria-selected="false" data-mode="live_forward">Live Demo (#5258778)</button>
+            <button type="button" class="seg-tab" role="tab" aria-selected="false" data-mode="backtest_engines">Backtest Engines</button>
+          </div>
+        </div>
+
+        <div class="power-banner" id="powerBanner" hidden></div>
+
+        <div class="table-scroll">
+          <table class="matrix-table" aria-describedby="matrixSubtitle">
+            <thead>
+              <tr>
+                <th scope="col"><button type="button" class="sort-btn" data-sort="symbol">MARKET <span class="sort-ind"></span></button></th>
+                <th scope="col">TIMEFRAME</th>
+                <th scope="col"><button type="button" class="sort-btn" data-sort="win_rate_pct">WIN RATE <span class="sort-ind"></span></button></th>
+                <th scope="col"><button type="button" class="sort-btn" data-sort="profit_factor">PROFIT FACTOR <span class="sort-ind"></span></button></th>
+                <th scope="col" class="num-col"><button type="button" class="sort-btn" data-sort="sharpe">SHARPE <span class="sort-ind"></span></button></th>
+                <th scope="col" class="num-col"><button type="button" class="sort-btn" data-sort="max_dd_usd">MAX DRAWDOWN <span class="sort-ind"></span></button></th>
+                <th scope="col" class="num-col"><button type="button" class="sort-btn" data-sort="expectancy_usd">EXPECTANCY <span class="sort-ind"></span></button></th>
+                <th scope="col" class="num-col"><button type="button" class="sort-btn" data-sort="trades">TRADES <span class="sort-ind"></span></button></th>
+              </tr>
+            </thead>
+            <tbody id="matrixBody">
+              <tr><td colspan="8" class="empty-cell">กำลังโหลดตารางเปรียบเทียบคู่เงิน…</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="matrix-footnote" id="matrixFootnote">
+          <span>คลิกที่แถวคู่เงินเพื่อเชื่อมข้อมูลไปยัง Day &amp; Session Heatmap ด้านล่าง · แถบ Win Rate อ้างอิงเส้น 50% · แถบ Profit Factor สเกล 0–4.0+ (เส้น 1.0 = จุดคุ้มทุน)</span>
+        </div>
+      </section>
+
+      <!-- =============================================================== -->
+      <!-- SECTION 2: DAY & SESSION INTELLIGENCE HEATMAP (ช่วงเวลา 2 มิติ)   -->
+      <!-- =============================================================== -->
+      <section class="card intel-panel" id="sectionHeatmap" aria-labelledby="heatmapTitle">
+        <div class="intel-panel-head">
+          <div class="intel-title-group">
+            <h2 id="heatmapTitle">Day &amp; Session Intelligence Heatmap</h2>
+            <button type="button" class="intel-info-btn" data-info="heatmap" aria-label="คำอธิบาย Day &amp; Session Heatmap" title="ดูเกณฑ์การจัดระดับ Edge และ No-Trade Zones">i</button>
+            <span class="intel-panel-sub" id="heatmapSubtitle">ความคาดหวังกำไรรายวัน × ช่วงเวลาตลาด (จันทร์–ศุกร์)</span>
+          </div>
+
+          <div class="heatmap-controls">
+            <div class="heatmap-legend" aria-label="คำอธิบายสี Heatmap">
+              <span class="leg-item"><i class="leg-swatch leg-profit"></i>Profitable Edge</span>
+              <span class="leg-item"><i class="leg-swatch leg-neutral"></i>Neutral / Low Edge</span>
+              <span class="leg-item"><i class="leg-swatch leg-notrade"></i>No-Trade Zone</span>
+            </div>
+            <div class="view-pills" role="group" aria-label="เลือกคู่เงินสำหรับ Heatmap" id="heatmapViewPills">
+              <button type="button" class="view-pill active" data-view="xauusd_3y">XAUUSD 3Y (774d)</button>
+              <button type="button" class="view-pill" data-view="XAUUSD">XAUUSD L2</button>
+              <button type="button" class="view-pill" data-view="GOLD-PERP">GOLD-PERP</button>
+              <button type="button" class="view-pill" data-view="BTCUSD">BTCUSD</button>
+              <button type="button" class="view-pill" data-view="ETHUSD">ETHUSD</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pure CSS Grid 2D Heatmap -->
+        <div class="heatmap-scroll">
+          <div class="heatmap-grid" id="heatmapGrid" role="grid" aria-label="ตารางความร้อนความคาดหวังกำไร วันจันทร์ถึงศุกร์ แยกตามช่วงเวลา Asia London New York">
+            <!-- Populated dynamically via intelligence.js -->
+          </div>
+        </div>
+
+        <!-- Selected Cell Detail Inspector -->
+        <div class="cell-inspector" id="cellInspector" aria-live="polite">
+          <div class="inspector-main">
+            <span class="inspector-badge" id="inspBadge">เลือกช่อง</span>
+            <strong id="inspTitle">คลิกหรือชี้เมาส์ที่ช่องในตาราง Heatmap เพื่อดูรายละเอียดสถิติ</strong>
+            <span class="inspector-reason" id="inspReason">ระบบคำนวณค่าคาดหวัง Z-Score, Win Rate, สเปรด และเกณฑ์ Daily Flat Cutoff 21:45 UTC</span>
+          </div>
+          <div class="inspector-stats mono" id="inspStats"></div>
+        </div>
+
+        <div class="panel-footer-formula">
+          <span>
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4m0-4h.01"/></svg>
+            Edge Score = f(Win Rate, Profit Factor, Z-Score, Sample Size &amp; 21:45 UTC Cutoff)
+          </span>
+          <span>Color intensity reflects statistical edge strength.</span>
+        </div>
+      </section>
+
+      <!-- =============================================================== -->
+      <!-- SECTION 3: MICROSTRUCTURE PATTERN (พฤติกรรมแท่งเทียน SVG ล้วน)    -->
+      <!-- =============================================================== -->
+      <section class="card intel-panel" id="sectionMicro" aria-labelledby="microTitle">
+        <div class="intel-panel-head">
+          <div class="intel-title-group">
+            <h2 id="microTitle">Microstructure Pattern</h2>
+            <button type="button" class="intel-info-btn" data-info="micro" aria-label="คำอธิบาย Microstructure Pattern" title="ดูโครงสร้างแท่งเทียน Absorption และ CHoCH">i</button>
+            <span class="intel-panel-sub">แผนภาพเวกเตอร์ SVG ล้วนจากแท่งเทียน M1 จริง แสดงจุดเข้า-ออก (Entry / SL / TP) ชัดเจน</span>
+          </div>
+          <div class="micro-controls">
+            <label class="toggle-chip">
+              <input type="checkbox" id="chkShowLevels" checked />
+              <span>แสดงเส้น Entry / SL / TP</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="micro-grid" id="microGrid">
+          <!-- 3 Visual SVG Pattern Cards rendered by intelligence.js -->
+        </div>
+      </section>
+    </div>
+
+    <!-- Contextual Help & Quant Glossary Modal -->
+    <div class="intel-modal-backdrop" id="infoModal" hidden role="dialog" aria-modal="true" aria-labelledby="infoModalTitle">
+      <div class="intel-modal-card">
+        <div class="intel-modal-head">
+          <strong id="infoModalTitle">คำอธิบายตัวชี้วัด (Quant Glossary)</strong>
+          <button type="button" class="intel-modal-close" id="btnCloseInfo" aria-label="ปิดหน้าต่างคำอธิบาย">✕</button>
+        </div>
+        <div class="intel-modal-body" id="infoModalBody"></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="assets/intelligence.js"></script>
+</body>
+</html>

@@ -4,14 +4,16 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Backtest Lab · รายละเอียดรอบทดสอบ</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="../style.css">
 </head>
 <body>
+<div id="old-web-banner" style="background:linear-gradient(90deg,#111827,#0f172a);border-bottom:1px solid rgba(245,179,1,0.35);color:#e2e8f0;padding:6px 16px;font-family:system-ui,-apple-system,sans-serif;font-size:12px;line-height:1.4;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;flex-shrink:0;position:relative;z-index:60;"><span>📁 <strong>เว็บเวอร์ชันเดิม (เก็บถาวร)</strong></span><span style="opacity:.45">·</span><a href="../index.html" style="color:#f5b301;text-decoration:none;font-weight:700;padding:2px 10px;border-radius:6px;border:1px solid rgba(245,179,1,0.4);background:rgba(245,179,1,0.1);">← กลับไปเว็บใหม่</a></div>
+
 <main class="stack" id="main"><p class="muted">กำลังโหลด…</p></main>
 <script type="module">
 import Chart from "https://cdn.jsdelivr.net/npm/chart.js@4.4.4/auto/+esm";
 import { sb, requireSession, labApi, h, $, money, pct, num, date, dateTime, signClass, describe, showError,
-  WEEKDAYS, tradeWeekday, tradeStats, weekdayStats, splitBar } from "./app.js";
+  WEEKDAYS, tradeWeekday, tradeStats, weekdayStats, splitBar } from "../app.js";
 
 const id = Number(new URLSearchParams(location.search).get("id"));
 const stat = (label, value, cls = "") => h("div", { class: "stat" }, h("div", { class: "label" }, label), h("div", { class: `value ${cls}` }, value));

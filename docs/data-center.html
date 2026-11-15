@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>📡 Data Center (ศูนย์ข้อมูลและการไหลของราคา) — AI Quant Backtest Lab (Page 2/8)</title>
+  <meta name="description" content="ศูนย์ข้อมูลและการไหลของราคาแบบ Split-Screen 70/30: TradingView Lightweight Charts Replay, QuickTrade Paper Simulator, 25-Level DoM Heatmap (100ms Batch), Order Flow & Spread และ Pipeline Health Sparklines" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect width='24' height='24' rx='6' fill='%230d1424'/><path d='M4 17l5-5 4 3 7-8' stroke='%2338bdf8' stroke-width='2.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>" />
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('cbot_quant_theme_v1');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&family=Noto+Sans+Thai:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/shell.css" />
+  <link rel="stylesheet" href="assets/data-center.css" />
+  <script src="assets/lightweight-charts.standalone.production.js"></script>
+</head>
+<body data-page="data-center.html">
+  <div id="app-shell"></div>
+
+  <div id="page-main-template" hidden>
+    <div class="dc-page-wrap">
+      <!-- Compact Page Header Strip inside Shared Shell -->
+      <div class="dc-header-row">
+        <div class="dc-title-group">
+          <span class="dc-page-badge mono">PAGE 2 / 8</span>
+          <h1 class="dc-h1" title="Data Center — cTrader Replay, Order Flow, Spread & 25-Level DoM">📡 Data Center — ศูนย์ข้อมูลและการไหลของราคา</h1>
+        </div>
+        <div class="dc-header-actions">
+          <span class="dc-sim-pill mono" title="ชุดข้อมูลบันทึกตลาดจริงจาก Pepperstone Demo #5258778 เล่นซ้ำแบบ Interactive Replay Simulator">
+            <span aria-hidden="true">🎮</span>
+            <span>REPLAY SIM · RECORDED</span>
+          </span>
+          <button id="btn-paper-drawer" class="dc-paper-btn mono" type="button" title="เปิด/ปิดตาราง Paper Positions, Deals และ Recorded Bot Trades">
+            <span aria-hidden="true">💼</span>
+            <span>Paper Equity: <strong id="top-paper-equity" style="color:var(--dc-green)">$10,000.00</strong></span>
+            <span id="top-open-badge" class="dc-open-badge">0</span>
+          </button>
+          <button id="btn-dc-help" class="dc-paper-btn" type="button" title="เปิดคู่มือการใช้งาน Data Center">
+            <span aria-hidden="true">📖</span>
+            <span>คู่มือ Data Center</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- =================================================================== -->
+      <!-- SPLIT-SCREEN 70 / 30 WORKSPACE                                      -->
+      <!-- =================================================================== -->
+      <div class="dc-workspace">
+        <!-- LEFT 70%: CHART + REPLAY + QUICKTRADE + ORDER FLOW -->
+        <section class="left-pane" aria-label="Price Chart and Order Flow">
+          <!-- 1. Chart & Replay Card -->
+          <div id="chart-card" class="dc-card chart-card">
+            <div class="chart-toolbar">
+              <div class="chart-toolbar-left">
+                <div class="symbol-select-wrap">
+                  <span id="symbol-badge-icon" class="symbol-badge-icon" aria-hidden="true">🥇</span>
+                  <select id="symbol-select" class="symbol-select" aria-label="เลือกคู่เทรด">
+                    <option value="XAUUSD">XAU/USD</option>
+                    <option value="BTCUSD">BTC/USD</option>
+                    <option value="ETHUSD">ETH/USD</option>
+                    <option value="GOLD-PERP">GOLD-PERP</option>
+                  </select>
+                  <span class="symbol-caret" aria-hidden="true">▾</span>
+                </div>
+
+                <div class="symbol-pills" role="group" aria-label="Quick symbol switch">
+                  <button type="button" class="sym-pill active" data-sym="XAUUSD">XAU/USD</button>
+                  <button type="button" class="sym-pill" data-sym="BTCUSD">BTC/USD</button>
+                  <button type="button" class="sym-pill" data-sym="ETHUSD">ETH/USD</button>
+                  <button type="button" class="sym-pill" data-sym="GOLD-PERP">GOLD-PERP</button>
+                </div>
+
+                <div class="tf-group" role="group" aria-label="Timeframe switch">
+                  <button type="button" class="tf-btn active" data-tf="M1">M1</button>
+                  <button type="button" class="tf-btn" data-tf="M5">M5</button>
+                  <button type="button" class="tf-btn" data-tf="M15">M15</button>
+                  <button type="button" class="tf-btn" data-tf="M30">M30</button>
+                  <button type="button" class="tf-btn" data-tf="H1">H1</button>
+                  <button type="button" class="tf-btn" data-tf="H4">H4</button>
+                  <button type="button" class="tf-btn" data-tf="D1">D1</button>
+                </div>
+              </div>
+
+              <div class="chart-toolbar-right">
+                <button id="btn-chart-mode" class="tool-btn" type="button" title="สลับระหว่างแท่งเทียน (Candlestick) และเส้นราคา (Area)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 5v14"/><rect x="7" y="8" width="4" height="8" rx="0.5"/><path d="M17 3v18"/><rect x="15" y="7" width="4" height="7" rx="0.5"/></svg>
+                  <span>Candles</span>
+                </button>
+                <button id="btn-vwap-toggle" class="tool-btn active" type="button" title="แสดง/ซ่อน Anchored VWAP และ POC">
+                  <span>fx</span> <span>VWAP/POC</span>
+                </button>
+                <button id="btn-gaps-toggle" class="tool-btn active" type="button" title="แสดงเครื่องหมายแจ้งเตือน Missing Bars บนกราฟ">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                  <span>Gaps</span>
+                </button>
+                <button id="btn-chart-fit" class="tool-btn" type="button" title="จัดหน้าจอกราฟให้เห็นแท่งล่าสุด (Auto Fit)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/></svg>
+                  <span>Auto</span>
+                </button>
+                <button id="btn-fullscreen" class="tool-btn" type="button" aria-label="ขยายกราฟเต็มจอ" title="ขยายกราฟเต็มจอ">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- OHLCV Header Strip -->
+            <div class="ohlc-strip mono">
+              <div class="ohlc-values">
+                <span class="ohlc-item"><span>O</span><strong id="ohlc-o">--</strong></span>
+                <span class="ohlc-item"><span>H</span><strong id="ohlc-h">--</strong></span>
+                <span class="ohlc-item"><span>L</span><strong id="ohlc-l">--</strong></span>
+                <span class="ohlc-item"><span>C</span><strong id="ohlc-c">--</strong></span>
+                <span id="ohlc-chg" class="ohlc-change up">--</span>
+              </div>
+              <div class="ohlc-context-pills">
+                <span class="ctx-tag">VWAP: <strong id="ctx-vwap" style="color:var(--dc-sky)">--</strong></span>
+                <span class="ctx-tag">POC: <strong id="ctx-poc" style="color:var(--dc-gold)">--</strong></span>
+                <span class="ctx-tag">Replay: <strong id="ctx-time">--</strong></span>
+              </div>
+            </div>
+
+            <!-- TradingView Lightweight Charts Canvas + Floating QuickTrade -->
+            <div class="chart-stage">
+              <div id="lw-chart-container"></div>
+
+              <!-- QuickTrade Floating Widget -->
+              <div id="quicktrade-card" class="quicktrade-card" aria-label="QuickTrade Order Panel">
+                <div class="qt-header">
+                  <div class="qt-title">
+                    <span style="color:var(--dc-gold)" aria-hidden="true">⚡</span>
+                    <span>QuickTrade</span>
+                    <span class="qt-paper-badge mono">PAPER</span>
+                  </div>
+                  <button id="qt-close-btn" class="qt-close" type="button" aria-label="ซ่อนหน้าต่าง QuickTrade" title="พับเก็บ QuickTrade">×</button>
+                </div>
+
+                <div class="qt-buttons-row">
+                  <button id="qt-buy-btn" class="qt-order-btn qt-btn-buy" type="button" aria-label="ส่งคำสั่งจำลอง Buy">
+                    <span class="qt-btn-side">▲ BUY</span>
+                    <span id="qt-ask-price" class="qt-btn-price">--</span>
+                  </button>
+                  <button id="qt-sell-btn" class="qt-order-btn qt-btn-sell" type="button" aria-label="ส่งคำสั่งจำลอง Sell">
+                    <span class="qt-btn-side">▼ SELL</span>
+                    <span id="qt-bid-price" class="qt-btn-price">--</span>
+                  </button>
+                </div>
+
+                <button id="qt-flatten-btn" class="qt-flatten-btn" type="button" disabled title="ปิดสถานะจำลองทั้งหมดของคู่เทรดนี้">
+                  <span aria-hidden="true">⇄</span>
+                  <span>FLATTEN</span>
+                </button>
+
+                <div class="qt-lot-row">
+                  <span>Lot Size:</span>
+                  <div class="qt-lot-stepper">
+                    <button id="qt-lot-minus" class="qt-lot-step" type="button" aria-label="ลด Lot Size">−</button>
+                    <input id="qt-lot-input" class="qt-lot-input" type="number" value="0.01" min="0.01" max="10" step="0.01" aria-label="Lot Size" />
+                    <button id="qt-lot-plus" class="qt-lot-step" type="button" aria-label="เพิ่ม Lot Size">+</button>
+                  </div>
+                </div>
+
+                <div id="qt-pos-mini" class="qt-pos-mini mono" title="คลิกเพื่อเปิดดูรายการออเดอร์จำลอง">
+                  <span id="qt-pos-summary" style="color:var(--text-muted)">0 open · Paper Sim</span>
+                  <span id="qt-pos-pnl" style="font-weight:800">$0.00</span>
+                </div>
+              </div>
+
+              <button id="quicktrade-reopen" class="quicktrade-reopen" type="button">
+                <span style="color:var(--dc-gold)" aria-hidden="true">⚡</span>
+                <span>QuickTrade</span>
+              </button>
+            </div>
+
+            <!-- Replay Time Control Bar -->
+            <div class="replay-bar">
+              <div class="replay-transport">
+                <button id="btn-play" class="r-btn active" type="button" aria-label="เล่น Replay" title="Play Replay">
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+                </button>
+                <button id="btn-pause" class="r-btn" type="button" aria-label="หยุด Replay ชั่วคราว" title="Pause Replay">
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                </button>
+                <button id="btn-step-back" class="r-btn" type="button" aria-label="ย้อนกลับ 1 แท่ง" title="Step -1 Bar">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><polygon points="19 20 9 12 19 4 19 20" fill="currentColor"/><line x1="5" y1="19" x2="5" y2="5"/></svg>
+                </button>
+                <button id="btn-step-fwd" class="r-btn" type="button" aria-label="เดินหน้า 1 แท่ง" title="Step +1 Bar">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><polygon points="5 4 15 12 5 20 5 4" fill="currentColor"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+                </button>
+              </div>
+
+              <div class="speed-group" role="group" aria-label="Replay speed">
+                <button type="button" class="r-btn active" data-speed="1">1x</button>
+                <button type="button" class="r-btn" data-speed="2">2x</button>
+                <button type="button" class="r-btn" data-speed="3">3x</button>
+                <button type="button" class="r-btn" data-speed="5">5x</button>
+              </div>
+
+              <div class="scrubber-wrap">
+                <input id="replay-scrubber" class="replay-slider" type="range" min="30" max="100" value="95" aria-label="แถบเลื่อนเวลา Replay" />
+              </div>
+
+              <div class="replay-meta mono">
+                <span id="replay-speed-label">Speed: 1.0x</span>
+                <span id="replay-bar-counter">-- / --</span>
+                <button id="btn-reset-replay" class="r-btn" type="button" aria-label="รีเซ็ตตำแหน่ง Replay" title="รีเซ็ตไปจุดเริ่มต้น Replay">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+                </button>
+                <button id="btn-snapshot" class="r-btn" type="button" aria-label="บันทึกภาพกราฟ PNG" title="บันทึกภาพหน้าจอกราฟ PNG">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Order Flow & Spread Card -->
+          <div class="dc-card orderflow-card">
+            <div class="dc-card-header">
+              <div class="dc-card-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                <span>Order Flow &amp; Spread</span>
+              </div>
+
+              <div class="of-legend mono">
+                <span class="legend-item"><span class="legend-dot" style="background:var(--dc-green)"></span>Buy Volume</span>
+                <span class="legend-item"><span class="legend-dot" style="background:var(--dc-red)"></span>Sell Volume</span>
+                <span class="legend-item"><span class="legend-line" style="background:var(--dc-sky)"></span>Spread (pips)</span>
+              </div>
+            </div>
+
+            <div class="of-body">
+              <div class="of-canvas-wrap">
+                <canvas id="orderflow-canvas"></canvas>
+                <div id="of-tooltip" class="of-tooltip"></div>
+              </div>
+
+              <div class="of-stats-col">
+                <div class="of-stat-box">
+                  <div class="of-stat-label">Current Spread</div>
+                  <div id="stat-spread-pips" class="of-stat-val" style="color:var(--dc-sky)">-- pips</div>
+                  <div id="stat-spread-raw" class="of-stat-sub">Quote: --</div>
+                </div>
+                <div class="of-stat-box">
+                  <div class="of-stat-label">Volatility (ATR M1)</div>
+                  <div id="stat-atr-pips" class="of-stat-val">-- pips</div>
+                  <div id="stat-cvd-val" class="of-stat-sub">CVD: --</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- RIGHT 30%: PIPELINE HEALTH STRIP + 25-LEVEL DoM LADDER -->
+        <aside class="right-pane" aria-label="Pipeline Health and Depth of Market">
+          <!-- 1. Data Pipeline Health Strip -->
+          <div class="dc-card health-card">
+            <div class="dc-card-header">
+              <div class="dc-card-title">
+                <svg id="health-status-icon" viewBox="0 0 24 24" fill="none" stroke="var(--dc-green)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                <span>DATA PIPELINE HEALTH</span>
+              </div>
+              <span id="health-window-badge" class="mono" style="font-size:10.5px;color:var(--text-secondary)">30m Window</span>
+            </div>
+
+            <div class="health-grid">
+              <!-- Latency -->
+              <div id="hm-card-latency" class="health-metric" title="Order Execution Latency &amp; L2 Feed Cadence">
+                <div class="hm-top">
+                  <span>Latency</span>
+                  <svg class="hm-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                </div>
+                <div id="hm-latency-val" class="hm-val" style="color:var(--dc-green)">-- ms</div>
+                <div id="hm-latency-sub" class="hm-sub">Cadence: --</div>
+                <svg id="spark-latency" class="hm-spark" viewBox="0 0 100 26" preserveAspectRatio="none"></svg>
+              </div>
+
+              <!-- Tick Freq -->
+              <div id="hm-card-tickfreq" class="health-metric" title="ความถี่ Tick ต่อวินาที (ticks / sec)">
+                <div class="hm-top">
+                  <span>Tick Freq</span>
+                  <svg class="hm-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><line x1="6" y1="20" x2="6" y2="14"></line><line x1="12" y1="20" x2="12" y2="9"></line><line x1="18" y1="20" x2="18" y2="4"></line></svg>
+                </div>
+                <div id="hm-tick-val" class="hm-val" style="color:var(--dc-green)">-- /s</div>
+                <div id="hm-tick-sub" class="hm-sub">-- ticks/m</div>
+                <svg id="spark-tickfreq" class="hm-spark" viewBox="0 0 100 26" preserveAspectRatio="none"></svg>
+              </div>
+
+              <!-- Missing Bars -->
+              <div id="hm-card-missing" class="health-metric" role="button" tabindex="0" title="คลิกเพื่อดูรายละเอียด Missing Bars ทั้งหมดในชุดข้อมูล">
+                <div class="hm-top">
+                  <span>Missing Bars</span>
+                  <svg id="hm-missing-icon" class="hm-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="9 12 11 14 15 10"></polyline></svg>
+                </div>
+                <div id="hm-missing-val" class="hm-val" style="color:var(--dc-green)">0</div>
+                <div id="hm-missing-sub" class="hm-sub">0 gaps (30m)</div>
+                <svg id="spark-missing" class="hm-spark" viewBox="0 0 100 26" preserveAspectRatio="none"></svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. 25-Level Depth of Market (DoM) Ladder -->
+          <div class="dc-card dom-card">
+            <div class="dc-card-header">
+              <div class="dc-card-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
+                <span>Depth of Market (25 Levels)</span>
+              </div>
+              <div class="mono" style="display:flex;align-items:center;gap:8px;font-size:11px;">
+                <span id="dom-symbol-label" style="font-weight:800;color:var(--text-primary)">XAU/USD</span>
+                <span id="dom-batch-badge" style="padding:1px 6px;border-radius:5px;background:var(--accent-green-bg);color:var(--dc-green);border:1px solid var(--accent-green-border);font-size:9.5px;font-weight:700;">100ms Batch</span>
+              </div>
+            </div>
+
+            <div class="dom-imbalance-strip">
+              <div class="dom-imb-labels">
+                <span id="dom-imb-bid-lbl" style="color:var(--dc-green)">Bids 50.0%</span>
+                <span id="dom-imb-mid-lbl" style="color:var(--text-muted)">Spread: --</span>
+                <span id="dom-imb-ask-lbl" style="color:var(--dc-red)">50.0% Asks</span>
+              </div>
+              <div class="dom-imb-track">
+                <div id="dom-imb-bid-bar" class="dom-imb-bid" style="width:50%"></div>
+                <div id="dom-imb-ask-bar" class="dom-imb-ask" style="width:50%"></div>
+              </div>
+            </div>
+
+            <div class="dom-table-wrap">
+              <table class="dom-table" aria-label="25-Level Depth of Market Ladder">
+                <thead>
+                  <tr>
+                    <th class="dom-col-lvl">#</th>
+                    <th style="text-align:left">Bid Vol</th>
+                    <th style="text-align:right;padding-right:6px">Bid</th>
+                    <th style="text-align:left;padding-left:6px">Ask</th>
+                    <th style="text-align:right">Ask Vol</th>
+                  </tr>
+                </thead>
+                <tbody id="dom-tbody">
+                  <!-- Pre-allocated 25 rows injected once by JS and flushed in 100ms batches -->
+                </tbody>
+              </table>
+            </div>
+
+            <div class="dom-footer-note mono">
+              <span id="dom-span-note">Span: Bid -- / Ask --</span>
+              <span id="dom-wall-note">Walls: Reconstructed L2 + POC</span>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================= -->
+  <!-- COMPACT COLLAPSIBLE PAPER POSITIONS & DEALS DRAWER                      -->
+  <!-- ======================================================================= -->
+  <div id="paper-drawer" class="paper-drawer" role="region" aria-label="Paper Trading Positions and History">
+    <div class="drawer-head">
+      <div class="drawer-tabs">
+        <button type="button" id="tab-open-pos" class="drawer-tab active">Open Positions (<span id="drawer-open-cnt">0</span>)</button>
+        <button type="button" id="tab-deals-hist" class="drawer-tab">Paper Deals (<span id="drawer-deals-cnt">0</span>)</button>
+        <button type="button" id="tab-rec-trades" class="drawer-tab">Recorded Bot Trades (<span id="drawer-rec-cnt">0</span>)</button>
+      </div>
+      <div class="mono" style="display:flex;align-items:center;gap:12px;font-size:11px;">
+        <span>Balance: <strong id="drawer-balance">$10,000.00</strong></span>
+        <span>Unrealized: <strong id="drawer-upnl">$0.00</strong></span>
+        <button id="btn-reset-paper" class="r-btn" type="button" title="รีเซ็ตพอร์ตจำลองกลับเป็น $10,000">Reset Sim</button>
+        <button id="btn-close-drawer" class="qt-close" type="button" aria-label="ปิดหน้าต่าง Positions">×</button>
+      </div>
+    </div>
+    <div class="drawer-body">
+      <div id="view-open-pos">
+        <table class="drawer-table">
+          <thead>
+            <tr>
+              <th>Ticket</th><th>Symbol</th><th>Side</th><th>Lot</th><th>Entry</th><th>Current</th><th>Unrealized PnL</th><th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="drawer-open-tbody"></tbody>
+        </table>
+      </div>
+      <div id="view-deals-hist" style="display:none">
+        <table class="drawer-table">
+          <thead>
+            <tr>
+              <th>Time</th><th>Symbol</th><th>Side</th><th>Lot</th><th>Entry</th><th>Exit</th><th>Realized PnL</th>
+            </tr>
+          </thead>
+          <tbody id="drawer-deals-tbody"></tbody>
+        </table>
+      </div>
+      <div id="view-rec-trades" style="display:none">
+        <table class="drawer-table">
+          <thead>
+            <tr>
+              <th>Time (UTC)</th><th>Event</th><th>Side</th><th>Price</th><th>Slippage</th><th>Latency</th><th>Net ($)</th>
+            </tr>
+          </thead>
+          <tbody id="drawer-rec-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================= -->
+  <!-- UNIVERSAL MODAL (MISSING BARS INSPECTOR / HELP)                         -->
+  <!-- ======================================================================= -->
+  <div id="dc-modal-backdrop" class="dc-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="dc-modal-title">
+    <div class="dc-modal-card">
+      <div class="dc-modal-head">
+        <span id="dc-modal-title">Details</span>
+        <button id="dc-modal-close" class="qt-close" type="button" aria-label="ปิดหน้าต่าง">×</button>
+      </div>
+      <div id="dc-modal-body" class="dc-modal-body"></div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Stack -->
+  <div id="toast-stack" class="toast-stack" aria-live="polite"></div>
+
+  <script type="module" src="assets/data-center.js"></script>
+</body>
+</html>

@@ -141,7 +141,7 @@ def run_one_cycle():
         "stage_label": "STAGE 1: Data Pipeline",
         "status": "COMPLETED",
         "timestamp": datetime.now().strftime("%H:%M:%S น."),
-        "sources": ["cTrader Open API", "Pepperstone Demo Account 5258778", "%LOCALAPPDATA%\\BacktestLab\\live"],
+        "sources": ["Pepperstone Demo Account 5258778", "%LOCALAPPDATA%\\BacktestLab\\live"],
         "symbols": ["BTCUSD", "ETHUSD", "XAUUSD", "GOLD-PERP"],
         "total_recorded_minutes": data_stats["total_minutes"],
         "detail": f"บันทึกข้อมูลราคาและสมุดคำสั่งซื้อขายจริงสะสม {data_stats['total_minutes']:,} นาที (Tick + DOM L2 25 ชั้น + Spread Spikes) ลงสู่ Data Pipeline",
