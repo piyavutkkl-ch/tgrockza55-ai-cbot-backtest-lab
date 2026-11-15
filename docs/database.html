@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="th" data-theme="dark">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Unified Database — AI Quant Backtest Lab</title>
+  <title>Unified Database — Data Catalog &amp; JSON Explorer (Page 8 / 8)</title>
+  <meta name="description" content="Unified Data Catalog (33 Datasets) and Interactive JSON Inspector for live telemetry, backtest runs, strategy registries, 193 research papers, and institutional audit logs." />
   <script>
     (function () {
       try {
@@ -12,48 +13,202 @@
       } catch (e) {}
     })();
   </script>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2300D4FF' stroke-width='2'%3E%3Cellipse cx='12' cy='5' rx='8' ry='3'/%3E%3Cpath d='M4 5v6c0 1.66 3.58 3 8 3s8-1.34 8-3V5'/%3E%3Cpath d='M4 11v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+Thai:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/shell.css" />
+  <link rel="stylesheet" href="assets/database.css" />
 </head>
-<body data-page="database.html">
+<body data-page="database.html" class="page-database">
   <div id="app-shell"></div>
+
   <div id="page-main-template" hidden>
-    <div class="placeholder-wrap">
-      <section class="card placeholder-hero">
-        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
-          <span class="badge badge-gold">🚧 กำลังพัฒนา (Placeholder หน้า 8 / 8)</span>
-          <span class="badge badge-blue">Unified All-in-One Research &amp; Trade Store</span>
+    <div class="db-workspace" aria-label="Unified Data Catalog and Interactive JSON Explorer">
+      <!-- LEFT 35% PANEL: Data Catalog (33 Datasets) -->
+      <aside class="db-panel catalog-panel" aria-label="Data Catalog">
+        <div class="db-panel-head">
+          <div class="db-panel-title">
+            <span class="db-icon-cyan" aria-hidden="true">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <ellipse cx="12" cy="5" rx="8" ry="3"/>
+                <path d="M4 5v6c0 1.66 3.58 3 8 3s8-1.34 8-3V5"/>
+                <path d="M4 11v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6"/>
+              </svg>
+            </span>
+            <h1 id="catalog-panel-title">Data Catalog (33 Datasets)</h1>
+          </div>
+          <span class="db-footprint-pill" id="catalog-footprint-pill">–</span>
         </div>
-        <h1 style="margin:0;font-size:22px;">🗄️ Unified Database</h1>
-        <p style="margin:0;color:var(--text-secondary);">
-          ฐานข้อมูลรวมทุกอย่างในที่เดียว (Live Trades, Backtest History, 193 Research Papers, Strategy Registry, Champions และ Logs) เพื่อค้นหา กรอง และตรวจสอบได้โดยไม่แยกกระจายหลายไฟล์
-        </p>
-        <div class="placeholder-grid">
-          <div class="placeholder-module">
-            <strong>Trades &amp; Execution Ledger</strong>
-            <span style="font-size:12px;color:var(--text-muted);">รวมประวัติ Live Closed Deals และ Telemetry Latency/Slippage</span>
-            <span class="badge badge-muted" style="width:fit-content;margin-top:6px;">แหล่งข้อมูล: live_status.json + CSV</span>
+
+        <div class="catalog-toolbar">
+          <div class="db-search-box">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input type="search"
+                   id="catalog-search-input"
+                   class="db-search-input"
+                   placeholder="Search datasets, files..."
+                   aria-label="Search datasets and files" />
+            <button type="button" id="catalog-search-clear" class="db-clear-btn" aria-label="Clear catalog search" hidden>✕</button>
           </div>
-          <div class="placeholder-module">
-            <strong>Papers &amp; Strategies Catalog</strong>
-            <span style="font-size:12px;color:var(--text-muted);">193 Papers · 9 Registered Strategies · 1,420 Hypotheses</span>
-            <span class="badge badge-muted" style="width:fit-content;margin-top:6px;">papers_database + strategy_registry</span>
-          </div>
-          <div class="placeholder-module">
-            <strong>All Artifacts &amp; JSON Explorer</strong>
-            <span style="font-size:12px;color:var(--text-muted);">เปิดดูและค้นหาทุกไฟล์ JSON/Markdown ใน docs/data/</span>
-            <span class="badge badge-muted" style="width:fit-content;margin-top:6px;">33+ Datasets Unified</span>
+
+          <button type="button"
+                  id="catalog-filter-btn"
+                  class="db-tool-btn icon-only"
+                  aria-label="Filter and sort catalog datasets"
+                  aria-expanded="false"
+                  aria-controls="catalog-filter-popover"
+                  title="Filter scope &amp; sort order">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+            </svg>
+          </button>
+
+          <div class="catalog-filter-popover" id="catalog-filter-popover" hidden role="dialog" aria-label="Catalog Filter Options">
+            <div>
+              <div class="filter-group-label">Dataset Scope</div>
+              <div class="filter-chip-row">
+                <button type="button" class="filter-chip is-active" data-scope="core">Core Datasets (33)</button>
+                <button type="button" class="filter-chip" data-scope="all">All Files (45)</button>
+              </div>
+            </div>
+            <div>
+              <div class="filter-group-label">Sort Order</div>
+              <div class="filter-chip-row">
+                <button type="button" class="filter-chip is-active" data-sort="folder">Folders</button>
+                <button type="button" class="filter-chip" data-sort="size">Largest</button>
+                <button type="button" class="filter-chip" data-sort="rows">Most Rows</button>
+                <button type="button" class="filter-chip" data-sort="name">A–Z</button>
+              </div>
+            </div>
+            <div>
+              <div class="filter-group-label">Folders</div>
+              <div class="filter-chip-row">
+                <button type="button" class="filter-chip" data-folder-action="expand">Expand All</button>
+                <button type="button" class="filter-chip" data-folder-action="collapse">Collapse All</button>
+              </div>
+            </div>
           </div>
         </div>
-        <div>
-          <a href="index.html" class="btn-primary-link">← กลับหน้า Overview</a>
+
+        <div class="catalog-tree-scroll" id="catalog-tree-scroll" role="region" aria-label="Dataset Folders">
+          <div class="catalog-empty">Loading 33 datasets catalog...</div>
+        </div>
+
+        <div class="catalog-footer-summary mono">
+          <span id="catalog-footer-left">33 verified files · docs/data/</span>
+          <span id="catalog-footer-right">–</span>
+        </div>
+      </aside>
+
+      <!-- RIGHT 65% PANEL: Interactive JSON Inspector -->
+      <section class="db-panel inspector-panel" aria-label="Interactive JSON Inspector">
+        <div class="db-panel-head">
+          <div class="db-panel-title">
+            <span class="db-icon-cyan mono" style="font-weight:800;font-size:15px;" aria-hidden="true">{ }</span>
+            <h2>Interactive JSON Inspector</h2>
+            <span class="inspector-breadcrumb" id="inspector-breadcrumb">data/backtest_data.json</span>
+          </div>
+          <div class="inspector-head-actions">
+            <button type="button" class="action-btn" id="btn-copy-json" title="Copy selected JSON node (or full document)" aria-label="Copy JSON to clipboard">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              <span>Copy</span>
+            </button>
+            <button type="button" class="action-btn primary-outline" id="btn-download-json" disabled>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              <span>Download .JSON</span>
+            </button>
+            <button type="button" class="action-btn" id="btn-export-csv" disabled>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="8" y1="13" x2="16" y2="13"/>
+                <line x1="8" y1="17" x2="16" y2="17"/>
+              </svg>
+              <span>Export .CSV</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="schema-badge-strip" id="schema-badge-strip" aria-label="Dataset Schema Metadata">
+          <span class="schema-pill fmt-blue">{} JSON</span>
+          <span class="schema-pill sch-green">Schema: loading...</span>
+        </div>
+
+        <div class="inspector-toolbar">
+          <div class="db-search-box inspector-search-box">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input type="search"
+                   id="inspector-search-input"
+                   class="db-search-input"
+                   placeholder="Search JSON keys (e.g. symbol, profit_factor, price...)"
+                   aria-label="Filter JSON keys or values" />
+            <button type="button" id="inspector-search-clear" class="db-clear-btn" aria-label="Clear JSON search" hidden>✕</button>
+          </div>
+
+          <div class="search-match-nav" id="search-match-nav" hidden>
+            <span class="match-count-badge" id="match-count-badge">0 matches</span>
+            <button type="button" class="mini-nav-btn" id="match-prev-btn" aria-label="Previous match" title="Previous match (Shift+Enter)">▲</button>
+            <button type="button" class="mini-nav-btn" id="match-next-btn" aria-label="Next match" title="Next match (Enter)">▼</button>
+          </div>
+
+          <div class="inspector-tree-controls">
+            <button type="button" class="db-tool-btn" id="btn-expand-all" title="Expand visible JSON tree nodes">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg>
+              <span>Expand All</span>
+            </button>
+            <button type="button" class="db-tool-btn" id="btn-collapse-all" title="Collapse JSON tree to root">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+              <span>Collapse All</span>
+            </button>
+            <div class="seg-view-toggle" role="group" aria-label="Inspector View Mode">
+              <button type="button" class="seg-view-btn is-active" data-view-mode="tree">Tree</button>
+              <button type="button" class="seg-view-btn" data-view-mode="raw">Raw</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="json-viewport-wrap">
+          <div class="json-tree-scroll" id="json-tree-scroll" role="region" aria-label="Interactive JSON Tree Data">
+            <div class="inspector-state-box">Initializing JSON Inspector...</div>
+          </div>
+          <div class="json-minimap-col" id="json-minimap-col" aria-hidden="true" title="Click or drag to navigate JSON structure">
+            <canvas class="json-minimap-canvas" id="json-minimap-canvas"></canvas>
+            <div class="json-minimap-thumb" id="json-minimap-thumb"></div>
+          </div>
+        </div>
+
+        <div class="inspector-statusbar">
+          <div class="statusbar-left">
+            <span class="status-valid-chip" id="status-valid-chip">✓ JSON Valid</span>
+            <button type="button" class="statusbar-jsonpath" id="statusbar-jsonpath" title="Click to copy active JSONPath">$</button>
+          </div>
+          <div class="statusbar-right">
+            <span id="statusbar-cursor">Ln 1, Col 1</span>
+            <span>Spaces: 2</span>
+            <span>UTF-8</span>
+            <span id="status-records-label">–</span>
+          </div>
         </div>
       </section>
     </div>
   </div>
-  <script type="module">
-    import { mountShell, loadShellTelemetryOnly } from './assets/shell.js';
-    mountShell({ activePage: 'database.html', onRetry: loadShellTelemetryOnly });
-    loadShellTelemetryOnly();
-  </script>
+
+  <div class="toast-banner" id="db-toast" role="status" aria-live="polite" hidden></div>
+
+  <script type="module" src="assets/database.js"></script>
 </body>
 </html>
