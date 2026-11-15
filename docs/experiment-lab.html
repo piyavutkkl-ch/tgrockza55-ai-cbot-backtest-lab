@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Experiment Lab — AI Quant Backtest Lab</title>
+  <title>🧪 Experiment Lab (ห้องทดลองและตรวจสอบย้อนหลัง) — AI Quant Backtest Lab (Page 4/8)</title>
+  <meta name="description" content="ห้องทดลองและตรวจสอบย้อนหลัง: Version Diff Comparator, Cost-Calibration Toggle (Commission + Slippage), Synchronized Underwater Drawdown &amp; Recovery Time, LTTB Downsampling (&gt;5,000 pts), และ Paginated Trade Execution Log" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect width='24' height='24' rx='6' fill='%230d1424'/><path d='M4 17l5-5 4 3 7-8' stroke='%2338bdf8' stroke-width='2.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>" />
   <script>
     (function () {
       try {
@@ -12,48 +14,274 @@
       } catch (e) {}
     })();
   </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&family=Noto+Sans+Thai:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/shell.css" />
+  <link rel="stylesheet" href="assets/experiment-lab.css" />
 </head>
 <body data-page="experiment-lab.html">
   <div id="app-shell"></div>
+
   <div id="page-main-template" hidden>
-    <div class="placeholder-wrap">
-      <section class="card placeholder-hero">
-        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
-          <span class="badge badge-gold">🚧 กำลังพัฒนา (Placeholder หน้า 4 / 8)</span>
-          <span class="badge badge-blue">Backtest Studio &amp; Version Comparison</span>
-        </div>
-        <h1 style="margin:0;font-size:22px;">🧪 Experiment Lab</h1>
-        <p style="margin:0;color:var(--text-secondary);">
-          ศูนย์ทดลอง Backtest เปรียบเทียบ Version ของพารามิเตอร์ การแข่งขัน Nightly Showdown (Champion vs Challenger) และการทดสอบซ้ำ
-        </p>
-        <div class="placeholder-grid">
-          <div class="placeholder-module">
-            <strong>Backtest Run Inspector</strong>
-            <span style="font-size:12px;color:var(--text-muted);">ตรวจสอบผลลัพธ์แต่ละ Run และค่าสถิติ</span>
-            <a href="old-web/run.html" class="btn-secondary-link" style="margin-top:6px;">ดูหน้าเดิม: run.html →</a>
-          </div>
-          <div class="placeholder-module">
-            <strong>Phase 1 Study &amp; Calibration</strong>
-            <span style="font-size:12px;color:var(--text-muted);">ทดสอบโมเดลรายนาทีและการทำนายสัญญาณ</span>
-            <a href="old-web/phase1.html" class="btn-secondary-link" style="margin-top:6px;">ดูหน้าเดิม: phase1.html →</a>
-          </div>
-          <div class="placeholder-module">
-            <strong>Champion Registry Arena</strong>
-            <span style="font-size:12px;color:var(--text-muted);">เปรียบเทียบ Champion รายสินทรัพย์ (champion_registry.json)</span>
-            <span class="badge badge-muted" style="width:fit-content;margin-top:6px;">กำลังออกแบบ UI ใหม่</span>
+    <div class="el-stack">
+      <!-- Offline / Fetch Warning Banner -->
+      <div class="el-banner" id="el-error-banner" role="alert">
+        <span id="el-error-msg">เกิดข้อผิดพลาดในการโหลดข้อมูล</span>
+        <button type="button" class="el-btn" onclick="location.reload()">โหลดใหม่</button>
+      </div>
+
+      <!-- 1. Context Telemetry Strip -->
+      <section class="el-context-strip" aria-label="บริบทข้อมูลการทดลอง">
+        <div class="el-title-block">
+          <div class="el-title-icon" aria-hidden="true">🧪</div>
+          <div>
+            <div class="el-title-top">
+              <h1 class="el-h1">EXPERIMENT LAB</h1>
+              <span class="el-page-badge mono">PAGE 4 / 8</span>
+            </div>
+            <div class="el-subtitle-row">
+              <span class="el-subtitle">Backtesting &amp; Version Diff Comparator</span>
+              <a href="old-web/run.html" class="el-legacy-chip mono" title="เปิดหน้า Run Inspector เวอร์ชันเดิม">run.html ↗</a>
+              <a href="old-web/phase1.html" class="el-legacy-chip mono" title="เปิดหน้า Phase 1 Study เวอร์ชันเดิม">phase1.html ↗</a>
+            </div>
           </div>
         </div>
-        <div>
-          <a href="index.html" class="btn-primary-link">← กลับหน้า Overview</a>
+
+        <div class="el-ctx-metrics">
+          <div class="el-ctx-item">
+            <span class="el-ctx-label">Data Coverage</span>
+            <span class="el-ctx-val mono" id="el-ctx-coverage"><span class="el-dot ok"></span> –</span>
+            <span class="el-ctx-sub mono" id="el-ctx-coverage-sub">กำลังโหลด...</span>
+          </div>
+          <div class="el-ctx-item">
+            <span class="el-ctx-label">Universe</span>
+            <span class="el-ctx-val mono" id="el-ctx-universe">–</span>
+            <span class="el-ctx-sub mono" id="el-ctx-universe-sub">–</span>
+          </div>
+          <div class="el-ctx-item">
+            <span class="el-ctx-label">Resolution</span>
+            <span class="el-ctx-val mono" id="el-ctx-res">M1</span>
+            <span class="el-ctx-sub">Bars / DOM</span>
+          </div>
+          <div class="el-ctx-item">
+            <span class="el-ctx-label">Period</span>
+            <span class="el-ctx-val mono" id="el-ctx-period">–</span>
+            <span class="el-ctx-sub mono" id="el-ctx-period-sub">–</span>
+          </div>
+          <div class="el-ctx-item">
+            <span class="el-ctx-label">Market Regime</span>
+            <span class="el-ctx-val" id="el-ctx-regime">–</span>
+            <span class="el-ctx-sub">Live Intelligence</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. Top Control Toolbar: Version Diff Comparator + 4 Delta KPIs + Cost Switch -->
+      <section class="el-toolbar" aria-label="ตัวควบคุมการเปรียบเทียบเวอร์ชันและจำลองต้นทุน">
+        <!-- Run Pair Selector -->
+        <div class="el-compare-box">
+          <div class="el-section-kicker">
+            <span>Compare Runs (A vs B Overlay)</span>
+            <div class="el-preset-row" id="el-preset-row" aria-label="ชุดเปรียบเทียบด่วน"></div>
+          </div>
+          <div class="el-select-pair">
+            <div class="el-run-select-wrap">
+              <label for="el-select-a" class="el-run-tag a">● Run A (Primary Solid)</label>
+              <select id="el-select-a" class="el-select" aria-label="เลือกกลยุทธ์หลัก Run A"></select>
+            </div>
+            <button type="button" id="el-swap-btn" class="el-swap-btn" title="สลับ Run A และ Run B" aria-label="สลับ Run A และ Run B">⇄</button>
+            <div class="el-run-select-wrap">
+              <label for="el-select-b" class="el-run-tag b">◆ Run B (Baseline Dashed)</label>
+              <select id="el-select-b" class="el-select" aria-label="เลือกกลยุทธ์เปรียบเทียบ Run B"></select>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Summary Delta KPI Cards -->
+        <div class="el-kpi-grid" aria-label="สรุปผลต่างระหว่าง 2 เวอร์ชัน">
+          <div class="el-kpi-card" title="ส่วนต่าง Win Rate ระหว่าง Run A และ Run B">
+            <span class="el-kpi-label">Win Rate</span>
+            <span class="el-kpi-delta mono" id="el-kpi-wr-delta">–</span>
+            <span class="el-kpi-sub mono" id="el-kpi-wr-sub">–</span>
+          </div>
+          <div class="el-kpi-card" title="Profit Factor ของ Run A เทียบกับ Run B">
+            <span class="el-kpi-label">Profit Factor</span>
+            <span class="el-kpi-delta mono" id="el-kpi-pf-val">–</span>
+            <span class="el-kpi-sub mono" id="el-kpi-pf-sub">–</span>
+          </div>
+          <div class="el-kpi-card" title="ผลตอบแทนสุทธิ (Net Return) หลังคำนวณต้นทุนเทรด">
+            <span class="el-kpi-label">Net Return</span>
+            <span class="el-kpi-delta mono" id="el-kpi-ret-delta">–</span>
+            <span class="el-kpi-sub mono" id="el-kpi-ret-sub">–</span>
+          </div>
+          <div class="el-kpi-card" title="ส่วนต่าง Max Drawdown (ค่าติดลบหมายถึง Run A เสี่ยงต่ำกว่า)">
+            <span class="el-kpi-label">Max Drawdown</span>
+            <span class="el-kpi-delta mono" id="el-kpi-dd-delta">–</span>
+            <span class="el-kpi-sub mono" id="el-kpi-dd-sub">–</span>
+          </div>
+        </div>
+
+        <!-- Cost-Calibration Toggle & Quick Export -->
+        <div class="el-cost-actions">
+          <div class="el-cost-box" title="เปิด-ปิดการหัก Commission และ Spread/Slippage จริงตามสภาวะตลาด Pepperstone">
+            <button type="button" id="el-cost-switch" class="el-switch" role="switch" aria-checked="true" aria-label="เปิดปิดจำลองต้นทุนจริง Commission และ Slippage">
+              <span class="el-switch-thumb"></span>
+            </button>
+            <div class="el-cost-text">
+              <span class="el-cost-title">จำลองต้นทุนจริง</span>
+              <span class="el-cost-sub mono" id="el-cost-sub">Commission + Slippage ON</span>
+            </div>
+          </div>
+          <div class="el-action-group">
+            <button type="button" id="el-refresh-btn" class="el-btn icon-only" title="โหลดข้อมูลล่าสุดใหม่" aria-label="รีเฟรชข้อมูล">↻</button>
+            <button type="button" id="el-export-json-btn" class="el-btn icon-only" title="ดาวน์โหลดผลเปรียบเทียบ JSON" aria-label="ส่งออกผลเปรียบเทียบ JSON">⬇</button>
+            <button type="button" id="el-ghost-toggle" class="el-btn icon-only active" title="แสดง/ซ่อนเส้นอ้างอิงก่อนหักต้นทุน (Gross Reference)" aria-label="สลับเส้นอ้างอิง Gross">⋮</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. Dual-Chart Canvas Card (Equity Curve + Underwater Drawdown + LTTB) -->
+      <section class="el-card" aria-label="กราฟ Equity Curve และ Underwater Drawdown">
+        <div class="el-card-hdr">
+          <div class="el-card-title-wrap">
+            <h2 class="el-card-title">Equity Curve &amp; Drawdown</h2>
+            <span class="el-lttb-badge mono" id="el-lttb-badge" title="ใช้อัลกอริทึม Largest-Triangle-Three-Buckets ลดจุดอัตโนมัติเมื่อเกิน 5,000 จุดเพื่อความลื่น 60fps">LTTB Ready</span>
+          </div>
+          <div class="el-chart-controls">
+            <div class="el-seg" role="group" aria-label="โหมดแกน X">
+              <button type="button" class="el-seg-btn active" data-xmode="time">By Time</button>
+              <button type="button" class="el-seg-btn" data-xmode="trade">By Trade #</button>
+              <button type="button" class="el-seg-btn" data-xmode="daily">Daily</button>
+            </div>
+            <div class="el-seg" role="group" aria-label="หน่วยกำไรขาดทุน">
+              <button type="button" class="el-seg-btn active" data-unit="pct">%</button>
+              <button type="button" class="el-seg-btn" data-unit="usd">$</button>
+            </div>
+            <div class="el-seg" role="group" aria-label="ซูมกราฟ">
+              <button type="button" class="el-seg-btn" id="el-zoom-in" title="ซูมเข้า (+)">+</button>
+              <button type="button" class="el-seg-btn" id="el-zoom-out" title="ซูมออก (−)">−</button>
+              <button type="button" class="el-seg-btn" id="el-zoom-reset" title="รีเซ็ตมุมมอง (Double-click บนกราฟได้เช่นกัน)">1:1</button>
+            </div>
+            <button type="button" class="el-btn" id="el-export-chart-btn">⬇ Export Chart</button>
+          </div>
+        </div>
+
+        <div class="el-dual-canvas-body">
+          <!-- Equity Sub-Header -->
+          <div class="el-subchart-hdr">
+            <div class="el-legend">
+              <span style="font-weight:700;color:var(--text-primary);">Equity Curve</span>
+              <span class="el-legend-item"><span class="el-swatch-solid"></span><span id="el-legend-a-text">Run A</span></span>
+              <span class="el-legend-item" id="el-legend-b-wrap"><span class="el-swatch-dashed"></span><span id="el-legend-b-text">Run B</span></span>
+              <span class="el-legend-item" id="el-legend-ghost-wrap"><span class="el-swatch-ghost"></span><span>Gross Reference (Zero-Cost)</span></span>
+            </div>
+            <span class="mono" style="font-size:11px;color:var(--text-muted);">Scroll Wheel: Zoom · Drag: Pan · Double-Click: Reset</span>
+          </div>
+
+          <div class="el-canvas-wrap el-canvas-equity" id="el-equity-wrap">
+            <canvas id="el-equity-canvas" aria-label="กราฟเปรียบเทียบผลตอบแทนสะสม Run A และ Run B"></canvas>
+          </div>
+
+          <!-- Underwater Drawdown Sub-Header -->
+          <div class="el-subchart-hdr" style="margin-top:2px;">
+            <div class="el-legend">
+              <span style="font-weight:700;color:var(--text-primary);">Underwater Drawdown (%)</span>
+              <span class="el-legend-item"><span class="el-swatch-dd"></span><span id="el-dd-legend-a">Run A</span></span>
+              <span class="el-legend-item" id="el-dd-legend-b-wrap"><span class="el-swatch-dashed"></span><span id="el-dd-legend-b">Run B</span></span>
+            </div>
+            <div class="el-recovery-chips mono">
+              <span id="el-rec-maxdd">Max DD: –</span>
+              <span>·</span>
+              <span id="el-rec-time">Max Recovery: –</span>
+              <span>·</span>
+              <span id="el-rec-status">Status: –</span>
+            </div>
+          </div>
+
+          <div class="el-canvas-wrap el-canvas-dd" id="el-dd-wrap">
+            <canvas id="el-dd-canvas" aria-label="กราฟช่วงเวลาพอร์ตติดลบและระยะเวลาฟื้นตัว"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- Floating Synchronized Tooltip -->
+      <div class="el-tooltip" id="el-chart-tooltip" role="status" aria-hidden="true"></div>
+
+      <!-- 4. Paginated Trade Execution Log -->
+      <section class="el-card" aria-label="บันทึกการซื้อขายย้อนหลัง">
+        <div class="el-card-hdr">
+          <div class="el-card-title-wrap">
+            <h2 class="el-card-title">Trade Execution Log</h2>
+            <span class="el-lttb-badge mono" id="el-log-count">0 trades</span>
+            <div class="el-seg" role="group" aria-label="ขอบเขตข้อมูลตาราง">
+              <button type="button" class="el-seg-btn active" data-scope="both">Both</button>
+              <button type="button" class="el-seg-btn" data-scope="a">Run A</button>
+              <button type="button" class="el-seg-btn" data-scope="b">Run B</button>
+            </div>
+          </div>
+          <div class="el-log-controls">
+            <div class="el-search-wrap">
+              <span class="el-search-icon" aria-hidden="true">🔍</span>
+              <input type="search" id="el-log-search" class="el-search" placeholder="Search symbol, reason, #..." aria-label="ค้นหาบันทึกการเทรด" />
+            </div>
+            <select id="el-log-filter" class="el-select" style="width:auto;height:32px;" aria-label="กรองรายการออเดอร์">
+              <option value="all">All Trades</option>
+              <option value="wins">Winners (&gt;$0)</option>
+              <option value="losses">Losers (&lt;$0)</option>
+              <option value="buy">BUY Only</option>
+              <option value="sell">SELL Only</option>
+              <option value="tp">Take Profit Exits</option>
+              <option value="sl">Stop Loss / Timeout</option>
+            </select>
+            <select id="el-log-sort" class="el-select" style="width:auto;height:32px;" aria-label="เรียงลำดับออเดอร์">
+              <option value="time_desc">Newest First</option>
+              <option value="time_asc">Oldest First</option>
+              <option value="pnl_desc">Highest Profit</option>
+              <option value="pnl_asc">Worst Loss</option>
+            </select>
+            <select id="el-page-size" class="el-select" style="width:auto;height:32px;" aria-label="จำนวนรายการต่อหน้า">
+              <option value="10">10 / page</option>
+              <option value="25">25 / page</option>
+              <option value="50">50 / page</option>
+            </select>
+            <button type="button" id="el-export-csv-btn" class="el-btn">⬇ Export Log</button>
+          </div>
+        </div>
+
+        <div class="el-table-wrap">
+          <table class="el-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Time (UTC)</th>
+                <th>Symbol</th>
+                <th>Side</th>
+                <th class="num">Size</th>
+                <th class="num">Price</th>
+                <th class="num">Commission</th>
+                <th class="num">Slippage / Spread</th>
+                <th class="num">P&amp;L (USD)</th>
+                <th class="num">P&amp;L (%)</th>
+                <th class="num">Cum. P&amp;L (USD)</th>
+                <th>Run</th>
+                <th>Reason</th>
+              </tr>
+            </thead>
+            <tbody id="el-log-tbody">
+              <tr><td colspan="13" style="text-align:center;padding:28px;color:var(--text-secondary);">กำลังโหลดรายการเทรดจาก docs/data/backtest_data.json...</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="el-pagination">
+          <span id="el-page-info" class="mono">Showing 0–0 of 0</span>
+          <div class="el-page-btns" id="el-page-btns"></div>
         </div>
       </section>
     </div>
   </div>
-  <script type="module">
-    import { mountShell, loadShellTelemetryOnly } from './assets/shell.js';
-    mountShell({ activePage: 'experiment-lab.html', onRetry: loadShellTelemetryOnly });
-    loadShellTelemetryOnly();
-  </script>
+
+  <script type="module" src="assets/experiment-lab.js"></script>
 </body>
 </html>
