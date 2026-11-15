@@ -7,7 +7,7 @@ import glob
 import subprocess
 from datetime import datetime, timezone
 
-REPO_ROOT = r'd:\cbot-atgvt'
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if REPO_ROOT not in sys.path:
     sys.path.insert(0, REPO_ROOT)
 
@@ -352,6 +352,10 @@ def update_live_status():
     except Exception as e:
         foundry_data = safe_load_json('strategy_foundry.json')
 
+    existing_ls = safe_load_json('live_status.json') or {}
+    market_intel_data = safe_load_json('live_market_intelligence.json') or existing_ls.get('market_intelligence_v4')
+    recorder_wd = existing_ls.get('recorder_watchdog') or safe_load_json('watchdog_status.json')
+
     status_obj = {
         "flywheel": flywheel_state,
         "agent_handovers": handovers_data,
@@ -395,6 +399,10 @@ def update_live_status():
         "recent_trades": all_trades[-10:],
         "recent_closed_deals": recent_deals
     }
+    if market_intel_data:
+        status_obj["market_intelligence_v4"] = market_intel_data
+    if recorder_wd:
+        status_obj["recorder_watchdog"] = recorder_wd
 
     # Write atomic JSON
     tmp_path = LIVE_STATUS_JSON + '.tmp'
@@ -419,6 +427,18 @@ def maybe_run_flywheel_cycle():
     except Exception as e:
         print(f"Error executing flywheel cycle: {e}")
 
+def rebuild_ui_summaries():
+    """Rebuild modular 8-page Web UI summary JSONs after telemetry updates."""
+    builders = [
+        os.path.join(REPO_ROOT, 'tools', 'build_overview_summary.py'),
+        os.path.join(REPO_ROOT, 'tools', 'build_intelligence_summary.py'),
+        os.path.join(REPO_ROOT, 'tools', 'build_audit_summary.py'),
+        os.path.join(REPO_ROOT, 'tools', 'build_database_catalog.py'),
+    ]
+    for b in builders:
+        if os.path.exists(b):
+            subprocess.run([sys.executable, b], cwd=REPO_ROOT, capture_output=True, check=False)
+
 def maybe_git_push(current_trade_count=None):
     global last_git_push, last_committed_trade_count
     now = time.time()
@@ -436,11 +456,23 @@ def maybe_git_push(current_trade_count=None):
     last_git_push = now
 
     try:
-        res = subprocess.run(['git', 'status', '--porcelain', 'docs/data/'], cwd=REPO_ROOT, capture_output=True, text=True)
+        rebuild_ui_summaries()
+        res = subprocess.run(['git', 'status', '--porcelain', 'docs/'], cwd=REPO_ROOT, capture_output=True, text=True)
         if res.stdout.strip():
             push_test = subprocess.run(['git', 'push', '--dry-run', 'origin', 'main'], cwd=REPO_ROOT, capture_output=True, text=True)
             if push_test.returncode == 0:
-                subprocess.run(['git', 'add', 'docs/data/live_status.json', 'docs/data/flywheel_cycles.json', 'docs/data/truth_guard.json'], cwd=REPO_ROOT, check=False)
+                files_to_add = [
+                    'docs/data/live_status.json',
+                    'docs/data/flywheel_cycles.json',
+                    'docs/data/truth_guard.json',
+                    'docs/data/overview_summary.json',
+                    'docs/data/intelligence_summary.json',
+                    'docs/data/audit_summary.json',
+                    'docs/assets/database_catalog.json',
+                ]
+                existing_files = [f for f in files_to_add if os.path.exists(os.path.join(REPO_ROOT, f))]
+                if existing_files:
+                    subprocess.run(['git', 'add', *existing_files], cwd=REPO_ROOT, check=False)
                 msg = f"chore(live): sync verified trade telemetry (N={current_trade_count})"
                 subprocess.run(['git', 'commit', '-m', msg], cwd=REPO_ROOT, check=False)
                 subprocess.run(['git', 'push', 'origin', 'main'], cwd=REPO_ROOT, check=False)

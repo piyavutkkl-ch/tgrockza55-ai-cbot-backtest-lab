@@ -44,7 +44,16 @@ def main():
     ok4, out4 = run_step("Web Telemetry & Data Feeds Sync", [PYTHON_EXE, "tools/sync_autonomous_champions_to_web.py"])
     
     # Step 5: Dashboard Build & Verification
-    ok5, out5 = run_step("Rebuild Modern Dashboard", [PYTHON_EXE, "tools/build_modern_quant_dashboard.py"])
+    ok5, out5 = run_step("Rebuild Legacy Old-Web Dashboard", [PYTHON_EXE, "tools/build_modern_quant_dashboard.py"])
+    for label, script in [
+        ("Rebuild Page 1 Overview Summary", "tools/build_overview_summary.py"),
+        ("Rebuild Page 3 Research Lab", "tools/build_research_lab.py"),
+        ("Rebuild Page 5 Intelligence Summary", "tools/build_intelligence_summary.py"),
+        ("Rebuild Page 6 Audit Summary", "tools/build_audit_summary.py"),
+        ("Rebuild Page 7 Archive Summary", "tools/build_archive_system_data.py"),
+        ("Rebuild Page 8 Database Catalog", "tools/build_database_catalog.py"),
+    ]:
+        run_step(label, [PYTHON_EXE, script])
     ok6, out6 = run_step("Run Automated Test Suite", [PYTHON_EXE, "tools/verify_white_theme_and_charts.py"])
     
     print("\n" + "="*80)

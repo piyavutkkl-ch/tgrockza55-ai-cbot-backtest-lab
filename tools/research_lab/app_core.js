@@ -119,10 +119,10 @@
         { value: 'SD_OFF', label: 'Overlay: Clean HA + OHLC Only' }
       ], window.RLAB.state.f3);
     } else if (tab === 'foundry') {
-      if (sInput) sInput.placeholder = 'Filter STR-001..STR-009, Graveyard bots, or Immune Genes by name, metric, or asset...';
+      if (sInput) sInput.placeholder = 'Filter STR-001..STR-010, Graveyard bots, or Immune Genes by name, metric, or asset...';
       fillSelect(f1, [
-        { value: 'ALL', label: 'All Foundry Statuses (9)' },
-        { value: 'PASSED', label: 'Status: PASSED (3)' },
+        { value: 'ALL', label: 'All Foundry Statuses (10)' },
+        { value: 'PASSED', label: 'Status: PASSED (4)' },
         { value: 'INCUBATING', label: 'Status: INCUBATING (5)' },
         { value: 'REJECTED', label: 'Status: REJECTED (1)' }
       ], window.RLAB.state.f1);

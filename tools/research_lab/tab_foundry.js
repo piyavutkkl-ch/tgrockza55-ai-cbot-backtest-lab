@@ -1,4 +1,4 @@
-// Tab 4: Strategy Foundry (STR-001..STR-009 Status Board, Micro-Forward Fleet, Failure Graveyard & Immune Genes)
+// Tab 4: Strategy Foundry (STR-001..STR-010 Status Board, Micro-Forward Fleet, Failure Graveyard & Immune Genes)
 (function () {
   'use strict';
 

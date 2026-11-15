@@ -562,12 +562,25 @@ def prepare_foundry_payload() -> dict:
             "engines": ["ENGINE_11_NEWS_GATE", "ENGINE_12_KELLY_SIZING"],
             "assets": ["XAUUSD", "GOLD-PERP", "BTCUSD", "ETHUSD"],
         },
+        "STR-010": {
+            "badge": "PASSED",
+            "th_name": "กลยุทธ์ Anchored VWAP สมดุล + โล่แนวโน้มใหญ่ EMA",
+            "evidence": "QuantFund VWAP Equilibrium XAUUSD M1 Backtest Net +$43.56, PF 3.79, WR 44.4% (Daily WR 80.0%); สถานะ CHAMPION ใน Registry.",
+            "engines": ["ENGINE_04_VWAP_SLICER", "ENGINE_09_KALMAN_ZEROLAG"],
+            "assets": ["XAUUSD"],
+        },
     }
 
     cards = []
     for sid in sorted(reg.get("strategies", {}).keys()):
         s = reg["strategies"][sid]
-        meta = foundry_status_map[sid]
+        meta = foundry_status_map.get(sid, {
+            "badge": "PASSED" if s.get("validation_status") == "CHAMPION" else "INCUBATING",
+            "th_name": s.get("name", sid),
+            "evidence": s.get("hypothesis", "Dynamic AI Strategy Registry entry."),
+            "engines": ["ENGINE_01_DEEPLOB"],
+            "assets": ["XAUUSD"],
+        })
         cards.append({
             "id": sid,
             "version": s.get("version", "1.0.0"),

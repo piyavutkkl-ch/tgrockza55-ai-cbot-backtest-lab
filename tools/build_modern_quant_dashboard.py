@@ -4,7 +4,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 DOCS = ROOT / "docs"
-INDEX_PATH = DOCS / "index.html"
+INDEX_PATH = DOCS / "old-web" / "index.html"
 
 # Load compact backtest data
 bt_data = json.loads((DOCS / "data" / "backtest_data.json").read_text(encoding="utf-8"))

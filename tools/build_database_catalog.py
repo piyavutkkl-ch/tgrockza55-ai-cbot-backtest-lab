@@ -39,7 +39,7 @@ FOLDER_SPECS = [
         "name": "Strategy Registries",
         "icon": "registry",
         "dot": "green",
-        "description": "Institutional strategy catalog STR-001..009, Champion arena promotions, and rule tiers",
+        "description": "Institutional strategy catalog STR-001..010, Champion arena promotions, and rule tiers",
     },
     {
         "id": "research_papers",
@@ -76,7 +76,7 @@ CORE_FOLDER_MAP: dict[str, tuple[str, str, str]] = {
     "experiment_registry.json": ("backtest_runs", "exp_registry_v4", "Experiment run ledger with immutable config SHA hashes & hypotheses"),
 
     # Strategy Registries (7)
-    "strategy_registry.json": ("strategy_registries", "strategy_lib_v4", "Institutional Strategy Library STR-001..009 definitions & regimes"),
+    "strategy_registry.json": ("strategy_registries", "strategy_lib_v4", "Institutional Strategy Library STR-001..010 definitions & regimes"),
     "champion_registry.json": ("strategy_registries", "champion_arena_v1", "Nightly Showdown Champion/Challenger promotion tournament results"),
     "autonomous_champions.json": ("strategy_registries", "auto_champions_v1", "Synthesized autonomous champion configurations & portfolio ensemble"),
     "live_evolution_champions.json": ("strategy_registries", "live_evo_champ_v1", "Live microstructure evolution top configurations evaluated across assets"),

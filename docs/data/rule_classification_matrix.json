@@ -76,36 +76,139 @@
     "ai_override_allowed": true,
     "deployment_gate": "REQUIRES_STATISTICAL_VALIDATION",
     "parameters": {
-      "sl_dist": {"min": 1.0, "max": 250.0, "unit": "points/ticks"},
-      "rr_ratio": {"min": 1.0, "max": 5.0, "unit": "ratio"},
-      "be_ratio": {"min": 0.0, "max": 2.0, "unit": "R-multiple"},
-      "daily_target_usd": {"min": 5.0, "max": 30.0, "unit": "USD"},
-      "max_daily_losses": {"min": 1, "max": 2, "unit": "count"},
-      "spread_threshold": {
-        "XAUUSD": {"min": 0.05, "max": 0.25, "unit": "points"},
-        "GOLD-PERP": {"min": 0.20, "max": 2.20, "unit": "USD"},
-        "BTCUSD": {"min": 5.0, "max": 35.0, "unit": "USD"},
-        "ETHUSD": {"min": 0.5, "max": 3.5, "unit": "USD"}
+      "sl_dist": {
+        "min": 1.0,
+        "max": 250.0,
+        "unit": "points/ticks"
       },
-      "news_pre_blackout_min": {"min": 15, "max": 60, "unit": "minutes"},
-      "news_post_blackout_min": {"min": 30, "max": 120, "unit": "minutes"},
-      "max_holding_bars": {"min": 5, "max": 240, "unit": "M1 bars"},
-      "switching_hysteresis_bars": {"min": 15, "max": 60, "unit": "M1 bars"}
+      "rr_ratio": {
+        "min": 1.0,
+        "max": 5.0,
+        "unit": "ratio"
+      },
+      "be_ratio": {
+        "min": 0.0,
+        "max": 2.0,
+        "unit": "R-multiple"
+      },
+      "daily_target_usd": {
+        "min": 5.0,
+        "max": 500.0,
+        "unit": "USD (Expanded for trailing runners)"
+      },
+      "max_daily_losses": {
+        "min": 1,
+        "max": 2,
+        "unit": "count"
+      },
+      "spread_threshold": {
+        "XAUUSD": {
+          "min": 0.05,
+          "max": 0.25,
+          "unit": "points"
+        },
+        "GOLD-PERP": {
+          "min": 0.2,
+          "max": 2.2,
+          "unit": "USD"
+        },
+        "BTCUSD": {
+          "min": 5.0,
+          "max": 35.0,
+          "unit": "USD"
+        },
+        "ETHUSD": {
+          "min": 0.5,
+          "max": 3.5,
+          "unit": "USD"
+        }
+      },
+      "news_pre_blackout_min": {
+        "min": 15,
+        "max": 60,
+        "unit": "minutes"
+      },
+      "news_post_blackout_min": {
+        "min": 30,
+        "max": 120,
+        "unit": "minutes"
+      },
+      "max_holding_bars": {
+        "min": 5,
+        "max": 240,
+        "unit": "M1 bars"
+      },
+      "switching_hysteresis_bars": {
+        "min": 3,
+        "max": 60,
+        "unit": "M1 bars (Dynamic: 5 breakout / 15-30 range)"
+      },
+      "adaptive_no_trade_threshold": {
+        "min": 35.0,
+        "max": 75.0,
+        "unit": "Suitability score gate"
+      },
+      "trailing_profit_lock_ratio": {
+        "min": 0.3,
+        "max": 0.8,
+        "unit": "Trailing lock ratio"
+      }
     }
   },
   "tier_3_open_research_hypotheses": {
     "authority": "UNBOUNDED_AI_RESEARCH_EXPLORATION",
     "documentation_required": true,
     "active_families": [
-      {"id": "STR-001", "name": "Trend Following", "regime": "Strong Uptrend / Strong Downtrend"},
-      {"id": "STR-002", "name": "Mean Reversion", "regime": "Sideway / Range-bound"},
-      {"id": "STR-003", "name": "Liquidity Sweep Reversal", "regime": "Liquidity Sweep / Stop Hunt"},
-      {"id": "STR-004", "name": "Momentum Breakout", "regime": "Breakout / Volatility Expansion"},
-      {"id": "STR-005", "name": "News Reaction", "regime": "Post-News Price Reaction"},
-      {"id": "STR-006", "name": "Order Flow Imbalance", "regime": "DOM Absorption / Delta Divergence"},
-      {"id": "STR-007", "name": "Volatility Reversal", "regime": "Extreme Band Extension / Exhaustion"},
-      {"id": "STR-008", "name": "Session Opening Range", "regime": "London / NY Open Range Expansion"},
-      {"id": "STR-009", "name": "No Trade", "regime": "Thin Liquidity / High Uncertainty / Spread Spike"}
+      {
+        "id": "STR-001",
+        "name": "Trend Following",
+        "regime": "Strong Uptrend / Strong Downtrend"
+      },
+      {
+        "id": "STR-002",
+        "name": "Mean Reversion",
+        "regime": "Sideway / Range-bound"
+      },
+      {
+        "id": "STR-003",
+        "name": "Liquidity Sweep Reversal",
+        "regime": "Liquidity Sweep / Stop Hunt"
+      },
+      {
+        "id": "STR-004",
+        "name": "Momentum Breakout",
+        "regime": "Breakout / Volatility Expansion"
+      },
+      {
+        "id": "STR-005",
+        "name": "News Reaction",
+        "regime": "Post-News Price Reaction"
+      },
+      {
+        "id": "STR-006",
+        "name": "Order Flow Imbalance",
+        "regime": "DOM Absorption / Delta Divergence"
+      },
+      {
+        "id": "STR-007",
+        "name": "Volatility Reversal",
+        "regime": "Extreme Band Extension / Exhaustion"
+      },
+      {
+        "id": "STR-008",
+        "name": "Session Opening Range",
+        "regime": "London / NY Open Range Expansion"
+      },
+      {
+        "id": "STR-009",
+        "name": "No Trade",
+        "regime": "Thin Liquidity / High Uncertainty / Spread Spike"
+      },
+      {
+        "id": "STR-010",
+        "name": "Institutional VWAP Equilibrium",
+        "regime": "Range / Mean Reversion / VWAP Stretch"
+      }
     ]
   }
 }

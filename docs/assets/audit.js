@@ -228,7 +228,7 @@ function renderStageInspector() {
   if (stage.num === 1) {
     metricChips = `<span class="insp-metric-chip">1,675,835 XAU Bars</span><span class="insp-metric-chip">L2 DOM + News Gate</span>`;
   } else if (stage.num <= 3) {
-    metricChips = `<span class="insp-metric-chip">9 Active Families (STR-001..009)</span><span class="insp-metric-chip">RAM Stealth SL ±5%</span>`;
+    metricChips = `<span class="insp-metric-chip">10 Active Families (STR-001..010)</span><span class="insp-metric-chip">RAM Stealth SL ±5%</span>`;
   } else if (stage.num <= 5) {
     metricChips = `<span class="insp-metric-chip">${fsStats.total_hypotheses_generated || 1420} Screened</span><span class="insp-metric-chip">${fsStats.rejection_rate_pct || 98.0}% Math Sieve</span>`;
   } else if (stage.num === 6) {

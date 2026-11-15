@@ -1,15 +1,15 @@
 import os
 import sys
-import re
+import json
 
 sys.stdout.reconfigure(encoding='utf-8')
 
-html_path = 'docs/index.html'
-with open(html_path, 'r', encoding='utf-8') as f:
+legacy_html_path = 'docs/old-web/index.html' if os.path.exists('docs/old-web/index.html') else 'docs/index.html'
+with open(legacy_html_path, 'r', encoding='utf-8') as f:
     html = f.read()
 
 checks = [
-    ('HTML Light Class', 'class="light"' in html),
+    ('Legacy HTML Light Class', 'class="light"' in html),
     ('TradingView Widget Container', 'id="tv_chart_container"' in html),
     ('TradingView Studio Card', 'id="tradingview-studio-card"' in html),
     ('TradingView Script Tag', 'https://s3.tradingview.com/tv.js' in html),
@@ -28,8 +28,30 @@ checks = [
     ('Dynamic JS Handlers', 'function initTradingViewChart' in html and 'function toggleTheme' in html)
 ]
 
+modular_pages = [
+    'docs/index.html',
+    'docs/data-center.html',
+    'docs/research-lab.html',
+    'docs/experiment-lab.html',
+    'docs/intelligence.html',
+    'docs/improvement-audit.html',
+    'docs/archive-system.html',
+    'docs/database.html',
+]
+for p in modular_pages:
+    exists = os.path.exists(p)
+    has_shell = exists and ('id="app-shell"' in open(p, 'r', encoding='utf-8').read())
+    checks.append((f'8-Page Shell ({os.path.basename(p)})', has_shell))
+
+checks.append(('Shared Shell JS (docs/assets/shell.js)', os.path.exists('docs/assets/shell.js')))
+checks.append(('Database Catalog (docs/assets/database_catalog.json)', os.path.exists('docs/assets/database_catalog.json')))
+if os.path.exists('docs/data/truth_guard.json'):
+    tg = json.load(open('docs/data/truth_guard.json', 'r', encoding='utf-8'))
+    n_val = tg.get('metrics_empirical', {}).get('total_closed_trades_N', 0)
+    checks.append((f'Truth Guard Telemetry Populated (N={n_val})', n_val > 0))
+
 all_passed = True
-print("=== VERIFICATION REPORT: WHITE THEME & TRADINGVIEW CHARTS ===")
+print("=== VERIFICATION REPORT: 8-PAGE SHELL & LEGACY DASHBOARD ===")
 for name, passed in checks:
     status = "✅ PASS" if passed else "❌ FAIL"
     print(f"[{status}] {name}")
@@ -37,6 +59,8 @@ for name, passed in checks:
         all_passed = False
 
 if all_passed:
-    print("\n🎉 ALL 17 SYSTEM CHECKS PASSED PERFECTLY!")
+    print(f"\n🎉 ALL {len(checks)} UI & TELEMETRY CHECKS PASSED PERFECTLY!")
+    sys.exit(0)
 else:
     print("\n⚠️ SOME CHECKS FAILED! Please inspect.")
+    sys.exit(1)

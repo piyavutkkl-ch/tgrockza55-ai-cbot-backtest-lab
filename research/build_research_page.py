@@ -179,8 +179,8 @@ research_html = f"""<!DOCTYPE html>
         <span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
         GitHub Pages
       </span>
-      <a href="https://github.com/tgrockza55-ai/tgrockza55-ai-cbot-backtest-lab" target="_blank" class="text-slate-400 hover:text-white transition font-mono">
-        tgrockza55-ai
+      <a href="https://github.com/piyavutkkl-ch/tgrockza55-ai-cbot-backtest-lab" target="_blank" class="text-slate-400 hover:text-white transition font-mono">
+        piyavutkkl-ch
       </a>
     </div>
   </header>

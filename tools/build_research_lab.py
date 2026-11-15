@@ -104,7 +104,7 @@ if (document.readyState === 'loading') {{
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>🧠 Research Lab (ห้องวิจัยสมมติฐานและพัฒนากลยุทธ์) — AI Quant Backtest Lab (Page 3/8)</title>
-  <meta name="description" content="ห้องวิจัยสมมติฐานและพัฒนากลยุทธ์: Virtual List 193 Papers พร้อม Slide-over Drawer, 13 Quant Engines 6-Axis Radar, Pro Candlestick Split-View & Instant Dictionary และ Strategy Foundry STR-001..009" />
+  <meta name="description" content="ห้องวิจัยสมมติฐานและพัฒนากลยุทธ์: Virtual List 193 Papers พร้อม Slide-over Drawer, 13 Quant Engines 6-Axis Radar, Pro Candlestick Split-View & Instant Dictionary และ Strategy Foundry STR-001..010" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect width='24' height='24' rx='6' fill='%230d1424'/><path d='M4 17l5-5 4 3 7-8' stroke='%23a855f7' stroke-width='2.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>" />
   <script>
     (function () {{
@@ -135,7 +135,7 @@ if (document.readyState === 'loading') {{
           <h1 class="rl-h1">🧠 Research Lab — ห้องวิจัยสมมติฐานและพัฒนากลยุทธ์</h1>
         </div>
         <div class="rl-header-meta">
-          <span class="rl-pill-chip mono">193 Papers · 14 Quant Engines · STR-001..009</span>
+          <span class="rl-pill-chip mono">193 Papers · 14 Quant Engines · STR-001..010</span>
           <a href="old-web/research.html" class="rl-pill-chip mono" title="ดูหน้า Research เวอร์ชันเดิม">Legacy Archive ↗</a>
         </div>
       </div>
@@ -171,7 +171,7 @@ if (document.readyState === 'loading') {{
                 <span>🕯️</span> <span>Pro Candlestick &amp; Dictionary</span>
               </button>
               <button type="button" data-tab="foundry" onclick="window.switchTab('foundry')" class="workspace-tab">
-                <span>🏆</span> <span>Strategy Foundry (STR-001..009)</span>
+                <span>🏆</span> <span>Strategy Foundry (STR-001..010)</span>
               </button>
             </div>
             <div class="hidden 2xl:flex items-center gap-2 text-[11px] font-mono text-slate-400 pr-1">
