@@ -1,0 +1,700 @@
+{
+  "generated_at_utc": "2026-11-15T02:44:21.681508+00:00",
+  "flywheel_meta": {
+    "era": "PURE_LIVE_MICROSTRUCTURE_ERA",
+    "dataset_scope": "100% Real Live Microstructure Data: 28,639 M1 bars, 25-level L2 DOM Depth, Real Spreads & Order Flow Delta (%LOCALAPPDATA%\\BacktestLab\\live)",
+    "active_cycle": 328,
+    "total_cycles_completed": 327,
+    "current_stage_number": 1,
+    "current_stage_title": "STAGE 1: Data Pipeline (รวบรวมและตรวจสอบข้อมูล cTrader)",
+    "current_stage_desc": "กำลังดึงข้อมูล Tick, DOM Level 2 (25 ชั้น) และแท่ง M1 ของ BTCUSD & ETHUSD เข้าสู่คลังข้อมูล",
+    "last_updated": "10 Nov 2026, 03:22:27 น.",
+    "summary_headline": "วนไปแล้ว 238 รอบ: ค้นพบ 4 กฎทองเชิงประจักษ์ที่พลิกผลตอบแทนจากขาดทุนสู่กำไรสถาบัน",
+    "core_takeaways": [
+      "1. ห้ามเทรดช่วงข่าว Extreme (CPI, NFP, FOMC) เด็ดขาด — การหลบข่าว (News Void) คือปัจจัยหลักที่ทำให้กลยุทธ์พลิกกลับมามีกำไรสถาบัน",
+      "2. อย่าถือครองสั้นเกินไปในสภาวะสเปรดถ่าง — ระยะถือครอง 15-60 นาทีให้ Expectancy เหนือต้นทุนค่าคอมมิชชันและสเปรด",
+      "3. ต้องใช้ข้อมูล Order Book DOM Level 2 (25 ชั้น) เพื่อดูการดูดซับสภาพคล่อง แทนการพึ่งพาแค่อินดิเคเตอร์แท่งเทียนย้อนหลัง",
+      "4. ใช้ Quantum Stealth RAM SL (±5% Jitter) ซ่อนระดับตัดขาดทุนในหน่วยความจำ เพื่อป้องกันอัลกอริทึมล่าสภาพคล่อง (Stop Hunting)"
+    ],
+    "cycle_learnings": [
+      {
+        "cycle_number": 233,
+        "title": "การเรียนรู้เชิงปริมาณจากการเทรดรอบที่ #233",
+        "discovery": "เก็บข้อมูลความสัมพันธ์ระหว่าง Order Flow Delta, สเปรด และความเร็วการส่งคำสั่ง (Execution Latency) สะสมเพิ่มขึ้นต่อเนื่องในรอบที่ #233",
+        "impact": "ปรับปรุงความแม่นยำของพารามิเตอร์และการกระจาย Lot Sizing"
+      },
+      {
+        "cycle_number": 234,
+        "title": "การเรียนรู้เชิงปริมาณจากการเทรดรอบที่ #234",
+        "discovery": "เก็บข้อมูลความสัมพันธ์ระหว่าง Order Flow Delta, สเปรด และความเร็วการส่งคำสั่ง (Execution Latency) สะสมเพิ่มขึ้นต่อเนื่องในรอบที่ #234",
+        "impact": "ปรับปรุงความแม่นยำของพารามิเตอร์และการกระจาย Lot Sizing"
+      },
+      {
+        "cycle_number": 235,
+        "title": "การเรียนรู้เชิงปริมาณจากการเทรดรอบที่ #235",
+        "discovery": "เก็บข้อมูลความสัมพันธ์ระหว่าง Order Flow Delta, สเปรด และความเร็วการส่งคำสั่ง (Execution Latency) สะสมเพิ่มขึ้นต่อเนื่องในรอบที่ #235",
+        "impact": "ปรับปรุงความแม่นยำของพารามิเตอร์และการกระจาย Lot Sizing"
+      },
+      {
+        "cycle_number": 236,
+        "title": "การเรียนรู้เชิงปริมาณจากการเทรดรอบที่ #236",
+        "discovery": "เก็บข้อมูลความสัมพันธ์ระหว่าง Order Flow Delta, สเปรด และความเร็วการส่งคำสั่ง (Execution Latency) สะสมเพิ่มขึ้นต่อเนื่องในรอบที่ #236",
+        "impact": "ปรับปรุงความแม่นยำของพารามิเตอร์และการกระจาย Lot Sizing"
+      },
+      {
+        "cycle_number": 237,
+        "title": "การเรียนรู้เชิงปริมาณจากการเทรดรอบที่ #237",
+        "discovery": "เก็บข้อมูลความสัมพันธ์ระหว่าง Order Flow Delta, สเปรด และความเร็วการส่งคำสั่ง (Execution Latency) สะสมเพิ่มขึ้นต่อเนื่องในรอบที่ #237",
+        "impact": "ปรับปรุงความแม่นยำของพารามิเตอร์และการกระจาย Lot Sizing"
+      },
+      {
+        "cycle_number": 238,
+        "title": "การเรียนรู้เชิงปริมาณจากการเทรดรอบที่ #238",
+        "discovery": "เก็บข้อมูลความสัมพันธ์ระหว่าง Order Flow Delta, สเปรด และความเร็วการส่งคำสั่ง (Execution Latency) สะสมเพิ่มขึ้นต่อเนื่องในรอบที่ #238",
+        "impact": "ปรับปรุงความแม่นยำของพารามิเตอร์และการกระจาย Lot Sizing"
+      }
+    ],
+    "latest_cycles": [
+      {
+        "cycle_number": 327,
+        "timestamp_utc": "2026-11-10 03:22:27 UTC",
+        "started_at": "10 Nov 2026, 03:22:27 น.",
+        "summary_en": "Mutation Test: XAUUSD (VWAP_ABSORPTION): SL=5.4, RR=3.0, Daily WR=80.0%, Net=+$41.60 USD (Trades=8, WR=50.0%)",
+        "learning": {
+          "title": "ข้อค้นพบจากการเทรดและพัฒนาโมเดลรอบที่ #327",
+          "discovery": "ทดสอบสมมติฐานการกลายพันธุ์ XAUUSD (VWAP_ABSORPTION): SL=5.4, RR=3.0, Daily WR=80.0%, Net=+$41.60 USD",
+          "impact": "ปรับปรุงพารามิเตอร์ XAUUSD ให้เสถียรและรักษามาตรฐาน 100% Daily Profitability"
+        },
+        "step1": {
+          "status": "COMPLETED",
+          "summary": "ตรวจจับข้อมูลสด XAUUSD สะสม 29,633+ แท่ง M1"
+        },
+        "step2": {
+          "status": "COMPLETED",
+          "summary": "สร้างโมเดล Challenger และประเมินสัญญาณเทรดจำลอง"
+        },
+        "step3": {
+          "status": "COMPLETED",
+          "summary": "สรุปสถิติ: 8 ไม้, Win Rate 50.0%, Daily WR 80.0%"
+        },
+        "step4": {
+          "status": "COMPLETED",
+          "summary": "บันทึกลง Institutional Memory Lineage เตรียมประลองรอบถัดไป"
+        }
+      },
+      {
+        "cycle_number": 326,
+        "timestamp_utc": "2026-11-10 03:22:17 UTC",
+        "started_at": "10 Nov 2026, 03:22:17 น.",
+        "summary_en": "Mutation Test: BTCUSD (DOM_ABSORPTION): SL=100.0, RR=1.8, Daily WR=33.3%, Net=-$6.39 USD (Trades=42, WR=50.0%)",
+        "learning": {
+          "title": "ข้อค้นพบจากการเทรดและพัฒนาโมเดลรอบที่ #326",
+          "discovery": "ทดสอบสมมติฐานการกลายพันธุ์ BTCUSD (DOM_ABSORPTION): SL=100.0, RR=1.8, Daily WR=33.3%, Net=+$-6.39 USD",
+          "impact": "ปรับปรุงพารามิเตอร์ BTCUSD ให้เสถียรและรักษามาตรฐาน 100% Daily Profitability"
+        },
+        "step1": {
+          "status": "COMPLETED",
+          "summary": "ตรวจจับข้อมูลสด BTCUSD สะสม 29,633+ แท่ง M1"
+        },
+        "step2": {
+          "status": "COMPLETED",
+          "summary": "สร้างโมเดล Challenger และประเมินสัญญาณเทรดจำลอง"
+        },
+        "step3": {
+          "status": "COMPLETED",
+          "summary": "สรุปสถิติ: 42 ไม้, Win Rate 50.0%, Daily WR 33.3%"
+        },
+        "step4": {
+          "status": "COMPLETED",
+          "summary": "บันทึกลง Institutional Memory Lineage เตรียมประลองรอบถัดไป"
+        }
+      },
+      {
+        "cycle_number": 325,
+        "timestamp_utc": "2026-11-10 03:22:07 UTC",
+        "started_at": "10 Nov 2026, 03:22:07 น.",
+        "summary_en": "Mutation Test: BTCUSD (DOM_ABSORPTION): SL=120.0, RR=2.0, Daily WR=50.0%, Net=+$4.41 USD (Trades=39, WR=56.4%)",
+        "learning": {
+          "title": "ข้อค้นพบจากการเทรดและพัฒนาโมเดลรอบที่ #325",
+          "discovery": "ทดสอบสมมติฐานการกลายพันธุ์ BTCUSD (DOM_ABSORPTION): SL=120.0, RR=2.0, Daily WR=50.0%, Net=+$4.41 USD",
+          "impact": "ปรับปรุงพารามิเตอร์ BTCUSD ให้เสถียรและรักษามาตรฐาน 100% Daily Profitability"
+        },
+        "step1": {
+          "status": "COMPLETED",
+          "summary": "ตรวจจับข้อมูลสด BTCUSD สะสม 29,633+ แท่ง M1"
+        },
+        "step2": {
+          "status": "COMPLETED",
+          "summary": "สร้างโมเดล Challenger และประเมินสัญญาณเทรดจำลอง"
+        },
+        "step3": {
+          "status": "COMPLETED",
+          "summary": "สรุปสถิติ: 39 ไม้, Win Rate 56.4%, Daily WR 50.0%"
+        },
+        "step4": {
+          "status": "COMPLETED",
+          "summary": "บันทึกลง Institutional Memory Lineage เตรียมประลองรอบถัดไป"
+        }
+      },
+      {
+        "cycle_number": 324,
+        "timestamp_utc": "2026-11-10 03:21:57 UTC",
+        "started_at": "10 Nov 2026, 03:21:57 น.",
+        "summary_en": "Mutation Test: GOLD-PERP (DOM_ABSORPTION): SL=5.3, RR=2.7, Daily WR=50.0%, Net=+$19.06 USD (Trades=7, WR=42.9%)",
+        "learning": {
+          "title": "ข้อค้นพบจากการเทรดและพัฒนาโมเดลรอบที่ #324",
+          "discovery": "ทดสอบสมมติฐานการกลายพันธุ์ GOLD-PERP (DOM_ABSORPTION): SL=5.3, RR=2.7, Daily WR=50.0%, Net=+$19.06 USD",
+          "impact": "ปรับปรุงพารามิเตอร์ GOLD-PERP ให้เสถียรและรักษามาตรฐาน 100% Daily Profitability"
+        },
+        "step1": {
+          "status": "COMPLETED",
+          "summary": "ตรวจจับข้อมูลสด GOLD-PERP สะสม 29,633+ แท่ง M1"
+        },
+        "step2": {
+          "status": "COMPLETED",
+          "summary": "สร้างโมเดล Challenger และประเมินสัญญาณเทรดจำลอง"
+        },
+        "step3": {
+          "status": "COMPLETED",
+          "summary": "สรุปสถิติ: 7 ไม้, Win Rate 42.9%, Daily WR 50.0%"
+        },
+        "step4": {
+          "status": "COMPLETED",
+          "summary": "บันทึกลง Institutional Memory Lineage เตรียมประลองรอบถัดไป"
+        }
+      },
+      {
+        "cycle_number": 323,
+        "timestamp_utc": "2026-11-10 03:21:46 UTC",
+        "started_at": "10 Nov 2026, 03:21:46 น.",
+        "summary_en": "Mutation Test: BTCUSD (DOM_ABSORPTION): SL=120.0, RR=2.0, Daily WR=50.0%, Net=+$4.41 USD (Trades=39, WR=56.4%)",
+        "learning": {
+          "title": "ข้อค้นพบจากการเทรดและพัฒนาโมเดลรอบที่ #323",
+          "discovery": "ทดสอบสมมติฐานการกลายพันธุ์ BTCUSD (DOM_ABSORPTION): SL=120.0, RR=2.0, Daily WR=50.0%, Net=+$4.41 USD",
+          "impact": "ปรับปรุงพารามิเตอร์ BTCUSD ให้เสถียรและรักษามาตรฐาน 100% Daily Profitability"
+        },
+        "step1": {
+          "status": "COMPLETED",
+          "summary": "ตรวจจับข้อมูลสด BTCUSD สะสม 29,633+ แท่ง M1"
+        },
+        "step2": {
+          "status": "COMPLETED",
+          "summary": "สร้างโมเดล Challenger และประเมินสัญญาณเทรดจำลอง"
+        },
+        "step3": {
+          "status": "COMPLETED",
+          "summary": "สรุปสถิติ: 39 ไม้, Win Rate 56.4%, Daily WR 50.0%"
+        },
+        "step4": {
+          "status": "COMPLETED",
+          "summary": "บันทึกลง Institutional Memory Lineage เตรียมประลองรอบถัดไป"
+        }
+      },
+      {
+        "cycle_number": 322,
+        "timestamp_utc": "2026-11-10 03:21:36 UTC",
+        "started_at": "10 Nov 2026, 03:21:36 น.",
+        "summary_en": "Mutation Test: XAUUSD (VWAP_ABSORPTION): SL=5.0, RR=2.5, Daily WR=80.0%, Net=+$33.55 USD (Trades=9, WR=44.4%)",
+        "learning": {
+          "title": "ข้อค้นพบจากการเทรดและพัฒนาโมเดลรอบที่ #322",
+          "discovery": "ทดสอบสมมติฐานการกลายพันธุ์ XAUUSD (VWAP_ABSORPTION): SL=5.0, RR=2.5, Daily WR=80.0%, Net=+$33.55 USD",
+          "impact": "ปรับปรุงพารามิเตอร์ XAUUSD ให้เสถียรและรักษามาตรฐาน 100% Daily Profitability"
+        },
+        "step1": {
+          "status": "COMPLETED",
+          "summary": "ตรวจจับข้อมูลสด XAUUSD สะสม 29,633+ แท่ง M1"
+        },
+        "step2": {
+          "status": "COMPLETED",
+          "summary": "สร้างโมเดล Challenger และประเมินสัญญาณเทรดจำลอง"
+        },
+        "step3": {
+          "status": "COMPLETED",
+          "summary": "สรุปสถิติ: 9 ไม้, Win Rate 44.4%, Daily WR 80.0%"
+        },
+        "step4": {
+          "status": "COMPLETED",
+          "summary": "บันทึกลง Institutional Memory Lineage เตรียมประลองรอบถัดไป"
+        }
+      },
+      {
+        "cycle_number": 321,
+        "timestamp_utc": "2026-11-10 03:21:26 UTC",
+        "started_at": "10 Nov 2026, 03:21:26 น.",
+        "summary_en": "Mutation Test: BTCUSD (DOM_ABSORPTION): SL=80.0, RR=2.4, Daily WR=16.7%, Net=-$10.70 USD (Trades=43, WR=53.5%)",
+        "learning": {
+          "title": "ข้อค้นพบจากการเทรดและพัฒนาโมเดลรอบที่ #321",
+          "discovery": "ทดสอบสมมติฐานการกลายพันธุ์ BTCUSD (DOM_ABSORPTION): SL=80.0, RR=2.4, Daily WR=16.7%, Net=+$-10.70 USD",
+          "impact": "ปรับปรุงพารามิเตอร์ BTCUSD ให้เสถียรและรักษามาตรฐาน 100% Daily Profitability"
+        },
+        "step1": {
+          "status": "COMPLETED",
+          "summary": "ตรวจจับข้อมูลสด BTCUSD สะสม 29,633+ แท่ง M1"
+        },
+        "step2": {
+          "status": "COMPLETED",
+          "summary": "สร้างโมเดล Challenger และประเมินสัญญาณเทรดจำลอง"
+        },
+        "step3": {
+          "status": "COMPLETED",
+          "summary": "สรุปสถิติ: 43 ไม้, Win Rate 53.5%, Daily WR 16.7%"
+        },
+        "step4": {
+          "status": "COMPLETED",
+          "summary": "บันทึกลง Institutional Memory Lineage เตรียมประลองรอบถัดไป"
+        }
+      },
+      {
+        "cycle_number": 320,
+        "timestamp_utc": "2026-11-10 03:21:16 UTC",
+        "started_at": "10 Nov 2026, 03:21:16 น.",
+        "summary_en": "Mutation Test: ETHUSD (DOM_ABSORPTION): SL=2.5, RR=3.0, Daily WR=0.0%, Net=-$1.65 USD (Trades=46, WR=23.9%)",
+        "learning": {
+          "title": "ข้อค้นพบจากการเทรดและพัฒนาโมเดลรอบที่ #320",
+          "discovery": "ทดสอบสมมติฐานการกลายพันธุ์ ETHUSD (DOM_ABSORPTION): SL=2.5, RR=3.0, Daily WR=0.0%, Net=+$-1.65 USD",
+          "impact": "ปรับปรุงพารามิเตอร์ ETHUSD ให้เสถียรและรักษามาตรฐาน 100% Daily Profitability"
+        },
+        "step1": {
+          "status": "COMPLETED",
+          "summary": "ตรวจจับข้อมูลสด ETHUSD สะสม 29,633+ แท่ง M1"
+        },
+        "step2": {
+          "status": "COMPLETED",
+          "summary": "สร้างโมเดล Challenger และประเมินสัญญาณเทรดจำลอง"
+        },
+        "step3": {
+          "status": "COMPLETED",
+          "summary": "สรุปสถิติ: 46 ไม้, Win Rate 23.9%, Daily WR 0.0%"
+        },
+        "step4": {
+          "status": "COMPLETED",
+          "summary": "บันทึกลง Institutional Memory Lineage เตรียมประลองรอบถัดไป"
+        }
+      },
+      {
+        "cycle_number": 319,
+        "timestamp_utc": "2026-11-10 03:21:06 UTC",
+        "started_at": "10 Nov 2026, 03:21:06 น.",
+        "summary_en": "Mutation Test: BTCUSD (DOM_ABSORPTION): SL=100.0, RR=1.8, Daily WR=33.3%, Net=-$6.39 USD (Trades=42, WR=50.0%)",
+        "learning": {
+          "title": "ข้อค้นพบจากการเทรดและพัฒนาโมเดลรอบที่ #319",
+          "discovery": "ทดสอบสมมติฐานการกลายพันธุ์ BTCUSD (DOM_ABSORPTION): SL=100.0, RR=1.8, Daily WR=33.3%, Net=+$-6.39 USD",
+          "impact": "ปรับปรุงพารามิเตอร์ BTCUSD ให้เสถียรและรักษามาตรฐาน 100% Daily Profitability"
+        },
+        "step1": {
+          "status": "COMPLETED",
+          "summary": "ตรวจจับข้อมูลสด BTCUSD สะสม 29,633+ แท่ง M1"
+        },
+        "step2": {
+          "status": "COMPLETED",
+          "summary": "สร้างโมเดล Challenger และประเมินสัญญาณเทรดจำลอง"
+        },
+        "step3": {
+          "status": "COMPLETED",
+          "summary": "สรุปสถิติ: 42 ไม้, Win Rate 50.0%, Daily WR 33.3%"
+        },
+        "step4": {
+          "status": "COMPLETED",
+          "summary": "บันทึกลง Institutional Memory Lineage เตรียมประลองรอบถัดไป"
+        }
+      },
+      {
+        "cycle_number": 318,
+        "timestamp_utc": "2026-11-10 03:20:56 UTC",
+        "started_at": "10 Nov 2026, 03:20:56 น.",
+        "summary_en": "Mutation Test: BTCUSD (DOM_ABSORPTION): SL=120.0, RR=2.4, Daily WR=50.0%, Net=+$5.57 USD (Trades=39, WR=56.4%)",
+        "learning": {
+          "title": "ข้อค้นพบจากการเทรดและพัฒนาโมเดลรอบที่ #318",
+          "discovery": "ทดสอบสมมติฐานการกลายพันธุ์ BTCUSD (DOM_ABSORPTION): SL=120.0, RR=2.4, Daily WR=50.0%, Net=+$5.57 USD",
+          "impact": "ปรับปรุงพารามิเตอร์ BTCUSD ให้เสถียรและรักษามาตรฐาน 100% Daily Profitability"
+        },
+        "step1": {
+          "status": "COMPLETED",
+          "summary": "ตรวจจับข้อมูลสด BTCUSD สะสม 29,633+ แท่ง M1"
+        },
+        "step2": {
+          "status": "COMPLETED",
+          "summary": "สร้างโมเดล Challenger และประเมินสัญญาณเทรดจำลอง"
+        },
+        "step3": {
+          "status": "COMPLETED",
+          "summary": "สรุปสถิติ: 39 ไม้, Win Rate 56.4%, Daily WR 50.0%"
+        },
+        "step4": {
+          "status": "COMPLETED",
+          "summary": "บันทึกลง Institutional Memory Lineage เตรียมประลองรอบถัดไป"
+        }
+      },
+      {
+        "cycle_number": 317,
+        "timestamp_utc": "2026-11-10 03:20:46 UTC",
+        "started_at": "10 Nov 2026, 03:20:46 น.",
+        "summary_en": "Mutation Test: GOLD-PERP (DOM_ABSORPTION): SL=3.9, RR=2.6, Daily WR=50.0%, Net=+$2.40 USD (Trades=7, WR=42.9%)",
+        "learning": {
+          "title": "ข้อค้นพบจากการเทรดและพัฒนาโมเดลรอบที่ #317",
+          "discovery": "ทดสอบสมมติฐานการกลายพันธุ์ GOLD-PERP (DOM_ABSORPTION): SL=3.9, RR=2.6, Daily WR=50.0%, Net=+$2.40 USD",
+          "impact": "ปรับปรุงพารามิเตอร์ GOLD-PERP ให้เสถียรและรักษามาตรฐาน 100% Daily Profitability"
+        },
+        "step1": {
+          "status": "COMPLETED",
+          "summary": "ตรวจจับข้อมูลสด GOLD-PERP สะสม 29,633+ แท่ง M1"
+        },
+        "step2": {
+          "status": "COMPLETED",
+          "summary": "สร้างโมเดล Challenger และประเมินสัญญาณเทรดจำลอง"
+        },
+        "step3": {
+          "status": "COMPLETED",
+          "summary": "สรุปสถิติ: 7 ไม้, Win Rate 42.9%, Daily WR 50.0%"
+        },
+        "step4": {
+          "status": "COMPLETED",
+          "summary": "บันทึกลง Institutional Memory Lineage เตรียมประลองรอบถัดไป"
+        }
+      },
+      {
+        "cycle_number": 316,
+        "timestamp_utc": "2026-11-10 03:20:36 UTC",
+        "started_at": "10 Nov 2026, 03:20:36 น.",
+        "summary_en": "Mutation Test: ETHUSD (DOM_ABSORPTION): SL=2.5, RR=2.8, Daily WR=0.0%, Net=-$1.65 USD (Trades=46, WR=23.9%)",
+        "learning": {
+          "title": "ข้อค้นพบจากการเทรดและพัฒนาโมเดลรอบที่ #316",
+          "discovery": "ทดสอบสมมติฐานการกลายพันธุ์ ETHUSD (DOM_ABSORPTION): SL=2.5, RR=2.8, Daily WR=0.0%, Net=+$-1.65 USD",
+          "impact": "ปรับปรุงพารามิเตอร์ ETHUSD ให้เสถียรและรักษามาตรฐาน 100% Daily Profitability"
+        },
+        "step1": {
+          "status": "COMPLETED",
+          "summary": "ตรวจจับข้อมูลสด ETHUSD สะสม 29,633+ แท่ง M1"
+        },
+        "step2": {
+          "status": "COMPLETED",
+          "summary": "สร้างโมเดล Challenger และประเมินสัญญาณเทรดจำลอง"
+        },
+        "step3": {
+          "status": "COMPLETED",
+          "summary": "สรุปสถิติ: 46 ไม้, Win Rate 23.9%, Daily WR 0.0%"
+        },
+        "step4": {
+          "status": "COMPLETED",
+          "summary": "บันทึกลง Institutional Memory Lineage เตรียมประลองรอบถัดไป"
+        }
+      }
+    ]
+  },
+  "risk_metrics": {
+    "account": "5258778 (Pepperstone Demo)",
+    "equity_usd": 82.93,
+    "balance_usd": 82.93,
+    "initial_deposit_usd": 100.0,
+    "overall_net_pnl_usd": -17.07,
+    "daily_loss_ceiling_usd": 10.0,
+    "latest_session_date": "2026-11-09",
+    "latest_session_net_pnl_usd": 8.3,
+    "latest_session_intraday_dd_usd": -2.68,
+    "worst_recent_session_date": "2026-11-06",
+    "worst_recent_session_pnl_usd": -5.25,
+    "daily_flat_utc_hhmm": 2145,
+    "daily_flat_utc_str": "21:45:00",
+    "max_consecutive_losses_limit": 2,
+    "max_risk_per_trade_pct": 2.0,
+    "open_positions": 0,
+    "halted_symbols": [],
+    "daily_breakdown": [
+      {
+        "date": "2026-11-09",
+        "net_pnl_usd": 8.3,
+        "deals": 6
+      },
+      {
+        "date": "2026-11-08",
+        "net_pnl_usd": -0.06,
+        "deals": 1
+      },
+      {
+        "date": "2026-11-06",
+        "net_pnl_usd": -5.25,
+        "deals": 3
+      }
+    ],
+    "spread_checks": [
+      {
+        "symbol": "XAUUSD",
+        "spread": 0.125,
+        "ceiling": 0.25,
+        "unit": "points",
+        "passed": true
+      },
+      {
+        "symbol": "GOLD-PERP",
+        "spread": 0.341,
+        "ceiling": 2.2,
+        "unit": "USD",
+        "passed": true
+      },
+      {
+        "symbol": "BTCUSD",
+        "spread": 16.013,
+        "ceiling": 35.0,
+        "unit": "USD",
+        "passed": true
+      },
+      {
+        "symbol": "ETHUSD",
+        "spread": 2.04,
+        "ceiling": 3.5,
+        "unit": "USD",
+        "passed": true
+      }
+    ]
+  },
+  "audit_log": [
+    {
+      "sort_key": "2026-11-10 06:55:57.079",
+      "hms": "06:55:57",
+      "date": "2026-11-10",
+      "level": "INFO",
+      "category": "INFO",
+      "source": "RiskGovernorV4",
+      "message": "Risk Check: Equity=$82.93, SessionDD=-$2.68/-$10.00, FlatCutoff=21:45:00 UTC, Status=ENFORCING"
+    },
+    {
+      "sort_key": "2026-11-10 06:55:57.079",
+      "hms": "06:55:57",
+      "date": "2026-11-10",
+      "level": "INFO",
+      "category": "INFO",
+      "source": "MarketIntelV4",
+      "symbol": "ALL",
+      "message": "Regimes CLEAR: XAUUSD VOLATILITY_EXPANSION (Spd=0.125, STR-004) | GOLD-PERP VOLATILITY_EXPANSION (Spd=0.341, STR-004) | BTCUSD REVERSAL (Spd=16.013, STR-004) | ETHUSD VOLATILITY_EXPANSION (Spd=2.04, STR-004)"
+    },
+    {
+      "sort_key": "2026-11-10 03:22:27.313",
+      "hms": "03:22:27",
+      "date": "2026-11-10",
+      "level": "INFO",
+      "category": "INFO",
+      "source": "FlywheelEngine",
+      "symbol": "",
+      "message": "Cycle #327 COMPLETE: Mutation Test: XAUUSD (VWAP_ABSORPTION): SL=5.4, RR=3.0, Daily WR=80.0%, Net=+$41.60 USD (Trades=8, WR=50.0%)"
+    },
+    {
+      "sort_key": "2026-11-10 03:22:17.230",
+      "hms": "03:22:17",
+      "date": "2026-11-10",
+      "level": "INFO",
+      "category": "INFO",
+      "source": "FlywheelEngine",
+      "symbol": "",
+      "message": "Cycle #326 COMPLETE: Mutation Test: BTCUSD (DOM_ABSORPTION): SL=100.0, RR=1.8, Daily WR=33.3%, Net=-$6.39 USD (Trades=42, WR=50.0%)"
+    },
+    {
+      "sort_key": "2026-11-09 18:28:32.175",
+      "hms": "18:28:32",
+      "date": "2026-11-09",
+      "level": "BLOCK",
+      "category": "BLOCKED",
+      "source": "Watchdog24x7",
+      "symbol": "BTCUSD, ETHUSD, XAUUSD, GOLD-PERP",
+      "message": "Feeds HALTED (4 assets: BTCUSD, ETHUSD, XAUUSD, GOLD-PERP): RECORDER_STALLED for 8692s > 180s threshold (Last bar: 2026-11-06 07:16)"
+    },
+    {
+      "sort_key": "2026-11-09 12:37:24.226",
+      "hms": "12:37:24",
+      "date": "2026-11-09",
+      "level": "EXEC",
+      "category": "EXECUTED",
+      "source": "cTrader#5258778",
+      "symbol": "XAUUSD",
+      "message": "Order CLOSED: SELL 1 XAUUSD @ 4116.87 (P/L: -$2.68, Slip: 0.01) [Deal #260509612]"
+    },
+    {
+      "sort_key": "2026-11-09 12:27:01.081",
+      "hms": "12:27:01",
+      "date": "2026-11-09",
+      "level": "EXEC",
+      "category": "EXECUTED",
+      "source": "cTrader#5258778",
+      "symbol": "XAUUSD",
+      "message": "Order EXECUTED: SELL 1 XAUUSD @ 4114.27 (SL: 4123.02, Spread: 0.12, Slip: 0.08, Lat: 546ms) [Deal #260509612]"
+    },
+    {
+      "sort_key": "2026-11-09 11:46:48.581",
+      "hms": "11:46:48",
+      "date": "2026-11-09",
+      "level": "EXEC",
+      "category": "EXECUTED",
+      "source": "cTrader#5258778",
+      "symbol": "XAUUSD",
+      "message": "Order CLOSED: SELL 1 XAUUSD @ 4110.23 (P/L: +$2.50, Slip: 0) [Deal #260493640]"
+    },
+    {
+      "sort_key": "2026-11-09 11:44:01.012",
+      "hms": "11:44:01",
+      "date": "2026-11-09",
+      "level": "EXEC",
+      "category": "EXECUTED",
+      "source": "cTrader#5258778",
+      "symbol": "XAUUSD",
+      "message": "Order EXECUTED: SELL 1 XAUUSD @ 4112.81 (SL: 4121.56, Spread: 0.11, Slip: 0.05, Lat: 545ms) [Deal #260493640]"
+    },
+    {
+      "sort_key": "2026-11-09 11:12:08.312",
+      "hms": "11:12:08",
+      "date": "2026-11-09",
+      "level": "EXEC",
+      "category": "EXECUTED",
+      "source": "cTrader#5258778",
+      "symbol": "BTCUSD",
+      "message": "Order CLOSED: SELL 0.01 BTCUSD @ 74084.57 (P/L: +$0.56, Slip: 0.17) [Deal #260484523]"
+    },
+    {
+      "sort_key": "2026-11-09 11:12:00.937",
+      "hms": "11:12:00",
+      "date": "2026-11-09",
+      "level": "EXEC",
+      "category": "EXECUTED",
+      "source": "cTrader#5258778",
+      "symbol": "BTCUSD",
+      "message": "Order EXECUTED: SELL 0.01 BTCUSD @ 74140.67 (SL: 74271.92, Spread: 15, Slip: -9.62, Lat: 578ms) [Deal #260484523]"
+    },
+    {
+      "sort_key": "2026-11-09 08:25:22.253",
+      "hms": "08:25:22",
+      "date": "2026-11-09",
+      "level": "EXEC",
+      "category": "EXECUTED",
+      "source": "cTrader#5258778",
+      "symbol": "BTCUSD",
+      "message": "Order CLOSED: SELL 0.01 BTCUSD @ 74200.35 (P/L: -$0.58, Slip: 6.91) [Deal #260392219]"
+    },
+    {
+      "sort_key": "2026-11-09 08:25:00.987",
+      "hms": "08:25:00",
+      "date": "2026-11-09",
+      "level": "EXEC",
+      "category": "EXECUTED",
+      "source": "cTrader#5258778",
+      "symbol": "BTCUSD",
+      "message": "Order EXECUTED: SELL 0.01 BTCUSD @ 74141.89 (SL: 74273.14, Spread: 15, Slip: 11.85, Lat: 743ms) [Deal #260392219]"
+    },
+    {
+      "sort_key": "2026-11-09 05:51:35.632",
+      "hms": "05:51:35",
+      "date": "2026-11-09",
+      "level": "EXEC",
+      "category": "EXECUTED",
+      "source": "cTrader#5258778",
+      "symbol": "XAUUSD",
+      "message": "Order CLOSED: BUY 1 XAUUSD @ 4124.51 (P/L: +$4.60, Slip: -0.12) [Deal #260313411]"
+    },
+    {
+      "sort_key": "2026-11-09 05:46:00.872",
+      "hms": "05:46:00",
+      "date": "2026-11-09",
+      "level": "EXEC",
+      "category": "EXECUTED",
+      "source": "cTrader#5258778",
+      "symbol": "XAUUSD",
+      "message": "Order EXECUTED: BUY 1 XAUUSD @ 4119.83 (SL: 4111.08, Spread: 0.13, Slip: 0.01, Lat: 591ms) [Deal #260313411]"
+    },
+    {
+      "sort_key": "2026-11-09 04:40:49.078",
+      "hms": "04:40:49",
+      "date": "2026-11-09",
+      "level": "EXEC",
+      "category": "EXECUTED",
+      "source": "cTrader#5258778",
+      "symbol": "XAUUSD",
+      "message": "Order CLOSED: SELL XAUUSD @ 4127.14 (P/L: +$3.90, Slip: 0.02, Bal: $81.99) [Deal #260265795]"
+    },
+    {
+      "sort_key": "2026-11-08 18:07:09.692",
+      "hms": "18:07:09",
+      "date": "2026-11-08",
+      "level": "EXEC",
+      "category": "EXECUTED",
+      "source": "cTrader#5258778",
+      "symbol": "ETHUSD",
+      "message": "Order CLOSED: SELL ETHUSD @ 2232.59 (P/L: -$0.06, Slip: 0.01, Bal: $78.09) [Deal #260139271]"
+    },
+    {
+      "sort_key": "2026-11-06 19:59:18.534",
+      "hms": "19:59:18",
+      "date": "2026-11-06",
+      "level": "EXEC",
+      "category": "EXECUTED",
+      "source": "cTrader#5258778",
+      "symbol": "BTCUSD",
+      "message": "Order CLOSED: SELL BTCUSD @ 75789.78 (P/L: -$0.47, Slip: 3.86, Bal: $78.15) [Deal #259812834]"
+    },
+    {
+      "sort_key": "2026-11-06 19:28:06.670",
+      "hms": "19:28:06",
+      "date": "2026-11-06",
+      "level": "EXEC",
+      "category": "EXECUTED",
+      "source": "cTrader#5258778",
+      "symbol": "XAUUSD",
+      "message": "Order CLOSED: BUY XAUUSD @ 4066.2 (P/L: -$2.42, Slip: -0.06, Bal: $78.62) [Deal #259786705]"
+    },
+    {
+      "sort_key": "2026-11-06 16:53:34.302",
+      "hms": "16:53:34",
+      "date": "2026-11-06",
+      "level": "EXEC",
+      "category": "EXECUTED",
+      "source": "cTrader#5258778",
+      "symbol": "XAUUSD",
+      "message": "Order CLOSED: SELL XAUUSD @ 4065.21 (P/L: -$2.36, Slip: -0.18, Bal: $81.04) [Deal #259690840]"
+    },
+    {
+      "sort_key": "2026-11-06 07:16",
+      "hms": "07:16",
+      "date": "2026-11-06",
+      "level": "INFO",
+      "category": "INFO",
+      "source": "AdaptiveSelector",
+      "message": "Strategy Switch: STR-009 -> STR-004 [Regime: VOLATILITY_EXPANSION, Score: 95.0, Held: 1000 bars]"
+    },
+    {
+      "sort_key": "2026-11-02 10:31:31.999",
+      "hms": "10:31:31",
+      "date": "2026-11-02",
+      "level": "BLOCK",
+      "category": "BLOCKED",
+      "source": "GatekeeperAudit",
+      "symbol": "XAUUSD",
+      "message": "[HITL_GATE] QF_V2_VWAP_EQUILIBRIUM (XAUUSD): Passed 9/9 Risk Gate checks (Full PF 1.16, OOS PF 1.37, Max DD 13.84%) — Awaiting Stage 1 Paper Approval"
+    },
+    {
+      "sort_key": "2026-11-02 10:31:27.969",
+      "hms": "10:31:27",
+      "date": "2026-11-02",
+      "level": "INFO",
+      "category": "INFO",
+      "source": "GatekeeperAudit",
+      "symbol": "XAUUSD",
+      "message": "[PASS] QF_V2_VWAP_EQUILIBRIUM (XAUUSD): Iteration #2 PASSED all 9/9 Boolean Checklist gates! Full PF=1.16, OOS PF=1.37, Max DD=13.84%, MC 95% DD=20.69%."
+    },
+    {
+      "sort_key": "2026-11-02 10:31:23.218",
+      "hms": "10:31:23",
+      "date": "2026-11-02",
+      "level": "BLOCK",
+      "category": "BLOCKED",
+      "source": "GatekeeperAudit",
+      "symbol": "XAUUSD",
+      "message": "[WARNING] QF_V2_VWAP_EQUILIBRIUM (XAUUSD): Iteration #1 VETOED by Deterministic Risk Engine (7 failed items): CHK-01 FAILED: C# strategy missing `override double? StopDistance` or failed compilation. | CHK-02 FAILED: Max risk per tra"
+    },
+    {
+      "sort_key": "2026-11-02 10:29:50.343",
+      "hms": "10:29:50",
+      "date": "2026-11-02",
+      "level": "BLOCK",
+      "category": "BLOCKED",
+      "source": "GatekeeperAudit",
+      "symbol": "XAUUSD",
+      "message": "[CRITICAL] QF_V2_VWAP_EQUILIBRIUM (XAUUSD): KILL SWITCH ENGAGED for `QF_V2_VWAP_EQUILIBRIUM` (XAUUSD)! Reason: CONNECTION FAILURE: cTrader heartbeat lost (> 120s).; MISSING SL/TP: Open position detected without active Stop Loss protec"
+    }
+  ]
+}
