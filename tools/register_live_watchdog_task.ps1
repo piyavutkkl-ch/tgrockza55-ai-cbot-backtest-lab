@@ -17,7 +17,7 @@ $Trigger = New-ScheduledTaskTrigger -AtLogOn
 $Settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -ExecutionTimeLimit (New-TimeSpan -Days 365) -RestartCount 5 -RestartInterval (New-TimeSpan -Minutes 1)
 
 try {
-    Register-ScheduledTask -TaskName $TaskName -Action $Action -Trigger $Trigger -Settings $Settings -Description "24/7 cTrader Live Recorder & Fleet Watchdog" -Force
+    Register-ScheduledTask -TaskName $TaskName -Action $Action -Trigger $Trigger -Settings $Settings -Description "24/7 cTrader Live Recorder & Fleet Watchdog" -Force -ErrorAction Stop
     Write-Host "Successfully registered $TaskName in Task Scheduler!" -ForegroundColor Green
 } catch {
     Write-Host "Could not register Task Scheduler task automatically (Requires Admin): $_" -ForegroundColor Yellow
