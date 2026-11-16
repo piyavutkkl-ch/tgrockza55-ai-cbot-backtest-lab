@@ -122,14 +122,6 @@ namespace cAlgo.Robots
                 {
                     Bot.Print("REGIME_ADAPTIVE_V5 MarketDepth warning: {0}", e.Message);
                 }
-
-                try
-                {
-                    var ticks = Bot.MarketData.GetTicks();
-                    if (ticks != null)
-                        _flow.WarmFromHistory(ticks, Bot.Server.TimeInUtc);
-                }
-                catch { }
             }
 
             Bot.Print(string.Format(
