@@ -17,15 +17,15 @@
 
 ## 2. Parallel Demo A/B Comparison (`#5258778` Live Forward)
 
-* **Updated (UTC):** `2026-11-16T18:28:39.391581+00:00`
-* **Active C# Strategy on Demo `#5258778`:** `REGIME_ADAPTIVE_V5` (Version `3`) · **Last Action:** `NONE`
-* **A/B Verdict:** `PARITY_MONITOR_V3` — REGIME_ADAPTIVE_V5 performing within parity tolerance (9 trades, Net +0.12 USD).
-* **Cumulative Demo Account (`truth_guard.json`):** Balance `$123.51 USD` · Closed `N=137` · Net `+23.51 USD` · PF `1.18`
+* **Updated (UTC):** `2026-11-16T18:50:30.239780+00:00`
+* **Active C# Strategy on Demo `#5258778`:** `DOM_ABSORPTION` (Version `2`) · **Last Action:** `AUTO_ROLLED_BACK_TO_V2_DOM_ABSORPTION`
+* **A/B Verdict:** `AUTO_ROLLBACK` — REGIME_ADAPTIVE_V5 underperformed DOM_ABSORPTION over 10 Demo trades (Exp -0.605 vs +0.043, PF 0.53 vs 1.04) -> Auto-Rollback to V2.
+* **Cumulative Demo Account (`truth_guard.json`):** Balance `$117.34 USD` · Closed `N=138` · Net `+17.34 USD` · PF `1.13`
 
 | Model Variant | Status on Demo `#5258778` | Closed Trades | Win Rate | Profit Factor | Expectancy / Trade | Net PnL (USD) | Max DD (USD) |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
 | **Baseline: `DOM_ABSORPTION v2`** | Rollback Snapshot Saved | 109 | 41.3% | 1.04 | +0.0431 | +4.70 | 31.66 |
-| **Challenger: `REGIME_ADAPTIVE_V5 v3`** | Active Forward Candidate | 9 | 33.3% | 1.02 | +0.0133 | +0.12 | 3.39 |
+| **Challenger: `REGIME_ADAPTIVE_V5 v3`** | Active Forward Candidate | 10 | 30.0% | 0.53 | -0.6050 | -6.05 | 9.56 |
 
 ---
 
@@ -34,3 +34,4 @@
 | Timestamp (UTC) | Action | From ➔ To | Rationale / Hypothesis |
 | :--- | :--- | :--- | :--- |
 | `2026-11-16T16:38:36` | `DEPLOY_V3_ON_DEMO` | `DOM_ABSORPTION v2` ➔ `REGIME_ADAPTIVE_V5 v3` | Phase 2 OOS Matrix proved 7-zone Regime/ATR/Zone-End adaptation reduces rollover & transition losses vs static DOM_ABSORPTION V2. |
+| `2026-11-16T18:50:30` | `AUTO_ROLLBACK_TO_V2` | `REGIME_ADAPTIVE_V5 v3` ➔ `DOM_ABSORPTION v2` | REGIME_ADAPTIVE_V5 underperformed DOM_ABSORPTION over 10 Demo trades (Exp -0.605 vs +0.043, PF 0.53 vs 1.04) -> Auto-Rollback to V2. |

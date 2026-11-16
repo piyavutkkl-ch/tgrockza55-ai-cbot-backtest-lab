@@ -1,8 +1,8 @@
 {
   "schema_version": "5.0.0-DEMO-DEPLOYMENT",
   "account_quarantine": "Pepperstone Demo #5258778",
-  "active_strategy_code": "REGIME_ADAPTIVE_V5",
-  "active_version": 3,
+  "active_strategy_code": "DOM_ABSORPTION",
+  "active_version": 2,
   "baseline_strategy_code": "DOM_ABSORPTION",
   "baseline_version": 2,
   "baseline_live_json": {
@@ -73,12 +73,20 @@
       "baseline_trades_at_switch": 109,
       "baseline_net_usd_at_switch": 4.7,
       "live_json_written": true
+    },
+    {
+      "timestamp_utc": "2026-11-16T18:50:30.239780+00:00",
+      "action": "AUTO_ROLLBACK_TO_V2",
+      "from": "REGIME_ADAPTIVE_V5 v3",
+      "to": "DOM_ABSORPTION v2",
+      "hypothesis": "REGIME_ADAPTIVE_V5 underperformed DOM_ABSORPTION over 10 Demo trades (Exp -0.605 vs +0.043, PF 0.53 vs 1.04) -> Auto-Rollback to V2.",
+      "live_json_written": true
     }
   ],
   "ab_evaluation": {
-    "verdict": "PARITY_MONITOR_V3",
-    "should_rollback": false,
-    "reason": "REGIME_ADAPTIVE_V5 performing within parity tolerance (9 trades, Net +0.12 USD).",
+    "verdict": "AUTO_ROLLBACK",
+    "should_rollback": true,
+    "reason": "REGIME_ADAPTIVE_V5 underperformed DOM_ABSORPTION over 10 Demo trades (Exp -0.605 vs +0.043, PF 0.53 vs 1.04) -> Auto-Rollback to V2.",
     "baseline": {
       "trades": 109,
       "wins": 45,
@@ -111,18 +119,18 @@
       }
     },
     "challenger": {
-      "trades": 9,
+      "trades": 10,
       "wins": 3,
-      "losses": 6,
-      "win_rate_pct": 33.3,
+      "losses": 7,
+      "win_rate_pct": 30.0,
       "gross_win_usd": 6.96,
-      "gross_loss_usd": 6.84,
-      "net_pnl_usd": 0.12,
-      "profit_factor": 1.02,
-      "expectancy_usd": 0.0133,
-      "max_dd_usd": 3.39,
+      "gross_loss_usd": 13.01,
+      "net_pnl_usd": -6.05,
+      "profit_factor": 0.53,
+      "expectancy_usd": -0.605,
+      "max_dd_usd": 9.56,
       "first_trade_utc": "2026-11-16 16:57:19.275",
-      "last_trade_utc": "2026-11-16 18:28:38.264",
+      "last_trade_utc": "2026-11-16 18:50:30.271",
       "by_symbol": {
         "BTCUSD": {
           "trades": 3,
@@ -135,14 +143,14 @@
           "net_pnl_usd": -0.24
         },
         "XAUUSD": {
-          "trades": 3,
+          "trades": 4,
           "wins": 2,
-          "net_pnl_usd": 2.63
+          "net_pnl_usd": -3.54
         }
       }
     }
   },
-  "updated_at_utc": "2026-11-16T18:28:39.391581+00:00",
+  "updated_at_utc": "2026-11-16T18:50:30.239780+00:00",
   "build_verified": true,
-  "last_action": "NONE"
+  "last_action": "AUTO_ROLLED_BACK_TO_V2_DOM_ABSORPTION"
 }
