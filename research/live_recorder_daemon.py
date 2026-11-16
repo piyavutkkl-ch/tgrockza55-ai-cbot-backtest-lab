@@ -66,7 +66,7 @@ def is_market_open(symbol):
     return True
 
 class SymbolSupervisor:
-    def __init__(self, symbol, max_inactivity_sec=180, warmup_timeout_sec=300):
+    def __init__(self, symbol, max_inactivity_sec=120, warmup_timeout_sec=300):
         self.symbol = symbol
         self.max_inactivity_sec = max_inactivity_sec
         self.warmup_timeout_sec = warmup_timeout_sec
@@ -245,9 +245,9 @@ def run_watchdog():
     print("================================================================================")
 
     supervisors = {
-        'BTCUSD': SymbolSupervisor('BTCUSD', max_inactivity_sec=180, warmup_timeout_sec=300),
-        'ETHUSD': SymbolSupervisor('ETHUSD', max_inactivity_sec=180, warmup_timeout_sec=300),
-        'XAUUSD': SymbolSupervisor('XAUUSD', max_inactivity_sec=300, warmup_timeout_sec=300)
+        'BTCUSD': SymbolSupervisor('BTCUSD', max_inactivity_sec=120, warmup_timeout_sec=300),
+        'ETHUSD': SymbolSupervisor('ETHUSD', max_inactivity_sec=120, warmup_timeout_sec=300),
+        'XAUUSD': SymbolSupervisor('XAUUSD', max_inactivity_sec=120, warmup_timeout_sec=300)
     }
 
     # Initial start

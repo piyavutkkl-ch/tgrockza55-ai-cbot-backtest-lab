@@ -1,49 +1,40 @@
-# cBot Backtest Lab — คู่มือสำหรับ Claude
+# cBot Backtest Lab — คู่มือสถาปัตยกรรมและ AI V5
 
-โปรเจกต์ส่วนตัว: cBot ของ cTrader รัน backtest หลายทฤษฎี ส่งผลขึ้น Supabase (สรุป) + Google Drive (trades/equity เต็ม)
-และแสดงบนเว็บ GitHub Pages ผู้ใช้สื่อสารภาษาไทย ตอบเป็นภาษาไทย
+> **กฎกลางบังคับอ่านก่อนทำงานทุกครั้ง:** [`GEMINI.md`](GEMINI.md) · [`AGENTS.md`](AGENTS.md)  
+> **แผนที่ระบบ:** [`CURRENT_STATE_MAP.md`](CURRENT_STATE_MAP.md) · [`FUTURE_STATE_MAP.md`](FUTURE_STATE_MAP.md)  
+> **อัปเดตสถาปัตยกรรม:** ยกเลิก Supabase Auth, Edge Function `lab`, Google Drive Upload, `old-web` และ `docs/app.js` แล้ว — เว็บปัจจุบันคือ 8-Page Read-Only Portal (`piyavutkkl-ch/tgrockza55-ai-cbot-backtest-lab`) ผู้ใช้สื่อสารภาษาไทย ตอบเป็นภาษาไทย
 
-## โครงสร้าง
+## โครงสร้างหลัก (V5 Current)
 
 ```
+GEMINI.md / AGENTS.md        กฎกลาง 5 หมวด (AI ต้องอ่านและตรวจ Conflict ก่อนแก้ไขทุกครั้ง)
+CURRENT_STATE_MAP.md         ภาพรวมสถานะระบบและข้อมูลสด ณ ปัจจุบัน
+FUTURE_STATE_MAP.md          พิมพ์เขียวสถาปัตยกรรม Multi-Agent, Hybrid Merger & Human Decide
 cbot/BacktestLab/            ซอร์ส cBot (C#, cTrader Automate .NET 6)
-  BacktestLab.cs             Robot หลัก: พารามิเตอร์, เปิด/ปิดออเดอร์, สร้างรายงาน, EquityRecorder
+  BacktestLab.cs             Robot หลัก: พารามิเตอร์, Stealth RAM SL, Equity/Order Control
   StrategyBase.cs            ฐานของทุกทฤษฎี + ค้นหาคลาสด้วย reflection จาก Code
-  Strategies/*.cs            หนึ่งไฟล์ = หนึ่งทฤษฎี (Code ขึ้นต้น CH_ = ทฤษฎีกราฟ ใช้ราคาอย่างเดียว)
-  Strategies/DataExport.cs   เครื่องมือ (ไม่ใช่ทฤษฎี): ส่งออกแท่งราคาเป็น CSV ไม่ส่งผลขึ้น lab
-  SwingTracker.cs            หาจุดสวิงสูง/ต่ำแบบไม่มี look-ahead ใช้ร่วมกันในทฤษฎีกราฟ
-  Reporter.cs                POST ไป /ingest, เก็บ pending เมื่อส่งไม่ได้
-  LiveRecorder.cs            บันทึกตลาดสดตอนรันบน Demo (tick, DOM, สรุปรายนาที, ออเดอร์) — ดูหัวข้อ "รันสดบนบัญชี Demo"
-  FlowTracker.cs             volume profile, anchored VWAP, delta/CVD, liquidity sweep แบบเรียลไทม์จากทุก tick (ต้องตรงกับ research\Phase1\Flow.cs)
-supabase/schema.sql          ตาราง strategies, backtest_runs, view strategy_stats + RLS
-supabase/migrations/*.sql    ส่วนเพิ่มของ schema (เช่น backtest_jobs) — ผู้ใช้รันใน SQL Editor ทีละไฟล์
-supabase/functions/lab/      Edge Function: /ingest, /progress, /runs, /runs/:id (GET, DELETE), /runs/:id/file, /health
-docs/                        เว็บ (GitHub Pages): summary (สรุป), index, run, strategies, chart (ทฤษฎีกราฟ), daystudy (สถิติรายวัน) + app.js, config.js
-docs/data/daystudy-*.json    ผลสถิติรายวัน (สร้างโดย tools\day-study.ps1; เป็นไฟล์สาธารณะ)
-docs/ha-examples.js          ภาพตัวอย่างวิธีทายทิศแท่ง Heikin Ashi บนหน้า summary (สองจังหวะ: ตอนทาย / เมื่อแท่งจบ) — ข้อมูลจริงจาก
-                             docs/data/ha-examples.json ซึ่ง `Phase1.exe study:ha` เขียนให้; ไม่พึ่ง app.js จึงดูได้โดยไม่ล็อกอิน
-tools/serve-docs.ps1         เซิร์ฟเวอร์ในเครื่อง (http://localhost:8123/) สำหรับดูหน้าเว็บก่อน push; หน้าทดสอบที่ไม่ต้องล็อกอินอยู่ใน tools/preview/
-                             (ใช้กับ preview ของ Claude ผ่าน .claude/launch.json ชื่อ docs-preview)
-tools/sync-cbot.ps1          ก๊อปซอร์สไป Documents\cAlgo\Sources\Robots\BacktestLab\BacktestLab + สร้าง config
-tools/backtest.ps1           รัน backtest 1 รอบผ่าน cTrader CLI (เพิ่ม -Build เพื่อ sync + build ก่อน)
-tools/day-study.ps1          สถิติ "วันนี้ของสัปดาห์ + ทรงนี้ → ขึ้น/ลงกี่ %" จาก CSV ของ DATA_EXPORT (-From/-To จำกัดช่วง)
-tools/exit-study.ps1         วิจัยการออกจากเทรด: จำลองแผนการออกบนแท่ง M1 จากรายงานที่เก็บในเครื่อง
-.mcp.json                    เชื่อม MCP ของ cTrader (project scope)
+  Strategies/*.cs            กลยุทธ์ C# (เช่น DomWallAbsorption.cs, QuantExtremeReversal.cs ฯลฯ)
+  LiveRecorder.cs            บันทึกตลาดสดลง %LOCALAPPDATA%\BacktestLab\live (tick, DOM 25 ชั้น, flow, trades)
+  FlowTracker.cs             volume profile, anchored VWAP, delta/CVD, liquidity sweep
+docs/                        เว็บ 8-Page Read-Only Portal บน GitHub Pages (`piyavutkkl-ch`):
+                             index.html, data-center.html, research-lab.html, experiment-lab.html,
+                             intelligence.html, improvement-audit.html, archive-system.html, database.html
+docs/data/*.json             ไฟล์สรุป Telemetry, Truth Guard, Evolution, Data Center feeds
+research/                    สคริปต์วิจัย Python, 24/7 Watchdog (live_recorder_daemon.py), live_status_sync.py
+quant_fund/ & quant_fund_v2/ โมดูล Multi-Agent V2 & SQLite Memory Store
+tools/                       Build pipelines (build_*.py), xau backtests, verify_8page_ui.py, test_ctrader_mcp.py
+.mcp.json                    เชื่อม MCP ของ cTrader Desktop (`http://127.0.0.1:9876/mcp/`)
 ```
 
-## เพิ่มทฤษฎีใหม่ (งานที่ผู้ใช้จะขอบ่อยที่สุด)
+## เพิ่ม/ปรับกลยุทธ์บน Demo (Rule V5 Checklist)
 
-1. สร้าง `cbot/BacktestLab/Strategies/<ชื่อ>.cs` คลาส inherit `StrategyBase` (ดูตัวอย่าง `EmaCross.cs`, `RsiReversal.cs`)
-2. ต้องกำหนด: `Code` (ตัวพิมพ์ใหญ่_ขีดล่าง ไม่ซ้ำ), `Name`, `Theory` (ภาษาไทย อธิบายว่าทำไมควรได้ผล),
-   `ParamNames` (ความหมายของ P1..P4 สูงสุด 4 ตัว), `EntryRules`/`ExitRules` (ภาษาไทย ใช้ `{ชื่อพารามิเตอร์}` แทนค่า),
-   `OnInit()` (สร้าง indicator จาก `Bot.Indicators`), `Signal()` (คืน Buy/Sell/null โดยดูแท่งที่ปิดแล้ว `.Last(1)`)
-3. ทางเลือก: `ShouldExit(Position)`, `ExitOnOppositeSignal`
-4. ห้ามแก้ตรรกะทฤษฎีเดิมโดยไม่เพิ่ม `Version` (ผลเก่าผูกกับเวอร์ชันเดิมในฐานข้อมูล)
-5. หลีกเลี่ยง look-ahead: ห้ามใช้ `.LastValue` ของแท่งที่ยังไม่ปิดในการตัดสินใจ
-6. Build + backtest: ถ้าเครื่องมี cTrader CLI ให้ใช้ `tools\backtest.ps1 -Build ...` (ดูหัวข้อถัดไป)
-   ถ้าไม่มี ให้รัน `tools\sync-cbot.ps1` แล้วบอกผู้ใช้ให้กด Build + ตั้งค่า backtest ใน cTrader เอง
-7. `git commit` + `git push` ได้เลยโดยไม่ต้องถาม (ผู้ใช้อนุญาตแล้ว: เว็บนี้เป็นข้อมูลแสดงอย่างเดียว) แล้วรายงานว่า push อะไรไป
-   ยกเว้น: ห้ามมีความลับในไฟล์, การลบ run และการ deploy Edge Function ยังให้ผู้ใช้ทำเอง
+1. อ่าน [`GEMINI.md`](GEMINI.md) + [`CURRENT_STATE_MAP.md`](CURRENT_STATE_MAP.md) + [`FUTURE_STATE_MAP.md`](FUTURE_STATE_MAP.md) ก่อนแก้ไขเสมอ (หากแนวทางขัดกฎหลัก 5 หมวด ต้องขอให้ Human Decide เพื่ออัปเดตกฎก่อนแก้โค้ด)
+2. สร้างหรือแก้ `cbot/BacktestLab/Strategies/<ชื่อ>.cs` คลาส inherit `StrategyBase` (ดู `DomWallAbsorption.cs`, `EmaCross.cs`)
+3. กำหนด `Code`, `Name`, `Theory`, `ParamNames`, `EntryRules`/`ExitRules`, `OnInit()`, `Signal()` (ใช้แท่งที่ปิดแล้ว `.Last(1)` ห้าม Lookahead)
+4. **Demo Autonomous Update & Rollback:** AI ปรับ/Deploy ตรรกะบน Demo `#5258778` ได้เลย แต่ต้องขยับ `Version` + บันทึกเหตุผล/สมมติฐานลง Repo + รันเทียบขนานกับของเดิม และ Rollback ทันทีถ้าของเดิมดีกว่า
+5. ห้ามล็อกเลข Risk/SL/Daily Flat ตายตัวแบบครอบจักรวาล ให้ปรับหาค่าที่เหมาะกับกลยุทธ์, สถานการณ์, และ Session/ตารางตลาดของสินทรัพย์นั้น (และตอน Backtest สามารถทดลองแบบไม่มี SL เพื่อศึกษาจุดแตกได้หากบันทึกสาเหตุครบ)
+6. Build + Sync: ใช้ `tools\backtest.ps1 -Build ...` หรือ `tools\sync-cbot.ps1` (ใช้บัญชี Demo `#5258778` เท่านั้น ไม่มีเงื่อนไขสวิตช์เข้า Live)
+7. `git commit` + `git push` ขึ้น `piyavutkkl-ch` ได้โดยไม่ต้องถามซ้ำ แล้วรายงานผลจริงพร้อมอัปเดต State Map/JSON ให้เว็บตรงความจริงเสมอ
 8. cAlgo.API มีชนิดชื่อซ้ำกับ .NET (`File`, `HttpMethod`) — ถ้าใช้ `System.IO` / `System.Net.Http` ให้ใส่ `using X = ...;` กำกับ
 9. จัดรูปแบบวันที่/ตัวเลขเป็นข้อความต้องใส่ `CultureInfo.InvariantCulture` เสมอ (เครื่องภาษาไทยจะได้ปี พ.ศ.)
 
@@ -233,34 +224,11 @@ powershell -ExecutionPolicy Bypass -File tools\backtest.ps1 -Strategy EMA_CROSS 
 ใช้ได้เมื่อ: cTrader เปิดและล็อกอินอยู่, Settings → MCP Server → Enable (ไม่เปิด Allow trading), และเปิด Claude ในโฟลเดอร์ repo แล้วอนุมัติใน `/mcp`
 ใช้สำหรับอ่านข้อมูล (บัญชี, symbol, ราคา) เท่านั้น ห้ามส่งคำสั่งเทรด — การรัน backtest ให้ใช้ `tools\backtest.ps1`
 
-## วิเคราะห์ผลที่มีอยู่
+## วิเคราะห์ผล & ข้อห้าม (V5 Active Rules)
 
-ค่าเชื่อมต่ออยู่ใน `Documents\BacktestLab\config.json` บนเครื่องผู้ใช้ (`apiUrl`, `ingestKey`) — ห้าม commit หรือพิมพ์ key ลงแชท/ไฟล์ใน repo
-
-```bash
-# รายการผลสรุปล่าสุด (มีทฤษฎีและพารามิเตอร์ติดมาด้วย)
-curl -s -H "x-ingest-key: $KEY" "$API/runs?limit=200"
-# กรอง: ?strategy=EMA_CROSS  ?symbol=EURUSD
-# รายละเอียด 1 run
-curl -s -H "x-ingest-key: $KEY" "$API/runs/42"
-# trades + equity เต็มจาก Drive
-curl -s -H "x-ingest-key: $KEY" "$API/runs/42/file"
-# ลบ run (แถวใน DB + ไฟล์ Drive ลงถังขยะ) — ถามผู้ใช้ก่อนทุกครั้ง; บนเว็บมีปุ่ม "ลบรอบทดสอบนี้" ในหน้า run
-curl -s -X DELETE -H "x-ingest-key: $KEY" "$API/runs/42"
-```
-
-ฟิลด์สำคัญของ run: `net_profit`, `win_rate` (%), `profit_factor`, `max_dd_pct` (%), `total_trades`, `params`,
-`date_from`/`date_to`, `strategy.{code,version,theory,entry_rules}`
-ไฟล์ Drive: `trades[]` = `{id, side, entryTime, exitTime, entryPrice, exitPrice, volume, pips, gross, commissions, swap, net, sl?, tp?, tag?,
-bars?: [[unix, o, h, l, c], ...], example?}` — `bars` แนบทุกเทรด (รวมไม่เกิน 50,000 แท่งต่อรอบ; เกินแล้วเทรดเก่าสุดไม่มี) ให้หน้า run กดแถวแล้วเห็นกราฟ,
-`equity[]` = `[unixSeconds, equity]`
-
-เวลาวิเคราะห์ให้เทียบ: ผลต่อ symbol/timeframe, ความไวต่อพารามิเตอร์, จำนวนเทรดพอมีนัยสำคัญไหม (< 30 เทรด = เชื่อถือน้อย),
-in-sample vs out-of-sample (แนะนำให้ผู้ใช้แยกช่วงวัน), และเตือนเรื่อง overfitting เสมอ
-
-## ข้อห้าม
-
-- ห้ามใส่ `INGEST_KEY`, service role key, Google client secret หรือ refresh token ลงใน repo
-- `docs/config.js` มีได้แค่ Supabase URL + anon/publishable key (ค่าสาธารณะ)
-- ข้อมูลเข้า DB ได้ทาง Edge Function เท่านั้น (RLS ไม่มี policy insert) — แก้ schema ให้เพิ่มไฟล์ migration ใหม่ใน `supabase/` แล้วบอกผู้ใช้ให้รันใน SQL Editor
-- Edge Function แก้แล้วผู้ใช้ต้องวางโค้ดใหม่ใน Dashboard (หรือ `supabase functions deploy lab --no-verify-jwt`)
+- ข้อมูลเทรดสดและโครงสร้าง L2 DOM เก็บใน `%LOCALAPPDATA%\BacktestLab\live` และสรุปขึ้น [`docs/data/`](docs/data/) (`truth_guard.json`, `dc_meta.json`, `live_status.json`)
+- เวลาวิเคราะห์ให้รายงานตรงตามความจริงแยกราย **สถานการณ์ (Regime) x เซสชัน (`ASIA`, `LONDON`, `NY`, `OVERNIGHT` + รอยต่อข้าม Session)** พร้อมระบุ Out-of-Sample Robustness และสาเหตุของความล้มเหลว/พอร์ตจำลองแตก (ไม่ต้องรอเกณฑ์ N>=500)
+- **ห้ามเด็ดขาด:**
+  - ห้ามใส่ `INGEST_KEY`, `ctidFile`, `pwdFile`, รหัสผ่านบัญชี หรือคีย์ส่วนตัวลงใน Git Repo หรือข้อความแชท
+  - ห้ามเปิดใช้งานบัญชีเงินจริงโดยเด็ดขาด (`#5258778` Demo Sandbox เท่านั้น)
+  - ห้ามรันคำสั่ง `supabase` หรือสร้างโค้ดเชื่อม Supabase Auth / Edge Function `lab` กลับมาในเว็บใหม่อีก (ยกเลิกแล้ว)

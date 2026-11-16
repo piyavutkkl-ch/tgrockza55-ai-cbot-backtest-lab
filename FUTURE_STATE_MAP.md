@@ -1,0 +1,50 @@
+# 🚀 FUTURE STATE MAP (`cbot-atgvt` — เป้าหมายสถาปัตยกรรม V5)
+
+> เอกสารนี้คือ **"พิมพ์เขียวเป้าหมายในอนาคต"** เพื่อให้ AI ทุกตัวเห็นภาพเดียวกันว่ากำลังพัฒนาระบบไปทางไหน (อ้างอิงกฎจาก [`GEMINI.md`](GEMINI.md))
+
+---
+
+## 🎯 เป้าหมายสูงสุด (North Star)
+สร้างระบบ **Regime-Aware Autonomous Trading & Research Ecosystem บนบัญชี Demo** ที่สามารถ:
+1. ดึงข้อมูลครบถ้วนทั้งจาก cTrader (OHLCV/Sessions) และ L2 DOM / Order Flow สด 24/7
+2. อ่านสถานการณ์ตลาดปัจจุบันและรอยต่อของแต่ละ Session ให้ออก
+3. เลือกกลยุทธ์ + พารามิเตอร์ (SL/TP/Sizing/Flat Time) ที่ทนทานต่อ Out-of-Sample เข้ากับสถานการณ์นั้น
+4. ทดลองเปลี่ยนตรรกะบน Demo แบบขนานพร้อม Rollback อัตโนมัติเมื่อของเดิมดีกว่า และส่งต่อรายงานสถานการณ์จริงให้ Human ตัดสินใจเมื่อถึงเกณฑ์สำคัญ
+
+---
+
+## 🏗️ 4 เสาหลักของระบบเป้าหมาย (Target Pipeline & Modules)
+
+### Phase 1: Smart Hybrid Data & Sanitizer Pipeline
+* **cTrader Historical Auto-Checker & Fetcher:**
+  * เช็กอัตโนมัติว่าข้อมูลไหนดึงจาก cTrader (`get_trendbars`, `get_symbol_sessions`) ได้ ➔ โหลดและแคชเฉพาะส่วนที่ขาด
+  * Watchdog 24/7 (Timeout **120 วินาที**) เก็บเฉพาะสิ่งที่ cTrader ไม่มี (`L2 DOM 25 ชั้น`, `Bid/Ask Real Spreads`, `Order Flow Delta/CVD`, `Execution Slippage/Latency`)
+* **Hybrid Data Merger + Demo Sanitizer:**
+  * Merge แท่งราคา & Session จาก cTrader เข้ากับ DOM/Flow/Spread ใน `%LOCALAPPDATA%\BacktestLab\live` ตาม UTC Timestamp
+  * คัดกรองตัดแถว `NaN`, แถวสเปรดเพี้ยน, หรือช่องโหว่การบันทึกออกจากชุดจำลอง **โดยไม่สั่งหยุดเก็บข้อมูลหรือหยุดเทรดใน Demo**
+
+### Phase 2: Session-Partitioned Regime & Forensic Strategy Engine
+* **Session & Transition Segmentation Engine:**
+  * แยกค้นหาสถานการณ์ (Regimes) และพัฒนา/ทดสอบกลยุทธ์แยกขาดเป็น 7 โซน:
+    `ASIA` · `ASIA→LONDON (Transition)` · `LONDON` · `LONDON→NY (Transition)` · `NY` · `NY→CLOSE (Transition)` · `OVERNIGHT`
+* **Adaptive Optimization Engine (No Fixed Numbers):**
+  * ปลดล็อกให้ AI ค้นหา SL, RR, Breakeven, Position Limit, Risk %, และ Session-Specific Flat Time ที่เหมาะกับ **แต่ละกลยุทธ์ x สถานการณ์ x สินทรัพย์**
+* **Blowup & Failure Forensic Logger (แทนการแบนถาวร):**
+  * อนุญาตให้ Backtest กลยุทธ์ที่ไม่มี SL หรือปล่อยจำลองพอร์ตแตกได้ **เพื่อเก็บข้อมูล Forensic**: *"แตกเมื่อไหร่, เพราะสถานการณ์ใด, ควรเปลี่ยนไปใช้กลยุทธ์ไหน หรือจับสัญญาณอะไรล่วงหน้า"*
+  * เก็บทุกกลยุทธ์ลง **Regime Strategy Matrix** พร้อมป้ายกำกับ `"ใช้ได้ในสถานการณ์ X (ชนะ a/b ครั้ง +$PnL)"` vs `"หลีกเลี่ยงในสถานการณ์ Y"`
+* **Mandatory Out-of-Sample Robustness Gate:**
+  * กลยุทธ์ที่จะเลื่อนขั้นลง Demo ต้องผ่านการตรวจ OOS บนข้อมูลที่ไม่เคยเห็นในสถานการณ์เดียวกัน ไม่ใช่แค่ตัวเลข In-Sample สูงสุด
+
+### Phase 3: Multi-Agent Pipeline & Autonomous Demo Deployment / Rollback
+* **4 Specialized AI Agents ส่งงานต่อกันผ่าน Repo Structured Artifacts:**
+  1. **`Data Collector & Merger Agent`**: คุม cTrader API + Watchdog 120s + Hybrid Merge + Sanitization ➔ อัปเดต `Data Center` & `Database`
+  2. **`Research & Pattern Hunter Agent`**: อ่านเปเปอร์/ดึง SSRN & arXiv + ตรวจจับ Regime & Session Transition Patterns ➔ ส่งสมมติฐานเข้า `Research Lab`
+  3. **`Strategy Evolver & OOS Validator Agent`**: สวีปพารามิเตอร์ SL/Risk/Logic + ตรวจ OOS Anti-Overfit + วิเคราะห์สาเหตุจุดแตก ➔ บันทึกใน `Experiment Lab` & `Intelligence`
+  4. **`Audit, Demo Deploy & Reporter Agent`**: ปรับ C# cBot บน Demo (ขยับ `Version` + เก็บ Rollback Baseline), อัปเดต `CURRENT_STATE_MAP.md` & เว็บ 8 หน้า, และติดตามผลขนานระหว่างรุ่นใหม่กับรุ่นเดิม (**Rollback อัตโนมัติทันทีหากรุ่นเดิมดีกว่า**)
+* **Human-in-the-Loop Decision Gate (`DECISION_LOG.md`):**
+  * เมื่อถึงจุดตัดสินใจสำคัญ (การแก้กฎหลัก 5 หมวดใน `GEMINI.md`, สรุปส่งมอบรอบพัฒนาใหญ่, หรือการตัดสินใจย้อนกลับ/เปลี่ยนทิศทางสถาปัตยกรรม) AI จะจัดทำสรุป Trade-off พร้อมตัวเลขตรงไปตรงมาให้ **Human Decide** ก่อนดำเนินการ
+
+### Phase 4: เว็บ 8 หน้าโหมด 4 ขั้นตอนหลัก & Real-Time Situational Transparency
+* แสดงวงจร 4 ขั้นตอนหลักบนเว็บ 8 หน้า (`Data & Market Sync ➔ Research & Matching ➔ Test & Anti-Overfit ➔ Learn & State Evolution`)
+* แสดงตาราง **Accuracy by Situation & Session** แบบตรงไปตรงมา (เช่น `"เจอสถานการณ์ A 3 ครั้ง ชนะ 2/3 (+$X)"`) แทนตัวนับรอ 500 ไม้
+* ซิงก์ `CURRENT_STATE_MAP.md` และ `docs/data/*.json` ให้ตรงกันตลอดเวลา

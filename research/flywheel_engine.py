@@ -26,12 +26,11 @@ CYCLE_LEARNINGS_REGISTRY = {
 }
 
 CORE_TAKEAWAYS = [
-    "1. ข้อมูล L2 DOM 25 ชั้นและ Real Tick Spreads คือหัวใจสำคัญที่ไม่สามารถดึงย้อนหลังจากโบรคเกอร์ได้",
-    "2. Fading จุดกลับตัวตามกำแพงสภาพคล่อง (DOM Absorption) ในช่วงตลาด Asia ชนะตลาดต่อเนื่อง 100% ทุกวัน (PF 2.01)",
-    "3. การใช้ High Wall 0.05 ร่วมกับเซสชัน London ช่วยเอาชนะต้นทุน Spread Drag 79.5% บน ETHUSD ได้สำเร็จ",
-    "4. 4 เสาหลัก (Structural Anchor + Displacement CHoCH + News Void Gate + Dynamic SL 10-20 pips) เป็นรากฐานของความเสี่ยงจำกัด",
-    "5. กฎพัฒนาหน้าเว็บให้เป็นปัจจุบัน (Web Dashboard Freshness Mandate): ทุกการวิจัย รอบสวีป และสถานะบอทสด ต้องซิงค์ขึ้น Dashboard เสมอ",
-    "6. กฎความยืดหยุ่นในหมวด 3 และ 4 (Adaptive Strategy Evolution): ปรับเปลี่ยนกฎเข้าออกและพารามิเตอร์ได้ตลอดเวลาเมื่อพบโมเดลที่ทำกำไรได้ดีกว่า"
+    "1. ใช้ข้อมูลจริงผสมผสาน: ดึง OHLCV & Sessions จาก cTrader API และบันทึก L2 DOM 25 ชั้น + Real Spread + Order Flow สด 24/7 ด้วยตัวเอง (Watchdog กู้คืนทุก 120s)",
+    "2. ไม่มีกลยุทธ์ขยะ มีแต่กลยุทธ์ที่ถูก/ผิดสถานการณ์: เก็บทุกกลยุทธ์พร้อมป้าย Regime x Session (ห้ามแบนถาวร) และทดสอบ Out-of-Sample กัน Overfitting",
+    "3. ปรับ risk/SL/Flat ตามสถานการณ์จริงและแยกพัฒนาตาม Session (`ASIA`, `LONDON`, `NY`, `OVERNIGHT` + รอยต่อข้าม Session) ขยายกลยุทธ์ได้ไม่จำกัด",
+    "4. Demo-Only ถาวร (#5258778): ปรับตรรกะบน Demo ได้เลยพร้อมบันทึก Version & เทียบของเดิม (Rollback ทันทีหากของเดิมดีกว่า); Backtest ทดลองไร้ SL ได้เพื่อหาจุดแตก",
+    "5. Repo-First Governance (GEMINI.md + CURRENT_STATE_MAP.md + FUTURE_STATE_MAP.md): AI ต้องอ่านกฎก่อนแก้ไขทุกครั้ง และอัปเดตหน้าเว็บ 8 หน้าเสมอ (แก้กฎหลักต้อง Human Decide)"
 ]
 
 def get_accumulated_learnings(total_cycles):

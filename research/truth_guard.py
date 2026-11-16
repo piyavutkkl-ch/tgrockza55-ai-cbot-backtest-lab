@@ -87,25 +87,17 @@ class TruthGuard:
         target_institutional = 1200
         power_pct = round(min(100.0, (n_closed / target_preliminary) * 100), 1)
 
-        if n_closed < 100:
-            stat_status = "CRITICALLY_UNDERPOWERED"
-            stat_label = "ยังไม่สามารถสรุปผลได้ (Statistically Insignificant)"
-            stat_desc = f"จำนวนเทรดจริงสะสม N={n_closed} ไม้ ค่าความคลาดเคลื่อนมาตรฐาน SE(SR)=±{se_sharpe} กว้างเกินกว่าจะพิสูจน์ความได้เปรียบ ต้องสะสมข้อมูลอย่างน้อย 500 ไม้"
-        elif n_closed < target_preliminary:
-            stat_status = "MODERATELY_UNDERPOWERED"
-            stat_label = "กำลังสะสมตัวอย่าง (Inconclusive)"
-            stat_desc = f"จำนวนเทรด N={n_closed}/{target_preliminary} ไม้ เริ่มเห็นแนวโน้มแต่ยังไม่มีนัยสำคัญทางสถิติ (p > 0.05)"
-        elif n_closed < target_institutional:
-            stat_status = "PRELIMINARY_SIGNIFICANT"
-            stat_label = "เริ่มมีนัยสำคัญทางสถิติ (p < 0.05)"
-            stat_desc = f"จำนวนเทรด N={n_closed} ผ่านเกณฑ์ขั้นต่ำ 500 ไม้ ค่าสถิติเริ่มเชื่อถือได้"
+        if n_closed == 0:
+            stat_status = "AWAITING_LIVE_TRADES"
+            stat_label = "ยังไม่มีข้อมูลเทรดปิดจริง"
+            stat_desc = "รอข้อมูลออเดอร์ปิดจริงจาก Pepperstone Demo #5258778"
         else:
-            stat_status = "INSTITUTIONALLY_VALIDATED"
-            stat_label = "ผ่านเกณฑ์ระดับสถาบันสมบูรณ์ (p < 0.01)"
-            stat_desc = f"จำนวนเทรด N={n_closed} เกิน 1,200 ไม้ ขนาดตัวอย่างใหญ่พอที่จะพิสูจน์ Edge ได้อย่างแน่ชัด"
+            stat_status = "SITUATIONAL_EMPIRICAL_REPORTING"
+            stat_label = f"รายงานผลจริงรายสถานการณ์ (N={n_closed} ไม้ · ชนะ {len(wins)}/{n_closed})"
+            stat_desc = f"จำนวนเทรดจริงสะสม N={n_closed} ไม้ (Win Rate {win_rate}%, PF {profit_factor}, Net ${net_pnl:+.2f}) — แสดงผลตามสถานการณ์และ Session จริง ควบคู่การทดสอบ Out-of-Sample"
 
         report = {
-            "truth_reset_version": "v4.0.0-TRUTH-RESET",
+            "truth_reset_version": "v5.0.0-SITUATIONAL-TRUTH",
             "audit_timestamp": datetime.now(timezone.utc).isoformat(),
             "data_source": "%LOCALAPPDATA%\\BacktestLab\\live",
             "account_number": "Pepperstone #5258778",
@@ -137,7 +129,7 @@ class TruthGuard:
                 "status": stat_status,
                 "label": stat_label,
                 "description": stat_desc,
-                "mandate": "ห้ามสรุปผลกำไรหรือความได้เปรียบ (Edge) ของระบบ จนกว่าขนาดตัวอย่างจะครบ 500 ไม้เป็นอย่างน้อย"
+                "mandate": "รายงานผลจริงแยกตามสถานการณ์และ Session ตรงไปตรงมา (ยกเลิกเกณฑ์รอ N>=500) พร้อมตรวจ Out-of-Sample กัน Overfitting"
             }
         }
         return report

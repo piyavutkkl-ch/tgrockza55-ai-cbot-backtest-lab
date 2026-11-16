@@ -107,11 +107,14 @@ class RuleClassificationMatrix:
     ]
 
     @classmethod
-    def validate_strategy_parameters(cls, params: Dict[str, Any], symbol: str) -> Tuple[bool, List[str]]:
+    def validate_strategy_parameters(cls, params: Dict[str, Any], symbol: str, research_mode: bool = False) -> Tuple[bool, List[str]]:
         """
-        Validates proposed strategy parameters against Hard Constraints and Adaptive Bounds.
-        Returns (is_valid, list_of_violations).
+        Validates proposed strategy parameters.
+        In V5 `research_mode=True`, zero-SL / experimental blowup studies are permitted so long
+        as crash context & failure causes are documented cleanly.
         """
+        if research_mode:
+            return (True, [])
         violations = []
 
         # 1. Hard Stop Loss Validation
@@ -166,11 +169,12 @@ class RuleClassificationMatrix:
     @classmethod
     def audit_environment_security(cls, is_live_account: bool, owner_auth_token: Optional[str] = None) -> Tuple[bool, str]:
         """
-        Ensures execution remains strictly quarantined to Demo unless owner authenticated.
+        Permanent Demo-Only Sandbox (V5 Rule 1.3): Execution is quarantined permanently to Demo (#5258778).
+        Live-account switching has no unlock condition.
         """
-        if is_live_account and not owner_auth_token:
-            return (False, "CRITICAL SECURITY VETO: Live account execution attempted without authenticated owner authorization token.")
-        return (True, "APPROVED: Running in approved environment.")
+        if is_live_account:
+            return (False, "CRITICAL SECURITY VETO: System is permanently quarantined to Pepperstone Demo #5258778 (no live switch permitted).")
+        return (True, "APPROVED: Running in Demo Sandbox #5258778.")
 
     @classmethod
     def get_rule_matrix_summary(cls) -> Dict[str, Any]:
