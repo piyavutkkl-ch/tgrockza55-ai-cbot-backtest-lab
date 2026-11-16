@@ -15,13 +15,10 @@
 
 ## 🏗️ 4 เสาหลักของระบบเป้าหมาย (Target Pipeline & Modules)
 
-### Phase 1: Smart Hybrid Data & Sanitizer Pipeline
-* **cTrader Historical Auto-Checker & Fetcher:**
-  * เช็กอัตโนมัติว่าข้อมูลไหนดึงจาก cTrader (`get_trendbars`, `get_symbol_sessions`) ได้ ➔ โหลดและแคชเฉพาะส่วนที่ขาด
-  * Watchdog 24/7 (Timeout **120 วินาที**) เก็บเฉพาะสิ่งที่ cTrader ไม่มี (`L2 DOM 25 ชั้น`, `Bid/Ask Real Spreads`, `Order Flow Delta/CVD`, `Execution Slippage/Latency`)
-* **Hybrid Data Merger + Demo Sanitizer:**
-  * Merge แท่งราคา & Session จาก cTrader เข้ากับ DOM/Flow/Spread ใน `%LOCALAPPDATA%\BacktestLab\live` ตาม UTC Timestamp
-  * คัดกรองตัดแถว `NaN`, แถวสเปรดเพี้ยน, หรือช่องโหว่การบันทึกออกจากชุดจำลอง **โดยไม่สั่งหยุดเก็บข้อมูลหรือหยุดเทรดใน Demo**
+### ✅ Phase 1: Smart Hybrid Data & Sanitizer Pipeline *(COMPLETED — 16 พ.ย. 2026)*
+* **สร้างเสร็จแล้ว:** [`research/ctrader_mcp_client.py`](research/ctrader_mcp_client.py), [`research/hybrid_data_merger.py`](research/hybrid_data_merger.py), [`research/test_hybrid_data_merger.py`](research/test_hybrid_data_merger.py), [`docs/data/hybrid_data_audit.json`](docs/data/hybrid_data_audit.json)
+* **cTrader Historical Auto-Checker & Fetcher:** ดึง `get_trendbars` & `get_symbol_sessions` อัตโนมัติผ่าน MCP JSON-RPC และแคชในเครื่อง; Watchdog 24/7 เก็บ L2 DOM 25 ชั้น, Real Spreads, Order Flow และ Slippage
+* **Hybrid Data Merger + Demo Sanitizer:** Merge แท่งราคา cTrader เข้ากับ DOM/Flow ตาม UTC Timestamp, คัดกรองแถวเสีย/`NaN`/แถวผี `ticks=0` อัตโนมัติ (อัปเดตเข้า [`live_status_sync.py`](research/live_status_sync.py) & [`build_data_center.py`](tools/build_data_center.py) แล้ว) และติดแท็กครบทั้ง 7 Session/Transition zones (`ASIA`, `ASIA_TO_LONDON`, `LONDON`, `LONDON_TO_NY`, `NY`, `NY_TO_CLOSE`, `OVERNIGHT`)
 
 ### Phase 2: Session-Partitioned Regime & Forensic Strategy Engine
 * **Session & Transition Segmentation Engine:**

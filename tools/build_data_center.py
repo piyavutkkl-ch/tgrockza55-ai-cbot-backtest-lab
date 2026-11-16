@@ -17,11 +17,16 @@ import json
 import os
 import shutil
 import statistics
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List
 
 ROOT = Path(__file__).resolve().parent.parent
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from research.hybrid_data_merger import sanitize_live_minute_files
 REPO_LIVE_DIR = ROOT / "data" / "live"
 DOCS_DATA_DIR = ROOT / "docs" / "data"
 
@@ -174,13 +179,7 @@ def build_symbol(sym: str, cfg: Dict[str, Any]) -> Dict[str, Any]:
     min_files = sorted(sym_dir.glob("min-*.csv"))
     flow_files = sorted(sym_dir.glob("flow-*.csv"))
 
-    flow_map: Dict[str, Dict[str, str]] = {}
-    for fp in flow_files:
-        with fp.open("r", encoding="utf-8", errors="replace") as f:
-            for row in csv.DictReader(f):
-                tstr = (row.get("time") or "").strip()
-                if tstr:
-                    flow_map[tstr] = row
+    min_clean, flow_clean, _ = sanitize_live_minute_files(min_files, flow_files)
 
     bars: List[List[Any]] = []
     gaps: List[Dict[str, Any]] = []
@@ -197,73 +196,69 @@ def build_symbol(sym: str, cfg: Dict[str, Any]) -> Dict[str, Any]:
     tick_freqs: List[float] = []
     cadences_ms: List[float] = []
 
-    for mp in min_files:
-        with mp.open("r", encoding="utf-8", errors="replace") as f:
-            for row in csv.DictReader(f):
-                tstr = (row.get("time") or "").strip()
-                if not tstr:
-                    continue
-                t_sec = parse_utc_minute(tstr)
-                missing_before = 0
-                if prev_ts is not None:
-                    diff_min = int((t_sec - prev_ts) // 60)
-                    if diff_min > 1:
-                        missing_before = diff_min - 1
-                        gaps.append({
-                            "afterIndex": len(bars) - 1,
-                            "from": prev_time_str,
-                            "to": tstr,
-                            "missingBars": missing_before,
-                        })
+    for tstr in sorted(min_clean.keys()):
+        row = min_clean[tstr]
+        t_sec = int(row["ts_unix"])
+        missing_before = 0
+        if prev_ts is not None:
+            diff_min = int((t_sec - prev_ts) // 60)
+            if diff_min > 1:
+                missing_before = diff_min - 1
+                gaps.append({
+                    "afterIndex": len(bars) - 1,
+                    "from": prev_time_str,
+                    "to": tstr,
+                    "missingBars": missing_before,
+                })
 
-                fl = flow_map.get(tstr)
-                o = _f(row.get("open"), 0.0, 2)
-                h = _f(row.get("high"), 0.0, 2)
-                l = _f(row.get("low"), 0.0, 2)
-                c = _f(row.get("close"), 0.0, 2)
-                v = _i(row.get("tickVolume"), 0)
-                tk = _i(row.get("ticks"), 0)
-                sp = _f(row.get("spreadAvg"), 0.0, 4)
-                bv = _f(row.get("bidVol"), 0.0, 2)
-                av = _f(row.get("askVol"), 0.0, 2)
-                imb = _f(row.get("imbalance"), 0.0, 4)
-                du = _i(row.get("depthUpdates"), 0)
+        fl = flow_clean.get(tstr)
+        o = round(float(row["open"]), 2)
+        h = round(float(row["high"]), 2)
+        l = round(float(row["low"]), 2)
+        c = round(float(row["close"]), 2)
+        v = int(round(float(row["tickVolume"])))
+        tk = int(row["ticks"])
+        sp = round(float(row["spreadAvg"]), 4)
+        bv = round(float(row["bidVol"]), 2)
+        av = round(float(row["askVol"]), 2)
+        imb = round(float(row["imbalance"]), 4)
+        du = int(row["depthUpdates"])
 
-                if fl:
-                    d = _i(fl.get("delta"), 0)
-                    cvd = _i(fl.get("cvd"), last_cvd)
-                    vw = _f(fl.get("vwapDay"), c, 2)
-                    sd = _f(fl.get("sdDay"), 0.0, 2)
-                    poc = _f(fl.get("poc"), c, 2)
-                    vah = _f(fl.get("vah"), c, 2)
-                    val = _f(fl.get("val"), c, 2)
-                    lb = _f(fl.get("ladderBid"), cfg["domStep"] * 10, 3)
-                    la = _f(fl.get("ladderAsk"), cfg["domStep"] * 10, 3)
-                    last_cvd, last_vw, last_sd, last_poc, last_vah, last_val = cvd, vw, sd, poc, vah, val
-                else:
-                    d = 0
-                    cvd = last_cvd
-                    vw = last_vw or c
-                    sd = last_sd
-                    poc = last_poc or c
-                    vah = last_vah or c
-                    val = last_val or c
-                    lb = round(cfg["domStep"] * 10, 3)
-                    la = round(cfg["domStep"] * 10, 3)
+        if fl:
+            d = int(round(float(fl["delta"])))
+            cvd = int(round(float(fl["cvd"])))
+            vw = round(float(fl["vwapDay"]) if fl["vwapDay"] is not None else c, 2)
+            sd = round(float(fl["sdDay"]) if fl["sdDay"] is not None else 0.0, 2)
+            poc = round(float(fl["poc"]) if fl["poc"] is not None else c, 2)
+            vah = round(float(fl["vah"]) if fl["vah"] is not None else c, 2)
+            val = round(float(fl["val"]) if fl["val"] is not None else c, 2)
+            lb = round(float(fl["ladderBid"]) if fl["ladderBid"] is not None else cfg["domStep"] * 10, 3)
+            la = round(float(fl["ladderAsk"]) if fl["ladderAsk"] is not None else cfg["domStep"] * 10, 3)
+            last_cvd, last_vw, last_sd, last_poc, last_vah, last_val = cvd, vw, sd, poc, vah, val
+        else:
+            d = 0
+            cvd = last_cvd
+            vw = last_vw or c
+            sd = last_sd
+            poc = last_poc or c
+            vah = last_vah or c
+            val = last_val or c
+            lb = round(cfg["domStep"] * 10, 3)
+            la = round(cfg["domStep"] * 10, 3)
 
-                bars.append([
-                    t_sec, o, h, l, c, v, tk, d, cvd, sp, bv, av, imb, du,
-                    vw, sd, poc, vah, val, lb, la, missing_before
-                ])
+        bars.append([
+            t_sec, o, h, l, c, v, tk, d, cvd, sp, bv, av, imb, du,
+            vw, sd, poc, vah, val, lb, la, missing_before
+        ])
 
-                if sp > 0:
-                    spreads_all.append(sp)
-                tick_freqs.append(round(tk / 60.0, 2))
-                if du > 0:
-                    cadences_ms.append(round(60000.0 / du, 1))
+        if sp > 0:
+            spreads_all.append(sp)
+        tick_freqs.append(round(tk / 60.0, 2))
+        if du > 0:
+            cadences_ms.append(round(60000.0 / du, 1))
 
-                prev_ts = t_sec
-                prev_time_str = tstr
+        prev_ts = t_sec
+        prev_time_str = tstr
 
     trades = parse_trades(pc_sym_dir) if (pc_sym_dir and (pc_sym_dir / "trades.csv").exists()) else parse_trades(sym_dir)
     exec_latencies = [t["latencyMs"] for t in trades if t.get("latencyMs") is not None]

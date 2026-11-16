@@ -22,7 +22,7 @@
 | ประเภทข้อมูล | ที่จัดเก็บ | ปริมาณข้อมูลปัจจุบัน (16 พ.ย. 2026) | แหล่ง & สถานะ |
 | :--- | :--- | :--- | :--- |
 | **Live L2 DOM 25 ชั้น, Tick, Real Spread, Order Flow, Trades** | `%LOCALAPPDATA%\BacktestLab\live\<SYMBOL>\` *(Local Only ~95+ MB)* | • **BTCUSD:** ~13,084 แท่ง M1<br/>• **ETHUSD:** ~13,012 แท่ง M1<br/>• **XAUUSD:** ~11,184 แท่ง M1<br/>• **GOLD-PERP:** 7,171 แท่ง (Standby) | อัดสดต่อเนื่อง 24/7 ด้วย `LiveRecorder.cs` (ไม่ขึ้น Git ไฟล์ใหญ่, ซิงก์สรุปเข้า `data/live/` และ `docs/data/dc_*.json`) |
-| **cTrader Historical Bars & Sessions** | ดึงผ่าน MCP (`get_trendbars`, `get_symbol_sessions`) | ย้อนหลัง M1–D1 สูงสุด 1,000 แท่ง/คำขอ + ตารางเวลาตลาด/DST จริง | **ยังไม่ได้สร้าง Pipeline Merge อัตโนมัติ** เข้ากับ L2 DOM/Flow ในตัว Backtester |
+| **cTrader Historical Bars & Sessions** | ดึงผ่าน [`research/ctrader_mcp_client.py`](research/ctrader_mcp_client.py) + แคชใน `%LOCALAPPDATA%\BacktestLab\ctrader_cache\` | ย้อนหลัง M1 + Sessions จริง (`XAU 42,307` / `BTC 22,911` / `ETH 22,908` แท่งเมื่อ Merge แล้ว) | **เชื่อมต่อ Phase 1 แล้ว (`hybrid_data_merger.py`):** Merge บน UTC Timestamp + คัดกรองแถวเสีย/ซ้ำอัตโนมัติ (กรองแถวผี XAU `ticks=0` ออก 1,028 แถวแล้ว) |
 | **ตลาดทองย้อนหลัง (Historical CSV)** | [`data/XAUUSD_2022_2026_Minute.csv`](data/) *(Local Only ~96.5 MB)* | 2022–2026 M1 | เก็บไว้เป็น Reference เท่านั้น (ไม่มี L2 DOM/Real Spread) |
 
 ### ตารางเปิด-ปิดตลาดจริงจาก cTrader (`get_symbol_sessions`)
@@ -50,7 +50,6 @@
 ---
 
 ## 5. ช่องว่างเทียบกับ Future State (สิ่งที่ยังต้องพัฒนาต่อ)
-1. **ยังไม่เชื่อม cTrader History Merger:** ยังไม่มีสคริปต์ดึง `get_trendbars`/`get_symbol_sessions` จาก cTrader มา Merge เข้ากับ L2 DOM/Flow ในเครื่องโดยอัตโนมัติ
-2. **Data Sanitizer ยังไม่แยกโหมด Demo vs Reference:** โค้ด V4 เก่า (`risk_governor.py`, `rule_classification.py`) ยังคงค่า Hard Limits เดิม (เช่น Daily Flat 21:45 UTC ตายตัว, Max Daily Loss -\$10, Wait N>=500) และยังไม่ได้รองรับโหมดทดลอง Backtest แบบไม่มี SL / บันทึกสาเหตุการแตกพอร์ตอย่างเป็นระบบ
-3. **Research & Strategy Matrix ยังไม่แบ่งโซน Session & Session Transition ชัดเจน:** การทดลองส่วนใหญ่ยังไม่แยกผลเป็นราย Session (`ASIA`, `LONDON`, `NY`, `OVERNIGHT`, `Session Transitions`) และยังไม่จับคู่ Regime-to-Strategy อัตโนมัติเต็มรูปแบบ
-4. **Multi-Agent Handoff & Autonomous Demo A/B + Rollback:** ยังรันแบบสคริปต์เดี่ยวเป็นหลัก ยังไม่ได้แบ่งสายพาน 4 Agent ชัดเจนพร้อมระบบ Deploy Demo A/B และ Rollback อัตโนมัติเมื่อกลยุทธ์ใหม่แพ้ของเดิม
+1. **✅ [Phase 1 เสร็จแล้ว]** เชื่อม [`ctrader_mcp_client.py`](research/ctrader_mcp_client.py) + [`hybrid_data_merger.py`](research/hybrid_data_merger.py) พร้อม V5 Data Sanitizer (ตัดแถวผี `ticks=0` / `NaN` อัตโนมัติ และแก้ไข `build_data_center.py` + `live_status_sync.py` แล้ว)
+2. **⏳ [Phase 2 ถัดไป] Session & Transition Regime Matrix + Blowup Forensics:** แยกพัฒนา/วิจัยเป็น 7 โซน (`ASIA`, `ASIA_TO_LONDON`, `LONDON`, `LONDON_TO_NY`, `NY`, `NY_TO_CLOSE`, `OVERNIGHT`) + ทดสอบ Backtest แบบ Adaptive/Zero-SL เพื่อหาจุดแตกและบันทึก Regime Strategy Matrix
+3. **⏳ [Phase 3–4] Multi-Agent Handoff & Autonomous Demo A/B + Rollback:** แบ่งสายพาน 4 Agents ส่งต่อข้อมูลกัน พร้อมระบบ Deploy Demo + Rollback อัตโนมัติเมื่อรุ่นเดิมดีกว่า และ Human Decision Gate

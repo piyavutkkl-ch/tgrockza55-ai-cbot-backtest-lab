@@ -95,14 +95,21 @@ BOT_CONFIGS = [
     }
 ]
 
-def get_latest_row(csv_path):
+def get_latest_row(csv_path, prefer_complete_min=False):
     if not os.path.exists(csv_path) or os.path.getsize(csv_path) == 0:
         return None
     try:
         with open(csv_path, 'r', encoding='utf-8') as f:
             reader = list(csv.DictReader(f))
-            if reader:
-                return reader[-1]
+            if not reader:
+                return None
+            if prefer_complete_min:
+                for row in reversed(reader):
+                    sp = (row.get('spreadAvg') or '').strip()
+                    tk = (row.get('ticks') or '').strip()
+                    if sp and tk not in ('', '0'):
+                        return row
+            return reader[-1]
     except Exception:
         pass
     return None
@@ -215,7 +222,7 @@ def inspect_bot_telemetry(cfg, now_epoch):
     else:
         heartbeat_desc = f"{int(diff_sec / 3600)} ชม. ที่แล้ว"
 
-    min_row = get_latest_row(min_file)
+    min_row = get_latest_row(min_file, prefer_complete_min=True)
     flow_row = get_latest_row(flow_file)
 
     def _safe_float(row, key, default=0.0):

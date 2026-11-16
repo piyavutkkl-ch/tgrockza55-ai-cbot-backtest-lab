@@ -100,6 +100,7 @@ CORE_FOLDER_MAP: dict[str, tuple[str, str, str]] = {
     "flywheel_cycles.json": ("audit_logs", "flywheel_live_v2", "Continuous 24/7 evolution flywheel cycles & accumulated learnings"),
     "archive_historical_cycles_v1.json": ("audit_logs", "flywheel_archive_v1", "Archived 122 historical flywheel cycles prior to pure-live reset"),
     "supabase_v2_backup_latest.json": ("audit_logs", "supabase_v2_snap", "Local PostgreSQL/Supabase V2 backup of recent runs, policies & audit logs"),
+    "hybrid_data_audit.json": ("live_telemetry", "hybrid_merger_v5", "Merged cTrader historical OHLCV/sessions + sanitized live L2 DOM/Order Flow audit"),
 }
 
 SECONDARY_DESCRIPTIONS: dict[str, tuple[str, str]] = {

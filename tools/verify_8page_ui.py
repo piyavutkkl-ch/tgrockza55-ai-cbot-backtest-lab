@@ -108,6 +108,7 @@ def main() -> int:
         DOCS / "data" / "dc_meta.json",
         DOCS / "data" / "strategy_foundry.json",
         DOCS / "data" / "flywheel_cycles.json",
+        DOCS / "data" / "hybrid_data_audit.json",
     ]
     json_errs = []
     for jf in json_files:
