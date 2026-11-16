@@ -1073,7 +1073,7 @@ const HELP_CONTENT = {
     <p>เปรียบเทียบประสิทธิภาพรายคู่เงินใน 3 ชุดข้อมูลจริงจาก Repository:</p>
     <ul>
       <li><b>Champion (L2 DOM):</b> พารามิเตอร์ที่ผ่านวิวัฒนาการล่าสุดบนข้อมูล 1-Minute Order Book (<code>champion_registry.json</code>)</li>
-      <li><b>Live Demo (#5258778):</b> ผลเทรดจริงสะสม N=79 ไม้บนบัญชี Pepperstone Demo — ปัจจุบันยังอยู่ในสถานะ <i>CRITICALLY_UNDERPOWERED</i> ต้องรอ ≥ 500 ไม้ก่อนสรุป Edge ทางสถิติ</li>
+      <li><b>Live Demo (#5258778):</b> ผลเทรดจริงสะสมจากบัญชี Pepperstone Demo (#5258778) รายงานตรงตามสถานการณ์จริง (V5 Situational Reporting) ควบคู่ผล Out-of-Sample จาก <code>regime_strategy_matrix.json</code></li>
       <li><b>Backtest Engines:</b> กลยุทธ์ทั้ง 8 รุ่นในห้องทดลอง (<code>backtest_data.json</code>)</li>
     </ul>
     <p><b>Inline Progress Bar:</b> แถบ Win Rate มีเส้นอ้างอิงที่ <code>50%</code> และแถบ Profit Factor ใช้สเกล <code>0–4.0+</code> พร้อมเส้นจุดคุ้มทุนที่ <code>1.0x</code> · คลิกแถวใดก็ได้เพื่อกระโดดดู Heatmap ของคู่เงินนั้น</p>

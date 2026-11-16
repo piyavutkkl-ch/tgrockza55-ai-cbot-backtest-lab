@@ -45,11 +45,12 @@
 ## 4. โครงสร้างระบบเว็บและสคริปต์ (8-Page Portal & Codebase)
 * **เว็บ 8 หน้า (`docs/`):**
   1. `index.html` (Overview) 2. `data-center.html` (Data Center) 3. `research-lab.html` (193 Papers + Quant Engines + Foundry) 4. `experiment-lab.html` (Backtest Comparator) 5. `intelligence.html` (Regime Matrix & Heatmap) 6. `improvement-audit.html` (Audit & Evolution Log) 7. `archive-system.html` (Transcript, Legacy Snapshot, Feedback Studio, Governance) 8. `database.html` (Unified 33-Dataset Catalog)
-* **ชุดตรวจสอบสุขภาพ:** `tools/verify_8page_ui.py` (ผ่าน 100%) และ `research/run_institutional_v4_test_suite.py` (11/12 ผ่าน; เหลือ Bug Windows file lock ใน `tearDown` ของ `test_attribution_matrix_feedback.py`)
+* **ชุดตรวจสอบสุขภาพ:** `tools/verify_8page_ui.py` (ผ่าน 100%) และ `research/run_institutional_v4_test_suite.py` (รวม Phase 1 & Phase 2 Unit Tests ผ่าน; เหลือ Bug Windows file lock ใน `tearDown` ของ `test_attribution_matrix_feedback.py`)
 
 ---
 
 ## 5. ช่องว่างเทียบกับ Future State (สิ่งที่ยังต้องพัฒนาต่อ)
 1. **✅ [Phase 1 เสร็จแล้ว]** เชื่อม [`ctrader_mcp_client.py`](research/ctrader_mcp_client.py) + [`hybrid_data_merger.py`](research/hybrid_data_merger.py) พร้อม V5 Data Sanitizer (ตัดแถวผี `ticks=0` / `NaN` อัตโนมัติ และแก้ไข `build_data_center.py` + `live_status_sync.py` แล้ว)
-2. **⏳ [Phase 2 ถัดไป] Session & Transition Regime Matrix + Blowup Forensics:** แยกพัฒนา/วิจัยเป็น 7 โซน (`ASIA`, `ASIA_TO_LONDON`, `LONDON`, `LONDON_TO_NY`, `NY`, `NY_TO_CLOSE`, `OVERNIGHT`) + ทดสอบ Backtest แบบ Adaptive/Zero-SL เพื่อหาจุดแตกและบันทึก Regime Strategy Matrix
-3. **⏳ [Phase 3–4] Multi-Agent Handoff & Autonomous Demo A/B + Rollback:** แบ่งสายพาน 4 Agents ส่งต่อข้อมูลกัน พร้อมระบบ Deploy Demo + Rollback อัตโนมัติเมื่อรุ่นเดิมดีกว่า และ Human Decision Gate
+2. **✅ [Phase 2 เสร็จแล้ว]** [`session_regime_forensics.py`](research/session_regime_forensics.py) + [`regime_strategy_matrix.json`](docs/data/regime_strategy_matrix.json) แยกวิเคราะห์ 7 โซน (`ASIA`, `ASIA_TO_LONDON`, `LONDON`, `LONDON_TO_NY`, `NY`, `NY_TO_CLOSE`, `OVERNIGHT`) + ตรวจ OOS (60/40) แบบไม่ล็อกเลขตายตัว + รัน Blowup Forensics (`FORENSIC_ZERO_SL`) บันทึกจุดแตกหักแทนการแบนถาวร
+3. **⏳ [Phase 3 ถัดไป] Multi-Agent Handoff & Autonomous Demo A/B + Rollback:** แบ่งสายพาน 4 Agents ส่งต่อข้อมูลกัน พร้อมระบบ Deploy Demo + Rollback อัตโนมัติเมื่อรุ่นเดิมดีกว่า และ Human Decision Gate
+4. **⏳ [Phase 4] เว็บ 8 หน้าโหมด 4 ขั้นตอนหลัก & Situational UI:** แสดงผล Situational Accuracy & Blowup Forensics เต็มรูปแบบบนเว็บ 8 หน้า

@@ -345,8 +345,8 @@ def build_performance_matrix(
         "live_forward": {
             "label": "Live Forward (#5258778)",
             "subtitle": (
-                f"ผลเทรดจริงจาก Pepperstone Demo #5258778 (N={truth_guard.get('metrics_empirical', {}).get('total_closed_trades_N', 79)} "
-                f"/ เป้าหมายขั้นต่ำ 500 ไม้ — ยังไม่เพียงพอสรุป Edge ทางสถิติ)"
+                f"{truth_guard.get('statistical_power', {}).get('label', 'ผลเทรดจริงจาก Pepperstone Demo #5258778')} "
+                f"— รายงานตรงตามสถานการณ์จริง (V5 Situational Truth)"
             ),
             "rows": live_rows,
         },
@@ -708,13 +708,32 @@ def main() -> None:
     daystudy = load_json(DOCS_DATA_DIR / "daystudy-XAUUSD.json", {})
     calibrated_costs = load_json(DOCS_DATA_DIR / "calibrated_costs.json", {})
     behavioral_alphas = load_json(DOCS_DATA_DIR / "behavioral_alphas.json", {})
+    regime_matrix = load_json(DOCS_DATA_DIR / "regime_strategy_matrix.json", {})
+
+    v5_zone_overview = {}
+    for sym, sdata in regime_matrix.get("symbols", {}).items():
+        if not isinstance(sdata, dict) or sdata.get("status") != "COMPLETED":
+            continue
+        mat = sdata.get("regime_strategy_matrix", [])
+        deployed = [m for m in mat if m.get("recommended_action") == "DEPLOY_ADAPTIVE"]
+        v5_zone_overview[sym] = {
+            "data_window": sdata.get("data_window", {}),
+            "oos_validated_cells": len(deployed),
+            "total_evaluated_cells": len(mat),
+            "top_verdicts": [m.get("verdict_th") for m in deployed[:5]],
+            "blowup_summary": {
+                "total_severe_events": sdata.get("blowup_forensics", {}).get("total_severe_events", 0),
+                "zero_sl_events": sdata.get("blowup_forensics", {}).get("zero_sl_events", 0),
+                "diagnosis_breakdown": sdata.get("blowup_forensics", {}).get("diagnosis_breakdown", {}),
+            },
+        }
 
     summary = {
         "meta": {
             "generated_at_utc": datetime.now(timezone.utc).isoformat(),
             "data_as_of_utc": live_status.get("timestamp_utc") or market_intel.get("updated_at_utc"),
             "account": truth_guard.get("account_number", "Pepperstone #5258778"),
-            "daily_cutoff_utc": "21:45",
+            "daily_cutoff_utc": "Adaptive by Symbol/Session (V5)",
             "statistical_power": truth_guard.get("statistical_power", {}),
             "truth_guard_metrics": truth_guard.get("metrics_empirical", {}),
             "sources": [
@@ -724,6 +743,7 @@ def main() -> None:
                 "docs/data/backtest_data.json",
                 "docs/data/calibrated_costs.json",
                 "docs/data/live_status.json",
+                "docs/data/regime_strategy_matrix.json",
                 "data/live/*/min-2026-11.csv",
                 "data/live/*/trades.csv",
             ],
@@ -734,6 +754,7 @@ def main() -> None:
         ),
         "day_session_heatmap": build_heatmap(daystudy, calibrated_costs),
         "microstructure_patterns": build_microstructure_cards(backtest_data, behavioral_alphas),
+        "v5_session_regime_summary": v5_zone_overview,
     }
 
     OUT_FILE.parent.mkdir(parents=True, exist_ok=True)

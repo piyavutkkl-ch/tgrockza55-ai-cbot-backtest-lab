@@ -17,6 +17,11 @@ import math
 from datetime import datetime, timezone
 from typing import Dict, Any, List, Optional, Tuple
 
+try:
+    from research.hybrid_data_merger import classify_session_zone
+except ImportError:
+    from hybrid_data_merger import classify_session_zone
+
 class MarketRegime:
     STRONG_UPTREND = "STRONG_UPTREND"
     STRONG_DOWNTREND = "STRONG_DOWNTREND"
@@ -113,6 +118,7 @@ class MarketIntelligenceEngine:
         primary_session = "LONDON_NY_OVERLAP" if is_london_ny_overlap else (
             "NEW_YORK" if is_ny else ("LONDON" if is_london else ("ASIA" if is_asia else "OFF_HOURS"))
         )
+        session_zone, is_session_transition = classify_session_zone(dt_utc)
         
         return {
             "timestamp_utc": dt_utc.strftime("%Y-%m-%d %H:%M:%S UTC"),
@@ -121,6 +127,8 @@ class MarketIntelligenceEngine:
             "hour_utc": hour,
             "minute_utc": minute,
             "primary_session": primary_session,
+            "session_zone": session_zone,
+            "is_session_transition": is_session_transition,
             "active_sessions": active_sessions,
             "is_london_open": is_london_open,
             "is_ny_open": is_ny_open,

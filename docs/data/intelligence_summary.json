@@ -1,19 +1,19 @@
 {
   "meta": {
-    "generated_at_utc": "2026-11-16T16:12:19.943968+00:00",
-    "data_as_of_utc": "2026-11-16T16:12:18.975410+00:00",
+    "generated_at_utc": "2026-11-16T16:23:24.306200+00:00",
+    "data_as_of_utc": "2026-11-16T16:23:21.930163+00:00",
     "account": "Pepperstone #5258778",
-    "daily_cutoff_utc": "21:45",
+    "daily_cutoff_utc": "Adaptive by Symbol/Session (V5)",
     "statistical_power": {
       "sample_size_N": 125,
       "target_preliminary_N": 500,
       "target_institutional_N": 1200,
       "power_progress_pct": 25.0,
       "standard_error_sharpe": 0.233,
-      "status": "MODERATELY_UNDERPOWERED",
-      "label": "กำลังสะสมตัวอย่าง (Inconclusive)",
-      "description": "จำนวนเทรด N=125/500 ไม้ เริ่มเห็นแนวโน้มแต่ยังไม่มีนัยสำคัญทางสถิติ (p > 0.05)",
-      "mandate": "ห้ามสรุปผลกำไรหรือความได้เปรียบ (Edge) ของระบบ จนกว่าขนาดตัวอย่างจะครบ 500 ไม้เป็นอย่างน้อย"
+      "status": "SITUATIONAL_EMPIRICAL_REPORTING",
+      "label": "รายงานผลจริงรายสถานการณ์ (N=125 ไม้ · ชนะ 56/125)",
+      "description": "จำนวนเทรดจริงสะสม N=125 ไม้ (Win Rate 44.8%, PF 1.17, Net $+20.76) — แสดงผลตามสถานการณ์และ Session จริง ควบคู่การทดสอบ Out-of-Sample",
+      "mandate": "รายงานผลจริงแยกตามสถานการณ์และ Session ตรงไปตรงมา (ยกเลิกเกณฑ์รอ N>=500) พร้อมตรวจ Out-of-Sample กัน Overfitting"
     },
     "truth_guard_metrics": {
       "initial_deposit": 100.0,
@@ -38,6 +38,7 @@
       "docs/data/backtest_data.json",
       "docs/data/calibrated_costs.json",
       "docs/data/live_status.json",
+      "docs/data/regime_strategy_matrix.json",
       "data/live/*/min-2026-11.csv",
       "data/live/*/trades.csv"
     ]
@@ -48,11 +49,11 @@
       "label": "Gold Spot",
       "badge": "Au",
       "tone": "gold",
-      "price": 3859.09,
-      "vwap": 3868.93,
+      "price": 3859.25,
+      "vwap": 3868.82,
       "delta_vs_vwap_pct": -0.25,
-      "spread": 0.125,
-      "imbalance": 0.0,
+      "spread": 0.118,
+      "imbalance": -0.03,
       "regime": "WEAK_TREND",
       "sparkline": [
         4049.05,
@@ -112,11 +113,11 @@
       "label": "Bitcoin",
       "badge": "₿",
       "tone": "orange",
-      "price": 64211.94,
-      "vwap": 64657.98,
-      "delta_vs_vwap_pct": -0.69,
-      "spread": 16.031,
-      "imbalance": 0.003,
+      "price": 64615.53,
+      "vwap": 64655.19,
+      "delta_vs_vwap_pct": -0.06,
+      "spread": 32.013,
+      "imbalance": 0.526,
       "regime": "REVERSAL",
       "sparkline": [
         75593.64,
@@ -144,11 +145,11 @@
       "label": "Ethereum",
       "badge": "Ξ",
       "tone": "sky",
-      "price": 1813.8,
-      "vwap": 1813.64,
-      "delta_vs_vwap_pct": 0.01,
-      "spread": 2.023,
-      "imbalance": 0.032,
+      "price": 1827.41,
+      "vwap": 1813.69,
+      "delta_vs_vwap_pct": 0.76,
+      "spread": 2.365,
+      "imbalance": 0.355,
       "regime": "WEAK_TREND",
       "sparkline": [
         2223.56,
@@ -269,7 +270,7 @@
     },
     "live_forward": {
       "label": "Live Forward (#5258778)",
-      "subtitle": "ผลเทรดจริงจาก Pepperstone Demo #5258778 (N=125 / เป้าหมายขั้นต่ำ 500 ไม้ — ยังไม่เพียงพอสรุป Edge ทางสถิติ)",
+      "subtitle": "รายงานผลจริงรายสถานการณ์ (N=125 ไม้ · ชนะ 56/125) — รายงานตรงตามสถานการณ์จริง (V5 Situational Truth)",
       "rows": [
         {
           "symbol": "XAUUSD",
@@ -2398,5 +2399,127 @@
         ]
       }
     }
-  ]
+  ],
+  "v5_session_regime_summary": {
+    "XAUUSD": {
+      "data_window": {
+        "start_time_utc": "2026-10-04 22:43",
+        "split_time_utc": "2026-11-08 23:16",
+        "end_time_utc": "2026-11-16 16:21",
+        "total_merged_bars": 42320,
+        "live_rich_bars": 10191,
+        "in_sample_bars": 6114,
+        "out_of_sample_bars": 4077
+      },
+      "oos_validated_cells": 16,
+      "total_evaluated_cells": 27,
+      "top_verdicts": [
+        "ASIA · TREND_BULL: ใช้ STR-003 (ADAPTIVE_TIGHT) — พบใน OOS 2 ครั้ง ชนะ 2/2 (100.0%), Net +13.76 USD (PF 9.99)",
+        "ASIA · TREND_BEAR: ใช้ STR-001 (ADAPTIVE_WIDE) — พบใน OOS 4 ครั้ง ชนะ 2/4 (50.0%), Net +14.81 USD (PF 1.73)",
+        "ASIA · BREAKOUT: ใช้ STR-004 (ADAPTIVE_WIDE) — พบใน OOS 10 ครั้ง ชนะ 5/10 (50.0%), Net +68.82 USD (PF 2.17)",
+        "ASIA · RANGE: ใช้ STR-003 (ADAPTIVE_WIDE) — พบใน OOS 6 ครั้ง ชนะ 2/6 (33.3%), Net +28.56 USD (PF 1.94)",
+        "ASIA_TO_LONDON · TREND_BEAR: ใช้ STR-004 (ZONE_SCALP_FLAT) — พบใน OOS 3 ครั้ง ชนะ 3/3 (100.0%), Net +16.01 USD (PF 9.99)"
+      ],
+      "blowup_summary": {
+        "total_severe_events": 138,
+        "zero_sl_events": 120,
+        "diagnosis_breakdown": {
+          "ROLLOVER_SPREAD_OR_THIN_LIQUIDITY": 12,
+          "REGIME_SHIFT_RANGE_TO_TREND_BULL": 31,
+          "REGIME_SHIFT_RANGE_TO_BREAKOUT": 16,
+          "REGIME_SHIFT_RANGE_TO_TREND_BEAR": 17,
+          "SESSION_TRANSITION_WHIPSAW_LONDON_TO_LONDON_TO_NY": 5,
+          "REGIME_SHIFT_TREND_BULL_TO_BREAKOUT": 9,
+          "UNHEDGED_ADVERSE_DRAG_WITHOUT_STOP": 18,
+          "REGIME_SHIFT_TREND_BULL_TO_TREND_BEAR": 9,
+          "REGIME_SHIFT_TREND_BEAR_TO_BREAKOUT": 2,
+          "REGIME_SHIFT_TREND_BEAR_TO_TREND_BULL": 8,
+          "SESSION_TRANSITION_WHIPSAW_ASIA_TO_LONDON_TO_LONDON": 2,
+          "REGIME_SHIFT_BREAKOUT_TO_TREND_BEAR": 4,
+          "REGIME_SHIFT_BREAKOUT_TO_TREND_BULL": 2,
+          "SESSION_TRANSITION_WHIPSAW_LONDON_TO_NY_TO_NY": 3
+        }
+      }
+    },
+    "BTCUSD": {
+      "data_window": {
+        "start_time_utc": "2026-10-31 17:02",
+        "split_time_utc": "2026-11-08 19:09",
+        "end_time_utc": "2026-11-16 16:22",
+        "total_merged_bars": 22926,
+        "live_rich_bars": 13109,
+        "in_sample_bars": 7865,
+        "out_of_sample_bars": 5244
+      },
+      "oos_validated_cells": 20,
+      "total_evaluated_cells": 35,
+      "top_verdicts": [
+        "ASIA · TREND_BEAR: ใช้ STR-001 (ADAPTIVE_BALANCED) — พบใน OOS 20 ครั้ง ชนะ 8/20 (40.0%), Net +20.45 USD (PF 1.81)",
+        "ASIA · BREAKOUT: ใช้ STR-004 (ADAPTIVE_BALANCED) — พบใน OOS 16 ครั้ง ชนะ 6/16 (37.5%), Net +4.03 USD (PF 1.18)",
+        "ASIA · RANGE: ใช้ STR-003 (ADAPTIVE_WIDE) — พบใน OOS 3 ครั้ง ชนะ 2/3 (66.7%), Net +7.76 USD (PF 2.94)",
+        "ASIA · THIN_OR_NEWS: ใช้ STR-004 (ADAPTIVE_WIDE) — พบใน OOS 2 ครั้ง ชนะ 1/2 (50.0%), Net +4.06 USD (PF 1.86)",
+        "ASIA_TO_LONDON · TREND_BEAR: ใช้ STR-001 (FAST_RR_1_5) — พบใน OOS 4 ครั้ง ชนะ 2/4 (50.0%), Net +2.06 USD (PF 2.21)"
+      ],
+      "blowup_summary": {
+        "total_severe_events": 177,
+        "zero_sl_events": 148,
+        "diagnosis_breakdown": {
+          "ROLLOVER_SPREAD_OR_THIN_LIQUIDITY": 76,
+          "REGIME_SHIFT_RANGE_TO_BREAKOUT": 10,
+          "REGIME_SHIFT_TREND_BEAR_TO_BREAKOUT": 2,
+          "UNHEDGED_ADVERSE_DRAG_WITHOUT_STOP": 16,
+          "REGIME_SHIFT_RANGE_TO_TREND_BULL": 12,
+          "REGIME_SHIFT_BREAKOUT_TO_TREND_BEAR": 4,
+          "REGIME_SHIFT_RANGE_TO_TREND_BEAR": 28,
+          "REGIME_SHIFT_BREAKOUT_TO_TREND_BULL": 3,
+          "SESSION_TRANSITION_WHIPSAW_LONDON_TO_NY_TO_NY": 3,
+          "REGIME_SHIFT_TREND_BULL_TO_TREND_BEAR": 14,
+          "REGIME_SHIFT_THIN_OR_NEWS_TO_TREND_BEAR": 2,
+          "REGIME_SHIFT_TREND_BEAR_TO_TREND_BULL": 3,
+          "SESSION_TRANSITION_WHIPSAW_ASIA_TO_ASIA_TO_LONDON": 2,
+          "REGIME_SHIFT_TREND_BULL_TO_BREAKOUT": 2
+        }
+      }
+    },
+    "ETHUSD": {
+      "data_window": {
+        "start_time_utc": "2026-10-31 17:05",
+        "split_time_utc": "2026-11-08 19:23",
+        "end_time_utc": "2026-11-16 16:22",
+        "total_merged_bars": 22923,
+        "live_rich_bars": 13037,
+        "in_sample_bars": 7822,
+        "out_of_sample_bars": 5215
+      },
+      "oos_validated_cells": 16,
+      "total_evaluated_cells": 29,
+      "top_verdicts": [
+        "ASIA · TREND_BEAR: ใช้ STR-006 (ADAPTIVE_BALANCED) — พบใน OOS 3 ครั้ง ชนะ 2/3 (66.7%), Net +0.50 USD (PF 5.23)",
+        "ASIA · BREAKOUT: ใช้ STR-006 (FAST_RR_1_5) — พบใน OOS 3 ครั้ง ชนะ 2/3 (66.7%), Net +0.10 USD (PF 1.94)",
+        "ASIA · RANGE: ใช้ STR-003 (ADAPTIVE_WIDE) — พบใน OOS 5 ครั้ง ชนะ 3/5 (60.0%), Net +0.49 USD (PF 3.27)",
+        "ASIA_TO_LONDON · RANGE: ใช้ STR-006 (ADAPTIVE_BALANCED) — พบใน OOS 3 ครั้ง ชนะ 2/3 (66.7%), Net +0.23 USD (PF 3.88)",
+        "LONDON · TREND_BULL: ใช้ STR-003 (ADAPTIVE_BALANCED) — พบใน OOS 2 ครั้ง ชนะ 1/2 (50.0%), Net +0.11 USD (PF 2.0)"
+      ],
+      "blowup_summary": {
+        "total_severe_events": 160,
+        "zero_sl_events": 103,
+        "diagnosis_breakdown": {
+          "REGIME_SHIFT_RANGE_TO_BREAKOUT": 11,
+          "ROLLOVER_SPREAD_OR_THIN_LIQUIDITY": 45,
+          "REGIME_SHIFT_RANGE_TO_TREND_BEAR": 31,
+          "UNHEDGED_ADVERSE_DRAG_WITHOUT_STOP": 32,
+          "SESSION_TRANSITION_WHIPSAW_ASIA_TO_LONDON_TO_LONDON_TO_NY": 1,
+          "REGIME_SHIFT_BREAKOUT_TO_TREND_BEAR": 7,
+          "REGIME_SHIFT_TREND_BEAR_TO_TREND_BULL": 6,
+          "REGIME_SHIFT_RANGE_TO_TREND_BULL": 5,
+          "REGIME_SHIFT_TREND_BULL_TO_TREND_BEAR": 5,
+          "SESSION_TRANSITION_WHIPSAW_LONDON_TO_LONDON_TO_NY": 2,
+          "SESSION_TRANSITION_WHIPSAW_OVERNIGHT_TO_ASIA_TO_LONDON": 1,
+          "REGIME_SHIFT_BREAKOUT_TO_TREND_BULL": 4,
+          "REGIME_SHIFT_TREND_BULL_TO_BREAKOUT": 1,
+          "REGIME_SHIFT_TREND_BEAR_TO_BREAKOUT": 9
+        }
+      }
+    }
+  }
 }

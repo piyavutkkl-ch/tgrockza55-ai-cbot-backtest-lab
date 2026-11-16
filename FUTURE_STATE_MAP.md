@@ -20,17 +20,11 @@
 * **cTrader Historical Auto-Checker & Fetcher:** ดึง `get_trendbars` & `get_symbol_sessions` อัตโนมัติผ่าน MCP JSON-RPC และแคชในเครื่อง; Watchdog 24/7 เก็บ L2 DOM 25 ชั้น, Real Spreads, Order Flow และ Slippage
 * **Hybrid Data Merger + Demo Sanitizer:** Merge แท่งราคา cTrader เข้ากับ DOM/Flow ตาม UTC Timestamp, คัดกรองแถวเสีย/`NaN`/แถวผี `ticks=0` อัตโนมัติ (อัปเดตเข้า [`live_status_sync.py`](research/live_status_sync.py) & [`build_data_center.py`](tools/build_data_center.py) แล้ว) และติดแท็กครบทั้ง 7 Session/Transition zones (`ASIA`, `ASIA_TO_LONDON`, `LONDON`, `LONDON_TO_NY`, `NY`, `NY_TO_CLOSE`, `OVERNIGHT`)
 
-### Phase 2: Session-Partitioned Regime & Forensic Strategy Engine
-* **Session & Transition Segmentation Engine:**
-  * แยกค้นหาสถานการณ์ (Regimes) และพัฒนา/ทดสอบกลยุทธ์แยกขาดเป็น 7 โซน:
-    `ASIA` · `ASIA→LONDON (Transition)` · `LONDON` · `LONDON→NY (Transition)` · `NY` · `NY→CLOSE (Transition)` · `OVERNIGHT`
-* **Adaptive Optimization Engine (No Fixed Numbers):**
-  * ปลดล็อกให้ AI ค้นหา SL, RR, Breakeven, Position Limit, Risk %, และ Session-Specific Flat Time ที่เหมาะกับ **แต่ละกลยุทธ์ x สถานการณ์ x สินทรัพย์**
-* **Blowup & Failure Forensic Logger (แทนการแบนถาวร):**
-  * อนุญาตให้ Backtest กลยุทธ์ที่ไม่มี SL หรือปล่อยจำลองพอร์ตแตกได้ **เพื่อเก็บข้อมูล Forensic**: *"แตกเมื่อไหร่, เพราะสถานการณ์ใด, ควรเปลี่ยนไปใช้กลยุทธ์ไหน หรือจับสัญญาณอะไรล่วงหน้า"*
-  * เก็บทุกกลยุทธ์ลง **Regime Strategy Matrix** พร้อมป้ายกำกับ `"ใช้ได้ในสถานการณ์ X (ชนะ a/b ครั้ง +$PnL)"` vs `"หลีกเลี่ยงในสถานการณ์ Y"`
-* **Mandatory Out-of-Sample Robustness Gate:**
-  * กลยุทธ์ที่จะเลื่อนขั้นลง Demo ต้องผ่านการตรวจ OOS บนข้อมูลที่ไม่เคยเห็นในสถานการณ์เดียวกัน ไม่ใช่แค่ตัวเลข In-Sample สูงสุด
+### ✅ Phase 2: Session-Partitioned Regime & Forensic Strategy Engine *(COMPLETED — 16 พ.ย. 2026)*
+* **สร้างเสร็จแล้ว:** [`research/session_regime_forensics.py`](research/session_regime_forensics.py), [`research/test_session_regime_forensics.py`](research/test_session_regime_forensics.py), [`docs/data/regime_strategy_matrix.json`](docs/data/regime_strategy_matrix.json) (เชื่อมเข้า [`market_intelligence_engine.py`](research/market_intelligence_engine.py) & [`build_intelligence_summary.py`](tools/build_intelligence_summary.py))
+* **Session & Transition Segmentation Engine:** แยกวิจัยและจำแนกครบทั้ง 7 โซน (`ASIA`, `ASIA_TO_LONDON`, `LONDON`, `LONDON_TO_NY`, `NY`, `NY_TO_CLOSE`, `OVERNIGHT`) บนชุดข้อมูล Hybrid ที่ Clean แล้ว
+* **Adaptive Optimization & Out-of-Sample Gate (No Fixed Numbers):** ทดสอบสวีป SL/RR (Tight/Balanced/Wide ATR) + รูปแบบการปิดออเดอร์ (`EXIT_AT_ZONE_END`, `ROLLOVER_GUARD`, `HOLD_THRU`) ผ่านเกณฑ์ Strict Chronological 60/40 IS➔OOS (Next-bar open fill, zero lookahead)
+* **Blowup & Failure Forensic Logger (No Permanent Ban):** ทดสอบโหมด `FORENSIC_ZERO_SL` (ไม่มี SL) เพื่อจับจุดแตกหักราย Regime/Transition พร้อมระบุสาเหตุและวิธีแก้ โดยเก็บทุกกลยุทธ์ไว้ใน Regime-Matched Memory (`REGIME_MATCHED_ACTIVE`) แทนการลบ/แบนถาวร
 
 ### Phase 3: Multi-Agent Pipeline & Autonomous Demo Deployment / Rollback
 * **4 Specialized AI Agents ส่งงานต่อกันผ่าน Repo Structured Artifacts:**
