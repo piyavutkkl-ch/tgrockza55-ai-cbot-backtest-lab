@@ -35,7 +35,8 @@
 * **สถานะเทรดสดสะสม (`docs/data/truth_guard.json` ณ `16 Nov 2026 15:58 UTC`):**
   * **จำนวนไม้ปิดจริง:** `N = 125` ไม้ (ชนะ 56 / แพ้ 69 · Win Rate **44.8%**)
   * **Balance / Net PnL:** **\$120.76 USD** (กำไรสุทธิ **+\$20.76 USD / +20.76%** จาก \$100 · Profit Factor **1.17**)
-* **cBot Strategy ที่รันบน Demo:** [`DomWallAbsorption.cs`](cbot/BacktestLab/Strategies/DomWallAbsorption.cs) (`DOM_ABSORPTION` V2) พร้อม `StrategyCode` และ `MarketRegime` logging ลง `trades.csv`
+* **cBot Strategy ที่รันบน Demo:** [`RegimeAdaptiveV5.cs`](cbot/BacktestLab/Strategies/RegimeAdaptiveV5.cs) (`REGIME_ADAPTIVE_V5` **V3**) รันทับ [`DomWallAbsorption.cs`](cbot/BacktestLab/Strategies/DomWallAbsorption.cs) (`DOM_ABSORPTION` **V2 Baseline** ที่สำรองไว้ใน [`demo_deployment_state.json`](docs/data/demo_deployment_state.json) พร้อม Auto-Rollback) — ยืนยันผ่าน `ctrader-cli build` (0 Errors) และ Sanity Tick Backtest XAUUSD 12–16 พ.ย. 2026 (`+50.43 USD`, PF `1.25`, `66` ไม้) แล้ว
+* **บันทึกการตัดสินใจ & A/B Audit:** [`DECISION_LOG.md`](DECISION_LOG.md) + [`docs/data/v5_pipeline_state.json`](docs/data/v5_pipeline_state.json)
 * **ผลวิจัย XAUUSD ล่าสุดบนข้อมูลสด (`tools/backtest_dom_live_grid.py` บน 7,295 แท่ง):**
   * `DOM_ABSORPTION_V2 + London/NY (08:00–21:00 UTC) + News Gate`: 78 ไม้ · WR 48.7% · PF **1.25** · Net **+\$35.48 USD** · Daily Win Rate **83.3%** (5/6 วัน)
   * `QuantExtremeReversal` (แชมป์ข้อมูลย้อนหลังเก่า): แพ้บนข้อมูลสด (**-\$16.30 USD**, PF 0.32) — เป็นหลักฐานชัดเจนเรื่อง Overfitting ของข้อมูลสังเคราะห์
@@ -45,12 +46,12 @@
 ## 4. โครงสร้างระบบเว็บและสคริปต์ (8-Page Portal & Codebase)
 * **เว็บ 8 หน้า (`docs/`):**
   1. `index.html` (Overview) 2. `data-center.html` (Data Center) 3. `research-lab.html` (193 Papers + Quant Engines + Foundry) 4. `experiment-lab.html` (Backtest Comparator) 5. `intelligence.html` (Regime Matrix & Heatmap) 6. `improvement-audit.html` (Audit & Evolution Log) 7. `archive-system.html` (Transcript, Legacy Snapshot, Feedback Studio, Governance) 8. `database.html` (Unified 33-Dataset Catalog)
-* **ชุดตรวจสอบสุขภาพ:** `tools/verify_8page_ui.py` (ผ่าน 100%) และ `research/run_institutional_v4_test_suite.py` (รวม Phase 1 & Phase 2 Unit Tests ผ่าน; เหลือ Bug Windows file lock ใน `tearDown` ของ `test_attribution_matrix_feedback.py`)
+* **ชุดตรวจสอบสุขภาพ:** `tools/verify_8page_ui.py` (ผ่าน 100%) และ `research/run_institutional_v4_test_suite.py` (รวม Phase 1, Phase 2 & Phase 3 Unit Tests ผ่าน; เหลือ Bug Windows file lock ใน `tearDown` ของ `test_attribution_matrix_feedback.py`)
 
 ---
 
 ## 5. ช่องว่างเทียบกับ Future State (สิ่งที่ยังต้องพัฒนาต่อ)
 1. **✅ [Phase 1 เสร็จแล้ว]** เชื่อม [`ctrader_mcp_client.py`](research/ctrader_mcp_client.py) + [`hybrid_data_merger.py`](research/hybrid_data_merger.py) พร้อม V5 Data Sanitizer (ตัดแถวผี `ticks=0` / `NaN` อัตโนมัติ และแก้ไข `build_data_center.py` + `live_status_sync.py` แล้ว)
 2. **✅ [Phase 2 เสร็จแล้ว]** [`session_regime_forensics.py`](research/session_regime_forensics.py) + [`regime_strategy_matrix.json`](docs/data/regime_strategy_matrix.json) แยกวิเคราะห์ 7 โซน (`ASIA`, `ASIA_TO_LONDON`, `LONDON`, `LONDON_TO_NY`, `NY`, `NY_TO_CLOSE`, `OVERNIGHT`) + ตรวจ OOS (60/40) แบบไม่ล็อกเลขตายตัว + รัน Blowup Forensics (`FORENSIC_ZERO_SL`) บันทึกจุดแตกหักแทนการแบนถาวร
-3. **⏳ [Phase 3 ถัดไป] Multi-Agent Handoff & Autonomous Demo A/B + Rollback:** แบ่งสายพาน 4 Agents ส่งต่อข้อมูลกัน พร้อมระบบ Deploy Demo + Rollback อัตโนมัติเมื่อรุ่นเดิมดีกว่า และ Human Decision Gate
-4. **⏳ [Phase 4] เว็บ 8 หน้าโหมด 4 ขั้นตอนหลัก & Situational UI:** แสดงผล Situational Accuracy & Blowup Forensics เต็มรูปแบบบนเว็บ 8 หน้า
+3. **✅ [Phase 3 เสร็จแล้ว]** [`v5_multi_agent_pipeline.py`](research/v5_multi_agent_pipeline.py) + [`demo_deployment_manager.py`](research/demo_deployment_manager.py) + [`DECISION_LOG.md`](DECISION_LOG.md) ขับเคลื่อน 4 Agents ส่งงานต่อกัน พร้อม Deploy `REGIME_ADAPTIVE_V5 v3` บน Demo `#5258778` และ Auto-Rollback Guard กลับ V2 อัตโนมัติ
+4. **⏳ [Phase 4 ถัดไป] เว็บ 8 หน้าโหมด 4 ขั้นตอนหลัก & Situational UI:** แสดงผล Situational Accuracy, Demo A/B Rollback Status และ Blowup Forensics เต็มรูปแบบบนเว็บ 8 หน้า

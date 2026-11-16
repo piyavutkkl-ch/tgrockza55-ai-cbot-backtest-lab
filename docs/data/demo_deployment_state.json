@@ -1,0 +1,125 @@
+{
+  "schema_version": "5.0.0-DEMO-DEPLOYMENT",
+  "account_quarantine": "Pepperstone Demo #5258778",
+  "active_strategy_code": "REGIME_ADAPTIVE_V5",
+  "active_version": 3,
+  "baseline_strategy_code": "DOM_ABSORPTION",
+  "baseline_version": 2,
+  "baseline_live_json": {
+    "strategy": "DOM_ABSORPTION",
+    "placeOrders": true,
+    "lots": 0.01,
+    "stealthStops": true,
+    "jitterNoisePct": 5.0,
+    "emergencySlMult": 3.5,
+    "symbols": {
+      "BTCUSD": {
+        "strategy": "DOM_ABSORPTION",
+        "p1": 15,
+        "p2": 0.035,
+        "p3": 35.0,
+        "p4": 2.6,
+        "lots": 0.01,
+        "placeOrders": true,
+        "stealthStops": true,
+        "jitterNoisePct": 5.0,
+        "emergencySlMult": 3.5
+      },
+      "ETHUSD": {
+        "strategy": "DOM_ABSORPTION",
+        "p1": 20,
+        "p2": 0.03,
+        "p3": 4.5,
+        "p4": 2.6,
+        "lots": 0.01,
+        "placeOrders": true,
+        "stealthStops": true,
+        "jitterNoisePct": 5.0,
+        "emergencySlMult": 3.5
+      },
+      "XAUUSD": {
+        "strategy": "DOM_ABSORPTION",
+        "p1": 15,
+        "p2": 0.03,
+        "p3": 2.5,
+        "p4": 2.4,
+        "lots": 0.01,
+        "placeOrders": true,
+        "stealthStops": true,
+        "jitterNoisePct": 5.0,
+        "emergencySlMult": 3.5
+      },
+      "GOLD-PERP": {
+        "strategy": "DOM_ABSORPTION",
+        "p1": 15,
+        "p2": 0.03,
+        "p3": 2.5,
+        "p4": 2.4,
+        "lots": 0.01,
+        "placeOrders": false,
+        "stealthStops": true,
+        "jitterNoisePct": 5.0,
+        "emergencySlMult": 3.5
+      }
+    }
+  },
+  "deployment_history": [
+    {
+      "timestamp_utc": "2026-11-16T16:38:36.017423+00:00",
+      "action": "DEPLOY_V3_ON_DEMO",
+      "from": "DOM_ABSORPTION v2",
+      "to": "REGIME_ADAPTIVE_V5 v3",
+      "hypothesis": "Phase 2 OOS Matrix proved 7-zone Regime/ATR/Zone-End adaptation reduces rollover & transition losses vs static DOM_ABSORPTION V2.",
+      "baseline_trades_at_switch": 109,
+      "baseline_net_usd_at_switch": 4.7,
+      "live_json_written": true
+    }
+  ],
+  "ab_evaluation": {
+    "verdict": "COLLECTING_PARALLEL_AB",
+    "should_rollback": false,
+    "reason": "Forward Demo verification in progress (0/8 closed trades on REGIME_ADAPTIVE_V5). Baseline (DOM_ABSORPTION) N=109, Net=+4.70 USD.",
+    "baseline": {
+      "trades": 109,
+      "wins": 45,
+      "losses": 64,
+      "win_rate_pct": 41.3,
+      "gross_win_usd": 111.77,
+      "gross_loss_usd": 107.07,
+      "net_pnl_usd": 4.7,
+      "profit_factor": 1.04,
+      "expectancy_usd": 0.0431,
+      "max_dd_usd": 31.66,
+      "first_trade_utc": "2026-10-04 23:32:15.426",
+      "last_trade_utc": "2026-11-16 15:58:10.604",
+      "by_symbol": {
+        "BTCUSD": {
+          "trades": 27,
+          "wins": 7,
+          "net_pnl_usd": -5.95
+        },
+        "ETHUSD": {
+          "trades": 7,
+          "wins": 2,
+          "net_pnl_usd": -0.42
+        },
+        "XAUUSD": {
+          "trades": 75,
+          "wins": 36,
+          "net_pnl_usd": 11.07
+        }
+      }
+    },
+    "challenger": {
+      "trades": 0,
+      "win_rate_pct": 0.0,
+      "profit_factor": 0.0,
+      "net_pnl_usd": 0.0,
+      "expectancy_usd": 0.0,
+      "max_dd_usd": 0.0
+    }
+  },
+  "updated_at_utc": "2026-11-16T16:38:36.017423+00:00",
+  "build_verified": true,
+  "last_action": "DEPLOYED_V3_REGIME_ADAPTIVE_V5"
+}

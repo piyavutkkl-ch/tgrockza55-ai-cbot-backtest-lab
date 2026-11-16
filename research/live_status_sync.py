@@ -442,7 +442,13 @@ def maybe_run_flywheel_cycle():
         print(f"Error executing flywheel cycle: {e}")
 
 def rebuild_ui_summaries():
-    """Rebuild modular 8-page Web UI summary JSONs after telemetry updates."""
+    """Run V5 Agent 4 A/B Governance Check and rebuild modular 8-page Web UI summary JSONs."""
+    try:
+        from research.v5_multi_agent_pipeline import run_v5_pipeline
+        run_v5_pipeline(deploy_v3=False, apply_live_json=True, build_verified=True)
+    except Exception as e:
+        print(f"V5 pipeline check skipped: {e}")
+
     builders = [
         os.path.join(REPO_ROOT, 'tools', 'build_data_center.py'),
         os.path.join(REPO_ROOT, 'tools', 'build_overview_summary.py'),
@@ -489,6 +495,10 @@ def maybe_git_push(current_trade_count=None):
                     'docs/data/dc_BTCUSD.json',
                     'docs/data/dc_ETHUSD.json',
                     'docs/data/dc_GOLD-PERP.json',
+                    'docs/data/demo_deployment_state.json',
+                    'docs/data/v5_pipeline_state.json',
+                    'docs/data/agent_handovers.json',
+                    'DECISION_LOG.md',
                     'data/live/BTCUSD/trades.csv',
                     'data/live/ETHUSD/trades.csv',
                     'data/live/XAUUSD/trades.csv',

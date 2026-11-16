@@ -1,0 +1,148 @@
+{
+  "schema_version": "5.0.0-MULTI-AGENT-PIPELINE",
+  "executed_at_utc": "2026-11-16T16:38:36.038065+00:00",
+  "demo_quarantine": "Pepperstone Demo #5258778",
+  "stages": {
+    "agent_1_collector_merger": {
+      "agent_id": "agent_1",
+      "status": "READY",
+      "checked_at_utc": "2026-11-16T16:38:35.995815+00:00",
+      "total_merged_bars": 88126,
+      "total_ghost_rows_filtered": 1028,
+      "watchdog_symbols": {
+        "BTCUSD": {
+          "symbol": "BTCUSD",
+          "status": "RECORDING_ACTIVE",
+          "pid": 22304,
+          "uptime_seconds": 84767,
+          "restart_count": 0,
+          "has_fresh_ticks": true,
+          "last_fresh_mtime_utc": "2026-11-16T16:38:29.645048+00:00",
+          "last_stoppage_utc": null,
+          "inactivity_or_warmup_seconds": 1
+        },
+        "ETHUSD": {
+          "symbol": "ETHUSD",
+          "status": "RECORDING_ACTIVE",
+          "pid": 17636,
+          "uptime_seconds": 84554,
+          "restart_count": 1,
+          "has_fresh_ticks": true,
+          "last_fresh_mtime_utc": "2026-11-16T16:38:30.067871+00:00",
+          "last_stoppage_utc": "2026-11-15T17:09:13.555101+00:00",
+          "inactivity_or_warmup_seconds": 1
+        },
+        "XAUUSD": {
+          "symbol": "XAUUSD",
+          "status": "RECORDING_ACTIVE",
+          "pid": 360,
+          "uptime_seconds": 63604,
+          "restart_count": 12,
+          "has_fresh_ticks": true,
+          "last_fresh_mtime_utc": "2026-11-16T16:38:31.030393+00:00",
+          "last_stoppage_utc": "2026-11-15T22:58:23.738529+00:00",
+          "inactivity_or_warmup_seconds": 0
+        }
+      },
+      "symbols": {
+        "BTCUSD": {
+          "total_merged_bars": 22911,
+          "ctrader_mcp_online": true,
+          "clean_live_min_rows": 13094,
+          "dropped_ghost_rows": 0
+        },
+        "ETHUSD": {
+          "total_merged_bars": 22908,
+          "ctrader_mcp_online": true,
+          "clean_live_min_rows": 13022,
+          "dropped_ghost_rows": 0
+        },
+        "XAUUSD": {
+          "total_merged_bars": 42307,
+          "ctrader_mcp_online": true,
+          "clean_live_min_rows": 10178,
+          "dropped_ghost_rows": 1028
+        }
+      }
+    },
+    "agent_2_research_hunter": {
+      "agent_id": "agent_2",
+      "status": "READY",
+      "upstream_merged_bars": 88126,
+      "papers_indexed": 193,
+      "external_leads": 0,
+      "total_forensic_cases": 475,
+      "zero_sl_forensic_cases": 371,
+      "symbols": {
+        "XAUUSD": {
+          "live_rich_bars": 10191,
+          "forensic_events": 138,
+          "zero_sl_events": 120,
+          "worst_case_summary": "STR-003 LONDON_TO_NY->LONDON_TO_NY MAE 19.25x ATR (ROLLOVER_SPREAD_OR_THIN_LIQUIDITY)"
+        },
+        "BTCUSD": {
+          "live_rich_bars": 13109,
+          "forensic_events": 177,
+          "zero_sl_events": 148,
+          "worst_case_summary": "STR-002 NY_TO_CLOSE->NY_TO_CLOSE MAE 33.92x ATR (ROLLOVER_SPREAD_OR_THIN_LIQUIDITY)"
+        },
+        "ETHUSD": {
+          "live_rich_bars": 13037,
+          "forensic_events": 160,
+          "zero_sl_events": 103,
+          "worst_case_summary": "STR-003 ASIA->LONDON_TO_NY MAE 27.82x ATR (REGIME_SHIFT_RANGE_TO_BREAKOUT)"
+        }
+      }
+    },
+    "agent_3_evolver_validator": {
+      "agent_id": "agent_3",
+      "status": "VALIDATED",
+      "candidate_strategy_code": "REGIME_ADAPTIVE_V5",
+      "candidate_version": 3,
+      "baseline_strategy_code": "DOM_ABSORPTION",
+      "baseline_version": 2,
+      "oos_passed_cells": 52,
+      "oos_total_cells": 91,
+      "forensics_mitigated_count": 475,
+      "symbols": {
+        "XAUUSD": {
+          "passed_cells": 16,
+          "total_cells": 27,
+          "top_policies": [
+            "ASIA · TREND_BULL: ใช้ STR-003 (ADAPTIVE_TIGHT) — พบใน OOS 2 ครั้ง ชนะ 2/2 (100.0%), Net +13.76 USD (PF 9.99)",
+            "ASIA · TREND_BEAR: ใช้ STR-001 (ADAPTIVE_WIDE) — พบใน OOS 4 ครั้ง ชนะ 2/4 (50.0%), Net +14.81 USD (PF 1.73)",
+            "ASIA · BREAKOUT: ใช้ STR-004 (ADAPTIVE_WIDE) — พบใน OOS 10 ครั้ง ชนะ 5/10 (50.0%), Net +68.82 USD (PF 2.17)",
+            "ASIA · RANGE: ใช้ STR-003 (ADAPTIVE_WIDE) — พบใน OOS 6 ครั้ง ชนะ 2/6 (33.3%), Net +28.56 USD (PF 1.94)"
+          ]
+        },
+        "BTCUSD": {
+          "passed_cells": 20,
+          "total_cells": 35,
+          "top_policies": [
+            "ASIA · TREND_BEAR: ใช้ STR-001 (ADAPTIVE_BALANCED) — พบใน OOS 20 ครั้ง ชนะ 8/20 (40.0%), Net +20.45 USD (PF 1.81)",
+            "ASIA · BREAKOUT: ใช้ STR-004 (ADAPTIVE_BALANCED) — พบใน OOS 16 ครั้ง ชนะ 6/16 (37.5%), Net +4.03 USD (PF 1.18)",
+            "ASIA · RANGE: ใช้ STR-003 (ADAPTIVE_WIDE) — พบใน OOS 3 ครั้ง ชนะ 2/3 (66.7%), Net +7.76 USD (PF 2.94)",
+            "ASIA · THIN_OR_NEWS: ใช้ STR-004 (ADAPTIVE_WIDE) — พบใน OOS 2 ครั้ง ชนะ 1/2 (50.0%), Net +4.06 USD (PF 1.86)"
+          ]
+        },
+        "ETHUSD": {
+          "passed_cells": 16,
+          "total_cells": 29,
+          "top_policies": [
+            "ASIA · TREND_BEAR: ใช้ STR-006 (ADAPTIVE_BALANCED) — พบใน OOS 3 ครั้ง ชนะ 2/3 (66.7%), Net +0.50 USD (PF 5.23)",
+            "ASIA · BREAKOUT: ใช้ STR-006 (FAST_RR_1_5) — พบใน OOS 3 ครั้ง ชนะ 2/3 (66.7%), Net +0.10 USD (PF 1.94)",
+            "ASIA · RANGE: ใช้ STR-003 (ADAPTIVE_WIDE) — พบใน OOS 5 ครั้ง ชนะ 3/5 (60.0%), Net +0.49 USD (PF 3.27)",
+            "ASIA_TO_LONDON · RANGE: ใช้ STR-006 (ADAPTIVE_BALANCED) — พบใน OOS 3 ครั้ง ชนะ 2/3 (66.7%), Net +0.23 USD (PF 3.88)"
+          ]
+        }
+      }
+    },
+    "agent_4_audit_demo_deploy": {
+      "active_strategy_code": "REGIME_ADAPTIVE_V5",
+      "active_version": 3,
+      "last_action": "DEPLOYED_V3_REGIME_ADAPTIVE_V5",
+      "ab_verdict": "COLLECTING_PARALLEL_AB",
+      "decision_log_updated": "DECISION_LOG.md"
+    }
+  }
+}

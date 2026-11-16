@@ -1,28 +1,36 @@
-# 📌 สมุดบันทึกการตัดสินใจของผู้ใช้ (Human-in-the-Loop Decision Matrix)
-*บันทึกสถานะการตัดสินใจเชิงกลยุทธ์ สถาปัตยกรรม และความปลอดภัยของระบบ cBot Multi-Agent & Flywheel*
-*อัปเดตล่าสุด: 08 พฤศจิกายน 2026*
+# 🧭 DECISION LOG & HUMAN DECISION GATE (`cbot-atgvt` V5)
+
+> เอกสารนี้จัดทำและอัปเดตอัตโนมัติโดย **Agent 4 (`Audit, Demo Deploy & Reporter Agent`)** 
+> ตามกฎกลาง [`GEMINI.md`](GEMINI.md) เพื่อบันทึกประวัติการปรับกลยุทธ์บน Demo (`#5258778`), เกณฑ์ A/B Rollback อัตโนมัติ, และประเด็นที่รอ **Human Decide**
 
 ---
 
-> [!NOTE]
-> ตามนโยบายการทำงานแบบ **Autonomous High-Agency**: หากมีประเด็นใดที่ต้องรอการตัดสินใจจากผู้ใช้ ระบบจะไม่หยุดรอ แต่จะเลือกแนวทางที่ปลอดภัย รัดกุม และมีประสิทธิภาพสูง (Default Best-Practice) ดำเนินการล่วงหน้าไปก่อนทันที เพื่อให้วงจรการพัฒนายังคงหมุนไปข้างหน้าอย่างต่อเนื่อง
+## 1. Human-in-the-Loop Decision Gate (รายการรอ/สรุปให้ Human พิจารณา)
+
+| ID | หัวข้อ / จุดตัดสินใจ | สถานะ | เหตุผล & Trade-Off (ตัวเลขจริง) | คำสั่ง Human / ทางเลือก |
+| :--- | :--- | :--- | :--- | :--- |
+| **DEC-V5-001** | ใช้กฎกลาง System Rules V5 (`GEMINI.md`) แทน V4 | ✅ APPROVED | ปลดล็อก Demo Sanitizer, ยกเลิกรอ N>=500, เพิ่ม 7-Zone & Zero-SL Forensics | ใช้งานแล้ว (ห้าม AI แก้กฎ 5 หมวดโดยพลการ) |
+| **DEC-V5-002** | Phase 3 Autonomous Upgrade บน Demo `#5258778`: `DOM_ABSORPTION v2` ➔ `REGIME_ADAPTIVE_V5 v3` | 🟢 DEPLOYED (AUTO-ROLLBACK ARMED) | ผล Phase 2 OOS ผ่าน `52/91` ช่อง across XAU/BTC/ETH และแก้จุดตาย Spread Spike ช่วง Transition (`475` Forensic cases) | AI ทดสอบเดินหน้าอัตโนมัติบน Demo และจะ **Rollback กลับ V2 ทันที** หาก Expectancy/PF ต่ำกว่า Baseline หลังครบ N>=8 ไม้ (หรือแพ้หนัก >= -12 USD) |
+| **DEC-V5-003** | ก้าวเข้าสู่ **Phase 4** (ปรับเว็บ 8 หน้าเป็น 4 ขั้นตอนหลัก & แสดงตาราง 7-Zone Situational Transparency เต็มรูปแบบ) | ⏳ AWAITING HUMAN GO | โครงสร้าง Backend Phase 1–3 พร้อมครบ (`Hybrid Merger`, `7-Zone OOS + Forensics`, `4-Agent Pipeline + Auto-Rollback`) | สั่ง **"ไปต่อ Phase 4"** เมื่อพร้อมอัปเกรด UI เว็บ 8 หน้า |
 
 ---
 
-### 📋 ตารางประเด็นที่รอการตัดสินใจ & ทางเลือกที่ระบบดำเนินการล่วงหน้า
+## 2. Parallel Demo A/B Comparison (`#5258778` Live Forward)
 
-| รหัสประเด็น | หัวข้อการตัดสินใจ | ทางเลือกที่เป็นไปได้ | แนวทางที่ระบบเลือกทำล่วงหน้า (Active Now) | ผลกระทบและความปลอดภัย |
-| :---: | :--- | :--- | :--- | :--- |
-| **DEC-001** | **โหมดบัญชีในการเทรดสด (Execution Account Mode)** | 1. รัน Forward บน Demo Account (`5258778`) ต่อไป<br/>2. ย้ายไปรัน Micro-Lot บน Live Account (`1347114`) | ✅ **เลือกทำทางที่ 1: รันบน Demo ต่อไป** จนกว่าระบบจะวนลูปครบ 10 รอบ และค่า Profit Factor $\ge 1.30$ | **ปลอดภัยสูงสุด 100%**: ไม่มีความเสี่ยงต่อเงินทุนจริงในบัญชี Live |
-| **DEC-002** | **การคัดเลือกคู่เหรียญช่วงวันหยุด (Weekend Asset Focus)** | 1. โฟกัสเฉพาะ `BTCUSD`<br/>2. โฟกัสเฉพาะ `ETHUSD`<br/>3. บันทึกและทดสอบคู่ขนานทั้งคู่ | ✅ **เลือกทำทางที่ 3: บันทึกและทดสอบคู่ขนานทั้ง BTCUSD และ ETHUSD** พร้อมเก็บบันทึก DOM L2 25 ชั้น | **เพิ่มความหลากหลายของข้อมูล**: ได้ Order Flow ของทั้งสองเหรียญมาเปรียบเทียบค่า Correlation |
-| **DEC-003** | **ระดับการกรองข่าวสารเศรษฐกิจ (News Blackout Window)** | 1. หยุดเทรดก่อน 15 นาที / หลัง 60 นาที<br/>2. หยุดเทรดก่อน 30 นาที / หลัง 120 นาที (แนะนำตามผลวิจัย)<br/>3. เทรดสวนข่าว (News Scalping) | ✅ **เลือกทำทางที่ 2: ก่อน 30 นาที / หลัง 120 นาที** สำหรับข่าว Extreme/High (CPI, FOMC, NFP) | **เพิ่มความได้เปรียบเชิงสถิติ**: ผลวิเคราะห์ 1.67 ล้านแท่งยืนยันว่าพลิกผลขาดทุนเป็นกำไร (PF 1.08, Net +$439) |
-| **DEC-004** | **ระดับความปลอดภัยของ Stop Loss (Stealth vs Hard SL)** | 1. Hard SL ในเซิร์ฟเวอร์โบรกเกอร์<br/>2. Quantum Stealth RAM SL (±5% Jitter) ซ่อนในหน่วยความจำ | ✅ **เลือกทำทางที่ 2: Quantum Stealth RAM SL** พร้อม Hard Catastrophe Stop สำรองไว้ที่ระยะ 3x | **ป้องกัน Stop Hunting**: โบรกเกอร์และสภาพคล่องภายนอกมองไม่เห็นระดับ SL จริง |
-| **DEC-005** | **ความถี่ในการหมุนลูป Flywheel (Loop Cycle Frequency)** | 1. ทุก 5 นาที (เร็ว สรุปผลต่อเนื่อง)<br/>2. ทุก 15 นาที<br/>3. ทุก 1 ชั่วโมง | ✅ **เลือกทำทางที่ 1: ทุก 5 นาที** ควบคู่กับระบบ Auto-Push ขึ้น GitHub Pages | **ติดตามผลได้แบบเรียลไทม์**: หน้าเว็บได้รับข้อมูลสรุปและรายงานแนวทางพัฒนาใหม่อย่างสม่ำเสมอ |
+* **Updated (UTC):** `2026-11-16T16:38:36.017423+00:00`
+* **Active C# Strategy on Demo `#5258778`:** `REGIME_ADAPTIVE_V5` (Version `3`) · **Last Action:** `DEPLOYED_V3_REGIME_ADAPTIVE_V5`
+* **A/B Verdict:** `COLLECTING_PARALLEL_AB` — Forward Demo verification in progress (0/8 closed trades on REGIME_ADAPTIVE_V5). Baseline (DOM_ABSORPTION) N=109, Net=+4.70 USD.
+* **Cumulative Demo Account (`truth_guard.json`):** Balance `$120.76 USD` · Closed `N=125` · Net `+20.76 USD` · PF `1.17`
+
+| Model Variant | Status on Demo `#5258778` | Closed Trades | Win Rate | Profit Factor | Expectancy / Trade | Net PnL (USD) | Max DD (USD) |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Baseline: `DOM_ABSORPTION v2`** | Rollback Snapshot Saved | 109 | 41.3% | 1.04 | +0.0431 | +4.70 | 31.66 |
+| **Challenger: `REGIME_ADAPTIVE_V5 v3`** | Active Forward Candidate | 0 | 0.0% | 0.00 | +0.0000 | +0.00 | 0.00 |
 
 ---
 
-### 🛠️ สิ่งที่ระบบได้ดำเนินการล่วงหน้าไปแล้วในระหว่างนี้ (Proactive Implementations):
-1. **วงจรควอนท์ 4 ขั้นตอนหมุนสะสมไปแล้ว 2 รอบสมบูรณ์** (Cycle #1 และ #2) พร้อมบันทึกรายละเอียดของแต่ละขั้นตอนลง [docs/data/flywheel_cycles.json](file:///d:/cbot-atgvt/docs/data/flywheel_cycles.json)
-2. **สร้างกลยุทธ์ Quant News-Filtered DOM Absorption** ที่ผสานตัวกรองข่าวเศรษฐกิจตามผลการวิจัยล่าสุด
-3. **ติดตั้งระบบ Live Dashboard บน GitHub Pages** พร้อมตัวนับรอบ (Cycle Counter) และการสลับดูรายละเอียดของแต่ละสเต็ป
-4. **เปิดระบบ Background Daemons** สำหรับคอยบันทึกข้อมูลสด cTrader และซิงค์ผลการประเมินขึ้นหน้าเว็บอัตโนมัติ
+## 3. Demo Deployment & Rollback History Log
+
+| Timestamp (UTC) | Action | From ➔ To | Rationale / Hypothesis |
+| :--- | :--- | :--- | :--- |
+| `2026-11-16T16:38:36` | `DEPLOY_V3_ON_DEMO` | `DOM_ABSORPTION v2` ➔ `REGIME_ADAPTIVE_V5 v3` | Phase 2 OOS Matrix proved 7-zone Regime/ATR/Zone-End adaptation reduces rollover & transition losses vs static DOM_ABSORPTION V2. |

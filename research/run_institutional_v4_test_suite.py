@@ -32,6 +32,7 @@ TEST_STEPS = [
     ("Event-Driven Market Intelligence Daemon", [PYTHON_EXE, "research/event_driven_intelligence_daemon.py", "--single"]),
     ("Phase 1 Hybrid cTrader+Live Merger & Sanitizer", [PYTHON_EXE, "-m", "unittest", "research/test_hybrid_data_merger.py"]),
     ("Phase 2 Session Regime Engine & Blowup Forensics", [PYTHON_EXE, "-m", "unittest", "research/test_session_regime_forensics.py"]),
+    ("Phase 3 V5 4-Agent Pipeline & Demo Rollback", [PYTHON_EXE, "-m", "unittest", "research/test_v5_multi_agent_pipeline.py"]),
     ("8-Page Web Portal Verification", [PYTHON_EXE, "tools/verify_8page_ui.py"])
 ]
 

@@ -26,14 +26,14 @@
 * **Adaptive Optimization & Out-of-Sample Gate (No Fixed Numbers):** ทดสอบสวีป SL/RR (Tight/Balanced/Wide ATR) + รูปแบบการปิดออเดอร์ (`EXIT_AT_ZONE_END`, `ROLLOVER_GUARD`, `HOLD_THRU`) ผ่านเกณฑ์ Strict Chronological 60/40 IS➔OOS (Next-bar open fill, zero lookahead)
 * **Blowup & Failure Forensic Logger (No Permanent Ban):** ทดสอบโหมด `FORENSIC_ZERO_SL` (ไม่มี SL) เพื่อจับจุดแตกหักราย Regime/Transition พร้อมระบุสาเหตุและวิธีแก้ โดยเก็บทุกกลยุทธ์ไว้ใน Regime-Matched Memory (`REGIME_MATCHED_ACTIVE`) แทนการลบ/แบนถาวร
 
-### Phase 3: Multi-Agent Pipeline & Autonomous Demo Deployment / Rollback
+### ✅ Phase 3: Multi-Agent Pipeline & Autonomous Demo Deployment / Rollback *(COMPLETED — 16 พ.ย. 2026)*
+* **สร้างเสร็จแล้ว:** [`research/v5_multi_agent_pipeline.py`](research/v5_multi_agent_pipeline.py), [`research/demo_deployment_manager.py`](research/demo_deployment_manager.py), [`research/test_v5_multi_agent_pipeline.py`](research/test_v5_multi_agent_pipeline.py), [`cbot/BacktestLab/Strategies/RegimeAdaptiveV5.cs`](cbot/BacktestLab/Strategies/RegimeAdaptiveV5.cs), [`DECISION_LOG.md`](DECISION_LOG.md)
 * **4 Specialized AI Agents ส่งงานต่อกันผ่าน Repo Structured Artifacts:**
-  1. **`Data Collector & Merger Agent`**: คุม cTrader API + Watchdog 120s + Hybrid Merge + Sanitization ➔ อัปเดต `Data Center` & `Database`
-  2. **`Research & Pattern Hunter Agent`**: อ่านเปเปอร์/ดึง SSRN & arXiv + ตรวจจับ Regime & Session Transition Patterns ➔ ส่งสมมติฐานเข้า `Research Lab`
-  3. **`Strategy Evolver & OOS Validator Agent`**: สวีปพารามิเตอร์ SL/Risk/Logic + ตรวจ OOS Anti-Overfit + วิเคราะห์สาเหตุจุดแตก ➔ บันทึกใน `Experiment Lab` & `Intelligence`
-  4. **`Audit, Demo Deploy & Reporter Agent`**: ปรับ C# cBot บน Demo (ขยับ `Version` + เก็บ Rollback Baseline), อัปเดต `CURRENT_STATE_MAP.md` & เว็บ 8 หน้า, และติดตามผลขนานระหว่างรุ่นใหม่กับรุ่นเดิม (**Rollback อัตโนมัติทันทีหากรุ่นเดิมดีกว่า**)
-* **Human-in-the-Loop Decision Gate (`DECISION_LOG.md`):**
-  * เมื่อถึงจุดตัดสินใจสำคัญ (การแก้กฎหลัก 5 หมวดใน `GEMINI.md`, สรุปส่งมอบรอบพัฒนาใหญ่, หรือการตัดสินใจย้อนกลับ/เปลี่ยนทิศทางสถาปัตยกรรม) AI จะจัดทำสรุป Trade-off พร้อมตัวเลขตรงไปตรงมาให้ **Human Decide** ก่อนดำเนินการ
+  1. **`Data Collector & Merger Agent`**: คุม cTrader API + Watchdog 120s + Hybrid Merge + Sanitization (`hybrid_data_audit.json`)
+  2. **`Research & Pattern Hunter Agent`**: สกัด 7-Zone Session Patterns & Blowup Forensics ร่วมกับคลัง 193 เปเปอร์
+  3. **`Strategy Evolver & OOS Validator Agent`**: คัดเลือก OOS 60/40 ช่องที่ผ่านเกณฑ์และสร้าง Policy `REGIME_ADAPTIVE_V5 v3`
+  4. **`Audit, Demo Deploy & Reporter Agent`**: Deploy `REGIME_ADAPTIVE_V5 v3` ลง Demo `#5258778` (คง Snapshot `DOM_ABSORPTION v2` สำหรับ **Auto-Rollback อัตโนมัติ**), อัปเดต [`DECISION_LOG.md`](DECISION_LOG.md), `agent_handovers.json` และ `v5_pipeline_state.json`
+* **Human-in-the-Loop Decision Gate ([`DECISION_LOG.md`](DECISION_LOG.md)):** สรุปรอบพัฒนาใหญ่, กฎหลัก, และผลเทียบ A/B ให้ Human พิจารณาตัดสินใจได้ตลอดเวลา
 
 ### Phase 4: เว็บ 8 หน้าโหมด 4 ขั้นตอนหลัก & Real-Time Situational Transparency
 * แสดงวงจร 4 ขั้นตอนหลักบนเว็บ 8 หน้า (`Data & Market Sync ➔ Research & Matching ➔ Test & Anti-Overfit ➔ Learn & State Evolution`)

@@ -102,6 +102,8 @@ CORE_FOLDER_MAP: dict[str, tuple[str, str, str]] = {
     "supabase_v2_backup_latest.json": ("audit_logs", "supabase_v2_snap", "Local PostgreSQL/Supabase V2 backup of recent runs, policies & audit logs"),
     "hybrid_data_audit.json": ("live_telemetry", "hybrid_merger_v5", "Merged cTrader historical OHLCV/sessions + sanitized live L2 DOM/Order Flow audit"),
     "regime_strategy_matrix.json": ("strategy_registries", "regime_matrix_v5", "Phase 2: 7-zone Session/Transition Regime Matrix, OOS adaptive params & Zero-SL blowup forensics"),
+    "demo_deployment_state.json": ("audit_logs", "demo_deploy_v5", "Phase 3: Pepperstone Demo #5258778 baseline/challenger versions, A/B metrics & auto-rollback ledger"),
+    "v5_pipeline_state.json": ("audit_logs", "v5_pipeline_v5", "Phase 3: 4-Agent V5 orchestration pipeline handoff state (Collector -> Research -> Evolver -> Deploy)"),
 }
 
 SECONDARY_DESCRIPTIONS: dict[str, tuple[str, str]] = {
