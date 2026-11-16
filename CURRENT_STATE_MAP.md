@@ -50,8 +50,8 @@
 
 ---
 
-## 5. ช่องว่างเทียบกับ Future State (สิ่งที่ยังต้องพัฒนาต่อ)
+## 5. แผนที่วิวัฒนาการระบบ V5 (Phase 1–4 Completed)
 1. **✅ [Phase 1 เสร็จแล้ว]** เชื่อม [`ctrader_mcp_client.py`](research/ctrader_mcp_client.py) + [`hybrid_data_merger.py`](research/hybrid_data_merger.py) พร้อม V5 Data Sanitizer (ตัดแถวผี `ticks=0` / `NaN` อัตโนมัติ และแก้ไข `build_data_center.py` + `live_status_sync.py` แล้ว)
 2. **✅ [Phase 2 เสร็จแล้ว]** [`session_regime_forensics.py`](research/session_regime_forensics.py) + [`regime_strategy_matrix.json`](docs/data/regime_strategy_matrix.json) แยกวิเคราะห์ 7 โซน (`ASIA`, `ASIA_TO_LONDON`, `LONDON`, `LONDON_TO_NY`, `NY`, `NY_TO_CLOSE`, `OVERNIGHT`) + ตรวจ OOS (60/40) แบบไม่ล็อกเลขตายตัว + รัน Blowup Forensics (`FORENSIC_ZERO_SL`) บันทึกจุดแตกหักแทนการแบนถาวร
 3. **✅ [Phase 3 เสร็จแล้ว]** [`v5_multi_agent_pipeline.py`](research/v5_multi_agent_pipeline.py) + [`demo_deployment_manager.py`](research/demo_deployment_manager.py) + [`DECISION_LOG.md`](DECISION_LOG.md) ขับเคลื่อน 4 Agents ส่งงานต่อกัน พร้อม Deploy `REGIME_ADAPTIVE_V5 v3` บน Demo `#5258778` และ Auto-Rollback Guard กลับ V2 อัตโนมัติ
-4. **⏳ [Phase 4 ถัดไป] เว็บ 8 หน้าโหมด 4 ขั้นตอนหลัก & Situational UI:** แสดงผล Situational Accuracy, Demo A/B Rollback Status และ Blowup Forensics เต็มรูปแบบบนเว็บ 8 หน้า
+4. **✅ [Phase 4 เสร็จแล้ว]** เว็บ 8 หน้าโหมด **4 ขั้นตอนหลัก V5** ([`index.html`](docs/index.html) / [`shell.js`](docs/assets/shell.js)), ตาราง **7-Zone Situational Matrix, Zero-SL Blowup Forensics & Non-Banning Memory** บน [`intelligence.html`](docs/intelligence.html), และ **Demo A/B Rollback + Truth Guard V5** บน [`improvement-audit.html`](docs/improvement-audit.html) ซิงก์ครบ 100%

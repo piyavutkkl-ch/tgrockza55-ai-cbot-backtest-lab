@@ -41,21 +41,21 @@ export function formatRelativeTime(isoStr) {
   return { short: `${days}d ago`, full };
 }
 
+export function classifySessionZoneUtc(now = new Date()) {
+  const hm = now.getUTCHours() * 60 + now.getUTCMinutes();
+  if (hm >= 0 && hm < 7 * 60) return { zone: 'ASIA', transition: false };
+  if (hm >= 7 * 60 && hm < 8 * 60) return { zone: 'ASIA_TO_LONDON', transition: true };
+  if (hm >= 8 * 60 && hm < 12 * 60 + 30) return { zone: 'LONDON', transition: false };
+  if (hm >= 12 * 60 + 30 && hm < 14 * 60) return { zone: 'LONDON_TO_NY', transition: true };
+  if (hm >= 14 * 60 && hm < 20 * 60 + 30) return { zone: 'NY', transition: false };
+  if (hm >= 20 * 60 + 30 && hm < 22 * 60) return { zone: 'NY_TO_CLOSE', transition: true };
+  return { zone: 'OVERNIGHT', transition: false };
+}
+
 export function formatCutoffCountdown(now = new Date()) {
-  const target = new Date(Date.UTC(
-    now.getUTCFullYear(),
-    now.getUTCMonth(),
-    now.getUTCDate(),
-    21, 45, 0, 0
-  ));
-  if (now.getTime() >= target.getTime()) {
-    target.setUTCDate(target.getUTCDate() + 1);
-  }
-  const sec = Math.max(0, Math.floor((target.getTime() - now.getTime()) / 1000));
-  const h = String(Math.floor(sec / 3600)).padStart(2, '0');
-  const m = String(Math.floor((sec % 3600) / 60)).padStart(2, '0');
-  const s = String(sec % 60).padStart(2, '0');
-  return `${h}:${m}:${s}`;
+  const sz = classifySessionZoneUtc(now);
+  const utcHms = now.toISOString().slice(11, 19);
+  return `${sz.zone}${sz.transition ? ' ⚡' : ''} · ${utcHms}`;
 }
 
 export function getSavedTheme() {
@@ -192,9 +192,9 @@ export function mountShell(options = {}) {
 
           <span class="topbar-divider" aria-hidden="true"></span>
 
-          <div class="cutoff-widget" title="ระบบบังคับปิดสถานะ (Daily Flat Cutoff) ทุกวันเวลา 21:45 UTC">
+          <div class="cutoff-widget" title="V5 7-Zone Session &amp; Transition Tracker (Adaptive Flat Time แยกตามสินทรัพย์ — ไม่ล็อก 21:45 ตายตัว)">
             ${clockSvg()}
-            <span class="cutoff-label">21:45 UTC CUTOFF</span>
+            <span class="cutoff-label">7-ZONE UTC</span>
             <span class="cutoff-time mono" id="shell-cutoff-timer">${formatCutoffCountdown()}</span>
           </div>
         </div>
@@ -240,7 +240,7 @@ export function mountShell(options = {}) {
         <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
           <span id="shell-footer-updated" class="mono">อัปเดตล่าสุด: –</span>
           <span>·</span>
-          <span>v4.0 (8-Page Hub)</span>
+          <span>v5.0 (4-Stage · 8-Page Hub)</span>
         </div>
       </footer>
     </div>
@@ -265,7 +265,7 @@ export function mountShell(options = {}) {
           <button type="button" class="icon-btn" id="shell-help-close" aria-label="ปิดคู่มือ">✕</button>
         </div>
         <p style="margin:0 0 12px;font-size:13px;color:var(--text-secondary);">
-          เว็บวิจัยถูกจัดกลุ่มใหม่เหลือ <strong>8 หมวดหลัก</strong> เพื่อให้เห็นภาพรวมพอร์ตสดและผลการทดสอบย้อนหลังแยกจากกันชัดเจน:
+          ระบบ V5 เชื่อม <strong>วงจร 4 ขั้นตอนหลัก</strong> (Data &amp; Market Sync ➔ Research &amp; Matching ➔ Test &amp; Anti-Overfit ➔ Learn &amp; State Evolution) เข้ากับ <strong>8 หน้า Read-Only Portal</strong>:
         </p>
         <div style="display:grid;gap:8px;margin-bottom:14px;">
           ${NAV_ITEMS.map((item, idx) => `
@@ -279,7 +279,7 @@ export function mountShell(options = {}) {
           `).join('')}
         </div>
         <div style="padding:10px 12px;border-radius:10px;background:var(--bg-subcard);border:1px solid var(--border-subtle);font-size:12px;color:var(--text-secondary);">
-          ต้องการเปิดหน้าเว็บชุดเดิมทั้ง 14 หน้า? ดูได้ที่ลิงก์ <strong>📁 เว็บเวอร์ชันเดิม</strong> บริเวณด้านล่างสุด (footer) ของทุกหน้า
+          🔒 ข้อมูลทุกหน้ามาจากข้อมูลตลาดจริงและบัญชี Pepperstone Demo <strong>#5258778</strong> แบบ 100% Read-Only (ไม่มีสิทธิ์เปิด Live Account)
         </div>
       </div>
     </div>

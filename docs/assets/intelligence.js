@@ -17,6 +17,7 @@ const DATA_URLS = {
   watchdog: 'data/watchdog_status.json',
   alerts: 'data/web_alerts.json',
   overview: 'data/overview_summary.json',
+  regimeMatrix: 'data/regime_strategy_matrix.json',
 };
 
 const state = {
@@ -25,6 +26,7 @@ const state = {
   watchdog: null,
   alerts: null,
   overview: null,
+  regimeMatrix: null,
   matrixMode: 'champion',
   sortKey: null,
   sortDir: 'desc',
@@ -32,6 +34,9 @@ const state = {
   heatmapView: 'xauusd_3y',
   activeCellKey: null,
   showLevels: true,
+  v5Symbol: 'XAUUSD',
+  v5Tab: 'matrix',
+  v5OnlyPassed: false,
   refreshTimer: null,
 };
 
@@ -1063,6 +1068,156 @@ function renderMicrostructure() {
   }
 }
 
+function renderV5SituationalSection() {
+  const bar = $('v5SummaryBar');
+  const body = $('v5SituationalBody');
+  if (!bar || !body) return;
+
+  const symData = state.regimeMatrix?.symbols?.[state.v5Symbol];
+  if (!symData || symData.status !== 'COMPLETED') {
+    bar.innerHTML = `<span style="color:var(--text-muted)">ไม่พบข้อมูล V5 Matrix สำหรับ ${escapeHtml(state.v5Symbol)}</span>`;
+    body.innerHTML = '';
+    return;
+  }
+
+  const dw = symData.data_window || {};
+  const allRows = Array.isArray(symData.regime_strategy_matrix) ? symData.regime_strategy_matrix : [];
+  const passedRows = allRows.filter((r) => r.recommended_action === 'DEPLOY_ADAPTIVE');
+  const foren = symData.blowup_forensics || {};
+
+  bar.innerHTML = `
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+      <span class="v5-pill-stat ok">OOS Passed: ${passedRows.length}/${allRows.length} Zone×Regime</span>
+      <span class="v5-pill-stat warn">Blowup Forensics: ${foren.total_severe_events || 0} (Zero-SL: ${foren.zero_sl_events || 0})</span>
+      <span class="mono" style="color:var(--text-muted);font-size:11px;">Live DOM=${Number(dw.live_rich_bars || 0).toLocaleString('en-US')} bars · OOS Split=${escapeHtml(dw.split_time_utc || '–')}</span>
+    </div>
+    ${state.v5Tab === 'matrix' ? `
+      <label class="toggle-chip" style="font-size:11.5px;">
+        <input type="checkbox" id="chkV5OnlyPassed" ${state.v5OnlyPassed ? 'checked' : ''} />
+        <span>แสดงเฉพาะช่องที่ผ่าน OOS</span>
+      </label>
+    ` : ''}
+  `;
+
+  $('chkV5OnlyPassed')?.addEventListener('change', (e) => {
+    state.v5OnlyPassed = e.target.checked;
+    renderV5SituationalSection();
+  });
+
+  if (state.v5Tab === 'matrix') {
+    const rows = state.v5OnlyPassed ? passedRows : allRows;
+    body.innerHTML = `
+      <div class="table-scroll">
+        <table class="v5-sit-table">
+          <thead>
+            <tr>
+              <th>7-ZONE SESSION</th>
+              <th>REGIME</th>
+              <th>BEST STRATEGY &amp; ADAPTIVE PROFILE</th>
+              <th>OOS UNSEEN (40%)</th>
+              <th>IN-SAMPLE (60%)</th>
+              <th>SITUATIONAL VERDICT (ตรงไปตรงมา)</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map((r) => {
+              const best = r.best_candidate || {};
+              const oos = best.oos_stats || {};
+              const isS = best.is_stats || {};
+              const ok = r.recommended_action === 'DEPLOY_ADAPTIVE';
+              return `
+                <tr>
+                  <td class="mono"><strong>${escapeHtml(r.session_zone)}</strong></td>
+                  <td><span class="tag-pill ${ok ? 'ok' : ''}" style="font-size:10.5px;">${escapeHtml(r.macro_regime)}</span></td>
+                  <td>
+                    <strong>${escapeHtml(best.strategy_id || '–')}</strong>
+                    <div class="mono" style="font-size:11px;color:var(--text-muted);">${escapeHtml(best.profile || '–')} · SL ${best.sl_atr ?? '–'}x ATR · RR ${best.rr ?? '–'}</div>
+                  </td>
+                  <td class="mono ${Number(oos.net_pnl_usd) > 0 ? 'val-pos' : Number(oos.net_pnl_usd) < 0 ? 'val-neg' : ''}">
+                    <strong>${oos.wins ?? 0}/${oos.trades ?? 0}</strong> (${oos.win_rate_pct ?? 0}%)<br/>
+                    <span>${Number(oos.net_pnl_usd || 0) >= 0 ? '+' : ''}${Number(oos.net_pnl_usd || 0).toFixed(2)} USD · PF ${oos.profit_factor ?? 0}</span>
+                  </td>
+                  <td class="mono" style="color:var(--text-secondary);">
+                    ${isS.wins ?? 0}/${isS.trades ?? 0} (${isS.win_rate_pct ?? 0}%)<br/>
+                    <span>${Number(isS.net_pnl_usd || 0) >= 0 ? '+' : ''}${Number(isS.net_pnl_usd || 0).toFixed(2)} USD</span>
+                  </td>
+                  <td style="max-width:340px;font-size:11.5px;">${escapeHtml(r.verdict_th || '')}</td>
+                </tr>
+              `;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+  } else if (state.v5Tab === 'forensics') {
+    const cases = Array.isArray(foren.top_cases) ? foren.top_cases : [];
+    body.innerHTML = `
+      <div class="table-scroll">
+        <table class="v5-sit-table">
+          <thead>
+            <tr>
+              <th>STRATEGY / MODE</th>
+              <th>ENTRY ➔ WORST TIME</th>
+              <th>ZONE TRANSITION</th>
+              <th>REGIME SHIFT</th>
+              <th>MAE / PNL / SPREAD</th>
+              <th>DIAGNOSIS &amp; COUNTERMEASURE</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${cases.map((c) => `
+              <tr>
+                <td>
+                  <strong>${escapeHtml(c.strategy_id)}</strong>
+                  <div class="mono" style="font-size:10.5px;color:${c.sl_mode === 'ZERO_SL' ? '#f87171' : 'var(--accent-gold-text)'};">${escapeHtml(c.sl_mode)} · ${escapeHtml(c.side)}</div>
+                </td>
+                <td class="mono" style="font-size:11px;">${escapeHtml(c.entry_time)}<br/>➔ ${escapeHtml(c.worst_time)}</td>
+                <td class="mono" style="font-size:11px;">${escapeHtml(c.entry_zone)} ➔ <strong>${escapeHtml(c.worst_zone)}</strong></td>
+                <td class="mono" style="font-size:11px;">${escapeHtml(c.entry_regime)} ➔ <strong>${escapeHtml(c.worst_regime)}</strong></td>
+                <td class="mono val-neg">
+                  MAE <strong>${c.mae_atr}x ATR</strong><br/>
+                  ${Number(c.pnl_usd).toFixed(2)} USD · Spd ${c.spread_at_worst}
+                </td>
+                <td style="max-width:320px;font-size:11.5px;">
+                  <strong>${escapeHtml(c.diagnosis)}</strong><br/>
+                  <span style="color:var(--text-secondary);">${escapeHtml(c.recommended_countermeasure)}</span>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+  } else {
+    const mem = symData.strategy_memory || {};
+    body.innerHTML = `
+      <div class="v5-mem-grid">
+        ${Object.entries(mem).map(([sid, m]) => {
+          const wins = Array.isArray(m.winning_contexts_oos) ? m.winning_contexts_oos : [];
+          const fails = Array.isArray(m.forensic_failure_hotspots) ? m.forensic_failure_hotspots : [];
+          return `
+            <article class="v5-mem-card">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+                <strong>${escapeHtml(sid)} · ${escapeHtml(m.name)}</strong>
+                <span class="v5-pill-stat ok" style="font-size:10px;">${escapeHtml(m.status)}</span>
+              </div>
+              <div style="font-size:11px;color:var(--text-muted);">Family: ${escapeHtml(m.family)}</div>
+              <div>
+                <div style="font-size:11px;font-weight:700;color:#4ade80;margin-bottom:3px;">✓ โซนที่ชนะใน OOS (${wins.length}):</div>
+                ${wins.length ? `<ul class="v5-mem-list">${wins.slice(0, 4).map((w) => `<li>${escapeHtml(w)}</li>`).join('')}</ul>` : '<span style="font-size:11px;color:var(--text-muted);">ยังไม่ผ่าน OOS ในสินทรัพย์นี้</span>'}
+              </div>
+              <div>
+                <div style="font-size:11px;font-weight:700;color:#f87171;margin-bottom:3px;">⚠ จุดเสี่ยงจาก Zero-SL Forensics:</div>
+                ${fails.length ? `<ul class="v5-mem-list">${fails.map((f) => `<li class="mono">${escapeHtml(f.context)} (${f.count}x)</li>`).join('')}</ul>` : '<span style="font-size:11px;color:var(--text-muted);">ไม่พบจุดแตก</span>'}
+              </div>
+            </article>
+          `;
+        }).join('')}
+      </div>
+    `;
+  }
+}
+
 /* ========================================================================
    Contextual Info Modal & Page Interactions
    ======================================================================== */
@@ -1195,6 +1350,28 @@ function initInteractions() {
     }
   });
   obs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+  document.querySelectorAll('#v5SymbolPills .view-pill').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      state.v5Symbol = btn.dataset.v5sym || 'XAUUSD';
+      document.querySelectorAll('#v5SymbolPills .view-pill').forEach((b) => {
+        b.classList.toggle('active', b === btn);
+      });
+      renderV5SituationalSection();
+    });
+  });
+
+  document.querySelectorAll('#v5SubTabs .seg-tab').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      state.v5Tab = btn.dataset.v5tab || 'matrix';
+      document.querySelectorAll('#v5SubTabs .seg-tab').forEach((b) => {
+        const active = b === btn;
+        b.classList.toggle('active', active);
+        b.setAttribute('aria-selected', String(active));
+      });
+      renderV5SituationalSection();
+    });
+  });
 }
 
 /* ========================================================================
@@ -1233,18 +1410,20 @@ async function loadAllData(isManual = false) {
   };
 
   try {
-    const [summary, liveStatus, watchdog, alerts, overview] = await Promise.all([
+    const [summary, liveStatus, watchdog, alerts, overview, regimeMatrix] = await Promise.all([
       tryFetch(DATA_URLS.summary, 'intelligence_summary'),
       tryFetch(DATA_URLS.live, 'live_status'),
       tryFetch(DATA_URLS.watchdog, 'watchdog_status'),
       tryFetch(DATA_URLS.alerts, 'web_alerts'),
       tryFetch(DATA_URLS.overview, 'overview_summary'),
+      tryFetch(DATA_URLS.regimeMatrix, 'regime_strategy_matrix'),
     ]);
 
     if (liveStatus) state.liveStatus = liveStatus;
     if (watchdog) state.watchdog = watchdog;
     if (alerts) state.alerts = alerts;
     if (overview) state.overview = overview;
+    if (regimeMatrix) state.regimeMatrix = regimeMatrix;
 
     updateShellTelemetry({
       watchdog: formatWatchdogForShell(state.watchdog),
@@ -1272,6 +1451,7 @@ async function loadAllData(isManual = false) {
     syncHeatmapPills();
     renderHeatmap();
     renderMicrostructure();
+    renderV5SituationalSection();
   } catch (err) {
     console.error('Intelligence fetch error:', err);
     if (offlineBanner && offlineText) {

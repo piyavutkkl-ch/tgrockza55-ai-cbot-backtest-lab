@@ -34,21 +34,24 @@
         <div id="auditHeaderTelemetry" class="audit-header-telemetry" aria-label="Account and market telemetry"></div>
       </div>
 
-      <!-- TOP SECTION: 10-Stage Institutional Lifecycle Stepper -->
-      <section class="audit-panel audit-panel-pad" id="lifecyclePanel" aria-label="10-Stage Institutional Lifecycle">
+      <!-- TOP SECTION: V5 4-Stage Institutional Loop (with Legacy 10-Stage Toggle) -->
+      <section class="audit-panel audit-panel-pad" id="lifecyclePanel" aria-label="V5 4-Stage Institutional Loop">
         <div class="a-panel-head">
           <div class="a-head-left">
             <span class="a-icon-box" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 12l10 5 10-5M2 17l10 5 10-5"/></svg>
             </span>
             <div>
-              <h2 class="a-panel-title">10-Stage Institutional Lifecycle</h2>
-              <div class="a-panel-sub">From Data Pipe to Continuous Improvement · Click any stage node to inspect AI officer deliverables</div>
+              <h2 class="a-panel-title" id="lifecycleTitle">V5 4-Stage Institutional Loop (4 AI Agents)</h2>
+              <div class="a-panel-sub" id="lifecycleSub">Data &amp; Market Sync ➔ Research &amp; Matching ➔ Test &amp; Anti-Overfit ➔ Learn, Audit &amp; Evolve</div>
             </div>
           </div>
           <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
-            <span id="lifecycleCycleBadge" class="tag-pill info">Cycle #328 · 327 Completed</span>
-            <span class="tag-pill ok">Stage 7 Active</span>
+            <div class="seg-mini" role="group" aria-label="Switch lifecycle view">
+              <button type="button" class="seg-mini-btn active" data-lifecycle-mode="v5">V5 4-Stage</button>
+              <button type="button" class="seg-mini-btn" data-lifecycle-mode="v4">Legacy 10-Stage</button>
+            </div>
+            <span id="lifecycleCycleBadge" class="tag-pill info">Cycle #1106 · V5 Active</span>
           </div>
         </div>
 
@@ -92,7 +95,7 @@
           </div>
         </article>
 
-        <!-- Card 2: Flat Cutoff 21:45 UTC Countdown -->
+        <!-- Card 2: V5 7-Zone Session & Adaptive Flat -->
         <article class="audit-panel risk-card">
           <div class="risk-card-top">
             <div class="a-head-left">
@@ -100,22 +103,22 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
               </span>
               <div>
-                <h2 class="a-panel-title">Flat Cutoff</h2>
-                <div class="a-panel-sub">Stop Trading at Night · Strictly No Overnight</div>
+                <h2 class="a-panel-title">7-Zone Session &amp; Adaptive Flat</h2>
+                <div class="a-panel-sub">Session/Transition Guard · Asset-Specific Rollover</div>
               </div>
             </div>
             <span id="cutoffOpenPosBadge" class="tag-pill ok">Open Pos: 0</span>
           </div>
 
           <div class="cutoff-center">
-            <div id="cutoffMainTime" class="cutoff-big-time">21:45:00</div>
-            <div class="cutoff-utc-label">UTC</div>
-            <div class="cutoff-sub-tz">04:45 ICT (Bangkok) · Fail-Closed Liquidation</div>
+            <div id="cutoffMainTime" class="cutoff-big-time" style="font-size:24px;">ASIA</div>
+            <div class="cutoff-utc-label" id="cutoffZoneMeta">UTC SESSION</div>
+            <div class="cutoff-sub-tz">XAU Guarded in NY_TO_CLOSE · Crypto Continuous</div>
           </div>
 
           <div class="card-bottom-bar">
-            <span id="cutoffCountdownLabel">🌙 Auto Flat in: <strong class="mono">--h --m --s</strong></span>
-            <span class="tag-pill info">HARD RULE</span>
+            <span id="cutoffCountdownLabel">🕒 Next Zone Transition: <strong class="mono">--m --s</strong></span>
+            <span class="tag-pill info">ADAPTIVE V5</span>
           </div>
         </article>
 
@@ -140,6 +143,11 @@
             <span>✓ ALL CLEAR — TRADING ALLOWED (VIEW MATRIX ↓)</span>
           </button>
         </article>
+      </section>
+
+      <!-- V5 DEMO A/B DEPLOYMENT & AUTO-ROLLBACK + HUMAN DECISION GATE -->
+      <section class="audit-panel audit-panel-pad" id="demoAbGatePanel" aria-label="Demo A/B Rollback and Human Decision Gate">
+        <div style="color:var(--text-muted);font-size:12px;">Loading V5 Demo #5258778 A/B Rollback &amp; Decision Gate telemetry…</div>
       </section>
 
       <!-- BOTTOM HERO SECTION: Dark Monospace Terminal Audit Log Stream -->

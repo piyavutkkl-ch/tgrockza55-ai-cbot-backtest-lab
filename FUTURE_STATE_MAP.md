@@ -35,7 +35,7 @@
   4. **`Audit, Demo Deploy & Reporter Agent`**: Deploy `REGIME_ADAPTIVE_V5 v3` ลง Demo `#5258778` (คง Snapshot `DOM_ABSORPTION v2` สำหรับ **Auto-Rollback อัตโนมัติ**), อัปเดต [`DECISION_LOG.md`](DECISION_LOG.md), `agent_handovers.json` และ `v5_pipeline_state.json`
 * **Human-in-the-Loop Decision Gate ([`DECISION_LOG.md`](DECISION_LOG.md)):** สรุปรอบพัฒนาใหญ่, กฎหลัก, และผลเทียบ A/B ให้ Human พิจารณาตัดสินใจได้ตลอดเวลา
 
-### Phase 4: เว็บ 8 หน้าโหมด 4 ขั้นตอนหลัก & Real-Time Situational Transparency
-* แสดงวงจร 4 ขั้นตอนหลักบนเว็บ 8 หน้า (`Data & Market Sync ➔ Research & Matching ➔ Test & Anti-Overfit ➔ Learn & State Evolution`)
-* แสดงตาราง **Accuracy by Situation & Session** แบบตรงไปตรงมา (เช่น `"เจอสถานการณ์ A 3 ครั้ง ชนะ 2/3 (+$X)"`) แทนตัวนับรอ 500 ไม้
-* ซิงก์ `CURRENT_STATE_MAP.md` และ `docs/data/*.json` ให้ตรงกันตลอดเวลา
+### ✅ Phase 4: เว็บ 8 หน้าโหมด 4 ขั้นตอนหลัก & Real-Time Situational Transparency *(COMPLETED — 16 พ.ย. 2026)*
+* แสดง **วงจร 4 ขั้นตอนหลัก V5** (`Data & Market Sync ➔ Research & Matching ➔ Test & Anti-Overfit ➔ Learn & State Evolution`) บน [`index.html`](docs/index.html), [`shell.js`](docs/assets/shell.js) และ [`improvement-audit.html`](docs/improvement-audit.html) พร้อมตัวบอก **7-Zone UTC Session** แบบเรียลไทม์บน Top Bar
+* แสดงตาราง **Accuracy by Situation & 7-Zone Session**, **Zero-SL Blowup Forensics**, และ **Regime-Matched Memory (ไม่แบนกลยุทธ์ถาวร)** บน [`intelligence.html`](docs/intelligence.html) โดยยกเลิกตัวนับรอ `N >= 500` บนเว็บแล้วทั้งหมด
+* แสดง **Demo `#5258778` Autonomous A/B (`DOM_ABSORPTION v2` vs `REGIME_ADAPTIVE_V5 v3`) & Human Gate** บน [`improvement-audit.html`](docs/improvement-audit.html) ซิงก์ [`CURRENT_STATE_MAP.md`](CURRENT_STATE_MAP.md) และ `docs/data/*.json` ตลอดเวลา

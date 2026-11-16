@@ -3,7 +3,7 @@
    Integrates cleanly with shared ES Module shell.js & docs/data/*.json
    ========================================================================== */
 
-import { mountShell, updateShellTelemetry, escapeHtml, formatRelativeTime } from './shell.js';
+import { mountShell, updateShellTelemetry, escapeHtml, formatRelativeTime, classifySessionZoneUtc } from './shell.js';
 
 const state = {
   auditSummary: null,
@@ -19,7 +19,10 @@ const state = {
   marketIntel: null,
   webAlerts: null,
   overviewSummary: null,
+  v5Pipeline: null,
+  demoDeploy: null,
   failedSources: [],
+  lifecycleMode: 'v5',
   gaugeMode: 'session', // 'session' (-$2.68) | 'worst' (-$5.25)
   inspectedStage: null,
   logFilter: 'ALL',
@@ -157,42 +160,81 @@ function renderHeaderTelemetryStrip() {
   document.getElementById('btnRefreshPage')?.addEventListener('click', loadPageData);
 }
 
+const V5_FOUR_STAGES = [
+  { num: 1, title: '1. Data & Market Sync', sub: 'Hybrid cTrader + Live', agent: 'Agent 1 · Collector/Merger', spec: 'Merges cTrader M1/sessions + 24/7 Watchdog L2 DOM/Tick & filters Demo ghost rows without halting.' },
+  { num: 2, title: '2. Research & Matching', sub: '7-Zone Patterns & Forensics', agent: 'Agent 2 · Research Hunter', spec: 'Mines 7 session/transition zones, 193 papers & Zero-SL Blowup Forensics without permanent strategy bans.' },
+  { num: 3, title: '3. Test & Anti-Overfit', sub: 'Chronological 60/40 OOS', agent: 'Agent 3 · Evolver/Validator', spec: 'Sweeps adaptive ATR SL/RR/Exit profiles and requires strict Unseen OOS edge per (Asset × Zone × Regime).' },
+  { num: 4, title: '4. Learn, Audit & Evolve', sub: 'Demo A/B & Human Gate', agent: 'Agent 4 · Audit/Deploy', spec: 'Deploys versioned C# cBot on Demo #5258778, runs parallel A/B Auto-Rollback & logs DECISION_LOG.md.' },
+];
+
 // =========================================================================
-// 1. 10-Stage Institutional Lifecycle Stepper
+// 1. V5 4-Stage Institutional Loop (with Legacy 10-Stage Toggle)
 // =========================================================================
 function renderLifecycleStepper() {
   const container = document.getElementById('lifecycleStepper');
   const cycleBadge = document.getElementById('lifecycleCycleBadge');
-  const activeStage = 7;
-
+  const titleEl = document.getElementById('lifecycleTitle');
+  const subEl = document.getElementById('lifecycleSub');
   const fw = state.auditSummary?.flywheel_meta || {};
-  if (cycleBadge) {
-    cycleBadge.textContent = `Cycle #${fw.active_cycle || 328} · ${fw.total_cycles_completed || 327} Completed`;
+
+  if (state.lifecycleMode === 'v5') {
+    if (titleEl) titleEl.textContent = 'V5 4-Stage Institutional Loop (4 AI Agents)';
+    if (subEl) subEl.textContent = 'Data & Market Sync ➔ Research & Matching ➔ Test & Anti-Overfit ➔ Learn, Audit & Evolve';
+    if (cycleBadge) {
+      const code = state.demoDeploy?.active_strategy_code || 'REGIME_ADAPTIVE_V5';
+      const ver = state.demoDeploy?.active_version || 3;
+      cycleBadge.textContent = `Cycle #${fw.total_cycles_completed || 1106} · ${code} v${ver}`;
+    }
+    if (!container) return;
+
+    const nodesHtml = V5_FOUR_STAGES.map((st) => {
+      const statusCls = st.num < 4 ? 'done' : 'active';
+      const inspCls = state.inspectedStage === st.num ? 'inspected' : '';
+      return `<button type="button" class="stage-node ${statusCls} ${inspCls}" data-stage="${st.num}" aria-pressed="${state.inspectedStage === st.num ? 'true' : 'false'}">
+        <span class="stage-circle">${st.num}</span>
+        <span class="stage-title">${escapeHtml(st.title)}</span>
+        <span class="stage-sub">${escapeHtml(st.sub)}</span>
+      </button>`;
+    }).join('');
+
+    container.innerHTML = `
+      <div class="stepper-grid" style="min-width:620px;">
+        <div class="stepper-track-bg" aria-hidden="true"></div>
+        <div class="stepper-track-fill" aria-hidden="true" style="width:92%"></div>
+        ${nodesHtml}
+      </div>
+    `;
+  } else {
+    if (titleEl) titleEl.textContent = 'Legacy 10-Stage Institutional Lifecycle';
+    if (subEl) subEl.textContent = 'Archived V4 10-Stage breakdown · Click any node to inspect details';
+    const activeStage = 7;
+    if (cycleBadge) {
+      cycleBadge.textContent = `Cycle #${fw.active_cycle || 1107} · ${fw.total_cycles_completed || 1106} Completed`;
+    }
+    if (!container) return;
+
+    const nodesHtml = LIFECYCLE_STAGES.map((st) => {
+      const statusCls = st.num < activeStage ? 'done' : st.num === activeStage ? 'active' : 'queued';
+      const inspCls = state.inspectedStage === st.num ? 'inspected' : '';
+      const circleInner =
+        st.num < activeStage
+          ? '<svg viewBox="0 0 20 20" width="15" height="15" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>'
+          : String(st.num);
+      return `<button type="button" class="stage-node ${statusCls} ${inspCls}" data-stage="${st.num}" aria-pressed="${state.inspectedStage === st.num ? 'true' : 'false'}">
+        <span class="stage-circle">${circleInner}</span>
+        <span class="stage-title">${escapeHtml(st.title)}</span>
+        <span class="stage-sub">${escapeHtml(st.sub)}</span>
+      </button>`;
+    }).join('');
+
+    container.innerHTML = `
+      <div class="stepper-grid">
+        <div class="stepper-track-bg" aria-hidden="true"></div>
+        <div class="stepper-track-fill" aria-hidden="true" style="width:${((activeStage - 1) / 9) * 90}%"></div>
+        ${nodesHtml}
+      </div>
+    `;
   }
-
-  if (!container) return;
-
-  const nodesHtml = LIFECYCLE_STAGES.map((st) => {
-    const statusCls = st.num < activeStage ? 'done' : st.num === activeStage ? 'active' : 'queued';
-    const inspCls = state.inspectedStage === st.num ? 'inspected' : '';
-    const circleInner =
-      st.num < activeStage
-        ? '<svg viewBox="0 0 20 20" width="15" height="15" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>'
-        : String(st.num);
-    return `<button type="button" class="stage-node ${statusCls} ${inspCls}" data-stage="${st.num}" aria-pressed="${state.inspectedStage === st.num ? 'true' : 'false'}">
-      <span class="stage-circle">${circleInner}</span>
-      <span class="stage-title">${escapeHtml(st.title)}</span>
-      <span class="stage-sub">${escapeHtml(st.sub)}</span>
-    </button>`;
-  }).join('');
-
-  container.innerHTML = `
-    <div class="stepper-grid">
-      <div class="stepper-track-bg" aria-hidden="true"></div>
-      <div class="stepper-track-fill" aria-hidden="true" style="width:${((activeStage - 1) / 9) * 90}%"></div>
-      ${nodesHtml}
-    </div>
-  `;
 
   container.querySelectorAll('.stage-node').forEach((btn) => {
     btn.addEventListener('click', () => {
@@ -209,6 +251,45 @@ function renderStageInspector() {
   if (!box) return;
   if (!state.inspectedStage) {
     box.hidden = true;
+    return;
+  }
+
+  if (state.lifecycleMode === 'v5') {
+    const st = V5_FOUR_STAGES.find((s) => s.num === state.inspectedStage);
+    if (!st) { box.hidden = true; return; }
+    const ps = state.v5Pipeline?.stages || {};
+    let metrics = '';
+    if (st.num === 1) {
+      const a1 = ps.agent_1_collector_merger || {};
+      metrics = `<span class="insp-metric-chip">Merged: ${a1.total_merged_bars ?? 0} bars</span><span class="insp-metric-chip">Ghost Filtered: ${a1.total_ghost_rows_filtered ?? 0}</span>`;
+    } else if (st.num === 2) {
+      const a2 = ps.agent_2_research_hunter || {};
+      metrics = `<span class="insp-metric-chip">Papers: ${a2.papers_indexed ?? 193}</span><span class="insp-metric-chip">Forensics: ${a2.total_forensic_cases ?? 0} (${a2.zero_sl_forensic_cases ?? 0} Zero-SL)</span>`;
+    } else if (st.num === 3) {
+      const a3 = ps.agent_3_evolver_validator || {};
+      metrics = `<span class="insp-metric-chip">OOS Passed: ${a3.oos_passed_cells ?? 0}/${a3.oos_total_cells ?? 0}</span><span class="insp-metric-chip">Candidate: ${escapeHtml(a3.candidate_strategy_code || 'REGIME_ADAPTIVE_V5')}</span>`;
+    } else {
+      const a4 = ps.agent_4_audit_demo_deploy || {};
+      metrics = `<span class="insp-metric-chip">Demo Active: ${escapeHtml(a4.active_strategy_code || 'REGIME_ADAPTIVE_V5')} v${a4.active_version || 3}</span><span class="insp-metric-chip">A/B: ${escapeHtml(a4.ab_verdict || 'COLLECTING')}</span>`;
+    }
+    box.hidden = false;
+    box.innerHTML = `
+      <div class="insp-main">
+        <div class="insp-top">
+          <span class="insp-stage-tag">${escapeHtml(st.title)}</span>
+          <span class="tag-pill">${escapeHtml(st.agent)}</span>
+          <span class="tag-pill ok">V5 PIPELINE ACTIVE</span>
+        </div>
+        <div class="insp-desc">${escapeHtml(st.spec)}</div>
+        <div class="insp-metrics">${metrics}</div>
+      </div>
+      <button type="button" class="btn-outline-sm" id="btnCloseStageInsp" aria-label="Close stage inspector">Close ✕</button>
+    `;
+    document.getElementById('btnCloseStageInsp')?.addEventListener('click', () => {
+      state.inspectedStage = null;
+      renderLifecycleStepper();
+      renderStageInspector();
+    });
     return;
   }
 
@@ -331,24 +412,73 @@ function renderRiskGaugeCard() {
 
 function renderFlatCutoffCard() {
   const rm = state.auditSummary?.risk_metrics || {};
-  const hhmm = Number(rm.daily_flat_utc_hhmm || 2145);
-  const stateCut = getFlatCutoffState(hhmm);
+  const now = new Date();
+  const sz = classifySessionZoneUtc(now);
+  const utcHms = now.toISOString().slice(11, 19);
+
+  // Compute minutes/seconds to next 7-zone boundary UTC
+  const hm = now.getUTCHours() * 60 + now.getUTCMinutes();
+  const boundaries = [7 * 60, 8 * 60, 12 * 60 + 30, 14 * 60, 20 * 60 + 30, 22 * 60, 24 * 60];
+  const nextB = boundaries.find((b) => b > hm) ?? 24 * 60;
+  const remSec = Math.max(0, (nextB - hm) * 60 - now.getUTCSeconds());
+  const rh = Math.floor(remSec / 3600);
+  const rmm = Math.floor((remSec % 3600) / 60);
+  const rss = remSec % 60;
 
   const timeEl = document.getElementById('cutoffMainTime');
+  const metaEl = document.getElementById('cutoffZoneMeta');
   const cntEl = document.getElementById('cutoffCountdownLabel');
   const posEl = document.getElementById('cutoffOpenPosBadge');
 
-  if (timeEl) timeEl.textContent = stateCut.targetStr;
+  if (timeEl) timeEl.textContent = sz.zone;
+  if (metaEl) metaEl.textContent = `${utcHms} UTC${sz.transition ? ' · TRANSITION WINDOW ⚡' : ''}`;
   if (cntEl) {
-    cntEl.innerHTML = stateCut.inFlatWindow
-      ? `<strong style="color:var(--audit-red-ink)">FLAT WINDOW ACTIVE</strong> · Next in <span class="mono">${stateCut.human}</span>`
-      : `Auto Flat in: <strong class="mono">${stateCut.human}</strong>`;
+    cntEl.innerHTML = `🕒 Next Zone Change in: <strong class="mono">${rh}h ${String(rmm).padStart(2, '0')}m ${String(rss).padStart(2, '0')}s</strong>`;
   }
   if (posEl) {
     const openPos = rm.open_positions ?? 0;
     posEl.textContent = `Open Pos: ${openPos}`;
     posEl.className = `tag-pill ${openPos === 0 ? 'ok' : 'warn'}`;
   }
+}
+
+function renderDemoAbAndGatePanel() {
+  const panel = document.getElementById('demoAbGatePanel');
+  if (!panel) return;
+  const dd = state.demoDeploy;
+  if (!dd) {
+    panel.innerHTML = `<div style="color:var(--text-muted);font-size:12px;">ไม่พบข้อมูล demo_deployment_state.json</div>`;
+    return;
+  }
+  const ab = dd.ab_evaluation || {};
+  const base = ab.baseline || {};
+  const chal = ab.challenger || {};
+  const verdict = ab.verdict || 'MONITORING';
+  const vCls = verdict === 'AUTO_ROLLBACK' ? 'crit' : verdict === 'OUTPERFORMING_RETAIN_V3' ? 'ok' : 'info';
+
+  panel.innerHTML = `
+    <div class="a-panel-head" style="margin-bottom:10px;">
+      <div class="a-head-left">
+        <span class="a-icon-box" aria-hidden="true">⚖️</span>
+        <div>
+          <h2 class="a-panel-title">Demo #5258778 Autonomous A/B &amp; Human Decision Gate</h2>
+          <div class="a-panel-sub">Active: <strong>${escapeHtml(dd.active_strategy_code)} v${dd.active_version}</strong> · Snapshot Rollback Ready: ${escapeHtml(dd.baseline_strategy_code || 'DOM_ABSORPTION')} v${dd.baseline_version || 2}</div>
+        </div>
+      </div>
+      <span class="tag-pill ${vCls}">${escapeHtml(verdict)}</span>
+    </div>
+    <div style="font-size:12px;color:var(--text-secondary);margin-bottom:10px;">${escapeHtml(ab.reason || '')}</div>
+    <div class="grid-2">
+      <div class="sub-card">
+        <div style="font-size:11px;font-weight:700;color:var(--text-muted);margin-bottom:4px;">BASELINE SNAPSHOT · DOM_ABSORPTION v2</div>
+        <div class="mono" style="font-size:12.5px;">N=${base.trades ?? 0} (${base.win_rate_pct ?? 0}% WR) · PF ${base.profit_factor ?? 0} · Net <strong>${fmtSignedUsd(base.net_pnl_usd ?? 0)}</strong> · DD ${fmtUsd(base.max_dd_usd ?? 0)}</div>
+      </div>
+      <div class="sub-card">
+        <div style="font-size:11px;font-weight:700;color:var(--accent-blue-text);margin-bottom:4px;">CHALLENGER FORWARD · REGIME_ADAPTIVE_V5 v3</div>
+        <div class="mono" style="font-size:12.5px;">N=${chal.trades ?? 0} (${chal.win_rate_pct ?? 0}% WR) · PF ${chal.profit_factor ?? 0} · Net <strong>${fmtSignedUsd(chal.net_pnl_usd ?? 0)}</strong> · Guard: Rollback @ N≥8 if underperforms</div>
+      </div>
+    </div>
+  `;
 }
 
 function renderFourPillarChecklistCard() {
@@ -641,23 +771,23 @@ function renderTabWatchdogAndTruth() {
       <div class="audit-panel audit-panel-pad">
         <div class="a-panel-head">
           <div>
-            <h3 class="a-panel-title">Truth Guard v4 — Empirical Sample Power</h3>
-            <div class="a-panel-sub">${escapeHtml(tg.account_number || 'Pepperstone #5258778')} · Mandatory N &ge; ${nTarget} Gate</div>
+            <h3 class="a-panel-title">Truth Guard V5 — Situational Empirical Reporting</h3>
+            <div class="a-panel-sub">${escapeHtml(tg.account_number || 'Pepperstone #5258778')} · Direct Situation Counts + OOS Validation</div>
           </div>
-          <span class="tag-pill warn">${escapeHtml(pwr.status || 'CRITICALLY_UNDERPOWERED')}</span>
+          <span class="tag-pill ok">${escapeHtml(pwr.status || 'SITUATIONAL_EMPIRICAL_REPORTING')}</span>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px">
-          <span style="font-size:12px;font-weight:700">Collected Closed Live Trades: <span class="mono">${nSize} / ${nTarget}</span> (Inst. Goal: ${pwr.target_institutional_N || 1200})</span>
-          <span class="mono" style="font-weight:700;color:var(--audit-amber-ink)">${powerPct}%</span>
+          <span style="font-size:12px;font-weight:700">${escapeHtml(pwr.label || `N=${nSize} Closed Live Trades`)}</span>
+          <span class="mono" style="font-weight:700;color:var(--audit-green-ink)">N=${nSize} (Live)</span>
         </div>
         <div class="power-track"><div class="power-fill" style="width:${Math.min(100, Number(powerPct))}%"></div></div>
         <div class="grid-4" style="margin-top:11px">
-          <div class="sub-card"><span style="font-size:10px;color:var(--text-muted)">SE(SHARPE)</span><strong class="mono" style="font-size:13.5px">±${pwr.standard_error_sharpe ?? 0.388}</strong></div>
-          <div class="sub-card"><span style="font-size:10px;color:var(--text-muted)">EMPIRICAL WR</span><strong class="mono" style="font-size:13.5px">${emp.win_rate_pct ?? 34.2}% (${emp.wins_count ?? 27}/${emp.losses_count ?? 52})</strong></div>
-          <div class="sub-card"><span style="font-size:10px;color:var(--text-muted)">EMPIRICAL PF</span><strong class="mono" style="font-size:13.5px">${emp.profit_factor ?? 0.79}</strong></div>
-          <div class="sub-card"><span style="font-size:10px;color:var(--text-muted)">CUM. NET P/L</span><strong class="mono" style="font-size:13.5px;color:var(--audit-red-ink)">${fmtSignedUsd(emp.net_pnl_usd ?? -17.07)}</strong></div>
+          <div class="sub-card"><span style="font-size:10px;color:var(--text-muted)">REALIZED SHARPE</span><strong class="mono" style="font-size:13.5px">${emp.realized_sharpe_estimate ?? '–'}</strong></div>
+          <div class="sub-card"><span style="font-size:10px;color:var(--text-muted)">EMPIRICAL WR</span><strong class="mono" style="font-size:13.5px">${emp.win_rate_pct ?? 44.8}% (${emp.wins_count ?? 56}/${emp.losses_count ?? 69})</strong></div>
+          <div class="sub-card"><span style="font-size:10px;color:var(--text-muted)">EMPIRICAL PF</span><strong class="mono" style="font-size:13.5px">${emp.profit_factor ?? 1.17}</strong></div>
+          <div class="sub-card"><span style="font-size:10px;color:var(--text-muted)">CUM. NET P/L</span><strong class="mono" style="font-size:13.5px;color:${Number(emp.net_pnl_usd) >= 0 ? 'var(--audit-green-ink)' : 'var(--audit-red-ink)'}">${fmtSignedUsd(emp.net_pnl_usd ?? 0)}</strong></div>
         </div>
-        <div style="margin-top:9px;font-size:11.5px;color:var(--text-secondary)"><strong>Mandate:</strong> With N=${nSize} live trades and SE(SR)=±${pwr.standard_error_sharpe ?? 0.388}, confidence bands are too wide to claim edge until at least ${nTarget} live closed trades accumulate.</div>
+        <div style="margin-top:9px;font-size:11.5px;color:var(--text-secondary)"><strong>V5 Mandate:</strong> ${escapeHtml(pwr.mandate || 'รายงานผลจริงแยกตามสถานการณ์และ Session ตรงไปตรงมา (ยกเลิกเกณฑ์รอ N>=500) พร้อมตรวจ Out-of-Sample')}</div>
       </div>
 
       <div class="audit-panel audit-panel-pad">
@@ -1055,6 +1185,8 @@ async function loadPageData() {
     marketIntel,
     webAlerts,
     overviewSummary,
+    v5Pipeline,
+    demoDeploy,
   ] = await Promise.all([
     fetchSafe('data/audit_summary.json', 'audit_summary'),
     fetchSafe('data/watchdog_status.json', 'watchdog_status'),
@@ -1069,6 +1201,8 @@ async function loadPageData() {
     fetchSafe('data/live_market_intelligence.json', 'live_market_intelligence'),
     fetchSafe('data/web_alerts.json', 'web_alerts'),
     fetchSafe('data/overview_summary.json', 'overview_summary'),
+    fetchSafe('data/v5_pipeline_state.json', 'v5_pipeline_state'),
+    fetchSafe('data/demo_deployment_state.json', 'demo_deployment_state'),
   ]);
 
   if (auditSummary) state.auditSummary = auditSummary;
@@ -1084,6 +1218,8 @@ async function loadPageData() {
   if (marketIntel) state.marketIntel = marketIntel;
   if (webAlerts) state.webAlerts = webAlerts;
   if (overviewSummary) state.overviewSummary = overviewSummary;
+  if (v5Pipeline) state.v5Pipeline = v5Pipeline;
+  if (demoDeploy) state.demoDeploy = demoDeploy;
   state.failedSources = failedSources;
 
   // Format watchdog object alerts cleanly as readable strings for shell.js Alerts drawer
@@ -1112,11 +1248,24 @@ async function loadPageData() {
   renderRiskGaugeCard();
   renderFlatCutoffCard();
   renderFourPillarChecklistCard();
+  renderDemoAbAndGatePanel();
   renderAuditLog();
   renderDeepDiveTabs();
 }
 
 function bindControls() {
+  document.querySelectorAll('[data-lifecycle-mode]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      state.lifecycleMode = btn.dataset.lifecycleMode || 'v5';
+      state.inspectedStage = null;
+      document.querySelectorAll('[data-lifecycle-mode]').forEach((b) => {
+        b.classList.toggle('active', b === btn);
+      });
+      renderLifecycleStepper();
+      renderStageInspector();
+    });
+  });
+
   document.querySelectorAll('[data-gauge-mode]').forEach((btn) => {
     btn.addEventListener('click', () => {
       state.gaugeMode = btn.dataset.gaugeMode;

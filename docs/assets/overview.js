@@ -14,6 +14,8 @@ const state = {
     truthGuard: null,
     foundry: null,
     championRegistry: null,
+    v5Pipeline: null,
+    demoDeploy: null,
   },
   failedSources: [],
 };
@@ -908,7 +910,7 @@ function renderAlphaFunnel(foundry, overviewSummary) {
         <span aria-hidden="true">🧪</span>
         <span>Alpha Funnel</span>
       </h2>
-      <a href="improvement-audit.html" class="footer-legacy-link" style="font-size:11px;">ดูทฤษฎี &amp; 10 Stages (หน้า 6) →</a>
+      <a href="improvement-audit.html" class="footer-legacy-link" style="font-size:11px;">ดูวงจร 4 ขั้นตอน V5 &amp; Audit (หน้า 6) →</a>
     </div>
 
     <div class="funnel-arrows-row">
@@ -972,6 +974,77 @@ function renderQuickAccess() {
   `;
 }
 
+function renderV5Loop(v5Pipeline, demoDeploy) {
+  const host = document.getElementById('v5-4stage-loop');
+  if (!host) return;
+  const st = v5Pipeline?.stages || {};
+  const a1 = st.agent_1_collector_merger || {};
+  const a2 = st.agent_2_research_hunter || {};
+  const a3 = st.agent_3_evolver_validator || {};
+  const a4 = st.agent_4_audit_demo_deploy || {};
+  const ab = demoDeploy?.ab_evaluation || {};
+  const activeCode = demoDeploy?.active_strategy_code || a4.active_strategy_code || 'REGIME_ADAPTIVE_V5';
+  const activeVer = demoDeploy?.active_version || a4.active_version || 3;
+
+  const cards = [
+    {
+      href: 'data-center.html',
+      step: 'STAGE 1 · AGENT 1',
+      badge: a1.status || 'SYNC',
+      title: 'Data & Market Sync',
+      metric: `${Number(a1.total_merged_bars || 0).toLocaleString('en-US')} Hybrid M1 · คัดแถวผี ${Number(a1.total_ghost_rows_filtered || 0).toLocaleString('en-US')}`,
+      pages: 'Data Center (หน้า 2) · Database (หน้า 8)',
+    },
+    {
+      href: 'research-lab.html',
+      step: 'STAGE 2 · AGENT 2',
+      badge: a2.status || 'RESEARCH',
+      title: 'Research & Matching',
+      metric: `${Number(a2.papers_indexed || 193)} Papers · ${Number(a2.total_forensic_cases || 0)} Forensics (${Number(a2.zero_sl_forensic_cases || 0)} Zero-SL)`,
+      pages: 'Research Lab (หน้า 3) · 7-Zone Mining',
+    },
+    {
+      href: 'intelligence.html#sectionV5Situational',
+      step: 'STAGE 3 · AGENT 3',
+      badge: a3.status || 'OOS',
+      title: 'Test & Anti-Overfit',
+      metric: `ผ่าน OOS ${a3.oos_passed_cells ?? '–'}/${a3.oos_total_cells ?? '–'} ช่อง (Unseen 40%) · 7-Zone Matrix`,
+      pages: 'Experiment Lab (หน้า 4) · Intelligence (หน้า 5)',
+    },
+    {
+      href: 'improvement-audit.html',
+      step: 'STAGE 4 · AGENT 4',
+      badge: ab.verdict || a4.ab_verdict || 'DEMO',
+      title: 'Learn, Audit & Evolve',
+      metric: `Demo #5258778: ${activeCode} v${activeVer} (Auto-Rollback vs V2 Ready)`,
+      pages: 'Audit & Human Gate (หน้า 6) · Archive (หน้า 7)',
+    },
+  ];
+
+  host.innerHTML = `
+    <div class="v5-loop-head">
+      <h2 class="v5-loop-title">
+        <span aria-hidden="true">🧭</span>
+        <span>V5 4-Stage Quant Lifecycle (เชื่อมต่อ 8 หน้าอัตโนมัติ)</span>
+      </h2>
+      <span class="badge badge-green">Account #5258778 · ${escapeHtml(activeCode)} v${escapeHtml(String(activeVer))}</span>
+    </div>
+    <div class="v5-loop-grid">
+      ${cards.map((c) => `
+        <a href="${escapeHtml(c.href)}" class="v5-stage-card">
+          <div class="v5-stage-top">
+            <span class="mono">${escapeHtml(c.step)}</span>
+            <span class="badge badge-blue" style="font-size:10px;padding:1px 6px;">${escapeHtml(c.badge)}</span>
+          </div>
+          <div class="v5-stage-name">${escapeHtml(c.title)}</div>
+          <div class="v5-stage-metric mono">${escapeHtml(c.metric)}</div>
+          <div class="v5-stage-pages">➔ ${escapeHtml(c.pages)}</div>
+        </a>
+      `).join('')}
+    </div>
+  `;
+}
+
 async function fetchJsonSafe(path, label, failedSources) {
   const bust = `?t=${Date.now()}`;
   try {
@@ -994,6 +1067,8 @@ async function loadAndRenderOverview() {
     truthGuard,
     foundry,
     championRegistry,
+    v5Pipeline,
+    demoDeploy,
   ] = await Promise.all([
     fetchJsonSafe('data/overview_summary.json', 'overview_summary', failedSources),
     fetchJsonSafe('data/live_status.json', 'live_status', failedSources),
@@ -1002,6 +1077,8 @@ async function loadAndRenderOverview() {
     fetchJsonSafe('data/truth_guard.json', 'truth_guard', failedSources),
     fetchJsonSafe('data/strategy_foundry.json', 'strategy_foundry', failedSources),
     fetchJsonSafe('data/champion_registry.json', 'champion_registry', failedSources),
+    fetchJsonSafe('data/v5_pipeline_state.json', 'v5_pipeline_state', failedSources),
+    fetchJsonSafe('data/demo_deployment_state.json', 'demo_deployment_state', failedSources),
   ]);
 
   // Preserve previous good snapshots if an individual fetch fails transiently
@@ -1012,6 +1089,8 @@ async function loadAndRenderOverview() {
   if (truthGuard) state.lastData.truthGuard = truthGuard;
   if (foundry) state.lastData.foundry = foundry;
   if (championRegistry) state.lastData.championRegistry = championRegistry;
+  if (v5Pipeline) state.lastData.v5Pipeline = v5Pipeline;
+  if (demoDeploy) state.lastData.demoDeploy = demoDeploy;
   state.failedSources = failedSources;
 
   updateShellTelemetry({
@@ -1022,6 +1101,7 @@ async function loadAndRenderOverview() {
     failedSources,
   });
 
+  renderV5Loop(state.lastData.v5Pipeline, state.lastData.demoDeploy);
   renderLiveDemoCard(state.lastData.liveStatus, state.lastData.truthGuard, state.lastData.overviewSummary);
   renderChampionCard(state.lastData.championRegistry, state.lastData.overviewSummary);
   renderBotsSection(state.lastData.liveStatus, state.lastData.overviewSummary);
