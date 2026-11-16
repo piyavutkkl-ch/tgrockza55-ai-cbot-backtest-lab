@@ -10,7 +10,7 @@ Runs all comprehensive unit & integration tests for Architecture V4:
 6. Statistical Validation Engine V4 (research/test_statistical_validation.py)
 7. Performance Attribution & AI Critic V4 (research/performance_attribution_engine.py)
 8. Experiment Registry V4 (research/experiment_registry.py)
-9. Modern Quant Dashboard & Web Theme (tools/verify_white_theme_and_charts.py)
+9. 8-Page Quant Research Portal Verification (tools/verify_8page_ui.py)
 """
 
 import sys, os, subprocess
@@ -30,7 +30,7 @@ TEST_STEPS = [
     ("Knowledge Memory & Experiment Registry", [PYTHON_EXE, "research/experiment_registry.py"]),
     ("Chronological Market Replay Engine", [PYTHON_EXE, "research/market_replay_engine.py"]),
     ("Event-Driven Market Intelligence Daemon", [PYTHON_EXE, "research/event_driven_intelligence_daemon.py", "--single"]),
-    ("Executive Dashboard UI Verification", [PYTHON_EXE, "tools/verify_white_theme_and_charts.py"])
+    ("8-Page Web Portal Verification", [PYTHON_EXE, "tools/verify_8page_ui.py"])
 ]
 
 def main():

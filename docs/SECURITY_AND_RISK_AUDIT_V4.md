@@ -38,8 +38,8 @@ This formal Security and Risk Audit inspects all operational layers of Architect
   - Flags open positions for immediate broker-level close.
 
 ### 2.3 Secrets & API Key Inspection (Frontend Sanity)
-- Scanned all files in `docs/` (`index.html`, `pro.html`, `research.html`, `chart.html`, `auth.html`, `config.js`).
-- **Result:** No Supabase service role secret keys, no Pepperstone live credentials, and no cTrader Client Secrets are present. Public `anon` tokens and client IDs are scoped read-only. Admin controls require signed Supabase user JWT authorization.
+- Scanned all files in `docs/` (all 8 HTML pages + `docs/assets/*.js` & `docs/data/*.json`).
+- **Result:** Zero Supabase keys (Supabase Auth & Edge Functions decommissioned), zero Pepperstone live credentials, and zero cTrader Client Secrets are present. The portal is strictly static & read-only on GitHub Pages.
 
 ### 2.4 Capital Defense & Circuit Breakers (Risk Governor V4)
 - **Daily Loss Ceiling:** -$10.00 USD on $100 starting capital (10% max daily portfolio loss).

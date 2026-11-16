@@ -25,7 +25,7 @@ python3 research/run_institutional_v4_test_suite.py
 python3 -c "import json; d=json.load(open('docs/data/live_market_intelligence.json')); print(d['feed_version'], d['system_health'])"
 
 # 3. Verify web dashboard UI
-python3 tools/verify_white_theme_and_charts.py
+python3 tools/verify_8page_ui.py
 ```
 
 ---
@@ -67,9 +67,9 @@ git log -n 5 --oneline
 # Soft rollback to previous verified commit
 git checkout ce5d23cf
 
-# Rebuild dashboard
-python3 tools/build_modern_quant_dashboard.py
-python3 tools/verify_white_theme_and_charts.py
+# Rebuild dashboard summaries
+python3 tools/build_overview_summary.py
+python3 tools/verify_8page_ui.py
 ```
 
 ### Step 3: Revert to Baseline Simulation

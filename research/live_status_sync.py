@@ -218,12 +218,19 @@ def inspect_bot_telemetry(cfg, now_epoch):
     min_row = get_latest_row(min_file)
     flow_row = get_latest_row(flow_file)
 
-    curr_price = float(min_row['close']) if min_row and 'close' in min_row else 0.0
-    spread = float(min_row['spreadAvg']) if min_row and 'spreadAvg' in min_row else 0.0
-    imbalance = float(min_row['imbalance']) if min_row and 'imbalance' in min_row else 0.0
-    delta = float(flow_row['delta']) if flow_row and 'delta' in flow_row else 0.0
-    cvd = float(flow_row['cvd']) if flow_row and 'cvd' in flow_row else 0.0
-    vwap = float(flow_row['vwapDay']) if flow_row and 'vwapDay' in flow_row else curr_price
+    def _safe_float(row, key, default=0.0):
+        try:
+            v = row.get(key) if row else None
+            return float(v) if v not in (None, '') else default
+        except (ValueError, TypeError):
+            return default
+
+    curr_price = _safe_float(min_row, 'close', 0.0)
+    spread = _safe_float(min_row, 'spreadAvg', 0.0)
+    imbalance = _safe_float(min_row, 'imbalance', 0.0)
+    delta = _safe_float(flow_row, 'delta', 0.0)
+    cvd = _safe_float(flow_row, 'cvd', 0.0)
+    vwap = _safe_float(flow_row, 'vwapDay', curr_price)
 
     return {
         **cfg,

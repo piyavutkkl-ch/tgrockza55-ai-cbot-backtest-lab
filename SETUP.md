@@ -1,4 +1,8 @@
-# ตั้งค่า cBot Backtest Lab ทีละขั้น
+# ตั้งค่า cBot Backtest Lab & Watchdog V4
+
+> **หมายเหตุสถาปัตยกรรมปัจจุบัน (Nov 2026):** ระบบ **ยกเลิกการใช้ Supabase Auth, Edge Function `lab` และ Google Drive OAuth แล้ว** ข้อมูลทั้งหมดบันทึกตรงลง `%LOCALAPPDATA%\BacktestLab\live\` และซิงก์สรุปขึ้น GitHub Pages (`docs/data/`) แบบ Read-only โดยอัตโนมัติ (คำแนะนำส่วน Supabase/Google Drive ด้านล่างเก็บไว้เป็นบันทึกประวัติเท่านั้น)
+
+---
 
 ทำครั้งเดียว ใช้เวลาประมาณ 45–60 นาที หลังจากนี้เครื่องใหม่ใช้แค่ขั้น 8 (ประมาณ 5 นาที)
 

@@ -235,7 +235,6 @@ export function mountShell(options = {}) {
 
       <footer class="shell-footer">
         <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-          <a href="old-web/index.html" class="footer-legacy-link">📁 เว็บเวอร์ชันเดิม</a>
           <span>Read-only Research Portal · แสดงข้อมูลจากชุดบันทึกวิจัยใน docs/data/</span>
         </div>
         <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">

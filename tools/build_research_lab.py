@@ -136,7 +136,6 @@ if (document.readyState === 'loading') {{
         </div>
         <div class="rl-header-meta">
           <span class="rl-pill-chip mono">193 Papers · 14 Quant Engines · STR-001..010</span>
-          <a href="old-web/research.html" class="rl-pill-chip mono" title="ดูหน้า Research เวอร์ชันเดิม">Legacy Archive ↗</a>
         </div>
       </div>
 

@@ -472,15 +472,22 @@ def main() -> None:
     rule_matrix = load_json(DATA_DIR / "rule_classification_matrix.json", {})
     truth_guard = load_json(DATA_DIR / "truth_guard.json", {})
 
+    existing_out = load_json(OUT_PATH, {})
     chat_path = DOCS_DIR / "old-web" / "chat_transcript.html"
-    if not chat_path.exists():
-        chat_path = DOCS_DIR / "chat_transcript.html"
-    privacy_path = DOCS_DIR / "old-web" / "privacy.html"
-    if not privacy_path.exists():
-        privacy_path = DOCS_DIR / "privacy.html"
+    if chat_path.exists():
+        chat_messages = extract_chat_transcript(chat_path)
+    else:
+        chat_messages = ((existing_out.get("research_transcript") or {}).get("messages")) or []
 
-    chat_messages = extract_chat_transcript(chat_path)
-    privacy_statements = extract_privacy_statements(privacy_path)
+    privacy_path = DOCS_DIR / "old-web" / "privacy.html"
+    if privacy_path.exists():
+        privacy_statements = extract_privacy_statements(privacy_path)
+    else:
+        privacy_statements = [
+            "Backtest Lab เป็นแดชบอร์ดอ่านผลวิจัยและสถิติเทรดแบบ Read-only บน GitHub Pages โดยไม่มีการเปิดเผยรหัสผ่านหรือ API Secret บนฝั่งเว็บ",
+            "ระบบยกเลิกการใช้ Supabase Auth, Edge Function และ Google Drive Upload แล้ว ข้อมูลทั้งหมดประมวลผลในเครื่องท้องถิ่นและซิงก์เฉพาะไฟล์ JSON สรุปขึ้น docs/data/",
+            "บัญชีที่ใช้ทดสอบเป็น Pepperstone Demo Account #5258778 เท่านั้น ไม่มีการเชื่อมคำสั่งซื้อขายกับเงินจริงโดยตรงจากหน้าเว็บ"
+        ]
     security_audit = extract_security_audit(DOCS_DIR / "SECURITY_AND_RISK_AUDIT_V4.md")
 
     orig_state = archive_v1.get("original_state") or {}

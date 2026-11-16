@@ -17,7 +17,7 @@ Observe ➔ Understand ➔ Research ➔ Build ➔ Prove ➔ Select ➔ Execute �
 • ซ่อม LiveRecorder      • Market Intelligence V4    • Adaptive Strategy Library  • ตรวจเกณฑ์ Audit Checklist
 • ระบบ Heartbeat 15s     • Rule Classification (1-3) • Dynamic Switching Engine   • เริ่มเงินจริงล็อตเล็ก (0.01 lot)
 • แจ้งเตือนค้าง >180s    • Risk Governor V4          • Demo Quarantine (#5258778) • Stealth RAM SL + Hard Stop
-• Watchdog Multi-Market  • Daily Flat (21:45 UTC)    • สะสม N >= 500 ไม้        • Supabase Owner Auth OTP
+• Watchdog Multi-Market  • Daily Flat (21:45 UTC)    • สะสม N >= 500 ไม้        • Manual Owner Sign-Off
 ```
 
 ---
@@ -96,5 +96,5 @@ Observe ➔ Understand ➔ Research ➔ Build ➔ Prove ➔ Select ➔ Execute �
 
 ### ข้อกำหนดเมื่อเริ่มเงินจริง (Live Execution Protocol):
 - **ขนาดคำสั่งเริ่มต้น:** เริ่มต้นที่ **0.01 lot** เท่านั้น
-- **การอนุมัติ:** ต้องได้รับการยืนยันรหัส OTP / Supabase Owner Auth จากเจ้าของพอร์ตก่อนสวิตช์
+- **การอนุมัติ:** ต้องได้รับการยืนยันและสลับบัญชีโดยตรงจากเจ้าของพอร์ตก่อนสวิตช์ (Supabase Auth ยกเลิกการใช้งานแล้ว)
 - **Emergency Circuit Breaker:** ติดตั้ง Hard Broker Disaster SL เสมอ ควบคู่กับ Stealth RAM SL
