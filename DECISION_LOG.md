@@ -17,15 +17,15 @@
 
 ## 2. Parallel Demo A/B Comparison (`#5258778` Live Forward)
 
-* **Updated (UTC):** `2026-11-17T08:44:17.294158+00:00`
+* **Updated (UTC):** `2026-11-17T09:01:30.051329+00:00`
 * **Active C# Strategy on Demo `#5258778`:** `DOM_ABSORPTION` (Version `2`) · **Last Action:** `NONE`
-* **A/B Verdict:** `OUTPERFORMING_RETAIN_V3` — REGIME_ADAPTIVE_V5 outperformed DOM_ABSORPTION across 73 forward Demo trades (Exp +0.063 vs +0.043, Net +4.63 USD).
-* **Cumulative Demo Account (`truth_guard.json`):** Balance `$129.60 USD` · Closed `N=233` · Net `+29.60 USD` · PF `1.11`
+* **A/B Verdict:** `OUTPERFORMING_RETAIN_V3` — REGIME_ADAPTIVE_V5 outperformed DOM_ABSORPTION across 74 forward Demo trades (Exp +0.063 vs +0.043, Net +4.68 USD).
+* **Cumulative Demo Account (`truth_guard.json`):** Balance `$129.65 USD` · Closed `N=234` · Net `+29.65 USD` · PF `1.11`
 
 | Model Variant | Status on Demo `#5258778` | Closed Trades | Win Rate | Profit Factor | Expectancy / Trade | Net PnL (USD) | Max DD (USD) |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
 | **Baseline: `DOM_ABSORPTION v2`** | Rollback Snapshot Saved | 109 | 41.3% | 1.04 | +0.0431 | +4.70 | 31.66 |
-| **Challenger: `REGIME_ADAPTIVE_V5 v3`** | Active Forward Candidate | 73 | 52.1% | 1.06 | +0.0634 | +4.63 | 23.45 |
+| **Challenger: `REGIME_ADAPTIVE_V5 v3`** | Active Forward Candidate | 74 | 52.7% | 1.06 | +0.0632 | +4.68 | 23.45 |
 
 ---
 
