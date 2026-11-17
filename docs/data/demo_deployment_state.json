@@ -84,9 +84,9 @@
     }
   ],
   "ab_evaluation": {
-    "verdict": "OUTPERFORMING_RETAIN_V3",
-    "should_rollback": false,
-    "reason": "REGIME_ADAPTIVE_V5 outperformed DOM_ABSORPTION across 103 forward Demo trades (Exp +0.106 vs +0.043, Net +10.96 USD).",
+    "verdict": "AUTO_ROLLBACK",
+    "should_rollback": true,
+    "reason": "REGIME_ADAPTIVE_V5 underperformed DOM_ABSORPTION over 105 Demo trades (Exp -0.010 vs +0.043, PF 0.99 vs 1.04) -> Auto-Rollback to V2.",
     "baseline": {
       "trades": 109,
       "wins": 45,
@@ -119,18 +119,18 @@
       }
     },
     "challenger": {
-      "trades": 103,
+      "trades": 105,
       "wins": 55,
-      "losses": 48,
-      "win_rate_pct": 53.4,
+      "losses": 50,
+      "win_rate_pct": 52.4,
       "gross_win_usd": 119.29,
-      "gross_loss_usd": 108.33,
-      "net_pnl_usd": 10.96,
-      "profit_factor": 1.1,
-      "expectancy_usd": 0.1064,
+      "gross_loss_usd": 120.32,
+      "net_pnl_usd": -1.03,
+      "profit_factor": 0.99,
+      "expectancy_usd": -0.0098,
       "max_dd_usd": 23.45,
       "first_trade_utc": "2026-11-16 16:57:19.275",
-      "last_trade_utc": "2026-11-17 14:49:43.366",
+      "last_trade_utc": "2026-11-17 15:04:37.774",
       "by_symbol": {
         "BTCUSD": {
           "trades": 27,
@@ -143,14 +143,14 @@
           "net_pnl_usd": -0.52
         },
         "XAUUSD": {
-          "trades": 48,
+          "trades": 50,
           "wins": 28,
-          "net_pnl_usd": 12.05
+          "net_pnl_usd": 0.06
         }
       }
     }
   },
-  "updated_at_utc": "2026-11-17T14:53:59.032035+00:00",
+  "updated_at_utc": "2026-11-17T15:04:37.226951+00:00",
   "build_verified": true,
   "last_action": "NONE"
 }
