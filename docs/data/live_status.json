@@ -3,22 +3,22 @@
     "era": "PURE_LIVE_MICROSTRUCTURE_ERA",
     "dataset_scope": "100% Real Live Microstructure Data: 28,639 M1 bars, 25-level L2 DOM Depth, Real Spreads & Order Flow Delta (%LOCALAPPDATA%\\BacktestLab\\live)",
     "archive_reference": "docs/data/archive_historical_cycles_v1.json (122 Historical Cycles Archived)",
-    "total_cycles_completed": 1574,
-    "active_cycle": 1575,
+    "total_cycles_completed": 1577,
+    "active_cycle": 1578,
     "current_step": "STEP_1_DATA_RECORDING",
     "current_stage_number": 1,
     "current_stage_title": "STAGE 1: Data Pipeline (รวบรวมและตรวจสอบข้อมูล cTrader)",
     "current_stage_desc": "กำลังดึงข้อมูล Tick, DOM Level 2 (25 ชั้น) และแท่ง M1 ของ BTCUSD & ETHUSD เข้าสู่คลังข้อมูล",
     "next_stage_title": "STAGE 7: Live Execution & Forward Testing",
-    "last_updated": "2026-11-18T07:49:02.253505+00:00",
-    "last_updated_local": "18 Nov 2026, 14:49:02 น.",
+    "last_updated": "2026-11-18T08:04:08.227334+00:00",
+    "last_updated_local": "18 Nov 2026, 15:04:08 น.",
     "latest_cycle": {
-      "cycle_number": 1574,
-      "started_at": "18 Nov 2026, 14:49:00 น.",
-      "completed_at": "18 Nov 2026, 14:49:02 น.",
-      "epoch": 1794988142.2535057,
+      "cycle_number": 1577,
+      "started_at": "18 Nov 2026, 15:04:06 น.",
+      "completed_at": "18 Nov 2026, 15:04:08 น.",
+      "epoch": 1794989048.2273343,
       "learning": {
-        "title": "ข้อค้นพบจากการเทรดรอบที่ #1574",
+        "title": "ข้อค้นพบจากการเทรดรอบที่ #1577",
         "discovery": "วิเคราะห์การดูดซับสภาพคล่อง L2 DOM และความสัมพันธ์ระหว่างสเปรดกับ Win Rate",
         "impact": "ปรับปรุงความแม่นยำของจุดเข้าออเดอร์"
       },
@@ -27,7 +27,7 @@
         "stage_number": 1,
         "stage_label": "STAGE 1: Data Pipeline",
         "status": "COMPLETED",
-        "timestamp": "14:49:00 น.",
+        "timestamp": "15:04:06 น.",
         "sources": [
           "Pepperstone Demo Account 5258778",
           "%LOCALAPPDATA%\\BacktestLab\\live"
@@ -38,8 +38,8 @@
           "XAUUSD",
           "GOLD-PERP"
         ],
-        "total_recorded_minutes": 51513,
-        "detail": "บันทึกข้อมูลราคาและสมุดคำสั่งซื้อขายจริงสะสม 51,513 นาที (Tick + DOM L2 25 ชั้น + Spread Spikes) ลงสู่ Data Pipeline",
+        "total_recorded_minutes": 51573,
+        "detail": "บันทึกข้อมูลราคาและสมุดคำสั่งซื้อขายจริงสะสม 51,573 นาที (Tick + DOM L2 25 ชั้น + Spread Spikes) ลงสู่ Data Pipeline",
         "summary": "ดึงข้อมูลสดจาก cTrader เข้าคลังข้อมูลสำเร็จ ไม่มีการสูญหายของระดับ Level 2 DOM"
       },
       "step2": {
@@ -47,14 +47,14 @@
         "stage_number": 7,
         "stage_label": "STAGE 7: Live Execution",
         "status": "COMPLETED",
-        "timestamp": "14:49:01 น.",
+        "timestamp": "15:04:07 น.",
         "engines_active": [
           "DOM_ABSORPTION",
           "QUANT_EQUILIBRIUM_V2",
           "HAWKES_VOLATILITY_BURST"
         ],
         "risk_rules": "Quantum Stealth RAM SL (±5% Jitter) + Spread Guard (< 2.5 pips)",
-        "total_forward_orders": 141,
+        "total_forward_orders": 142,
         "detail": "ประเมินสภาพคล่อง Order Book Imbalance และเข้าทำออเดอร์ Forward Trading 0.01 Lot แบบ Stealth Defense",
         "summary": "วิเคราะห์สัญญาณความน่าจะเป็นทางคณิตศาสตร์ P(up) และส่งคำสั่งเทรดทดสอบในสภาพตลาดจริง"
       },
@@ -63,14 +63,14 @@
         "stage_number": 8,
         "stage_label": "STAGE 8-9: Memory & Tracking",
         "status": "COMPLETED",
-        "timestamp": "14:49:01 น.",
-        "current_balance": 29.6,
-        "net_pnl": -70.4,
-        "win_rate": 44.9,
-        "closed_trades": 376,
+        "timestamp": "15:04:07 น.",
+        "current_balance": 30.78,
+        "net_pnl": -69.22,
+        "win_rate": 45.2,
+        "closed_trades": 378,
         "avg_slippage_pips": 0.08,
         "execution_latency_ms": 28.5,
-        "detail": "พอร์ต Balance $29.60 USD, ออเดอร์ปิดสะสม 376 ครั้ง, Win Rate 44.9%, Slippage เฉลี่ย 0.08 pips",
+        "detail": "พอร์ต Balance $30.78 USD, ออเดอร์ปิดสะสม 378 ครั้ง, Win Rate 45.2%, Slippage เฉลี่ย 0.08 pips",
         "summary": "รายงานตัวชี้วัดครบถ้วน พร้อมบันทึกความจำสถาบัน (Memory Lineage) ลงสู่ประวัติระบบ"
       },
       "step4": {
@@ -78,8 +78,8 @@
         "stage_number": 10,
         "stage_label": "STAGE 10: Feedback Loop",
         "status": "COMPLETED",
-        "timestamp": "14:49:02 น.",
-        "cycle_discovery_title": "ข้อค้นพบจากการเทรดรอบที่ #1574",
+        "timestamp": "15:04:08 น.",
+        "cycle_discovery_title": "ข้อค้นพบจากการเทรดรอบที่ #1577",
         "cycle_discovery_desc": "วิเคราะห์การดูดซับสภาพคล่อง L2 DOM และความสัมพันธ์ระหว่างสเปรดกับ Win Rate",
         "cycle_discovery_impact": "ปรับปรุงความแม่นยำของจุดเข้าออเดอร์",
         "directives_for_next_cycle": [
@@ -87,12 +87,252 @@
           "เชื่อมโยงโมเดล Order Book Imbalance (OBI) จาก arXiv 1808.03668",
           "นำ Dynamic ATR Trailing Stop มาใช้ล็อคกำไรเมื่อราคาขยับบวก"
         ],
-        "evolution_status": "APPROVED_FOR_CYCLE_1575",
+        "evolution_status": "APPROVED_FOR_CYCLE_1578",
         "detail": "วิเคราะห์การดูดซับสภาพคล่อง L2 DOM และความสัมพันธ์ระหว่างสเปรดกับ Win Rate",
         "summary": "ปรับปรุงความแม่นยำของจุดเข้าออเดอร์"
       }
     },
     "cycles": [
+      {
+        "cycle_number": 1577,
+        "started_at": "18 Nov 2026, 15:04:06 น.",
+        "completed_at": "18 Nov 2026, 15:04:08 น.",
+        "epoch": 1794989048.2273343,
+        "learning": {
+          "title": "ข้อค้นพบจากการเทรดรอบที่ #1577",
+          "discovery": "วิเคราะห์การดูดซับสภาพคล่อง L2 DOM และความสัมพันธ์ระหว่างสเปรดกับ Win Rate",
+          "impact": "ปรับปรุงความแม่นยำของจุดเข้าออเดอร์"
+        },
+        "step1": {
+          "step_name": "1. บันทึกข้อมูล cTrader (Data Ingest & Recording)",
+          "stage_number": 1,
+          "stage_label": "STAGE 1: Data Pipeline",
+          "status": "COMPLETED",
+          "timestamp": "15:04:06 น.",
+          "sources": [
+            "Pepperstone Demo Account 5258778",
+            "%LOCALAPPDATA%\\BacktestLab\\live"
+          ],
+          "symbols": [
+            "BTCUSD",
+            "ETHUSD",
+            "XAUUSD",
+            "GOLD-PERP"
+          ],
+          "total_recorded_minutes": 51573,
+          "detail": "บันทึกข้อมูลราคาและสมุดคำสั่งซื้อขายจริงสะสม 51,573 นาที (Tick + DOM L2 25 ชั้น + Spread Spikes) ลงสู่ Data Pipeline",
+          "summary": "ดึงข้อมูลสดจาก cTrader เข้าคลังข้อมูลสำเร็จ ไม่มีการสูญหายของระดับ Level 2 DOM"
+        },
+        "step2": {
+          "step_name": "2. วิเคราะห์ & ลองเทรดจริง (Analysis & Forward Execution)",
+          "stage_number": 7,
+          "stage_label": "STAGE 7: Live Execution",
+          "status": "COMPLETED",
+          "timestamp": "15:04:07 น.",
+          "engines_active": [
+            "DOM_ABSORPTION",
+            "QUANT_EQUILIBRIUM_V2",
+            "HAWKES_VOLATILITY_BURST"
+          ],
+          "risk_rules": "Quantum Stealth RAM SL (±5% Jitter) + Spread Guard (< 2.5 pips)",
+          "total_forward_orders": 142,
+          "detail": "ประเมินสภาพคล่อง Order Book Imbalance และเข้าทำออเดอร์ Forward Trading 0.01 Lot แบบ Stealth Defense",
+          "summary": "วิเคราะห์สัญญาณความน่าจะเป็นทางคณิตศาสตร์ P(up) และส่งคำสั่งเทรดทดสอบในสภาพตลาดจริง"
+        },
+        "step3": {
+          "step_name": "3. รายงานผลลัพธ์ (Performance & Tracking)",
+          "stage_number": 8,
+          "stage_label": "STAGE 8-9: Memory & Tracking",
+          "status": "COMPLETED",
+          "timestamp": "15:04:07 น.",
+          "current_balance": 30.78,
+          "net_pnl": -69.22,
+          "win_rate": 45.2,
+          "closed_trades": 378,
+          "avg_slippage_pips": 0.08,
+          "execution_latency_ms": 28.5,
+          "detail": "พอร์ต Balance $30.78 USD, ออเดอร์ปิดสะสม 378 ครั้ง, Win Rate 45.2%, Slippage เฉลี่ย 0.08 pips",
+          "summary": "รายงานตัวชี้วัดครบถ้วน พร้อมบันทึกความจำสถาบัน (Memory Lineage) ลงสู่ประวัติระบบ"
+        },
+        "step4": {
+          "step_name": "4. แนวทางพัฒนา & ต่อยอด (Feedback & Evolution)",
+          "stage_number": 10,
+          "stage_label": "STAGE 10: Feedback Loop",
+          "status": "COMPLETED",
+          "timestamp": "15:04:08 น.",
+          "cycle_discovery_title": "ข้อค้นพบจากการเทรดรอบที่ #1577",
+          "cycle_discovery_desc": "วิเคราะห์การดูดซับสภาพคล่อง L2 DOM และความสัมพันธ์ระหว่างสเปรดกับ Win Rate",
+          "cycle_discovery_impact": "ปรับปรุงความแม่นยำของจุดเข้าออเดอร์",
+          "directives_for_next_cycle": [
+            "ปรับปรุงตัวกรอง Spread Guard ให้เข้มงวดขึ้นเมื่อสเปรดถ่าง > 2.0 pips",
+            "เชื่อมโยงโมเดล Order Book Imbalance (OBI) จาก arXiv 1808.03668",
+            "นำ Dynamic ATR Trailing Stop มาใช้ล็อคกำไรเมื่อราคาขยับบวก"
+          ],
+          "evolution_status": "APPROVED_FOR_CYCLE_1578",
+          "detail": "วิเคราะห์การดูดซับสภาพคล่อง L2 DOM และความสัมพันธ์ระหว่างสเปรดกับ Win Rate",
+          "summary": "ปรับปรุงความแม่นยำของจุดเข้าออเดอร์"
+        }
+      },
+      {
+        "cycle_number": 1576,
+        "started_at": "18 Nov 2026, 14:59:05 น.",
+        "completed_at": "18 Nov 2026, 14:59:06 น.",
+        "epoch": 1794988746.9681096,
+        "learning": {
+          "title": "ข้อค้นพบจากการเทรดรอบที่ #1576",
+          "discovery": "วิเคราะห์การดูดซับสภาพคล่อง L2 DOM และความสัมพันธ์ระหว่างสเปรดกับ Win Rate",
+          "impact": "ปรับปรุงความแม่นยำของจุดเข้าออเดอร์"
+        },
+        "step1": {
+          "step_name": "1. บันทึกข้อมูล cTrader (Data Ingest & Recording)",
+          "stage_number": 1,
+          "stage_label": "STAGE 1: Data Pipeline",
+          "status": "COMPLETED",
+          "timestamp": "14:59:05 น.",
+          "sources": [
+            "Pepperstone Demo Account 5258778",
+            "%LOCALAPPDATA%\\BacktestLab\\live"
+          ],
+          "symbols": [
+            "BTCUSD",
+            "ETHUSD",
+            "XAUUSD",
+            "GOLD-PERP"
+          ],
+          "total_recorded_minutes": 51553,
+          "detail": "บันทึกข้อมูลราคาและสมุดคำสั่งซื้อขายจริงสะสม 51,553 นาที (Tick + DOM L2 25 ชั้น + Spread Spikes) ลงสู่ Data Pipeline",
+          "summary": "ดึงข้อมูลสดจาก cTrader เข้าคลังข้อมูลสำเร็จ ไม่มีการสูญหายของระดับ Level 2 DOM"
+        },
+        "step2": {
+          "step_name": "2. วิเคราะห์ & ลองเทรดจริง (Analysis & Forward Execution)",
+          "stage_number": 7,
+          "stage_label": "STAGE 7: Live Execution",
+          "status": "COMPLETED",
+          "timestamp": "14:59:05 น.",
+          "engines_active": [
+            "DOM_ABSORPTION",
+            "QUANT_EQUILIBRIUM_V2",
+            "HAWKES_VOLATILITY_BURST"
+          ],
+          "risk_rules": "Quantum Stealth RAM SL (±5% Jitter) + Spread Guard (< 2.5 pips)",
+          "total_forward_orders": 142,
+          "detail": "ประเมินสภาพคล่อง Order Book Imbalance และเข้าทำออเดอร์ Forward Trading 0.01 Lot แบบ Stealth Defense",
+          "summary": "วิเคราะห์สัญญาณความน่าจะเป็นทางคณิตศาสตร์ P(up) และส่งคำสั่งเทรดทดสอบในสภาพตลาดจริง"
+        },
+        "step3": {
+          "step_name": "3. รายงานผลลัพธ์ (Performance & Tracking)",
+          "stage_number": 8,
+          "stage_label": "STAGE 8-9: Memory & Tracking",
+          "status": "COMPLETED",
+          "timestamp": "14:59:06 น.",
+          "current_balance": 30.78,
+          "net_pnl": -69.22,
+          "win_rate": 45.2,
+          "closed_trades": 378,
+          "avg_slippage_pips": 0.08,
+          "execution_latency_ms": 28.5,
+          "detail": "พอร์ต Balance $30.78 USD, ออเดอร์ปิดสะสม 378 ครั้ง, Win Rate 45.2%, Slippage เฉลี่ย 0.08 pips",
+          "summary": "รายงานตัวชี้วัดครบถ้วน พร้อมบันทึกความจำสถาบัน (Memory Lineage) ลงสู่ประวัติระบบ"
+        },
+        "step4": {
+          "step_name": "4. แนวทางพัฒนา & ต่อยอด (Feedback & Evolution)",
+          "stage_number": 10,
+          "stage_label": "STAGE 10: Feedback Loop",
+          "status": "COMPLETED",
+          "timestamp": "14:59:06 น.",
+          "cycle_discovery_title": "ข้อค้นพบจากการเทรดรอบที่ #1576",
+          "cycle_discovery_desc": "วิเคราะห์การดูดซับสภาพคล่อง L2 DOM และความสัมพันธ์ระหว่างสเปรดกับ Win Rate",
+          "cycle_discovery_impact": "ปรับปรุงความแม่นยำของจุดเข้าออเดอร์",
+          "directives_for_next_cycle": [
+            "ปรับปรุงตัวกรอง Spread Guard ให้เข้มงวดขึ้นเมื่อสเปรดถ่าง > 2.0 pips",
+            "เชื่อมโยงโมเดล Order Book Imbalance (OBI) จาก arXiv 1808.03668",
+            "นำ Dynamic ATR Trailing Stop มาใช้ล็อคกำไรเมื่อราคาขยับบวก"
+          ],
+          "evolution_status": "APPROVED_FOR_CYCLE_1577",
+          "detail": "วิเคราะห์การดูดซับสภาพคล่อง L2 DOM และความสัมพันธ์ระหว่างสเปรดกับ Win Rate",
+          "summary": "ปรับปรุงความแม่นยำของจุดเข้าออเดอร์"
+        }
+      },
+      {
+        "cycle_number": 1575,
+        "started_at": "18 Nov 2026, 14:54:03 น.",
+        "completed_at": "18 Nov 2026, 14:54:05 น.",
+        "epoch": 1794988445.4955187,
+        "learning": {
+          "title": "ข้อค้นพบจากการเทรดรอบที่ #1575",
+          "discovery": "วิเคราะห์การดูดซับสภาพคล่อง L2 DOM และความสัมพันธ์ระหว่างสเปรดกับ Win Rate",
+          "impact": "ปรับปรุงความแม่นยำของจุดเข้าออเดอร์"
+        },
+        "step1": {
+          "step_name": "1. บันทึกข้อมูล cTrader (Data Ingest & Recording)",
+          "stage_number": 1,
+          "stage_label": "STAGE 1: Data Pipeline",
+          "status": "COMPLETED",
+          "timestamp": "14:54:03 น.",
+          "sources": [
+            "Pepperstone Demo Account 5258778",
+            "%LOCALAPPDATA%\\BacktestLab\\live"
+          ],
+          "symbols": [
+            "BTCUSD",
+            "ETHUSD",
+            "XAUUSD",
+            "GOLD-PERP"
+          ],
+          "total_recorded_minutes": 51533,
+          "detail": "บันทึกข้อมูลราคาและสมุดคำสั่งซื้อขายจริงสะสม 51,533 นาที (Tick + DOM L2 25 ชั้น + Spread Spikes) ลงสู่ Data Pipeline",
+          "summary": "ดึงข้อมูลสดจาก cTrader เข้าคลังข้อมูลสำเร็จ ไม่มีการสูญหายของระดับ Level 2 DOM"
+        },
+        "step2": {
+          "step_name": "2. วิเคราะห์ & ลองเทรดจริง (Analysis & Forward Execution)",
+          "stage_number": 7,
+          "stage_label": "STAGE 7: Live Execution",
+          "status": "COMPLETED",
+          "timestamp": "14:54:04 น.",
+          "engines_active": [
+            "DOM_ABSORPTION",
+            "QUANT_EQUILIBRIUM_V2",
+            "HAWKES_VOLATILITY_BURST"
+          ],
+          "risk_rules": "Quantum Stealth RAM SL (±5% Jitter) + Spread Guard (< 2.5 pips)",
+          "total_forward_orders": 142,
+          "detail": "ประเมินสภาพคล่อง Order Book Imbalance และเข้าทำออเดอร์ Forward Trading 0.01 Lot แบบ Stealth Defense",
+          "summary": "วิเคราะห์สัญญาณความน่าจะเป็นทางคณิตศาสตร์ P(up) และส่งคำสั่งเทรดทดสอบในสภาพตลาดจริง"
+        },
+        "step3": {
+          "step_name": "3. รายงานผลลัพธ์ (Performance & Tracking)",
+          "stage_number": 8,
+          "stage_label": "STAGE 8-9: Memory & Tracking",
+          "status": "COMPLETED",
+          "timestamp": "14:54:04 น.",
+          "current_balance": 30.78,
+          "net_pnl": -69.22,
+          "win_rate": 45.2,
+          "closed_trades": 378,
+          "avg_slippage_pips": 0.08,
+          "execution_latency_ms": 28.5,
+          "detail": "พอร์ต Balance $30.78 USD, ออเดอร์ปิดสะสม 378 ครั้ง, Win Rate 45.2%, Slippage เฉลี่ย 0.08 pips",
+          "summary": "รายงานตัวชี้วัดครบถ้วน พร้อมบันทึกความจำสถาบัน (Memory Lineage) ลงสู่ประวัติระบบ"
+        },
+        "step4": {
+          "step_name": "4. แนวทางพัฒนา & ต่อยอด (Feedback & Evolution)",
+          "stage_number": 10,
+          "stage_label": "STAGE 10: Feedback Loop",
+          "status": "COMPLETED",
+          "timestamp": "14:54:05 น.",
+          "cycle_discovery_title": "ข้อค้นพบจากการเทรดรอบที่ #1575",
+          "cycle_discovery_desc": "วิเคราะห์การดูดซับสภาพคล่อง L2 DOM และความสัมพันธ์ระหว่างสเปรดกับ Win Rate",
+          "cycle_discovery_impact": "ปรับปรุงความแม่นยำของจุดเข้าออเดอร์",
+          "directives_for_next_cycle": [
+            "ปรับปรุงตัวกรอง Spread Guard ให้เข้มงวดขึ้นเมื่อสเปรดถ่าง > 2.0 pips",
+            "เชื่อมโยงโมเดล Order Book Imbalance (OBI) จาก arXiv 1808.03668",
+            "นำ Dynamic ATR Trailing Stop มาใช้ล็อคกำไรเมื่อราคาขยับบวก"
+          ],
+          "evolution_status": "APPROVED_FOR_CYCLE_1576",
+          "detail": "วิเคราะห์การดูดซับสภาพคล่อง L2 DOM และความสัมพันธ์ระหว่างสเปรดกับ Win Rate",
+          "summary": "ปรับปรุงความแม่นยำของจุดเข้าออเดอร์"
+        }
+      },
       {
         "cycle_number": 1574,
         "started_at": "18 Nov 2026, 14:49:00 น.",
@@ -3852,251 +4092,11 @@
           "detail": "วิเคราะห์การดูดซับสภาพคล่อง L2 DOM และความสัมพันธ์ระหว่างสเปรดกับ Win Rate",
           "summary": "ปรับปรุงความแม่นยำของจุดเข้าออเดอร์"
         }
-      },
-      {
-        "cycle_number": 1527,
-        "started_at": "18 Nov 2026, 10:52:52 น.",
-        "completed_at": "18 Nov 2026, 10:52:53 น.",
-        "epoch": 1794973973.6353762,
-        "learning": {
-          "title": "ข้อค้นพบจากการเทรดรอบที่ #1527",
-          "discovery": "วิเคราะห์การดูดซับสภาพคล่อง L2 DOM และความสัมพันธ์ระหว่างสเปรดกับ Win Rate",
-          "impact": "ปรับปรุงความแม่นยำของจุดเข้าออเดอร์"
-        },
-        "step1": {
-          "step_name": "1. บันทึกข้อมูล cTrader (Data Ingest & Recording)",
-          "stage_number": 1,
-          "stage_label": "STAGE 1: Data Pipeline",
-          "status": "COMPLETED",
-          "timestamp": "10:52:52 น.",
-          "sources": [
-            "Pepperstone Demo Account 5258778",
-            "%LOCALAPPDATA%\\BacktestLab\\live"
-          ],
-          "symbols": [
-            "BTCUSD",
-            "ETHUSD",
-            "XAUUSD",
-            "GOLD-PERP"
-          ],
-          "total_recorded_minutes": 50565,
-          "detail": "บันทึกข้อมูลราคาและสมุดคำสั่งซื้อขายจริงสะสม 50,565 นาที (Tick + DOM L2 25 ชั้น + Spread Spikes) ลงสู่ Data Pipeline",
-          "summary": "ดึงข้อมูลสดจาก cTrader เข้าคลังข้อมูลสำเร็จ ไม่มีการสูญหายของระดับ Level 2 DOM"
-        },
-        "step2": {
-          "step_name": "2. วิเคราะห์ & ลองเทรดจริง (Analysis & Forward Execution)",
-          "stage_number": 7,
-          "stage_label": "STAGE 7: Live Execution",
-          "status": "COMPLETED",
-          "timestamp": "10:52:52 น.",
-          "engines_active": [
-            "DOM_ABSORPTION",
-            "QUANT_EQUILIBRIUM_V2",
-            "HAWKES_VOLATILITY_BURST"
-          ],
-          "risk_rules": "Quantum Stealth RAM SL (±5% Jitter) + Spread Guard (< 2.5 pips)",
-          "total_forward_orders": 138,
-          "detail": "ประเมินสภาพคล่อง Order Book Imbalance และเข้าทำออเดอร์ Forward Trading 0.01 Lot แบบ Stealth Defense",
-          "summary": "วิเคราะห์สัญญาณความน่าจะเป็นทางคณิตศาสตร์ P(up) และส่งคำสั่งเทรดทดสอบในสภาพตลาดจริง"
-        },
-        "step3": {
-          "step_name": "3. รายงานผลลัพธ์ (Performance & Tracking)",
-          "stage_number": 8,
-          "stage_label": "STAGE 8-9: Memory & Tracking",
-          "status": "COMPLETED",
-          "timestamp": "10:52:53 น.",
-          "current_balance": 18.17,
-          "net_pnl": -81.83,
-          "win_rate": 45.5,
-          "closed_trades": 358,
-          "avg_slippage_pips": 0.08,
-          "execution_latency_ms": 28.5,
-          "detail": "พอร์ต Balance $18.17 USD, ออเดอร์ปิดสะสม 358 ครั้ง, Win Rate 45.5%, Slippage เฉลี่ย 0.08 pips",
-          "summary": "รายงานตัวชี้วัดครบถ้วน พร้อมบันทึกความจำสถาบัน (Memory Lineage) ลงสู่ประวัติระบบ"
-        },
-        "step4": {
-          "step_name": "4. แนวทางพัฒนา & ต่อยอด (Feedback & Evolution)",
-          "stage_number": 10,
-          "stage_label": "STAGE 10: Feedback Loop",
-          "status": "COMPLETED",
-          "timestamp": "10:52:53 น.",
-          "cycle_discovery_title": "ข้อค้นพบจากการเทรดรอบที่ #1527",
-          "cycle_discovery_desc": "วิเคราะห์การดูดซับสภาพคล่อง L2 DOM และความสัมพันธ์ระหว่างสเปรดกับ Win Rate",
-          "cycle_discovery_impact": "ปรับปรุงความแม่นยำของจุดเข้าออเดอร์",
-          "directives_for_next_cycle": [
-            "ปรับปรุงตัวกรอง Spread Guard ให้เข้มงวดขึ้นเมื่อสเปรดถ่าง > 2.0 pips",
-            "เชื่อมโยงโมเดล Order Book Imbalance (OBI) จาก arXiv 1808.03668",
-            "นำ Dynamic ATR Trailing Stop มาใช้ล็อคกำไรเมื่อราคาขยับบวก"
-          ],
-          "evolution_status": "APPROVED_FOR_CYCLE_1528",
-          "detail": "วิเคราะห์การดูดซับสภาพคล่อง L2 DOM และความสัมพันธ์ระหว่างสเปรดกับ Win Rate",
-          "summary": "ปรับปรุงความแม่นยำของจุดเข้าออเดอร์"
-        }
-      },
-      {
-        "cycle_number": 1526,
-        "started_at": "18 Nov 2026, 10:47:50 น.",
-        "completed_at": "18 Nov 2026, 10:47:52 น.",
-        "epoch": 1794973672.3943634,
-        "learning": {
-          "title": "ข้อค้นพบจากการเทรดรอบที่ #1526",
-          "discovery": "วิเคราะห์การดูดซับสภาพคล่อง L2 DOM และความสัมพันธ์ระหว่างสเปรดกับ Win Rate",
-          "impact": "ปรับปรุงความแม่นยำของจุดเข้าออเดอร์"
-        },
-        "step1": {
-          "step_name": "1. บันทึกข้อมูล cTrader (Data Ingest & Recording)",
-          "stage_number": 1,
-          "stage_label": "STAGE 1: Data Pipeline",
-          "status": "COMPLETED",
-          "timestamp": "10:47:50 น.",
-          "sources": [
-            "Pepperstone Demo Account 5258778",
-            "%LOCALAPPDATA%\\BacktestLab\\live"
-          ],
-          "symbols": [
-            "BTCUSD",
-            "ETHUSD",
-            "XAUUSD",
-            "GOLD-PERP"
-          ],
-          "total_recorded_minutes": 50545,
-          "detail": "บันทึกข้อมูลราคาและสมุดคำสั่งซื้อขายจริงสะสม 50,545 นาที (Tick + DOM L2 25 ชั้น + Spread Spikes) ลงสู่ Data Pipeline",
-          "summary": "ดึงข้อมูลสดจาก cTrader เข้าคลังข้อมูลสำเร็จ ไม่มีการสูญหายของระดับ Level 2 DOM"
-        },
-        "step2": {
-          "step_name": "2. วิเคราะห์ & ลองเทรดจริง (Analysis & Forward Execution)",
-          "stage_number": 7,
-          "stage_label": "STAGE 7: Live Execution",
-          "status": "COMPLETED",
-          "timestamp": "10:47:51 น.",
-          "engines_active": [
-            "DOM_ABSORPTION",
-            "QUANT_EQUILIBRIUM_V2",
-            "HAWKES_VOLATILITY_BURST"
-          ],
-          "risk_rules": "Quantum Stealth RAM SL (±5% Jitter) + Spread Guard (< 2.5 pips)",
-          "total_forward_orders": 138,
-          "detail": "ประเมินสภาพคล่อง Order Book Imbalance และเข้าทำออเดอร์ Forward Trading 0.01 Lot แบบ Stealth Defense",
-          "summary": "วิเคราะห์สัญญาณความน่าจะเป็นทางคณิตศาสตร์ P(up) และส่งคำสั่งเทรดทดสอบในสภาพตลาดจริง"
-        },
-        "step3": {
-          "step_name": "3. รายงานผลลัพธ์ (Performance & Tracking)",
-          "stage_number": 8,
-          "stage_label": "STAGE 8-9: Memory & Tracking",
-          "status": "COMPLETED",
-          "timestamp": "10:47:51 น.",
-          "current_balance": 30.09,
-          "net_pnl": -69.91,
-          "win_rate": 45.8,
-          "closed_trades": 356,
-          "avg_slippage_pips": 0.08,
-          "execution_latency_ms": 28.5,
-          "detail": "พอร์ต Balance $30.09 USD, ออเดอร์ปิดสะสม 356 ครั้ง, Win Rate 45.8%, Slippage เฉลี่ย 0.08 pips",
-          "summary": "รายงานตัวชี้วัดครบถ้วน พร้อมบันทึกความจำสถาบัน (Memory Lineage) ลงสู่ประวัติระบบ"
-        },
-        "step4": {
-          "step_name": "4. แนวทางพัฒนา & ต่อยอด (Feedback & Evolution)",
-          "stage_number": 10,
-          "stage_label": "STAGE 10: Feedback Loop",
-          "status": "COMPLETED",
-          "timestamp": "10:47:52 น.",
-          "cycle_discovery_title": "ข้อค้นพบจากการเทรดรอบที่ #1526",
-          "cycle_discovery_desc": "วิเคราะห์การดูดซับสภาพคล่อง L2 DOM และความสัมพันธ์ระหว่างสเปรดกับ Win Rate",
-          "cycle_discovery_impact": "ปรับปรุงความแม่นยำของจุดเข้าออเดอร์",
-          "directives_for_next_cycle": [
-            "ปรับปรุงตัวกรอง Spread Guard ให้เข้มงวดขึ้นเมื่อสเปรดถ่าง > 2.0 pips",
-            "เชื่อมโยงโมเดล Order Book Imbalance (OBI) จาก arXiv 1808.03668",
-            "นำ Dynamic ATR Trailing Stop มาใช้ล็อคกำไรเมื่อราคาขยับบวก"
-          ],
-          "evolution_status": "APPROVED_FOR_CYCLE_1527",
-          "detail": "วิเคราะห์การดูดซับสภาพคล่อง L2 DOM และความสัมพันธ์ระหว่างสเปรดกับ Win Rate",
-          "summary": "ปรับปรุงความแม่นยำของจุดเข้าออเดอร์"
-        }
-      },
-      {
-        "cycle_number": 1525,
-        "started_at": "18 Nov 2026, 10:42:50 น.",
-        "completed_at": "18 Nov 2026, 10:42:51 น.",
-        "epoch": 1794973371.787061,
-        "learning": {
-          "title": "ข้อค้นพบจากการเทรดรอบที่ #1525",
-          "discovery": "วิเคราะห์การดูดซับสภาพคล่อง L2 DOM และความสัมพันธ์ระหว่างสเปรดกับ Win Rate",
-          "impact": "ปรับปรุงความแม่นยำของจุดเข้าออเดอร์"
-        },
-        "step1": {
-          "step_name": "1. บันทึกข้อมูล cTrader (Data Ingest & Recording)",
-          "stage_number": 1,
-          "stage_label": "STAGE 1: Data Pipeline",
-          "status": "COMPLETED",
-          "timestamp": "10:42:50 น.",
-          "sources": [
-            "Pepperstone Demo Account 5258778",
-            "%LOCALAPPDATA%\\BacktestLab\\live"
-          ],
-          "symbols": [
-            "BTCUSD",
-            "ETHUSD",
-            "XAUUSD",
-            "GOLD-PERP"
-          ],
-          "total_recorded_minutes": 50525,
-          "detail": "บันทึกข้อมูลราคาและสมุดคำสั่งซื้อขายจริงสะสม 50,525 นาที (Tick + DOM L2 25 ชั้น + Spread Spikes) ลงสู่ Data Pipeline",
-          "summary": "ดึงข้อมูลสดจาก cTrader เข้าคลังข้อมูลสำเร็จ ไม่มีการสูญหายของระดับ Level 2 DOM"
-        },
-        "step2": {
-          "step_name": "2. วิเคราะห์ & ลองเทรดจริง (Analysis & Forward Execution)",
-          "stage_number": 7,
-          "stage_label": "STAGE 7: Live Execution",
-          "status": "COMPLETED",
-          "timestamp": "10:42:50 น.",
-          "engines_active": [
-            "DOM_ABSORPTION",
-            "QUANT_EQUILIBRIUM_V2",
-            "HAWKES_VOLATILITY_BURST"
-          ],
-          "risk_rules": "Quantum Stealth RAM SL (±5% Jitter) + Spread Guard (< 2.5 pips)",
-          "total_forward_orders": 138,
-          "detail": "ประเมินสภาพคล่อง Order Book Imbalance และเข้าทำออเดอร์ Forward Trading 0.01 Lot แบบ Stealth Defense",
-          "summary": "วิเคราะห์สัญญาณความน่าจะเป็นทางคณิตศาสตร์ P(up) และส่งคำสั่งเทรดทดสอบในสภาพตลาดจริง"
-        },
-        "step3": {
-          "step_name": "3. รายงานผลลัพธ์ (Performance & Tracking)",
-          "stage_number": 8,
-          "stage_label": "STAGE 8-9: Memory & Tracking",
-          "status": "COMPLETED",
-          "timestamp": "10:42:51 น.",
-          "current_balance": 30.09,
-          "net_pnl": -69.91,
-          "win_rate": 45.8,
-          "closed_trades": 356,
-          "avg_slippage_pips": 0.08,
-          "execution_latency_ms": 28.5,
-          "detail": "พอร์ต Balance $30.09 USD, ออเดอร์ปิดสะสม 356 ครั้ง, Win Rate 45.8%, Slippage เฉลี่ย 0.08 pips",
-          "summary": "รายงานตัวชี้วัดครบถ้วน พร้อมบันทึกความจำสถาบัน (Memory Lineage) ลงสู่ประวัติระบบ"
-        },
-        "step4": {
-          "step_name": "4. แนวทางพัฒนา & ต่อยอด (Feedback & Evolution)",
-          "stage_number": 10,
-          "stage_label": "STAGE 10: Feedback Loop",
-          "status": "COMPLETED",
-          "timestamp": "10:42:51 น.",
-          "cycle_discovery_title": "ข้อค้นพบจากการเทรดรอบที่ #1525",
-          "cycle_discovery_desc": "วิเคราะห์การดูดซับสภาพคล่อง L2 DOM และความสัมพันธ์ระหว่างสเปรดกับ Win Rate",
-          "cycle_discovery_impact": "ปรับปรุงความแม่นยำของจุดเข้าออเดอร์",
-          "directives_for_next_cycle": [
-            "ปรับปรุงตัวกรอง Spread Guard ให้เข้มงวดขึ้นเมื่อสเปรดถ่าง > 2.0 pips",
-            "เชื่อมโยงโมเดล Order Book Imbalance (OBI) จาก arXiv 1808.03668",
-            "นำ Dynamic ATR Trailing Stop มาใช้ล็อคกำไรเมื่อราคาขยับบวก"
-          ],
-          "evolution_status": "APPROVED_FOR_CYCLE_1526",
-          "detail": "วิเคราะห์การดูดซับสภาพคล่อง L2 DOM และความสัมพันธ์ระหว่างสเปรดกับ Win Rate",
-          "summary": "ปรับปรุงความแม่นยำของจุดเข้าออเดอร์"
-        }
       }
     ],
     "accumulated_learnings": {
-      "total_cycles": 1574,
-      "summary_headline": "วนไปแล้ว 1574 รอบ: ค้นพบ 4 กฎทองเชิงประจักษ์ที่พลิกผลตอบแทนจากขาดทุนสู่กำไรสถาบัน",
+      "total_cycles": 1577,
+      "summary_headline": "วนไปแล้ว 1577 รอบ: ค้นพบ 4 กฎทองเชิงประจักษ์ที่พลิกผลตอบแทนจากขาดทุนสู่กำไรสถาบัน",
       "cycle_learnings": [
         {
           "cycle_number": 1,
@@ -13541,6 +13541,24 @@
           "title": "การเรียนรู้เชิงปริมาณจากการเทรดรอบที่ #1574",
           "discovery": "เก็บข้อมูลความสัมพันธ์ระหว่าง Order Flow Delta, สเปรด และความเร็วการส่งคำสั่ง (Execution Latency) สะสมเพิ่มขึ้นต่อเนื่องในรอบที่ #1574",
           "impact": "ปรับปรุงความแม่นยำของพารามิเตอร์และการกระจาย Lot Sizing"
+        },
+        {
+          "cycle_number": 1575,
+          "title": "การเรียนรู้เชิงปริมาณจากการเทรดรอบที่ #1575",
+          "discovery": "เก็บข้อมูลความสัมพันธ์ระหว่าง Order Flow Delta, สเปรด และความเร็วการส่งคำสั่ง (Execution Latency) สะสมเพิ่มขึ้นต่อเนื่องในรอบที่ #1575",
+          "impact": "ปรับปรุงความแม่นยำของพารามิเตอร์และการกระจาย Lot Sizing"
+        },
+        {
+          "cycle_number": 1576,
+          "title": "การเรียนรู้เชิงปริมาณจากการเทรดรอบที่ #1576",
+          "discovery": "เก็บข้อมูลความสัมพันธ์ระหว่าง Order Flow Delta, สเปรด และความเร็วการส่งคำสั่ง (Execution Latency) สะสมเพิ่มขึ้นต่อเนื่องในรอบที่ #1576",
+          "impact": "ปรับปรุงความแม่นยำของพารามิเตอร์และการกระจาย Lot Sizing"
+        },
+        {
+          "cycle_number": 1577,
+          "title": "การเรียนรู้เชิงปริมาณจากการเทรดรอบที่ #1577",
+          "discovery": "เก็บข้อมูลความสัมพันธ์ระหว่าง Order Flow Delta, สเปรด และความเร็วการส่งคำสั่ง (Execution Latency) สะสมเพิ่มขึ้นต่อเนื่องในรอบที่ #1577",
+          "impact": "ปรับปรุงความแม่นยำของพารามิเตอร์และการกระจาย Lot Sizing"
         }
       ],
       "core_takeaways": [
@@ -13622,7 +13640,7 @@
           "ข้อมูล Hybrid พร้อม 100%",
           "ติดแท็ก 7 Session/Transition zones เรียบร้อย"
         ],
-        "timestamp": "07:08:36 UTC",
+        "timestamp": "07:52:56 UTC",
         "status": "DELIVERED"
       },
       {
@@ -13651,7 +13669,7 @@
           "ส่งต่อจุดตาย Regime Shift ให้ Evolver",
           "เปิดสวีป SL/RR/Exit แบบ Adaptive (ไม่ล็อกเลขตายตัว)"
         ],
-        "timestamp": "07:08:36 UTC",
+        "timestamp": "07:52:56 UTC",
         "status": "DELIVERED"
       },
       {
@@ -13680,7 +13698,7 @@
           "ผ่าน OOS Robustness Gate",
           "บันทึก Baseline V2 เพื่อพร้อม Rollback ทันที"
         ],
-        "timestamp": "07:08:36 UTC",
+        "timestamp": "07:52:56 UTC",
         "status": "DELIVERED"
       },
       {
@@ -13704,16 +13722,16 @@
           "specialty": "cTrader Historical API/MCP, 24/7 L2 DOM Watchdog (120s), UTC Hybrid Merge & Demo Sanitizer"
         },
         "subject": "Demo #5258778 Status: DOM_ABSORPTION v2 (AUTO_ROLLBACK)",
-        "message": "Agent 4 (Audit & Demo Deploy) ตรวจสอบ A/B บน Demo #5258778 (Emergency bleed guard triggered: REGIME_ADAPTIVE_V5 lost -52.76 USD over 176 trades.) และซิงก์สถานะลง DECISION_LOG.md, CURRENT_STATE_MAP.md และเว็บ 8 หน้าเรียบร้อย",
+        "message": "Agent 4 (Audit & Demo Deploy) ตรวจสอบ A/B บน Demo #5258778 (Emergency bleed guard triggered: REGIME_ADAPTIVE_V5 lost -51.58 USD over 178 trades.) และซิงก์สถานะลง DECISION_LOG.md, CURRENT_STATE_MAP.md และเว็บ 8 หน้าเรียบร้อย",
         "action_items": [
           "Active Model: DOM_ABSORPTION v2",
           "Auto-Rollback Guard Active"
         ],
-        "timestamp": "07:08:36 UTC",
+        "timestamp": "07:52:56 UTC",
         "status": "ACTIVE_NOW"
       }
     ],
-    "last_dispatch": "07:08:36 UTC",
+    "last_dispatch": "07:52:56 UTC",
     "current_active_handover": {
       "step": 4,
       "from_officer": {
@@ -13735,12 +13753,12 @@
         "specialty": "cTrader Historical API/MCP, 24/7 L2 DOM Watchdog (120s), UTC Hybrid Merge & Demo Sanitizer"
       },
       "subject": "Demo #5258778 Status: DOM_ABSORPTION v2 (AUTO_ROLLBACK)",
-      "message": "Agent 4 (Audit & Demo Deploy) ตรวจสอบ A/B บน Demo #5258778 (Emergency bleed guard triggered: REGIME_ADAPTIVE_V5 lost -52.76 USD over 176 trades.) และซิงก์สถานะลง DECISION_LOG.md, CURRENT_STATE_MAP.md และเว็บ 8 หน้าเรียบร้อย",
+      "message": "Agent 4 (Audit & Demo Deploy) ตรวจสอบ A/B บน Demo #5258778 (Emergency bleed guard triggered: REGIME_ADAPTIVE_V5 lost -51.58 USD over 178 trades.) และซิงก์สถานะลง DECISION_LOG.md, CURRENT_STATE_MAP.md และเว็บ 8 หน้าเรียบร้อย",
       "action_items": [
         "Active Model: DOM_ABSORPTION v2",
         "Auto-Rollback Guard Active"
       ],
-      "timestamp": "07:08:36 UTC",
+      "timestamp": "07:52:56 UTC",
       "status": "ACTIVE_NOW"
     }
   },
@@ -14094,7 +14112,7 @@
   },
   "truth_guard": {
     "truth_reset_version": "v5.0.0-SITUATIONAL-TRUTH",
-    "audit_timestamp": "2026-11-18T07:52:56.840574+00:00",
+    "audit_timestamp": "2026-11-18T08:07:11.349092+00:00",
     "data_source": "%LOCALAPPDATA%\\BacktestLab\\live",
     "account_number": "Pepperstone #5258778",
     "raw_files_audited": [
@@ -14104,35 +14122,35 @@
     ],
     "metrics_empirical": {
       "initial_deposit": 100.0,
-      "current_balance": 30.78,
-      "net_pnl_usd": -69.22,
-      "net_pnl_pct": -69.22,
+      "current_balance": 21.1,
+      "net_pnl_usd": -78.9,
+      "net_pnl_pct": -78.9,
       "gross_win_usd": 440.25,
-      "gross_loss_usd": 509.47,
-      "total_events_count": 665,
-      "total_closed_trades_N": 378,
+      "gross_loss_usd": 519.15,
+      "total_events_count": 668,
+      "total_closed_trades_N": 380,
       "wins_count": 171,
-      "losses_count": 207,
+      "losses_count": 209,
       "breakevens_count": 0,
-      "win_rate_pct": 45.2,
-      "profit_factor": 0.86,
-      "realized_sharpe_estimate": -2.93
+      "win_rate_pct": 45.0,
+      "profit_factor": 0.85,
+      "realized_sharpe_estimate": -3.31
     },
     "statistical_power": {
-      "sample_size_N": 378,
+      "sample_size_N": 380,
       "target_preliminary_N": 500,
       "target_institutional_N": 1200,
-      "power_progress_pct": 75.6,
-      "standard_error_sharpe": 0.118,
+      "power_progress_pct": 76.0,
+      "standard_error_sharpe": 0.131,
       "status": "SITUATIONAL_EMPIRICAL_REPORTING",
-      "label": "รายงานผลจริงรายสถานการณ์ (N=378 ไม้ · ชนะ 171/378)",
-      "description": "จำนวนเทรดจริงสะสม N=378 ไม้ (Win Rate 45.2%, PF 0.86, Net $-69.22) — แสดงผลตามสถานการณ์และ Session จริง ควบคู่การทดสอบ Out-of-Sample",
+      "label": "รายงานผลจริงรายสถานการณ์ (N=380 ไม้ · ชนะ 171/380)",
+      "description": "จำนวนเทรดจริงสะสม N=380 ไม้ (Win Rate 45.0%, PF 0.85, Net $-78.90) — แสดงผลตามสถานการณ์และ Session จริง ควบคู่การทดสอบ Out-of-Sample",
       "mandate": "รายงานผลจริงแยกตามสถานการณ์และ Session ตรงไปตรงมา (ยกเลิกเกณฑ์รอ N>=500) พร้อมตรวจ Out-of-Sample กัน Overfitting"
     }
   },
   "strategy_foundry": {
     "foundry_version": "v4.0.0-STRATEGY-FOUNDRY",
-    "updated_at": "2026-11-18T07:52:56.841574+00:00",
+    "updated_at": "2026-11-18T08:07:11.349092+00:00",
     "core_philosophy": "เปลี่ยนจาก 'บอทที่ฉลาดขึ้นเรื่อยๆ' สู่ 'โรงงานคัดกรองกลยุทธ์' (Strategy Foundry): ระบบจะสร้างไอเดียจำนวนมหาศาล ทดสอบด้วยโค้ดคณิตศาสตร์แล้วคัดทิ้ง 98% ตัวที่รอดจะถูกทดสอบด้วยเงินน้อยๆ (0.01 Lot) และถูกปลดออกอัตโนมัติ (Auto-Decommission) ทันทีที่ผลงานเริ่มเสื่อมถอย สิ่งที่พัฒนาขึ้นจริงไม่ใช่ผลกำไรที่เป็นเส้นตรง แต่คือความเฉียบคมของกระบวนการค้นหาและการตัดไฟแต่ต้นลม",
     "stats": {
       "total_hypotheses_generated": 1420,
@@ -14267,9 +14285,9 @@
       }
     ]
   },
-  "timestamp_utc": "2026-11-18T07:52:56.833574+00:00",
-  "timestamp_local": "18 Nov 2026, 14:52:56 น.",
-  "epoch": 1794988376.4823878,
+  "timestamp_utc": "2026-11-18T08:07:11.341017+00:00",
+  "timestamp_local": "18 Nov 2026, 15:07:11 น.",
+  "epoch": 1794989230.952654,
   "summary": {
     "total_bots": 5,
     "online_bots": 3,
@@ -14284,25 +14302,25 @@
     "symbols": "BTCUSD + ETHUSD + XAUUSD",
     "account": "5258778 (Pepperstone Demo)",
     "initial_deposit": 100.0,
-    "balance": 30.78,
-    "equity": 30.78,
-    "net_pnl": -69.22,
-    "net_pnl_pct": -69.22,
+    "balance": 21.1,
+    "equity": 21.1,
+    "net_pnl": -78.9,
+    "net_pnl_pct": -78.9,
     "gross_win": 440.25,
-    "gross_loss": 509.47,
-    "total_trades": 378,
+    "gross_loss": 519.15,
+    "total_trades": 380,
     "wins": 171,
-    "losses": 207,
-    "win_rate": 45.2,
+    "losses": 209,
+    "win_rate": 45.0,
     "statistical_power": {
-      "sample_size_N": 378,
+      "sample_size_N": 380,
       "target_preliminary_N": 500,
       "target_institutional_N": 1200,
-      "power_progress_pct": 75.6,
-      "standard_error_sharpe": 0.118,
+      "power_progress_pct": 76.0,
+      "standard_error_sharpe": 0.131,
       "status": "SITUATIONAL_EMPIRICAL_REPORTING",
-      "label": "รายงานผลจริงรายสถานการณ์ (N=378 ไม้ · ชนะ 171/378)",
-      "description": "จำนวนเทรดจริงสะสม N=378 ไม้ (Win Rate 45.2%, PF 0.86, Net $-69.22) — แสดงผลตามสถานการณ์และ Session จริง ควบคู่การทดสอบ Out-of-Sample",
+      "label": "รายงานผลจริงรายสถานการณ์ (N=380 ไม้ · ชนะ 171/380)",
+      "description": "จำนวนเทรดจริงสะสม N=380 ไม้ (Win Rate 45.0%, PF 0.85, Net $-78.90) — แสดงผลตามสถานการณ์และ Session จริง ควบคู่การทดสอบ Out-of-Sample",
       "mandate": "รายงานผลจริงแยกตามสถานการณ์และ Session ตรงไปตรงมา (ยกเลิกเกณฑ์รอ N>=500) พร้อมตรวจ Out-of-Sample กัน Overfitting"
     },
     "open_positions": 0
@@ -14328,15 +14346,15 @@
       "win_rate": 39.4,
       "is_online": true,
       "status": "LIVE",
-      "heartbeat_seconds": 2.1,
-      "heartbeat_desc": "2 วินาทีที่แล้ว",
-      "current_price": 64714.56,
+      "heartbeat_seconds": 1.9,
+      "heartbeat_desc": "เมื่อสักครู่ (< 2 วิ)",
+      "current_price": 64706.63,
       "spread": 15.0,
-      "imbalance": 0.0,
-      "delta": 2.0,
-      "cvd": 808.0,
-      "vwap": 64562.8058,
-      "recorded_minutes": 15047,
+      "imbalance": 0.004,
+      "delta": -52.0,
+      "cvd": 570.0,
+      "vwap": 64567.9959,
+      "recorded_minutes": 15062,
       "open_positions": 0
     },
     {
@@ -14359,15 +14377,15 @@
       "win_rate": 33.3,
       "is_online": true,
       "status": "LIVE",
-      "heartbeat_seconds": 1.2,
+      "heartbeat_seconds": 1.7,
       "heartbeat_desc": "เมื่อสักครู่ (< 2 วิ)",
-      "current_price": 1812.59,
+      "current_price": 1810.94,
       "spread": 2.0,
-      "imbalance": 0.0,
-      "delta": -3.0,
-      "cvd": -745.0,
-      "vwap": 1810.1754,
-      "recorded_minutes": 14983,
+      "imbalance": 0.011,
+      "delta": 1.0,
+      "cvd": -810.0,
+      "vwap": 1810.2896,
+      "recorded_minutes": 14998,
       "open_positions": 0
     },
     {
@@ -14383,22 +14401,22 @@
       "defense": "Quantum Stealth RAM SL (±5% Jitter)",
       "role_desc": "เทรดสดดักจังหวะทองคำรอบลอนดอน & นิวยอร์ก (รอวอลุ่มช่วงบ่าย)",
       "icon": "🟡",
-      "closed_trades": 241,
-      "net_pnl": -49.67,
+      "closed_trades": 243,
+      "net_pnl": -59.35,
       "wins": 121,
-      "losses": 120,
-      "win_rate": 50.2,
+      "losses": 122,
+      "win_rate": 49.8,
       "is_online": true,
       "status": "LIVE",
-      "heartbeat_seconds": 0.2,
+      "heartbeat_seconds": 1.6,
       "heartbeat_desc": "เมื่อสักครู่ (< 2 วิ)",
-      "current_price": 3766.07,
+      "current_price": 3768.19,
       "spread": 0.118,
       "imbalance": 0.0,
-      "delta": 2.0,
-      "cvd": -1315.0,
-      "vwap": 3801.9924,
-      "recorded_minutes": 14680,
+      "delta": -8.0,
+      "cvd": -1433.0,
+      "vwap": 3801.1785,
+      "recorded_minutes": 14710,
       "open_positions": 0
     },
     {
@@ -14421,8 +14439,8 @@
       "win_rate": 0.0,
       "is_online": false,
       "status": "OFFLINE",
-      "heartbeat_seconds": 956849.1,
-      "heartbeat_desc": "265 ชม. ที่แล้ว",
+      "heartbeat_seconds": 957703.6,
+      "heartbeat_desc": "266 ชม. ที่แล้ว",
       "current_price": 4077.42,
       "spread": 1.541,
       "imbalance": -0.002,
@@ -14447,11 +14465,11 @@
       "icon": "⏸️",
       "force_offline": true,
       "offline_reason": "สลับให้ DOM Absorption รันหลัก",
-      "closed_trades": 241,
-      "net_pnl": -49.67,
+      "closed_trades": 243,
+      "net_pnl": -59.35,
       "wins": 121,
-      "losses": 120,
-      "win_rate": 50.2,
+      "losses": 122,
+      "win_rate": 49.8,
       "is_online": false,
       "status": "OFFLINE",
       "heartbeat_seconds": 99999,
@@ -14467,81 +14485,6 @@
     }
   ],
   "recent_trades": [
-    {
-      "time": "2026-11-18 06:16:29.552",
-      "event": "CLOSE",
-      "id": "264197366",
-      "side": "Sell",
-      "units": "1",
-      "price": "3781.50",
-      "expected": "",
-      "slippage": "",
-      "latencyMs": "",
-      "spread": "0.11",
-      "stopLoss": "",
-      "pUp": "",
-      "reason": "Closed",
-      "gross": "6.48",
-      "commission": "-0.08",
-      "swap": "0.00",
-      "net": "6.40",
-      "balance": "69.96",
-      "null": [
-        "REGIME_ADAPTIVE_V5",
-        "ASIA|RANGE"
-      ],
-      "symbol": "XAUUSD"
-    },
-    {
-      "time": "2026-11-18 06:33:41.580",
-      "event": "CLOSE",
-      "id": "264208585",
-      "side": "Buy",
-      "units": "0.01",
-      "price": "1806.69",
-      "expected": "1806.63",
-      "slippage": "-0.06",
-      "latencyMs": "",
-      "spread": "2",
-      "stopLoss": "",
-      "pUp": "",
-      "reason": "Closed",
-      "gross": "-0.07",
-      "commission": "0.00",
-      "swap": "0.00",
-      "net": "-0.07",
-      "balance": "69.89",
-      "null": [
-        "REGIME_ADAPTIVE_V5",
-        "ASIA|BREAKOUT"
-      ],
-      "symbol": "ETHUSD"
-    },
-    {
-      "time": "2026-11-18 06:48:01.781",
-      "event": "OPEN",
-      "id": "264233790",
-      "side": "Buy",
-      "units": "1",
-      "price": "3782.59",
-      "expected": "3783.02",
-      "slippage": "-0.43",
-      "latencyMs": "629",
-      "spread": "0.12",
-      "stopLoss": "3764.54",
-      "pUp": "",
-      "reason": "ASIA|RANGE|STR002_VWAP",
-      "gross": "",
-      "commission": "",
-      "swap": "",
-      "net": "",
-      "balance": "69.89",
-      "null": [
-        "REGIME_ADAPTIVE_V5",
-        "ASIA|RANGE"
-      ],
-      "symbol": "XAUUSD"
-    },
     {
       "time": "2026-11-18 06:49:43.204",
       "event": "CLOSE",
@@ -14716,9 +14659,110 @@
         "ASIA_TO_LONDON|TREND_BULL"
       ],
       "symbol": "ETHUSD"
+    },
+    {
+      "time": "2026-11-18 07:55:01.304",
+      "event": "OPEN",
+      "id": "264264019",
+      "side": "Buy",
+      "units": "1",
+      "price": "3772.01",
+      "expected": "3772.11",
+      "slippage": "-0.1",
+      "latencyMs": "625",
+      "spread": "0.09",
+      "stopLoss": "3754.51",
+      "pUp": "",
+      "reason": "ASIA_TO_LONDON|RANGE|STR002_VWAP",
+      "gross": "",
+      "commission": "",
+      "swap": "",
+      "net": "",
+      "balance": "64.57",
+      "null": [
+        "REGIME_ADAPTIVE_V5",
+        "ASIA_TO_LONDON|RANGE"
+      ],
+      "symbol": "XAUUSD"
+    },
+    {
+      "time": "2026-11-18 08:07:10.898",
+      "event": "CLOSE",
+      "id": "264264019",
+      "side": "Buy",
+      "units": "1",
+      "price": "3767.25",
+      "expected": "",
+      "slippage": "",
+      "latencyMs": "",
+      "spread": "0.12",
+      "stopLoss": "",
+      "pUp": "",
+      "reason": "Closed",
+      "gross": "-4.76",
+      "commission": "-0.08",
+      "swap": "0.00",
+      "net": "-4.84",
+      "balance": "59.73",
+      "null": [
+        "REGIME_ADAPTIVE_V5",
+        "ASIA_TO_LONDON|RANGE"
+      ],
+      "symbol": "XAUUSD"
+    },
+    {
+      "time": "2026-11-18 08:07:11.022",
+      "event": "CLOSE",
+      "id": "264264019",
+      "side": "Buy",
+      "units": "1",
+      "price": "3767.25",
+      "expected": "3766.92",
+      "slippage": "-0.33",
+      "latencyMs": "",
+      "spread": "0.12",
+      "stopLoss": "",
+      "pUp": "",
+      "reason": "Closed",
+      "gross": "-4.76",
+      "commission": "-0.08",
+      "swap": "0.00",
+      "net": "-4.84",
+      "balance": "59.73",
+      "null": [
+        "REGIME_ADAPTIVE_V5",
+        "ASIA_TO_LONDON|RANGE"
+      ],
+      "symbol": "XAUUSD"
     }
   ],
   "recent_closed_deals": [
+    {
+      "id": "264264019",
+      "symbol": "XAUUSD",
+      "side": "Buy",
+      "close_time": "2026-11-18 08:07:11.022",
+      "entry_price": 3772.01,
+      "exit_price": 3767.25,
+      "net": -4.84,
+      "reason": "Closed",
+      "spread": 0.12,
+      "slippage": -0.33,
+      "balance": 59.73
+    },
+    {
+      "id": "264264019",
+      "symbol": "XAUUSD",
+      "side": "Buy",
+      "close_time": "2026-11-18 08:07:10.898",
+      "entry_price": 3772.01,
+      "exit_price": 3767.25,
+      "net": -4.84,
+      "reason": "Closed",
+      "spread": 0.12,
+      "slippage": 0.0,
+      "balance": 59.73
+    },
     {
       "id": "264262121",
       "symbol": "ETHUSD",
@@ -14822,32 +14866,6 @@
       "spread": 0.13,
       "slippage": 0.07,
       "balance": 69.96
-    },
-    {
-      "id": "264199414",
-      "symbol": "ETHUSD",
-      "side": "Buy",
-      "close_time": "2026-11-18 05:49:19.107",
-      "entry_price": 1813.31,
-      "exit_price": 1806.23,
-      "net": -0.07,
-      "reason": "Closed",
-      "spread": 2.0,
-      "slippage": 0.0,
-      "balance": 63.56
-    },
-    {
-      "id": "264190868",
-      "symbol": "XAUUSD",
-      "side": "Buy",
-      "close_time": "2026-11-18 05:18:18.060",
-      "entry_price": 3784.76,
-      "exit_price": 3789.2,
-      "net": 4.36,
-      "reason": "Closed",
-      "spread": 0.12,
-      "slippage": 0.0,
-      "balance": 63.63
     }
   ],
   "market_intelligence_v4": {
