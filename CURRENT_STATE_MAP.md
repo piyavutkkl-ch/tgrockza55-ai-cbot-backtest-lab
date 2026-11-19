@@ -1,4 +1,4 @@
-# 🗺️ CURRENT STATE MAP (`cbot-atgvt` — อัปเดต 16 พ.ย. 2026)
+# 🗺️ CURRENT STATE MAP (`cbot-atgvt` — อัปเดต 19 พ.ย. 2026)
 
 > เอกสารนี้คือ **"ภาพความจริง ณ ปัจจุบัน"** ที่บันทึกอยู่ใน Git Repo เพื่อใช้เป็นจุดตั้งต้นเดียวกันของ AI ทุกตัวและ Human (อ้างอิงกฎจาก [`GEMINI.md`](GEMINI.md))
 
@@ -32,11 +32,13 @@
 ---
 
 ## 3. สถานะผลงานพอร์ต Demo & โค้ดกลยุทธ์ปัจจุบัน
-* **สถานะเทรดสดสะสม (`docs/data/truth_guard.json` ณ `16 Nov 2026 15:58 UTC`):**
-  * **จำนวนไม้ปิดจริง:** `N = 125` ไม้ (ชนะ 56 / แพ้ 69 · Win Rate **44.8%**)
-  * **Balance / Net PnL:** **\$120.76 USD** (กำไรสุทธิ **+\$20.76 USD / +20.76%** จาก \$100 · Profit Factor **1.17**)
-* **cBot Strategy ที่รันบน Demo:** [`RegimeAdaptiveV5.cs`](cbot/BacktestLab/Strategies/RegimeAdaptiveV5.cs) (`REGIME_ADAPTIVE_V5` **V3**) รันทับ [`DomWallAbsorption.cs`](cbot/BacktestLab/Strategies/DomWallAbsorption.cs) (`DOM_ABSORPTION` **V2 Baseline** ที่สำรองไว้ใน [`demo_deployment_state.json`](docs/data/demo_deployment_state.json) พร้อม Auto-Rollback) — ยืนยันผ่าน `ctrader-cli build` (0 Errors) และ Sanity Tick Backtest XAUUSD 12–16 พ.ย. 2026 (`+50.43 USD`, PF `1.25`, `66` ไม้) แล้ว
-* **บันทึกการตัดสินใจ & A/B Audit:** [`DECISION_LOG.md`](DECISION_LOG.md) + [`docs/data/v5_pipeline_state.json`](docs/data/v5_pipeline_state.json)
+* **สถานะเทรดสดสะสม (`docs/data/truth_guard.json` ณ `19 Nov 2026 08:34 UTC`):**
+  * **จำนวนไม้ปิดจริง:** `N = 412` ไม้ (ชนะ 168 / แพ้ 244 · Win Rate **40.8%**)
+  * **Cumulative Net PnL / Balance:** Net **-\$129.26 USD** · Balance บัญชี cTrader จริง **\$115.67 USD** (Profit Factor **0.79**)
+* **cBot Strategy & A/B Evaluation บน Demo `#5258778`:**
+  * **Challenger `REGIME_ADAPTIVE_V5 v3`:** วิ่งทดสอบจริง 208 ไม้ (ชนะ 89 / แพ้ 119 · Net **-\$100.48 USD**, PF 0.68) ติด Emergency Bleed Guard ➔ **Auto-Rollback กลับไปใช้ Baseline `DOM_ABSORPTION v2` อัตโนมัติ** เรียบร้อยตามกฎ System Rules V5
+  * **Baseline `DOM_ABSORPTION v2`:** 109 ไม้ (ชนะ 45 / แพ้ 64 · Net **+\$4.70 USD**, PF **1.04**)
+* **บันทึกการตัดสินใจ & A/B Audit:** [`DECISION_LOG.md`](DECISION_LOG.md) + [`docs/data/v5_pipeline_state.json`](docs/data/v5_pipeline_state.json) + [`docs/data/demo_deployment_state.json`](docs/data/demo_deployment_state.json)
 * **ผลวิจัย XAUUSD ล่าสุดบนข้อมูลสด (`tools/backtest_dom_live_grid.py` บน 7,295 แท่ง):**
   * `DOM_ABSORPTION_V2 + London/NY (08:00–21:00 UTC) + News Gate`: 78 ไม้ · WR 48.7% · PF **1.25** · Net **+\$35.48 USD** · Daily Win Rate **83.3%** (5/6 วัน)
   * `QuantExtremeReversal` (แชมป์ข้อมูลย้อนหลังเก่า): แพ้บนข้อมูลสด (**-\$16.30 USD**, PF 0.32) — เป็นหลักฐานชัดเจนเรื่อง Overfitting ของข้อมูลสังเคราะห์
