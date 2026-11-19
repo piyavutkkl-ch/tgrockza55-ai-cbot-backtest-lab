@@ -17,15 +17,15 @@
 
 ## 2. Parallel Demo A/B Comparison (`#5258778` Live Forward)
 
-* **Updated (UTC):** `2026-11-19T18:30:07.615650+00:00`
+* **Updated (UTC):** `2026-11-19T18:43:38.013415+00:00`
 * **Active C# Strategy on Demo `#5258778`:** `DOM_ABSORPTION` (Version `2`) · **Last Action:** `NONE`
-* **A/B Verdict:** `AUTO_ROLLBACK` — Emergency bleed guard triggered: REGIME_ADAPTIVE_V5 lost -106.82 USD over 223 trades.
-* **Cumulative Demo Account (`truth_guard.json`):** Balance `$-35.60 USD` · Closed `N=427` · Net `-135.60 USD` · PF `0.79`
+* **A/B Verdict:** `AUTO_ROLLBACK` — Emergency bleed guard triggered: REGIME_ADAPTIVE_V5 lost -110.97 USD over 224 trades.
+* **Cumulative Demo Account (`truth_guard.json`):** Balance `$-39.75 USD` · Closed `N=428` · Net `-139.75 USD` · PF `0.79`
 
 | Model Variant | Status on Demo `#5258778` | Closed Trades | Win Rate | Profit Factor | Expectancy / Trade | Net PnL (USD) | Max DD (USD) |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
 | **Baseline: `DOM_ABSORPTION v2`** | Rollback Snapshot Saved | 109 | 41.3% | 1.04 | +0.0431 | +4.70 | 31.66 |
-| **Challenger: `REGIME_ADAPTIVE_V5 v3`** | Active Forward Candidate | 223 | 43.0% | 0.69 | -0.4790 | -106.82 | 132.07 |
+| **Challenger: `REGIME_ADAPTIVE_V5 v3`** | Active Forward Candidate | 224 | 42.9% | 0.68 | -0.4954 | -110.97 | 132.07 |
 
 ---
 
