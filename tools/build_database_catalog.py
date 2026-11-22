@@ -89,6 +89,7 @@ CORE_FOLDER_MAP: dict[str, tuple[str, str, str]] = {
     "alpha_discovery.json": ("research_papers", "alpha_miner_v1", "Symbolic algebraic alpha mining formulas & screening pass metrics"),
     "behavioral_alphas.json": ("research_papers", "behavioral_v3", "Quantified behavioral finance biases & disposition-effect alpha models"),
     "external_alphas.json": ("research_papers", "external_scout_v1", "External arXiv q-fin / SSRN / GitHub cTrader quantitative alpha leads"),
+    "trading_condition_library.json": ("research_papers", "pattern_library_v5", "V5 Round 2 Trading Condition Library: 20-field OOS validated conditions, 7-zone playbooks & MTF confluence proofs"),
 
     # Audit Logs (9)
     "web_alerts.json": ("audit_logs", "web_alerts_v1", "Gatekeeper PASS/VETO, HITL approval gates & system incident alerts"),
@@ -104,6 +105,7 @@ CORE_FOLDER_MAP: dict[str, tuple[str, str, str]] = {
     "regime_strategy_matrix.json": ("strategy_registries", "regime_matrix_v5", "Phase 2: 7-zone Session/Transition Regime Matrix, OOS adaptive params & Zero-SL blowup forensics"),
     "demo_deployment_state.json": ("audit_logs", "demo_deploy_v5", "Phase 3: Pepperstone Demo #5258778 baseline/challenger versions, A/B metrics & auto-rollback ledger"),
     "v5_pipeline_state.json": ("audit_logs", "v5_pipeline_v5", "Phase 3: 4-Agent V5 orchestration pipeline handoff state (Collector -> Research -> Evolver -> Deploy)"),
+    "pattern_discovery_state.json": ("audit_logs", "pattern_state_v5", "V5 Pattern Discovery iterative state & Round 1 vs Round 2 validation yield summary"),
 }
 
 SECONDARY_DESCRIPTIONS: dict[str, tuple[str, str]] = {
@@ -235,6 +237,10 @@ def infer_record_stats(filename: str, parsed: Any) -> tuple[int, str, list[str]]
         if filename == "live_evolution_champions.json" and isinstance(parsed.get("champions"), dict):
             n = len(parsed["champions"])
             return n, f"{n:,} champions", list(parsed.keys())
+
+        if filename == "trading_condition_library.json" and isinstance(parsed.get("symbols"), dict):
+            n_arch = sum(len(v.get("conditions", [])) for v in parsed["symbols"].values() if isinstance(v, dict))
+            return n_arch, f"{n_arch:,} conditions", list(parsed.keys())
 
         if filename == "rule_classification_matrix.json":
             n = sum(

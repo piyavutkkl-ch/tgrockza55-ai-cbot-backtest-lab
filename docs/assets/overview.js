@@ -974,7 +974,7 @@ function renderQuickAccess() {
   `;
 }
 
-function renderV5Loop(v5Pipeline, demoDeploy) {
+function renderV5Loop(v5Pipeline, demoDeploy, patternState) {
   const host = document.getElementById('v5-4stage-loop');
   if (!host) return;
   const st = v5Pipeline?.stages || {};
@@ -986,6 +986,16 @@ function renderV5Loop(v5Pipeline, demoDeploy) {
   const activeCode = demoDeploy?.active_strategy_code || a4.active_strategy_code || 'REGIME_ADAPTIVE_V5';
   const activeVer = demoDeploy?.active_version || a4.active_version || 3;
 
+  const patTotal = Number(patternState?.total_conditions_archived || 0);
+  const patOosSum = Object.values(patternState?.validated_summary || {}).reduce(
+    (acc, v) => acc + Number(v?.VALIDATED_OOS || 0),
+    0
+  );
+  const patRound = Number(patternState?.iteration_round || 2);
+  const stage2Metric = patTotal > 0
+    ? `${patTotal.toLocaleString('en-US')} Conditions · ${patOosSum} VALIDATED_OOS (R${patRound}) · ${Number(a2.papers_indexed || 193)} Papers`
+    : `${Number(a2.papers_indexed || 193)} Papers · ${Number(a2.total_forensic_cases || 0)} Forensics (${Number(a2.zero_sl_forensic_cases || 0)} Zero-SL)`;
+
   const cards = [
     {
       href: 'data-center.html',
@@ -996,12 +1006,12 @@ function renderV5Loop(v5Pipeline, demoDeploy) {
       pages: 'Data Center (หน้า 2) · Database (หน้า 8)',
     },
     {
-      href: 'research-lab.html',
+      href: 'research-lab.html#patterns',
       step: 'STAGE 2 · AGENT 2',
-      badge: a2.status || 'RESEARCH',
+      badge: patTotal > 0 ? `R${patRound} LIBRARY` : (a2.status || 'RESEARCH'),
       title: 'Research & Matching',
-      metric: `${Number(a2.papers_indexed || 193)} Papers · ${Number(a2.total_forensic_cases || 0)} Forensics (${Number(a2.zero_sl_forensic_cases || 0)} Zero-SL)`,
-      pages: 'Research Lab (หน้า 3) · 7-Zone Mining',
+      metric: stage2Metric,
+      pages: 'Research Lab (หน้า 3) · Pattern Library & 7-Zone Playbook',
     },
     {
       href: 'intelligence.html#sectionV5Situational',
@@ -1069,6 +1079,7 @@ async function loadAndRenderOverview() {
     championRegistry,
     v5Pipeline,
     demoDeploy,
+    patternState,
   ] = await Promise.all([
     fetchJsonSafe('data/overview_summary.json', 'overview_summary', failedSources),
     fetchJsonSafe('data/live_status.json', 'live_status', failedSources),
@@ -1079,6 +1090,7 @@ async function loadAndRenderOverview() {
     fetchJsonSafe('data/champion_registry.json', 'champion_registry', failedSources),
     fetchJsonSafe('data/v5_pipeline_state.json', 'v5_pipeline_state', failedSources),
     fetchJsonSafe('data/demo_deployment_state.json', 'demo_deployment_state', failedSources),
+    fetchJsonSafe('data/pattern_discovery_state.json', 'pattern_discovery_state', failedSources),
   ]);
 
   // Preserve previous good snapshots if an individual fetch fails transiently
@@ -1091,6 +1103,7 @@ async function loadAndRenderOverview() {
   if (championRegistry) state.lastData.championRegistry = championRegistry;
   if (v5Pipeline) state.lastData.v5Pipeline = v5Pipeline;
   if (demoDeploy) state.lastData.demoDeploy = demoDeploy;
+  if (patternState) state.lastData.patternState = patternState;
   state.failedSources = failedSources;
 
   updateShellTelemetry({
@@ -1101,7 +1114,7 @@ async function loadAndRenderOverview() {
     failedSources,
   });
 
-  renderV5Loop(state.lastData.v5Pipeline, state.lastData.demoDeploy);
+  renderV5Loop(state.lastData.v5Pipeline, state.lastData.demoDeploy, state.lastData.patternState);
   renderLiveDemoCard(state.lastData.liveStatus, state.lastData.truthGuard, state.lastData.overviewSummary);
   renderChampionCard(state.lastData.championRegistry, state.lastData.overviewSummary);
   renderBotsSection(state.lastData.liveStatus, state.lastData.overviewSummary);

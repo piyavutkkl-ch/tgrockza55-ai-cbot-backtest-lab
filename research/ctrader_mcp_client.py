@@ -152,17 +152,33 @@ class CTraderMCPClient:
                 return None
         return None
 
-    def fetch_and_cache_m1_bars(
+    _TIMEFRAME_SLICES = {
+        "m1": (timedelta(hours=14), 60),
+        "m5": (timedelta(hours=70), 12),
+        "m15": (timedelta(days=9), 6),
+        "m30": (timedelta(days=18), 4),
+        "h1": (timedelta(days=35), 2),
+        "h4": (timedelta(days=140), 1),
+        "d1": (timedelta(days=800), 1),
+    }
+
+    def fetch_and_cache_trendbars(
         self,
         symbol: str,
+        timeframe: str,
         start_utc: datetime,
         end_utc: datetime,
     ) -> List[Dict[str, Any]]:
         """
-        Incrementally fetches M1 OHLCV bars from cTrader MCP in 950-bar slices (under 1000 cap)
-        and persists to %LOCALAPPDATA%\\BacktestLab\\ctrader_cache\\<symbol>_m1.json.
+        Incrementally fetches historical OHLCV bars from cTrader MCP in slices below the
+        1000-bar server cap and persists to %LOCALAPPDATA%\\BacktestLab\\ctrader_cache\\<symbol>_<tf>.json.
         """
-        cache_file = self.cache_dir / f"{symbol}_m1.json"
+        tf = timeframe.lower().strip()
+        if tf not in self._TIMEFRAME_SLICES:
+            raise ValueError(f"Unsupported timeframe: {timeframe!r}")
+        slice_delta, min_slice_bars = self._TIMEFRAME_SLICES[tf]
+
+        cache_file = self.cache_dir / f"{symbol}_{tf}.json"
         cached: Dict[str, Dict[str, Any]] = {}
         if cache_file.exists():
             try:
@@ -176,20 +192,17 @@ class CTraderMCPClient:
         if not self.ensure_initialized():
             return sorted(cached.values(), key=lambda x: x["time"])
 
-        # Walk backward from end_utc in 14-hour slices (<= 840 M1 bars per request < 1000 cap)
         cur_end = end_utc.astimezone(timezone.utc)
         target_start = start_utc.astimezone(timezone.utc)
         added = 0
 
-        # Avoid refetching ranges completely covered if start..end already well populated,
-        # unless tail minutes are recent (always refresh last 24h cleanly).
         cached_times = sorted(cached.keys())
         earliest_cached = cached_times[0] if cached_times else None
         latest_cached = cached_times[-1] if cached_times else None
         recent_cutoff = (end_utc.astimezone(timezone.utc) - timedelta(hours=24)).strftime("%Y-%m-%d %H:%M")
 
         while cur_end > target_start:
-            cur_start = max(target_start, cur_end - timedelta(hours=14))
+            cur_start = max(target_start, cur_end - slice_delta)
             s_key = cur_start.strftime("%Y-%m-%d %H:%M")
             e_key = cur_end.strftime("%Y-%m-%d %H:%M")
 
@@ -197,7 +210,7 @@ class CTraderMCPClient:
             if earliest_cached and latest_cached and s_key >= earliest_cached and e_key <= min(latest_cached, recent_cutoff):
                 count_in_slice = sum(1 for k in cached_times if s_key <= k <= e_key)
                 is_weekend_gap = (symbol == "XAUUSD" and cur_start.weekday() == 5 and cur_end.weekday() == 5)
-                if count_in_slice >= 60 or is_weekend_gap:
+                if count_in_slice >= min_slice_bars or is_weekend_gap:
                     cur_end = cur_start
                     continue
 
@@ -205,7 +218,7 @@ class CTraderMCPClient:
                 "get_trendbars",
                 {
                     "symbolName": symbol,
-                    "timeframe": "m1",
+                    "timeframe": tf,
                     "from": cur_start.strftime("%Y-%m-%dT%H:%M:%SZ"),
                     "to": cur_end.strftime("%Y-%m-%dT%H:%M:%SZ"),
                     "limit": 1000,
@@ -237,3 +250,15 @@ class CTraderMCPClient:
             tmp.write_text(json.dumps(sorted_bars), encoding="utf-8")
             tmp.replace(cache_file)
         return sorted_bars
+
+    def fetch_and_cache_m1_bars(
+        self,
+        symbol: str,
+        start_utc: datetime,
+        end_utc: datetime,
+    ) -> List[Dict[str, Any]]:
+        """
+        Incrementally fetches M1 OHLCV bars from cTrader MCP in 950-bar slices (under 1000 cap)
+        and persists to %LOCALAPPDATA%\\BacktestLab\\ctrader_cache\\<symbol>_m1.json.
+        """
+        return self.fetch_and_cache_trendbars(symbol, "m1", start_utc, end_utc)

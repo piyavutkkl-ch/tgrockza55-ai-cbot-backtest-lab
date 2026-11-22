@@ -1,5 +1,6 @@
 // ANTIGRAVITY QUANT · Page 3 / 8: Research Lab ES Module
 import { mountShell, loadShellTelemetryOnly } from './shell.js';
+import { registerPatternLibraryTab } from './pattern-library-tab.js';
 
 // Research Lab Core Controller (Shared 8-Page Shell Compatible)
 (function () {
@@ -143,6 +144,42 @@ import { mountShell, loadShellTelemetryOnly } from './shell.js';
         { value: 'MEDIUM', label: 'Cost Sensitivity: MEDIUM' },
         { value: 'HIGH', label: 'Cost Sensitivity: HIGH' }
       ], window.RLAB.state.f3);
+    } else if (tab === 'patterns') {
+      if (sInput) sInput.placeholder = 'Search Condition Library by event, sequence, session, or category (e.g. DOM_STACK, VA_REJECT, NY, M15)...';
+      fillSelect(f1, [
+        { value: 'EDGES_ONLY', label: 'Status: Verified Edges Only (OOS/Regime/Rare)' },
+        { value: 'ALL', label: 'Status: All Archived Conditions' },
+        { value: 'VALIDATED_OOS', label: 'VALIDATED_OOS Only' },
+        { value: 'REGIME_SPECIFIC_EDGE', label: 'REGIME_SPECIFIC_EDGE Only' },
+        { value: 'RARE_HIGH_EDGE', label: 'RARE_HIGH_EDGE Only' },
+        { value: 'IS_ONLY_OVERFIT', label: 'IS_ONLY_OVERFIT (Audit)' },
+        { value: 'NO_EDGE', label: 'NO_EDGE (Audit)' },
+        { value: 'INSUFFICIENT_DATA', label: 'INSUFFICIENT_DATA (Audit)' }
+      ], window.RLAB.state.f1);
+      fillSelect(f2, [
+        { value: 'ALL', label: 'All Types & Discovery Rounds' },
+        { value: 'ROUND2', label: 'Round 2 Only (OrderBook + Session)' },
+        { value: 'ROUND1', label: 'Round 1 Only (Single + Seq + MTF)' },
+        { value: 'MICROSTRUCTURE_ONLY', label: 'Live Microstructure Required (DOM/Flow)' },
+        { value: 'Single', label: 'Type: Single Condition' },
+        { value: 'Sequential', label: 'Type: Multi-Step Sequence' },
+        { value: 'Multi-TF', label: 'Type: Multi-Timeframe (MTF)' },
+        { value: 'Session-Micro', label: 'Type: Session-Micro (7-Zone)' },
+        { value: 'Session-Specific', label: 'Type: Session-Specific (7-Zone)' }
+      ], window.RLAB.state.f2);
+      fillSelect(f3, [
+        { value: 'ALL', label: 'All Directions & Categories' },
+        { value: 'BUY', label: 'Direction: BUY Only' },
+        { value: 'SELL', label: 'Direction: SELL Only' },
+        { value: 'JITTER_PASS', label: '±15% Jitter Stability: PASS' },
+        { value: 'High Probability', label: 'Category: High Probability' },
+        { value: 'High Expectancy', label: 'Category: High Expectancy' },
+        { value: 'High Confluence', label: 'Category: High Confluence' },
+        { value: 'High Frequency', label: 'Category: High Frequency' },
+        { value: 'Sequential Patterns', label: 'Category: Sequential Patterns' },
+        { value: 'Multi-Timeframe Patterns', label: 'Category: Multi-Timeframe Patterns' },
+        { value: 'Rare but Powerful', label: 'Category: Rare but Powerful' }
+      ], window.RLAB.state.f3);
     }
   }
 
@@ -153,7 +190,7 @@ import { mountShell, loadShellTelemetryOnly } from './shell.js';
     window.RLAB.state.activeTab = tab;
 
     if (prev !== tab && !opts.keepFilters) {
-      window.RLAB.state.f1 = 'ALL';
+      window.RLAB.state.f1 = tab === 'patterns' ? 'EDGES_ONLY' : 'ALL';
       window.RLAB.state.f2 = 'ALL';
       window.RLAB.state.f3 = 'ALL';
       if (!opts.keepSearch) {
@@ -199,7 +236,7 @@ import { mountShell, loadShellTelemetryOnly } from './shell.js';
     var si = document.getElementById('global-search');
     if (si) si.value = '';
     window.RLAB.state.search = '';
-    window.RLAB.state.f1 = 'ALL';
+    window.RLAB.state.f1 = window.RLAB.state.activeTab === 'patterns' ? 'EDGES_ONLY' : 'ALL';
     window.RLAB.state.f2 = 'ALL';
     window.RLAB.state.f3 = 'ALL';
     configureFiltersForTab(window.RLAB.state.activeTab);
@@ -237,14 +274,15 @@ import { mountShell, loadShellTelemetryOnly } from './shell.js';
   window.initResearchLabApp = function () {
     observeShellTheme();
     setupKeyboard();
+    registerPatternLibraryTab();
 
-    ['papers', 'engines', 'candlestick', 'foundry'].forEach(function (k) {
+    ['papers', 'engines', 'candlestick', 'foundry', 'patterns'].forEach(function (k) {
       var r = window.RLAB.renderers[k];
       if (r && typeof r.init === 'function') r.init();
     });
 
     var hashTab = (window.location.hash || '').replace('#', '');
-    var startTab = ['papers', 'engines', 'candlestick', 'foundry'].indexOf(hashTab) >= 0 ? hashTab : 'papers';
+    var startTab = ['papers', 'engines', 'candlestick', 'foundry', 'patterns'].indexOf(hashTab) >= 0 ? hashTab : 'papers';
     window.switchTab(startTab, { keepFilters: false });
   };
 })();

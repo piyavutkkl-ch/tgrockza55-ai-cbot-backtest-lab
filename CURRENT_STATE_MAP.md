@@ -1,4 +1,4 @@
-# 🗺️ CURRENT STATE MAP (`cbot-atgvt` — อัปเดต 19 พ.ย. 2026)
+# 🗺️ CURRENT STATE MAP (`cbot-atgvt` — อัปเดต 22 พ.ย. 2026)
 
 > เอกสารนี้คือ **"ภาพความจริง ณ ปัจจุบัน"** ที่บันทึกอยู่ใน Git Repo เพื่อใช้เป็นจุดตั้งต้นเดียวกันของ AI ทุกตัวและ Human (อ้างอิงกฎจาก [`GEMINI.md`](GEMINI.md))
 
@@ -47,8 +47,9 @@
 
 ## 4. โครงสร้างระบบเว็บและสคริปต์ (8-Page Portal & Codebase)
 * **เว็บ 8 หน้า (`docs/`):**
-  1. `index.html` (Overview) 2. `data-center.html` (Data Center) 3. `research-lab.html` (193 Papers + Quant Engines + Foundry) 4. `experiment-lab.html` (Backtest Comparator) 5. `intelligence.html` (Regime Matrix & Heatmap) 6. `improvement-audit.html` (Audit & Evolution Log) 7. `archive-system.html` (Transcript, Legacy Snapshot, Feedback Studio, Governance) 8. `database.html` (Unified 33-Dataset Catalog)
-* **ชุดตรวจสอบสุขภาพ:** `tools/verify_8page_ui.py` (ผ่าน 100%) และ `research/run_institutional_v4_test_suite.py` (รวม Phase 1, Phase 2 & Phase 3 Unit Tests ผ่าน; เหลือ Bug Windows file lock ใน `tearDown` ของ `test_attribution_matrix_feedback.py`)
+  1. `index.html` (Overview) 2. `data-center.html` (Data Center) 3. `research-lab.html` (193 Papers + Quant Engines + Foundry + **Tab 5: Trading Condition Library V5 R2**) 4. `experiment-lab.html` (Backtest Comparator) 5. `intelligence.html` (Regime Matrix & Heatmap) 6. `improvement-audit.html` (Audit & Evolution Log) 7. `archive-system.html` (Transcript, Legacy Snapshot, Feedback Studio, Governance) 8. `database.html` (Unified Catalog)
+* **Pattern Discovery Engine V5 Round 2 (`research/pattern_discovery/`):** สกัดจาก Tier 1 Live Microstructure + Tier 2 cTrader MTF (`m5/m15/h1/h4`) รวม `1,630` เงื่อนไข (`XAUUSD 565 · BTCUSD 646 · ETHUSD 419`) ผ่าน `VALIDATED_OOS` รวม **`165`** รูปแบบ (`XAU 66 · BTC 93 · ETH 6`) ซิงก์ลง [`trading_condition_library.json`](docs/data/trading_condition_library.json), [`pattern_discovery_state.json`](docs/data/pattern_discovery_state.json), [`TRADING_CONDITION_LIBRARY_REPORT.md`](TRADING_CONDITION_LIBRARY_REPORT.md) และหน้าเว็บ Page 3 `#patterns` แล้ว
+* **ชุดตรวจสอบสุขภาพ:** `tools/verify_8page_ui.py` (ผ่าน 100%), `research/pattern_discovery/test_pattern_discovery.py` (8/8 ผ่าน), และ `research/run_institutional_v4_test_suite.py` (รวม Phase 1, Phase 2 & Phase 3 Unit Tests ผ่าน; เหลือ Bug Windows file lock ใน `tearDown` ของ `test_attribution_matrix_feedback.py`)
 
 ---
 
